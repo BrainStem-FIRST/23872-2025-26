@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import subsystems.Collector;
+
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOp")
 public class Tele extends LinearOpMode {
@@ -33,6 +35,12 @@ public class Tele extends LinearOpMode {
 
         while (opModeIsActive()) {
             telemetry.update();
+
+            if(gamepad1.a) {
+                robot.collector.collectionState = Collector.CollectionState.ON;
+            } else {
+                robot.collector.collectionState = Collector.CollectionState.OFF;
+            }
 
 
             double y = -gamepad1.left_stick_y*0.4;
