@@ -16,7 +16,7 @@ public class Collector implements Component {
 
     private HardwareMap map;
     private Telemetry telemetry;
-    private DcMotorEx collectorMotor;
+    public DcMotorEx collectorMotor;
     public CollectionState collectionState;
     public enum CollectionState {
         OFF,

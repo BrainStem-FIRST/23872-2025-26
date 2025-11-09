@@ -36,10 +36,14 @@ public class Tele extends LinearOpMode {
         while (opModeIsActive()) {
             telemetry.update();
 
+//            robot.update();
+
             if(gamepad1.a) {
-                robot.collector.collectionState = Collector.CollectionState.ON;
+//                robot.collector.collectionState = Collector.CollectionState.ON;
+                robot.collector.collectorMotor.setPower(1.0);
             } else {
-                robot.collector.collectionState = Collector.CollectionState.OFF;
+//                robot.collector.collectionState = Collector.CollectionState.OFF;
+                robot.collector.collectorMotor.setPower(0);
             }
 
 
