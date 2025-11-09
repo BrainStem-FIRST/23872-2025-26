@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import subsystems.Collector;
+import subsystems.Finger;
 import subsystems.Shooter;
 
 
@@ -55,12 +56,12 @@ public class Tele extends LinearOpMode {
             }
 
             if (gamepad1.y) {
-//                robot.finger.fingerState = Finger.FingerState.UP;
-                robot.finger.fingerState.setPosition(1);
+                robot.finger.fingerState = Finger.FingerState.UP;
             } else {
-//                robot.finger.fingerState = Finger.FingerState.DOWN;
-                robot.finger.fingerState.setPosition(0);
+                robot.finger.fingerState = Finger.FingerState.DOWN;
+            }
 
+            robot.finger.update();
                 if (gamepad1.x) {
 //                robot.shooter.shooterState = Shooter.ShooterState.ON;
                     robot.shooter.shooterMotorOne.setPower(1);
@@ -95,4 +96,3 @@ public class Tele extends LinearOpMode {
             }
         }
     }
-}

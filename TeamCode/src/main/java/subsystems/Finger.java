@@ -1,9 +1,8 @@
 package subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo; // Import Servo
+import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Component;
 
@@ -19,10 +18,7 @@ public class Finger implements Component {
     public HardwareMap map;
     public enum FingerState {
         DOWN,
-        UP;
-
-        public void setPosition(int i) {
-        }
+        UP
     }
 
     public Finger(HardwareMap hardwareMap, Telemetry telemetry) {
@@ -34,7 +30,7 @@ public class Finger implements Component {
 
 
     }
-        @Override
+    @Override
     public void reset() {
 
     }
@@ -43,10 +39,10 @@ public class Finger implements Component {
     public void update() {
         switch (fingerState) {
             case DOWN:
-                fingerServo.setPosition(0);
+                fingerServo.setPosition(0.0);
                 break;
             case UP:
-                fingerServo.setPosition(1);
+                fingerServo.setPosition(1.0);
                 break;
         }
     }
