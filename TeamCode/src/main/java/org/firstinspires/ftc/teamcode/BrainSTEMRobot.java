@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -12,6 +11,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import java.util.ArrayList;
 
 import subsystems.Collector;
+import subsystems.Spindexer;
 
 public class BrainSTEMRobot {
 
@@ -31,6 +31,7 @@ public class BrainSTEMRobot {
     public Telemetry telemetry;
     public OpMode opMode;
     private ArrayList<Component> subsystems;
+    public Spindexer spindexer;
     public Collector collector;
 
 
@@ -40,8 +41,10 @@ public class BrainSTEMRobot {
         this.opMode = opMode;
         subsystems = new ArrayList<>();
 
+        spindexer = new Spindexer(hwMap, telemetry );
         collector = new Collector(hwMap, telemetry);
 
+        subsystems.add(spindexer);
         subsystems.add(collector);
 
         // Defining the Motors

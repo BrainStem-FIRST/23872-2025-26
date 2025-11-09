@@ -3,8 +3,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import subsystems.Collector;
-
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOp")
 public class Tele extends LinearOpMode {
@@ -39,10 +37,16 @@ public class Tele extends LinearOpMode {
 //            robot.update();
 
             if(gamepad1.a) {
-//                robot.collector.collectionState = Collector.CollectionState.ON;
-                robot.collector.collectorMotor.setPower(1.0);
+//               robot.spindexer.spindexerState = Spindexer.SpindexerState.ON;
+                robot.spindexer.spindexerMotor.setPower(0.2);
             } else {
-//                robot.collector.collectionState = Collector.CollectionState.OFF;
+//                robot.spindexer.spindexerState = Spindexer.SpindexerState.OFF;
+                robot.spindexer.spindexerMotor.setPower(0);
+            }
+
+            if(gamepad1.b){
+                robot.collector.collectorMotor.setPower(1);
+            }else{
                 robot.collector.collectorMotor.setPower(0);
             }
 
