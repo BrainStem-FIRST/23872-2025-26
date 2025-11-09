@@ -3,6 +3,9 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import subsystems.Collector;
+import subsystems.Shooter;
+
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOp")
 public class Tele extends LinearOpMode {
@@ -45,9 +48,21 @@ public class Tele extends LinearOpMode {
             }
 
             if(gamepad1.b){
-                robot.collector.collectorMotor.setPower(1);
+//                robot.collector.collectorState = Collector.CollectorState.ON;
+                robot.collector.collectorMotor.setPower(0.8);
             }else{
+//                robot.collector.collectorState = Collector.CollectorState.ON;
                 robot.collector.collectorMotor.setPower(0);
+            }
+
+            if(gamepad1.x){
+//                robot.shooter.shooterState = Shooter.ShooterState.ON;
+                robot.shooter.shooterMotorOne.setPower(1);
+                robot.shooter.shooterMotorTwo.setPower(1);
+            } else {
+//                robot.shooter.shooterState = Shooter.ShooterState.OFF;
+                robot.shooter.shooterMotorOne.setPower(0);
+                robot.shooter.shooterMotorTwo.setPower(0);
             }
 
 

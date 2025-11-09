@@ -11,6 +11,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import java.util.ArrayList;
 
 import subsystems.Collector;
+import subsystems.Shooter;
 import subsystems.Spindexer;
 
 public class BrainSTEMRobot {
@@ -33,6 +34,7 @@ public class BrainSTEMRobot {
     private ArrayList<Component> subsystems;
     public Spindexer spindexer;
     public Collector collector;
+    public Shooter shooter;
 
 
     public BrainSTEMRobot(HardwareMap hwMap, Telemetry telemetry, OpMode opMode) {
@@ -43,9 +45,11 @@ public class BrainSTEMRobot {
 
         spindexer = new Spindexer(hwMap, telemetry );
         collector = new Collector(hwMap, telemetry);
+        shooter = new Shooter(hwMap, telemetry);
 
         subsystems.add(spindexer);
         subsystems.add(collector);
+        subsystems.add(shooter);
 
         // Defining the Motors
         frontLeft =  (DcMotorEx)hwMap.dcMotor.get("FL");
