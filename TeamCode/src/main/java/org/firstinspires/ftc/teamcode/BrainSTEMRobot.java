@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import subsystems.Collector;
 import subsystems.Shooter;
 import subsystems.Spindexer;
+import subsystems.Finger;
 
 public class BrainSTEMRobot {
 
@@ -35,6 +36,8 @@ public class BrainSTEMRobot {
     public Spindexer spindexer;
     public Collector collector;
     public Shooter shooter;
+
+
 
 
     public BrainSTEMRobot(HardwareMap hwMap, Telemetry telemetry, OpMode opMode) {
