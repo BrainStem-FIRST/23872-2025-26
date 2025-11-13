@@ -51,10 +51,12 @@ public class BrainSTEMRobot {
         spindexer = new Spindexer(hwMap, telemetry );
         collector = new Collector(hwMap, telemetry);
         shooter = new Shooter(hwMap, telemetry);
+        finger = new Finger(hwMap, telemetry);
 
         subsystems.add(spindexer);
         subsystems.add(collector);
         subsystems.add(shooter);
+        subsystems.add(finger);
 
         // Defining the Motors
         frontLeft =  (DcMotorEx)hwMap.dcMotor.get("FL");

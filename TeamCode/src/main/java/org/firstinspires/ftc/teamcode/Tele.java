@@ -68,26 +68,26 @@ public class Tele extends LinearOpMode {
             }
 
 
-                double y = -gamepad1.left_stick_y * 0.4;
-                double x = gamepad1.left_stick_x * 0.4;
-                double rx = gamepad1.right_stick_x * 0.4;
+            double y = -gamepad1.left_stick_y * 0.4;
+            double x = gamepad1.left_stick_x * 0.4;
+            double rx = gamepad1.right_stick_x * 0.4;
 
-                robot.frontLeft.setPower(y + x + rx);
-                robot.backLeft.setPower(y - x + rx);
-                robot.frontRight.setPower(y - x - rx);
-                robot.backRight.setPower(y + x - rx);
-                telemetry.addData("frontLeft", robot.frontLeft.getPower());
-                telemetry.addData("frontRight", robot.frontRight.getPower());
-                telemetry.addData("backLeft", robot.backLeft.getPower());
-                telemetry.addData("backRight", robot.backRight.getPower());
-
-
-                telemetry.addData("y-axis :", y);
-                telemetry.addData("x-axis :", x);
-                telemetry.addData("turn :", rx);
-                //telemetry.update();
+            robot.frontLeft.setPower(y + x + rx);
+            robot.backLeft.setPower(y - x + rx);
+            robot.frontRight.setPower(y - x - rx);
+            robot.backRight.setPower(y + x - rx);
+            telemetry.addData("frontLeft", robot.frontLeft.getPower());
+            telemetry.addData("frontRight", robot.frontRight.getPower());
+            telemetry.addData("backLeft", robot.backLeft.getPower());
+            telemetry.addData("backRight", robot.backRight.getPower());
 
 
-            }
+            telemetry.addData("y-axis :", y);
+            telemetry.addData("x-axis :", x);
+            telemetry.addData("turn :", rx);
+            //telemetry.update();
+
+
         }
     }
+}
