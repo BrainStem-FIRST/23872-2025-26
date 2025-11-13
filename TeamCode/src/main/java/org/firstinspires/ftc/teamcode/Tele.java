@@ -42,7 +42,7 @@ public class Tele extends LinearOpMode {
 
             boolean a_Button_Is_Pressed_This_Loop = gamepad1.a;
             if (a_Button_Is_Pressed_This_Loop && !a_Button_Was_Pressed_Last_Loop) {
-                robot.spindexer.rotateDegrees(120);
+                robot.spindexer.rotateDegrees(110);
             }
             a_Button_Was_Pressed_Last_Loop = a_Button_Is_Pressed_This_Loop;
 
