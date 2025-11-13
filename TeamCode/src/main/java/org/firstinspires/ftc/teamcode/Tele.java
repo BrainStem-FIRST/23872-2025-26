@@ -44,7 +44,6 @@ public class Tele extends LinearOpMode {
             if (a_Button_Is_Pressed_This_Loop && !a_Button_Was_Pressed_Last_Loop) {
                 robot.spindexer.rotateDegrees(120);
             }
-
             a_Button_Was_Pressed_Last_Loop = a_Button_Is_Pressed_This_Loop;
 
             if (gamepad1.b) {
@@ -61,16 +60,12 @@ public class Tele extends LinearOpMode {
                 robot.finger.fingerState = Finger.FingerState.DOWN;
             }
 
-            robot.finger.update();
-                if (gamepad1.x) {
-//                robot.shooter.shooterState = Shooter.ShooterState.ON;
-                    robot.shooter.shooterMotorOne.setPower(1);
-                    robot.shooter.shooterMotorTwo.setPower(1);
-                } else {
-//                robot.shooter.shooterState = Shooter.ShooterState.OFF;
-                    robot.shooter.shooterMotorOne.setPower(0);
-                    robot.shooter.shooterMotorTwo.setPower(0);
-                }
+
+            if (gamepad1.x) {
+                robot.shooter.shooterState = Shooter.ShooterState.ON;
+            } else {
+                robot.shooter.shooterState = Shooter.ShooterState.OFF;
+            }
 
 
                 double y = -gamepad1.left_stick_y * 0.4;

@@ -1,24 +1,25 @@
 package subsystems;
 
-//import static subsystems.Shooter..shooterState.OFF;
-//import static subsystems.Shooter..shooterState.ON;
-
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Component;
 
-
 @Config
 public class Shooter implements Component {
-
+    public static double SHOOTER_TICKS_PER_REVOLUTION = 288;
     private HardwareMap map;
     private Telemetry telemetry;
     public DcMotorEx shooterMotorTwo;
     public DcMotorEx shooterMotorOne;
+
     public ShooterState shooterState;
+
+    public double targetVelocity;
+
     public enum ShooterState {
         OFF,
         ON
@@ -33,12 +34,17 @@ public class Shooter implements Component {
 
         shooterMotorTwo.setDirection(DcMotorEx.Direction.REVERSE);
 
-        shooterMotorOne.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        shooterMotorTwo.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        shooterMotorOne.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
+        shooterMotorTwo.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
+
+        shooterMotorOne.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        shooterMotorTwo.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+
+        shooterMotorOne.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        shooterMotorTwo.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         this.shooterState = ShooterState.OFF;
     }
-
 
     @Override
     public void reset() {
@@ -49,12 +55,12 @@ public class Shooter implements Component {
     public void update() {
         switch (shooterState) {
             case OFF:
-                shooterMotorOne.setPower(0);
-                shooterMotorTwo.setPower(0);
+                shooterMotorOne.setVelocity(0);
+                shooterMotorTwo.setVelocity(0);
                 break;
             case ON:
-                shooterMotorOne.setPower(0.5);
-                shooterMotorTwo.setPower(0.5);
+                shooterMotorOne.setVelocity(19200);
+                shooterMotorTwo.setVelocity(19200);
                 break;
         }
     }
@@ -63,6 +69,4 @@ public class Shooter implements Component {
     public String test() {
         return null;
     }
-
-
 }

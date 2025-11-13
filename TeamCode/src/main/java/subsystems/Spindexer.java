@@ -18,12 +18,12 @@ import org.firstinspires.ftc.teamcode.Component;
 public class Spindexer implements Component {
 
 
-    private int targetPosition;
-    public static double TICKS_PER_REVOLUTION = 288;
+    private int spindexerTargetPosition;
+    public static double SPINDEXER_TICKS_PER_REVOLUTION = 288;
 
-    public static double GEAR_RATIO = 1.0;
+    public static double SPINDEXER_GEAR_RATIO = 1.0;
 
-    public static final double TICKS_PER_DEGREE = (TICKS_PER_REVOLUTION * GEAR_RATIO) / 360.0;
+    public static final double SPINDEXER_TICKS_PER_DEGREE = (SPINDEXER_TICKS_PER_REVOLUTION * SPINDEXER_GEAR_RATIO) / 360.0;
 
 
     private HardwareMap map;
@@ -57,9 +57,9 @@ public class Spindexer implements Component {
             return;
         }
 
-        targetPosition = spindexerMotor.getCurrentPosition() + (int)(degrees * TICKS_PER_DEGREE);
+        spindexerTargetPosition = spindexerMotor.getCurrentPosition() + (int)(degrees * SPINDEXER_TICKS_PER_DEGREE);
 
-        spindexerMotor.setTargetPosition(targetPosition);
+        spindexerMotor.setTargetPosition(spindexerTargetPosition);
 
         spindexerMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
