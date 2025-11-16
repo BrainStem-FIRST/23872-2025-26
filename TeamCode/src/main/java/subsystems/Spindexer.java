@@ -53,9 +53,7 @@ public class Spindexer implements Component {
     }
 
     public void rotateDegrees(double degrees){
-        if (spindexerState == SpindexerState.ON){
-            return;
-        }
+        
 
         spindexerTargetPosition = spindexerMotor.getCurrentPosition() + (int)(degrees * SPINDEXER_TICKS_PER_DEGREE);
 
