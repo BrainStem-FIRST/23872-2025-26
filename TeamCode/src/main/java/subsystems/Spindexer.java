@@ -43,6 +43,8 @@ public class Spindexer implements Component {
 
         spindexerMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
 
+        spindexerMotor.setTargetPositionTolerance(15);
+
         spindexerMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
         this.spindexerState = SpindexerState.OFF;
@@ -53,7 +55,7 @@ public class Spindexer implements Component {
     }
 
     public void rotateDegrees(double degrees){
-        
+
 
         spindexerTargetPosition = spindexerMotor.getCurrentPosition() + (int)(degrees * SPINDEXER_TICKS_PER_DEGREE);
 
