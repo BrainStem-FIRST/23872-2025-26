@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -17,12 +18,6 @@ import subsystems.Finger;
 
 public class BrainSTEMRobot {
 
-    // Initializing the drivetrain
-    public DcMotorEx frontLeft;
-    public DcMotorEx backLeft;
-    public DcMotorEx frontRight;
-    public DcMotorEx backRight;
-
     // Example Motors and Servos
 
     public Servo exampleServo;
@@ -38,6 +33,8 @@ public class BrainSTEMRobot {
     public Shooter shooter;
 
     public Finger finger;
+    public MecanumDrive drive;
+
 
 
 
@@ -59,24 +56,7 @@ public class BrainSTEMRobot {
         subsystems.add(finger);
 
         // Defining the Motors
-        frontLeft =  (DcMotorEx)hwMap.dcMotor.get("FL");
-        frontRight = (DcMotorEx)hwMap.dcMotor.get("FR");
-        backLeft =   (DcMotorEx)hwMap.dcMotor.get("BL");
-        backRight =  (DcMotorEx)hwMap.dcMotor.get("BR");
-
-        frontLeft.setDirection(DcMotor.Direction.FORWARD);
-        frontRight.setDirection(DcMotor.Direction.REVERSE);
-        backLeft.setDirection(DcMotor.Direction.FORWARD);
-        backRight.setDirection(DcMotor.Direction.FORWARD);
-
-
-
-        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-
+        drive = new MecanumDrive(hwMap, new Pose2d(0, 0, 0));
     }
 
     public void update() {
@@ -86,19 +66,10 @@ public class BrainSTEMRobot {
     }
 
     public void setDTMotorPowers(double frontLeftPower, double frontRightPower, double backLeftPower, double backRightPower) {
-        frontLeft.setPower(frontLeftPower);
-        frontRight.setPower(frontRightPower);
-        backLeft.setPower(backLeftPower);
-        backRight.setPower(backRightPower);
+        drive.setMotorPowers(frontLeftPower, frontRightPower, backLeftPower, backRightPower);
     }
 
     public void stop() {
-        frontLeft.setPower(0);
-        frontRight.setPower(0);
-        backLeft.setPower(0);
-        backRight.setPower(0);
+        drive.setMotorPowers(0, 0, 0, 0);
     }
-
-
-
 }
