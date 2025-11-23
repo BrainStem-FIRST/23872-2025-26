@@ -507,4 +507,8 @@ public final class MecanumDrive {
         rightBack.setPower(br);
         leftBack.setPower(bl);
     }
+
+    public void stop() {
+        setMotorPowers(0, 0, 0, 0);
+    }
 }

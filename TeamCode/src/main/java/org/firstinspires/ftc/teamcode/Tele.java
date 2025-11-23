@@ -73,7 +73,14 @@ public class Tele extends LinearOpMode {
             double x = gamepad1.left_stick_x * 0.6;
             double rx = gamepad1.right_stick_x * 0.6;
 
-            robot.drive.setMotorPowers(y + x + rx, y - x - rx, y - x + rx,y + x - rx);
+            robot.drive.setMotorPowers(0.5, -0.5, -0.5,0.5);
+
+//            robot.drive.setMotorPowers(
+//                    y + x + rx,
+//                    y - x - rx,
+//                    y - x + rx,
+//                    y + x - rx
+//            );
 //            telemetry.addData("frontLeft", robot.frontLeft.getPower());
 //            telemetry.addData("frontRight", robot.frontRight.getPower());
 //            telemetry.addData("backLeft", robot.backLeft.getPower());

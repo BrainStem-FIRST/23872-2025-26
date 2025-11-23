@@ -64,12 +64,4 @@ public class BrainSTEMRobot {
             c.update();
         }
     }
-
-    public void setDTMotorPowers(double frontLeftPower, double frontRightPower, double backLeftPower, double backRightPower) {
-        drive.setMotorPowers(frontLeftPower, frontRightPower, backLeftPower, backRightPower);
-    }
-
-    public void stop() {
-        drive.setMotorPowers(0, 0, 0, 0);
-    }
 }
