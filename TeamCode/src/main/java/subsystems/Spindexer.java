@@ -43,7 +43,7 @@ public class Spindexer implements Component {
 
         spindexerMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
 
-        spindexerMotor.setTargetPositionTolerance(15);
+        spindexerMotor.setTargetPositionTolerance(2);
 
         spindexerMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
@@ -84,7 +84,7 @@ public class Spindexer implements Component {
 
                     spindexerState = SpindexerState.OFF;
 
-                    spindexerMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+                    spindexerMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
                 }
                 break;
         }
