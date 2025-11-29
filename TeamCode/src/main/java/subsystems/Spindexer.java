@@ -49,13 +49,12 @@ public class Spindexer implements Component {
 
         this.spindexerState = SpindexerState.OFF;
 
-        spindexerMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        spindexerMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
 
     }
 
     public void rotateDegrees(double degrees){
-
 
         spindexerTargetPosition = spindexerMotor.getCurrentPosition() + (int)(degrees * SPINDEXER_TICKS_PER_DEGREE);
 
