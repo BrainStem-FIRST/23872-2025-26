@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -21,7 +22,7 @@ public class Tele extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        robot = new BrainSTEMRobot(this.hardwareMap, this.telemetry, this);
+        robot = new BrainSTEMRobot(this.hardwareMap, this.telemetry, this, new Pose2d(0,0,0));
 
 
         waitForStart();

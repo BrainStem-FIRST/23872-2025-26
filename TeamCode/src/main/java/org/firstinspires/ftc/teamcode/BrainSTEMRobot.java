@@ -39,7 +39,7 @@ public class BrainSTEMRobot {
 
 
 
-    public BrainSTEMRobot(HardwareMap hwMap, Telemetry telemetry, OpMode opMode) {
+    public BrainSTEMRobot(HardwareMap hwMap, Telemetry telemetry, OpMode opMode, Pose2d startPose) {
 
         this.telemetry = telemetry;
         this.opMode = opMode;
@@ -56,7 +56,7 @@ public class BrainSTEMRobot {
         subsystems.add(finger);
 
         // Defining the Motors
-        drive = new MecanumDrive(hwMap, new Pose2d(0, 0, 0));
+        drive = new MecanumDrive(hwMap,startPose);
     }
 
     public void update() {
