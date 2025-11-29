@@ -63,14 +63,14 @@ public final class MecanumDrive {
                 RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
 
         // drive model parameters
-        public double inPerTick = 528.0417;
+        public double inPerTick = .0020070245;
         public double lateralInPerTick = inPerTick;
-        public double trackWidthTicks = 0;
+        public double trackWidthTicks = 13.3;
 
         // feedforward parameters (in tick units)
-        public double kS = 0;
-        public double kV = 0;
-        public double kA = 0;
+        public double kS = 1.0654986520156897;
+        public double kV = -0.0002705780892447051;
+        public double kA = 1.0000000;
 
         // path profile parameters (in inches)
         public double maxWheelVel = 50;
@@ -248,8 +248,6 @@ public final class MecanumDrive {
                 PARAMS.logoFacingDirection, PARAMS.usbFacingDirection));
 
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
-
-        
 
         localizer = new PinpointLocalizer(hardwareMap, PARAMS.inPerTick, pose);
 
@@ -502,13 +500,9 @@ public final class MecanumDrive {
     }
 
     public void setMotorPowers(double fl, double fr, double bl, double br) {
-        rightFront.setPower(fr);
         leftFront.setPower(fl);
-        rightBack.setPower(br);
+        rightFront.setPower(fr);
         leftBack.setPower(bl);
-    }
-
-    public void stop() {
-        setMotorPowers(0, 0, 0, 0);
+        rightBack.setPower(br);
     }
 }
