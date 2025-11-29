@@ -59,8 +59,8 @@ public class Shooter implements Component {
                 shooterMotorTwo.setVelocity(0);
                 break;
             case ON:
-                shooterMotorOne.setVelocity(19200);
-                shooterMotorTwo.setVelocity(19200);
+                shooterMotorOne.setVelocity(4000);
+                shooterMotorTwo.setVelocity(4000);
                 break;
         }
     }
