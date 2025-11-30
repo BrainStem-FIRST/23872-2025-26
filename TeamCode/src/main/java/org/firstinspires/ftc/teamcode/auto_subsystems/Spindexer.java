@@ -1,9 +1,7 @@
-package subsystems;
+package org.firstinspires.ftc.teamcode.auto_subsystems;
 
 //import static subsystems.Spindexer.spindexerState.OFF;
 //import static subsystems.Spindexer.spindexerState.ON;
-
-import android.transition.ChangeBounds;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -25,14 +23,29 @@ public class Spindexer implements Component {
 
     public static final double SPINDEXER_TICKS_PER_DEGREE = (SPINDEXER_TICKS_PER_REVOLUTION * SPINDEXER_GEAR_RATIO) / 360.0;
 
+    private static int COLLECT1_POS = 120;
+    private static int COLLECT2_POS = 240;
+    private static int COLLECT3_POS = 0;
+    private static int SHOOT1_POS = 60;
+    private static int SHOOT2_POS = 180;
+    private static int SHOOT3_POS = 300;
+
+    private int ticks;
+
+
+
 
     private HardwareMap map;
     private Telemetry telemetry;
     public DcMotorEx spindexerMotor;
     public SpindexerState spindexerState;
     public enum SpindexerState {
-        OFF,
-        ON
+        COLLECT1,
+        COLLECT2,
+        COLLECT3,
+        SHOOT1,
+        SHOOT2,
+        SHOOT3
     }
 
     public Spindexer(HardwareMap hardwareMap, Telemetry telemetry) {
@@ -47,7 +60,7 @@ public class Spindexer implements Component {
 
         spindexerMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        this.spindexerState = SpindexerState.OFF;
+        this.spindexerState = SpindexerState.SHOOT1;
 
         spindexerMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
@@ -63,7 +76,17 @@ public class Spindexer implements Component {
         spindexerMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         spindexerMotor.setPower(0.2);
-        spindexerState = SpindexerState.ON;
+
+    }
+
+    private int convertDegreesToTicks(double degrees){
+        return (int)(degrees * SPINDEXER_TICKS_PER_DEGREE);
+    }
+
+    private void setTargetPosition(int targetPosition){
+        spindexerMotor.setTargetPosition(targetPosition);
+        spindexerMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        spindexerMotor.setPower(1.0);
     }
 
 
@@ -75,18 +98,23 @@ public class Spindexer implements Component {
     @Override
     public void update() {
         switch (spindexerState) {
-            case OFF:
-                spindexerMotor.setPower(0);
+            case COLLECT1:
+                setTargetPosition(convertDegreesToTicks(COLLECT1_POS));
                 break;
-            case ON:
-                if (!isSpindexerBusy()) {
-
-                    spindexerMotor.setPower(0);
-
-                    spindexerState = SpindexerState.OFF;
-
-                    spindexerMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-                }
+            case COLLECT2:
+                setTargetPosition(convertDegreesToTicks(COLLECT2_POS));
+                break;
+            case COLLECT3:
+                setTargetPosition(convertDegreesToTicks(COLLECT3_POS));
+                break;
+            case SHOOT1:
+                setTargetPosition(convertDegreesToTicks(SHOOT1_POS));
+                break;
+            case SHOOT2:
+                setTargetPosition(convertDegreesToTicks(SHOOT2_POS));
+                break;
+            case SHOOT3:
+                setTargetPosition(convertDegreesToTicks(SHOOT3_POS));
                 break;
         }
     }

@@ -4,9 +4,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-import subsystems.Finger;
-import subsystems.Shooter;
-import subsystems.Spindexer;
+import tele_subsystems.Finger;
+import tele_subsystems.Shooter;
+import tele_subsystems.Spindexer;
 
 public class ShootThreeBalls {
 

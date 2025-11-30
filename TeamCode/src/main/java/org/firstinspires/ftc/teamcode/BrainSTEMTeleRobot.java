@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -11,12 +10,12 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.util.ArrayList;
 
-import subsystems.Collector;
-import subsystems.Shooter;
-import subsystems.Spindexer;
-import subsystems.Finger;
+import tele_subsystems.Collector;
+import tele_subsystems.Shooter;
+import tele_subsystems.Spindexer;
+import tele_subsystems.Finger;
 
-public class BrainSTEMRobot {
+public class BrainSTEMTeleRobot {
 
     // Example Motors and Servos
 
@@ -39,7 +38,7 @@ public class BrainSTEMRobot {
 
 
 
-    public BrainSTEMRobot(HardwareMap hwMap, Telemetry telemetry, OpMode opMode, Pose2d startPose) {
+    public BrainSTEMTeleRobot(HardwareMap hwMap, Telemetry telemetry, OpMode opMode, Pose2d startPose) {
 
         this.telemetry = telemetry;
         this.opMode = opMode;

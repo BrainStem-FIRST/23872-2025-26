@@ -4,9 +4,8 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import subsystems.Collector;
-import subsystems.Finger;
-import subsystems.Shooter;
+import tele_subsystems.Finger;
+import tele_subsystems.Shooter;
 
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOp")
@@ -14,7 +13,7 @@ public class Tele extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
 
-    private BrainSTEMRobot robot;
+    private BrainSTEMTeleRobot robot;
 
     private boolean a_Button_Was_Pressed_Last_Loop = false;
 
@@ -22,7 +21,7 @@ public class Tele extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        robot = new BrainSTEMRobot(this.hardwareMap, this.telemetry, this, new Pose2d(0, 0, 0));
+        robot = new BrainSTEMTeleRobot(this.hardwareMap, this.telemetry, this, new Pose2d(0, 0, 0));
 
 
         waitForStart();
@@ -69,7 +68,7 @@ public class Tele extends LinearOpMode {
 
 
             if (gamepad1.b) {
-                robot.shooter.shooterState = Shooter.ShooterState.ON;
+                robot.shooter.shooterState = Shooter.ShooterState.SHOOT_FAR;
             } else {
                 robot.shooter.shooterState = Shooter.ShooterState.OFF;
             }
