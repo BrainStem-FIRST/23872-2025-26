@@ -52,7 +52,7 @@ public final class BasicAuto extends LinearOpMode {
 
             robot.spindexer.rotateDegrees(60);
             robot.update();
-            
+
 
         wait (0.1, robot);
 
