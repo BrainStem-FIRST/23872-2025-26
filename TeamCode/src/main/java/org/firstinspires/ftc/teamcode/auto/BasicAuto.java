@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.auto;
 
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Trajectory;
+import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -22,6 +24,8 @@ public final class BasicAuto extends LinearOpMode {
 
         Pose2d beginPose = new Pose2d(58.8, 16.5, Math.toRadians(167.9));
             BrainSTEMRobot robot = new BrainSTEMRobot(hardwareMap, telemetry, this, beginPose);
+
+
 
             waitForStart();
 
@@ -49,9 +53,15 @@ public final class BasicAuto extends LinearOpMode {
         robot.spindexer.rotateDegrees(60);
         robot.update();
 
+
+        wait (0.1, robot);
+
         robot.update();
 
+
         while (opModeIsActive());
+
+
 
 
 
