@@ -33,25 +33,23 @@ public final class BasicAuto extends LinearOpMode {
             robot.update();
 
 
-            wait(2, robot);
+            wait(0.75, robot);
 
             robot.finger.fingerState = Finger.FingerState.UP;
             robot.update();
 
             wait(1, robot);
 
-        robot.finger.fingerState = Finger.FingerState.DOWN;
-        robot.update();
+            robot.finger.fingerState = Finger.FingerState.DOWN;
+            robot.update();
 
-        robot.shooter.setShooterOff();
-        robot.update();
+            robot.shooter.setShooterOff();
+            robot.update();
 
-        robot.spindexer.rotateDegrees(60);
-        robot.update();
+            robot.spindexer.rotateDegrees(60);
+            robot.update();
 
-        robot.update();
-
-        while (opModeIsActive());
+            while (opModeIsActive());
 
 
 

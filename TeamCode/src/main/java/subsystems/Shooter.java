@@ -56,11 +56,11 @@ public class Shooter implements Component {
         switch (shooterState) {
             case OFF:
                 shooterMotorOne.setVelocity(0);
-                shooterMotorTwo.setVelocity(0);
+
                 break;
             case ON:
                 shooterMotorOne.setVelocity(4000);
-                shooterMotorTwo.setVelocity(4000);
+
                 break;
         }
     }
