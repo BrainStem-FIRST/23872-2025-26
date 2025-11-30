@@ -76,9 +76,10 @@ public class Spindexer implements Component {
     public void update() {
         switch (spindexerState) {
             case OFF:
+                spindexerMotor.setPower(0);
                 break;
             case ON:
-                if (!spindexerMotor.isBusy()) {
+                if (!isSpindexerBusy()) {
 
                     spindexerMotor.setPower(0);
 
@@ -88,6 +89,10 @@ public class Spindexer implements Component {
                 }
                 break;
         }
+    }
+
+    public boolean isSpindexerBusy(){
+        return spindexerMotor.isBusy();
     }
 
 

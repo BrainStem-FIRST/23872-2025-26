@@ -46,7 +46,7 @@ public class Collector implements Component {
                 collectorMotor.setPower(0);
                 break;
             case ON:
-                collectorMotor.setPower(0.1);
+                collectorMotor.setPower(0.5);
                 break;
         }
     }
