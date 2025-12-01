@@ -23,6 +23,7 @@ public final class BasicAuto extends LinearOpMode {
         Pose2d beginPose = new Pose2d(62.5, 15.8, Math.toRadians(177.8));
             BrainSTEMAutoRobot robot = new BrainSTEMAutoRobot(hardwareMap, telemetry, this, beginPose);
 
+             
 
             Action setCollect1 = new AutoActions().setCollect1(robot);
             Action robotUpdate = new AutoActions().robotUpdate(robot);
