@@ -2,30 +2,37 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import tele_subsystems.Collector;
 import tele_subsystems.Finger;
 import tele_subsystems.Shooter;
+import tele_subsystems.Spindexer;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.ShootThreeBalls;
 
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOp")
+@TeleOp(name = "TeleOp")
 public class Tele extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
-
     private BrainSTEMTeleRobot robot;
-
-    private boolean a_Button_Was_Pressed_Last_Loop = false;
-
+    private ShootThreeBalls shootThreeBalls;
 
     @Override
     public void runOpMode() throws InterruptedException {
 
         robot = new BrainSTEMTeleRobot(this.hardwareMap, this.telemetry, this, new Pose2d(0, 0, 0));
+        shootThreeBalls = new ShootThreeBalls(this.robot.shooter, this.robot.finger, this.robot.spindexer, telemetry);
 
+        Shooter shooter;
+        Finger finger = null;
+        Spindexer spindexer;
+        Telemetry telemetry = null;
 
         waitForStart();
-
 
         while (!opModeIsActive()) {
 
@@ -34,32 +41,26 @@ public class Tele extends LinearOpMode {
             telemetry.update();
         }
 
-
-        while (opModeIsActive()) {
+        while (opModeIsActive() && !isStopRequested()) {
             telemetry.update();
-
             robot.update();
 
-            boolean a_Button_Is_Pressed_This_Loop = gamepad2.x;
-            if (a_Button_Is_Pressed_This_Loop && !a_Button_Was_Pressed_Last_Loop) {
-                robot.spindexer.rotateDegrees(120);
-            }
-            a_Button_Was_Pressed_Last_Loop = a_Button_Is_Pressed_This_Loop;
-
-            if (gamepad2.y && !robot.spindexer.isSpindexerBusy()) {
-                robot.spindexer.rotateDegrees(60);
-            }
-
-            a_Button_Was_Pressed_Last_Loop = a_Button_Is_Pressed_This_Loop;
-
-
-
+            //Gamepad 1 controls ↓
             if (gamepad1.a) {
-//                robot.collector.collectorState = Collector.CollectorState.ON;
-                robot.collector.collectorMotor.setPower(0.8);
+                robot.collector.collectorState = Collector.CollectorState.ON;
             } else {
-//                robot.collector.collectorState = Collector.CollectorState.ON;
-                robot.collector.collectorMotor.setPower(0);
+                robot.collector.collectorState = Collector.CollectorState.ON;
+            }
+
+            if (gamepad1.b) {
+                robot.shooter.shooterState = Shooter.ShooterState.SHOOT_FAR;
+            } else {
+                robot.shooter.shooterState = Shooter.ShooterState.OFF;
+            }
+
+            //Gamepad 2 controls ↓
+            if (gamepad2.a && !robot.spindexer.isSpindexerBusy()) {
+                robot.spindexer.rotateDegrees(120);
             }
 
             if (gamepad2.b) {
@@ -68,19 +69,18 @@ public class Tele extends LinearOpMode {
                 robot.finger.fingerState = Finger.FingerState.DOWN;
             }
 
-
-            if (gamepad1.b) {
-                robot.shooter.shooterState = Shooter.ShooterState.SHOOT_FAR;
-            } else {
-                robot.shooter.shooterState = Shooter.ShooterState.OFF;
+            if (gamepad2.y && !robot.spindexer.isSpindexerBusy()) {
+                robot.spindexer.rotateDegrees(60);
             }
 
+            if (gamepad2.x && !robot.spindexer.isSpindexerBusy() && (finger.fingerState == Finger.FingerState.DOWN)) {
+                shootThreeBalls.start();
+            }
 
+            //driving ↓
             double y = -gamepad1.left_stick_y * 0.6;
             double x = gamepad1.left_stick_x * 0.6;
             double rx = gamepad1.right_stick_x * 0.6;
-
-//            robot.drive.setMotorPowers(0.5, -0.5, -0.5,0.5);
 
             robot.drive.setMotorPowers(
                     y + x + rx,
@@ -88,6 +88,7 @@ public class Tele extends LinearOpMode {
                     y - x + rx,
                     y + x - rx
             );
+
             telemetry.addData("frontLeft", robot.drive.leftFront.getPower());
             telemetry.addData("frontRight", robot.drive.rightFront.getPower());
             telemetry.addData("backLeft", robot.drive.leftBack).getClass();
@@ -97,7 +98,6 @@ public class Tele extends LinearOpMode {
             telemetry.addData("y-axis :", y);
             telemetry.addData("x-axis :", x);
             telemetry.addData("turn :", rx);
-            //telemetry.update();
 
 
         }
