@@ -27,16 +27,15 @@ public class Tele extends LinearOpMode {
         robot = new BrainSTEMTeleRobot(this.hardwareMap, this.telemetry, this, new Pose2d(0, 0, 0));
         shootThreeBalls = new ShootThreeBalls(this.robot.shooter, this.robot.finger, this.robot.spindexer, telemetry);
 
-        Shooter shooter;
-        Finger finger = null;
-        Spindexer spindexer;
-        Telemetry telemetry = null;
+//        Shooter shooter;
+//        Finger finger;
+//        Spindexer spindexer;
+//        Telemetry telemetry;
 
         waitForStart();
 
         while (!opModeIsActive()) {
 
-            telemetry.addData("Opmode Status :", "Init");
 
             telemetry.update();
         }
@@ -73,7 +72,7 @@ public class Tele extends LinearOpMode {
                 robot.spindexer.rotateDegrees(60);
             }
 
-            if (gamepad2.x && !robot.spindexer.isSpindexerBusy() && (finger.fingerState == Finger.FingerState.DOWN)) {
+            if (gamepad2.x && !robot.spindexer.isSpindexerBusy() && (robot.finger.fingerState == Finger.FingerState.DOWN)) {
                 shootThreeBalls.start();
             }
 
