@@ -53,7 +53,7 @@ public final class BasicAuto extends LinearOpMode {
         Action setCollect3 = new AutoActions().setCollect3(robot);
         waitForStart();
 
-
+        
             if (isStopRequested()) return;
 
             robot.spindexer.spindexerState = Spindexer.SpindexerState.COLLECT1;
