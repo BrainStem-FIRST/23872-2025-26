@@ -7,6 +7,8 @@ import com.acmerobotics.roadrunner.Action;
 
 import org.firstinspires.ftc.teamcode.BrainSTEMAutoRobot;
 
+import tele_subsystems.Collector;
+
 public class AutoActions {
 
     public Action setCollect1(BrainSTEMAutoRobot robot) {
@@ -14,6 +16,16 @@ public class AutoActions {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                 robot.spindexer.spindexerState = Spindexer.SpindexerState.COLLECT1;
+                return false;
+            }
+        };
+    }
+
+    public Action setCollectorOn(BrainSTEMAutoRobot robot) {
+        return new Action() {
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                robot.collector.collectorState = Collector.CollectorState.ON;
                 return false;
             }
         };
