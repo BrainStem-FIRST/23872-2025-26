@@ -38,6 +38,7 @@ public class Spindexer implements Component {
         this.telemetry = telemetry;
 
         spindexerMotor = map.get(DcMotorEx.class, "spindexerMotor");
+        spindexerMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
         spindexerMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
 
@@ -47,7 +48,7 @@ public class Spindexer implements Component {
 
         spindexerState = SpindexerState.OFF;
 
-        spindexerMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+
 
 
     }
