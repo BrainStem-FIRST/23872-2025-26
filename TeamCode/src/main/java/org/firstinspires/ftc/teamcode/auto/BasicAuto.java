@@ -9,14 +9,14 @@ import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
 import org.firstinspires.ftc.teamcode.BrainSTEMAutoRobot;
+import org.firstinspires.ftc.teamcode.auto_subsystems.Collector;
 
 import org.firstinspires.ftc.teamcode.auto_subsystems.AutoActions;
 import org.firstinspires.ftc.teamcode.auto_subsystems.Finger;
 import org.firstinspires.ftc.teamcode.auto_subsystems.Spindexer;
 
-import tele_subsystems.Collector;
+
 @Autonomous (name = "Auto")
 @Config
 public final class BasicAuto extends LinearOpMode {
@@ -43,9 +43,9 @@ public final class BasicAuto extends LinearOpMode {
 
         Pose2d shootPose = new Pose2d(positions.preloadX, positions.preloadY, positions.preloadA);
         Pose2d collectPose = new Pose2d(positions.collect1_1X, positions.collect1_1Y, positions.collect1_1A);
-//        robot.collector.collectorState = Collector.CollectorState.ON;
-//        wait(500);
-//        robot.collector.collectorState = Collector.CollectorState.OFF;
+        robot.collector.collectorState = Collector.CollectorState.ON;
+        wait(500);
+        robot.collector.collectorState = Collector.CollectorState.OFF;
         Pose2d collectPose2 = new Pose2d(positions.collect1_2X, positions.collect1_2Y, positions.collect1_2A);
         Pose2d collectPose3 = new Pose2d(positions.collect1_3X, positions.collect1_3Y, positions.collect1_3A);
 
