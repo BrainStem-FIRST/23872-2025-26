@@ -77,7 +77,7 @@ public class Tele extends LinearOpMode {
             if (gamepad2.a) {
 //                robot.spindexer.rotate120degrees();
                 robot.spindexer.spindexerState = Spindexer.SpindexerState.NORMAL;
-                robot.spindexer.spindexerMotor.setPower(0.5);
+                robot.spindexer.rotate120degrees();
             }
 //            } else if (gamepad2.y && !robot.spindexer.isSpindexerBusy()){
 //                robot.spindexer.rotateDegrees(60);
