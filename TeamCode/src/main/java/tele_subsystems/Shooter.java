@@ -17,8 +17,13 @@ public class Shooter implements Component {
     private Telemetry telemetry;
     public DcMotorEx shooterMotorTwo;
     public DcMotorEx shooterMotorOne;
+
     public double FAR_SHOOT_VEL = 3750;
     public double CLOSE_SHOOT_VEL = 2000;
+
+    public double CLOSE_SHOOT_VEL = 2000;
+    public double FAR_SHOOT_VEL = 3750;
+
 
     public ShooterState shooterState;
 

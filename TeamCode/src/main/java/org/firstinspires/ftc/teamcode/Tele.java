@@ -69,11 +69,18 @@ public class Tele extends LinearOpMode {
             if (gamepad1.b) {
 
                 robot.shooter.shooterState = Shooter.ShooterState.SHOOT_FAR;
+
             } else if (gamepad1.y) {
                 robot.shooter.shooterState = Shooter.ShooterState.SHOOT_CLOSE;
             } else {
+
+            } else if (gamepad1.x){
+               robot.shooter.shooterState = Shooter.ShooterState.SHOOT_CLOSE;
+            } else{
+
                 robot.shooter.shooterState = Shooter.ShooterState.OFF;
             }
+
 
 
             //Gamepad 2 controls ↓
