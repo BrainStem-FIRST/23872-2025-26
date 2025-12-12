@@ -4,17 +4,39 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.ftc.Actions;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.BrainSTEMAutoRobot;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 169e49d25bcb585315b218d745d7abf3d49734a9
 public class AutoActions {
 
-    public Action setCollect1(BrainSTEMAutoRobot robot) {
+    public Action setIndex1(BrainSTEMAutoRobot robot) {
         return new Action() {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                 robot.spindexer.spindexerState = Spindexer.SpindexerState.COLLECT1;
                 return false;
+            }
+        };
+    }
+    public Action rotate120(BrainSTEMAutoRobot robot) {
+        return new Action() {
+
+            private boolean alreadyPressed = false;
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+               if (!alreadyPressed){
+                   robot.spindexer.rotate120Degrees();
+                   robot.spindexer.spindexerState = Spindexer.SpindexerState.NORMAL;
+               }
+                return robot.spindexer.spindexerMotor.isBusy();
+
             }
         };
     }
@@ -34,12 +56,12 @@ public class AutoActions {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                 robot.update();
-                return false;
+                return true;
             }
         };
     }
 
-    public Action setCollect2(BrainSTEMAutoRobot robot) {
+    public Action setIndex2(BrainSTEMAutoRobot robot) {
         return new Action() {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
@@ -49,7 +71,7 @@ public class AutoActions {
         };
     }
 
-    public Action setCollect3(BrainSTEMAutoRobot robot) {
+    public Action setIndex3(BrainSTEMAutoRobot robot) {
         return new Action() {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
@@ -58,4 +80,7 @@ public class AutoActions {
             }
         };
     }
+
+
+
 }

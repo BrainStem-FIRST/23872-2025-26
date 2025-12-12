@@ -74,8 +74,11 @@ public class Tele extends LinearOpMode {
 
 
             //Gamepad 2 controls ↓
-//            if (gamepad2.a && !robot.spindexer.isSpindexerBusy()) {
-//                robot.spindexer.rotateDegrees(120);
+            if (gp2.isFirstA()) {
+//                robot.spindexer.rotate120degrees();
+                robot.spindexer.spindexerState = Spindexer.SpindexerState.NORMAL;
+                robot.spindexer.rotate120degrees();
+            }
 //            } else if (gamepad2.y && !robot.spindexer.isSpindexerBusy()){
 //                robot.spindexer.rotateDegrees(60);
 //            }
@@ -100,14 +103,6 @@ public class Tele extends LinearOpMode {
                 robot.finger.fingerState = Finger.FingerState.DOWN;
             }
 
-//            if (gamepad2.y && !robot.spindexer.isSpindexerBusy()) {
-//                robot.spindexer.rotateDegrees(60);
-//            }
-
-//            if (gamepad2.x && !robot.spindexer.isSpindexerBusy() && (robot.finger.fingerState == Finger.FingerState.DOWN)) {
-//                shootThreeBalls.start();
-//            }
-
             //driving ↓
             double y = -gamepad1.left_stick_y * 0.6;
             double x = gamepad1.left_stick_x * 0.6;
@@ -122,8 +117,8 @@ public class Tele extends LinearOpMode {
 
             telemetry.addData("frontLeft", robot.drive.leftFront.getPower());
             telemetry.addData("frontRight", robot.drive.rightFront.getPower());
-            telemetry.addData("backLeft", robot.drive.leftBack).getClass();
-            telemetry.addData("backRight", robot.drive.rightBack).getClass();
+            telemetry.addData("backLeft", robot.drive.leftBack.getPower());
+            telemetry.addData("backRight", robot.drive.rightBack.getPower());
 
             telemetry.addData("spindexer", robot.spindexer.spindexerMotor.getPower());
 

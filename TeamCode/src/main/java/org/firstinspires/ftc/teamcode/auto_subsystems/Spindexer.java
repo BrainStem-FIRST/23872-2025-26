@@ -23,12 +23,12 @@ public class Spindexer implements Component {
 
     public static final double SPINDEXER_TICKS_PER_DEGREE = (SPINDEXER_TICKS_PER_REVOLUTION * SPINDEXER_GEAR_RATIO) / 360.0;
 
-    private static int COLLECT1_POS = 120;
-    private static int COLLECT2_POS = 240;
-    private static int COLLECT3_POS = 0;
-    private static int SHOOT1_POS = 60;
-    private static int SHOOT2_POS = 180;
-    private static int SHOOT3_POS = 300;
+    public static int COLLECT1_POS = 120;
+    public static int COLLECT2_POS = 240;
+    public static int COLLECT3_POS = 0;
+    public static int SHOOT1_POS = 60;
+    public static int SHOOT2_POS = 180;
+    public static int SHOOT3_POS = 300;
 
     private int ticks;
 
@@ -45,7 +45,8 @@ public class Spindexer implements Component {
         COLLECT3,
         SHOOT1,
         SHOOT2,
-        SHOOT3
+        SHOOT3,
+        NORMAL
     }
 
     public Spindexer(HardwareMap hardwareMap, Telemetry telemetry) {
@@ -56,7 +57,7 @@ public class Spindexer implements Component {
 
         spindexerMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
 
-        spindexerMotor.setTargetPositionTolerance(2);
+        spindexerMotor.setTargetPositionTolerance(5);
 
         spindexerMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
@@ -75,9 +76,17 @@ public class Spindexer implements Component {
 
         spindexerMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        spindexerMotor.setPower(0.2);
+        spindexerMotor.setPower(0.5);
+    }
+    public void rotate120Degrees(){
+        spindexerMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        spindexerMotor.setTargetPosition(96);
+        spindexerMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        spindexerMotor.setPower(0.5);
 
     }
+
+
 
     private int convertDegreesToTicks(double degrees){
         return (int)(degrees * SPINDEXER_TICKS_PER_DEGREE);
@@ -115,6 +124,8 @@ public class Spindexer implements Component {
                 break;
             case SHOOT3:
                 setTargetPosition(convertDegreesToTicks(SHOOT3_POS));
+                break;
+            case NORMAL:
                 break;
         }
     }
