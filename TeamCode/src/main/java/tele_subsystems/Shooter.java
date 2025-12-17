@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Component;
+import org.firstinspires.ftc.teamcode.PIDController;
 
 @Config
 public class Shooter implements Component {
@@ -18,11 +19,11 @@ public class Shooter implements Component {
     public DcMotorEx shooterMotorTwo;
     public DcMotorEx shooterMotorOne;
 
-    public double FAR_SHOOT_VEL = 3750;
-    public double CLOSE_SHOOT_VEL = 2000;
+    public static double FAR_SHOOT_VEL = 1000;
+    public static double CLOSE_SHOOT_VEL = 1000;
 
-    public double CLOSE_SHOOT_VEL = 2000;
-    public double FAR_SHOOT_VEL = 3750;
+//    public double CLOSE_SHOOT_VEL = 2000;
+//    public double FAR_SHOOT_VEL = 3750;
 
 
     public ShooterState shooterState;
@@ -31,11 +32,13 @@ public class Shooter implements Component {
 
     public enum ShooterState {
         OFF,
-        PRESPIN,
         SHOOT_FAR,
         SHOOT_CLOSE
 
     }
+      public PIDController shooterPid;
+
+    public static double pidKp = 0, pidKF = 0.01;
 
     public Shooter(HardwareMap hardwareMap, Telemetry telemetry) {
         this.map = hardwareMap;
@@ -53,10 +56,12 @@ public class Shooter implements Component {
         shooterMotorOne.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         shooterMotorTwo.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
 
-        shooterMotorOne.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        shooterMotorTwo.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        shooterMotorOne.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        shooterMotorTwo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         this.shooterState = ShooterState.OFF;
+
+        shooterPid = new PIDController(pidKp, 0, 0);
     }
 
     @Override
@@ -68,23 +73,32 @@ public class Shooter implements Component {
     public void update() {
         switch (shooterState) {
             case OFF:
-                shooterMotorOne.setVelocity(0);
-                shooterMotorTwo.setVelocity(0);
+                shooterMotorOne.setPower(0);
+                shooterMotorTwo.setPower(0);
 
                 break;
             case SHOOT_FAR:
-                shooterMotorOne.setVelocity(FAR_SHOOT_VEL);
-                shooterMotorTwo.setVelocity(FAR_SHOOT_VEL);
-
+                double power = shooterPid.update(shooterMotorOne.getVelocity());
+                telemetry.addData("pid power", power);
+                double minPower = pidKF * shooterPid.getTarget();
+                power = power - Math.abs(minPower); // -75, 75
+                telemetry.addData("min power", minPower);
+                telemetry.addData("total power", power);
+                shooterMotorOne.setPower(-power);
+                shooterMotorTwo.setPower(-power);
                 break;
             case SHOOT_CLOSE:
-                shooterMotorOne.setVelocity(CLOSE_SHOOT_VEL);
-                shooterMotorTwo.setVelocity(CLOSE_SHOOT_VEL);
-                break;
-            case PRESPIN:
-                shooterMotorOne.setVelocity(1000);
-                shooterMotorTwo.setVelocity(1000);
-                break;
+                power = shooterPid.update(shooterMotorTwo.getVelocity());
+                telemetry.addData("pid power", power);
+                minPower = pidKF * shooterPid.getTarget();
+                power = power - Math.abs(minPower); // -75, 75
+                telemetry.addData("min power", minPower);
+                telemetry.addData("total power", power);
+                shooterMotorOne.setPower(-power);
+                shooterMotorTwo.setPower(-power);
+//                shooterMotorOne.setVelocity(CLOSE_SHOOT_VEL);
+//                shooterMotorTwo.setVelocity(CLOSE_SHOOT_VEL);
+//                break;
         }
 
         telemetry.addData("shooter motor one velocity", shooterMotorOne.getVelocity());

@@ -44,7 +44,7 @@ public final class BasicAuto extends LinearOpMode {
         // DECLARE POSES
 
         Pose2d shootPose = new Pose2d(positions.preloadX, positions.preloadY, positions.preloadA);
-
+        wait(500);
         Pose2d collectPose = new Pose2d(positions.collect1X, positions.collect1Y, positions.collect1A);
         wait(500);
         Pose2d collectPose2 = new Pose2d(positions.collect2X, positions.collect2Y, positions.collect2A);
@@ -52,12 +52,6 @@ public final class BasicAuto extends LinearOpMode {
         Pose2d collectPose3 = new Pose2d(positions.collect3X, positions.collect3Y, positions.collect3A);
         wait(500);
 
-        Pose2d collectPose = new Pose2d(positions.collect1X, positions.collect1Y, positions.collect1A);
-        robot.collector.collectorState = Collector.CollectorState.ON;
-        wait(500);
-        robot.collector.collectorState = Collector.CollectorState.OFF;
-        Pose2d collectPose2 = new Pose2d(positions.collect2X, positions.collect2Y, positions.collect2A);
-        Pose2d collectPose3 = new Pose2d(positions.collect3X, positions.collect3Y, positions.collect3A);
 
 
 
@@ -99,15 +93,15 @@ public final class BasicAuto extends LinearOpMode {
 
                                 setIndex1,
                                 new SleepAction(1.0),
-                                rotate120
+ //                               rotate120
 //                                setIndex2
 //                               new SleepAction(1.0)
 
 
-//                                preloadDrive,
-//                                collectDrive,
-//                                collectDrive2,
-//                                collectDrive3
+                                preloadDrive,
+                                collectDrive,
+                                collectDrive2,
+                                collectDrive3
 
                         ), robotUpdate)
 

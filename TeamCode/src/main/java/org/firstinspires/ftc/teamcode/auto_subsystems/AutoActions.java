@@ -10,10 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.BrainSTEMAutoRobot;
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 169e49d25bcb585315b218d745d7abf3d49734a9
 public class AutoActions {
 
     public Action setIndex1(BrainSTEMAutoRobot robot) {

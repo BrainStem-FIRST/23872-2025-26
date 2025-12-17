@@ -7,66 +7,60 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.BrainSTEMTeleRobot;
 import org.firstinspires.ftc.teamcode.Component;
+import org.firstinspires.ftc.teamcode.PIDController;
+import org.firstinspires.ftc.teamcode.Tele;
+
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.robot.Robot;
 
 
 @Config
 public class Spindexer implements Component {
+    public static double indexerKP = 0.05;
+    public static double errorThreshold = 5;
+    public static double normalRotateDeg = 120;
+    public static double shootRotateDeg = 30;
+    public static double SPINDEXER_TICKS_PER_REVOLUTION = 239;
 
+    public enum SpindexerState {
+        COLLECT,
+        SHOOT
+    }
+    public SpindexerState spindexerState;
 
-//    private LinearOpMode opmode;
-//
-//    public Spindexer(LinearOpMode opmode, HardwareMap hardwareMap) {
-//        this.opmode = opmode;
-//        spindexerMotor = hardwareMap.get(DcMotor.class, "spindexer");
-//    }
-
-    public static double SPINDEXER_TICKS_PER_REVOLUTION = 288;
-
-    public static double SPINDEXER_GEAR_RATIO = 1.0;
-
-    public static final double SPINDEXER_TICKS_PER_DEGREE = (SPINDEXER_TICKS_PER_REVOLUTION * SPINDEXER_GEAR_RATIO) / 360.0;
-
-
+    public PIDController spindexerPid;
+    private int spindexerTargetPosition;
+    private DcMotorEx spindexerMotor;
+    private int curPos;
     private HardwareMap map;
     private Telemetry telemetry;
-    public SpindexerState spindexerState;
-    private int spindexerTargetPosition;
-    public enum SpindexerState {
-        OFF,
-        ON,
-        NORMAL
-    }
-    public DcMotorEx spindexerMotor;
-    public Spindexer(HardwareMap hardwareMap, Telemetry telemetry) {
+
+    public boolean indexerCued;
+    private BrainSTEMTeleRobot robot;
+    public Spindexer(HardwareMap hardwareMap, Telemetry telemetry, BrainSTEMTeleRobot robot) {
         this.map = hardwareMap;
         this.telemetry = telemetry;
-
+        this.robot = robot;
 
         spindexerMotor = map.get(DcMotorEx.class, "spindexerMotor");
         spindexerMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        spindexerMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        spindexerMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         spindexerMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        spindexerState = SpindexerState.NORMAL;
-
+        spindexerPid = new PIDController(indexerKP, 0, 0);
+        spindexerState = SpindexerState.COLLECT;
     }
 
     public void rotateDegrees(double degrees){
-
-            telemetry.addData("in rotateDegrees", spindexerMotor.isBusy());
-            telemetry.update();
-            spindexerTargetPosition = spindexerMotor.getCurrentPosition() + (int)(degrees * SPINDEXER_TICKS_PER_DEGREE);
-            spindexerMotor.setTargetPosition(spindexerTargetPosition);
-            spindexerMotor.setTargetPositionTolerance(2);
-            spindexerMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            spindexerMotor.setPower(0.3);
-
-            spindexerState = SpindexerState.ON;
-
-
-
+            spindexerTargetPosition = spindexerMotor.getCurrentPosition() + (int)(degrees / 360. * SPINDEXER_TICKS_PER_REVOLUTION);
+            spindexerPid.reset();
+            spindexerPid.setTarget(spindexerTargetPosition);
+//            spindexerMotor.setTargetPosition(spindexerTargetPosition);
+//            spindexerMotor.setTargetPositionTolerance(2);
+//            spindexerMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            spindexerMotor.setPower(0.3);
     }
     public int getCurrentPosition() {
         return spindexerMotor.getCurrentPosition();
@@ -89,26 +83,26 @@ public class Spindexer implements Component {
 
     @Override
     public void update() {
-        switch (spindexerState) {
-            case OFF:
-                if (spindexerMotor.getPower() != 0) {
-                    spindexerMotor.setPower(0);
-                }
-                break;
-            case ON:
-                if (!spindexerMotor.isBusy()) {
-                    spindexerMotor.setPower(0);
-                    spindexerMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    spindexerState = SpindexerState.NORMAL;
-                }
-                break;
-            case NORMAL:
-                break;
+        if(indexerCued && robot.finger.fingerState == Finger.FingerState.DOWN) {
+            rotateDegrees(normalRotateDeg);
+            indexerCued = false;
+        }
+        curPos = spindexerMotor.getCurrentPosition();
+
+        if(isStatic()) {
+            spindexerMotor.setPower(0);
+        }
+        else {
+            double power = spindexerPid.update(spindexerMotor.getCurrentPosition());
+            spindexerMotor.setPower(-power);
         }
     }
 
-    public boolean isSpindexerBusy(){
-        return spindexerMotor.isBusy();
+    public boolean isStatic() {
+        return Math.abs(curPos - spindexerPid.getTarget()) < errorThreshold;
+    }
+    public double getMotorPos() {
+        return curPos;
     }
 
 

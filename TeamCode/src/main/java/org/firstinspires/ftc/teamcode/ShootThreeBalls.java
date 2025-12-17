@@ -95,7 +95,7 @@ public class ShootThreeBalls {
                 shooter.shooterState = Shooter.ShooterState.SHOOT_FAR;
                 finger.fingerState = Finger.FingerState.DOWN;
 
-                if (spindexer.spindexerState == Spindexer.SpindexerState.OFF) {
+                if (spindexer.isStatic()) {
                     telemetry.addData("Stage", "Ok. Spindexer is good. We are shooting.");
                     currentState = ShootThreeState.LIFT;
                     stageTimer.reset();
@@ -148,7 +148,7 @@ public class ShootThreeBalls {
 
                 shooter.shooterState = Shooter.ShooterState.OFF;
                 finger.fingerState = Finger.FingerState.DOWN;
-                if (spindexer.spindexerState == Spindexer.SpindexerState.OFF){
+                if (spindexer.isStatic()){
                     telemetry.addData("Stage", "Okay we are good.");
                     currentState = ShootThreeState.STOP;
                     stageTimer.reset();
@@ -162,7 +162,7 @@ public class ShootThreeBalls {
             case STOP:
                 shooter.shooterState = Shooter.ShooterState.OFF; // Turn shooter off
                 finger.fingerState = Finger.FingerState.DOWN;  // Keep finger down
-                spindexer.spindexerState = Spindexer.SpindexerState.OFF; //Turn off spindexer
+
 
 
 
