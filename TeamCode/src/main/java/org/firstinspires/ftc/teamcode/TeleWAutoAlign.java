@@ -60,7 +60,7 @@ public class TeleWAutoAlign extends LinearOpMode {
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0,0,0)); //change
 
-        drive.setMotorMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
 
         //somehow transfer pose from auto
 
@@ -118,6 +118,10 @@ public class TeleWAutoAlign extends LinearOpMode {
         double x = gamepad1.left_stick_x * 0.6;
         double rx = gamepad1.right_stick_x * 0.6;
 
+        if(gamepad2.y){
+            rx = autoAlignRobo();
+        }
+
         robot.drive.setMotorPowers(
                 y + x + rx,
                 y - x - rx,
@@ -169,6 +173,7 @@ public class TeleWAutoAlign extends LinearOpMode {
             robot.spindexer.indexerCued = true;
             robot.finger.flickerTimer.reset();
         }
+
     }
 
     public void setDriveModes() {
@@ -203,6 +208,28 @@ public class TeleWAutoAlign extends LinearOpMode {
                 v.x * cos - v.y * sin,
                 v.x * sin + v.y * cos
         );
+    }
+
+
+    private double calculateAngle(){
+        Vector2d redGoal = new Vector2d(-72, 48);
+        double dx = redGoal.x - drive.localizer.getPose().position.x;
+        double dy = redGoal.y - drive.localizer.getPose().position.y;
+
+        double angle = Math.atan2(dy,dx);
+        telemetry.addData("dx", dx);
+        telemetry.addData("dy", dy);
+        telemetry.addData("angle", angle);
+        return angle;
+    }
+
+    private double autoAlignRobo(){
+        double angle = calculateAngle();
+        double headingError = angle - drive.localizer.getPose().heading.toDouble();
+        double kP = 0.0001; //change
+        double power = kP*headingError;
+        telemetry.addData("power", power);
+        return power;
     }
 
 }
