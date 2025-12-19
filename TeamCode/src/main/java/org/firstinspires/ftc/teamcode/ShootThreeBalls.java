@@ -74,7 +74,7 @@ public class ShootThreeBalls {
                 shooter.shooterState = Shooter.ShooterState.SHOOT_FAR;
                 finger.fingerState = Finger.FingerState.DOWN;
 
-                double currentVelocity = shooter.shooterMotorOne.getVelocity();
+                double currentVelocity = Double.parseDouble(String.valueOf(shooter.shooterMotorOne.getVelocity()));
                 double tolerance = SHOOTER_TARGET_VELOCITY * SHOOTER_VELOCITY_TOLERANCE;
 
                 telemetry.addData("Current Shooter Velocity", "%.1f / %.1f", currentVelocity, SHOOTER_TARGET_VELOCITY);

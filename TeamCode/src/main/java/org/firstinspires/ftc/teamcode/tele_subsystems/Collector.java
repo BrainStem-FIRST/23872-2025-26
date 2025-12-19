@@ -18,7 +18,8 @@ public class Collector implements Component {
     public enum CollectorState {
 
         OFF,
-        ON
+        INTAKE,
+        EXTAKE
     }
 
     public Collector(HardwareMap hardwareMap, Telemetry telemetry) {
@@ -42,8 +43,11 @@ public class Collector implements Component {
             case OFF:
                 collectorMotor.setPower(0);
                 break;
-            case ON:
+            case INTAKE:
                 collectorMotor.setPower(0.8);
+                break;
+            case EXTAKE:
+                collectorMotor.setPower(-0.8);
                 break;
         }
     }

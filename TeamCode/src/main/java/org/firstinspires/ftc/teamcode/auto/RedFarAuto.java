@@ -1,16 +1,21 @@
 package org.firstinspires.ftc.teamcode.auto;
 
+import androidx.annotation.NonNull;
+
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.BrainSTEMAutoRobot;
 import org.firstinspires.ftc.teamcode.auto_subsystems.AutoActions;
+import org.firstinspires.ftc.teamcode.auto_subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.auto_subsystems.Spindexer;
 
 @Autonomous (name = "Red Far Auto")
@@ -31,7 +36,7 @@ public final class RedFarAuto extends LinearOpMode {
         Pose2d beginPose = new Pose2d(positions.startX, positions.startY, positions.startA);
         Pose2d shootPose = new Pose2d(positions.preloadX, positions.preloadY, positions.preloadA);
         Pose2d collectPose = new Pose2d(positions.collect1X, positions.collect1Y, positions.collect1A);
-
+        Pose2d collectPose2 = new Pose2d(positions.collect2X, positions.collect2Y, positions.collect2A);
 
         BrainSTEMAutoRobot robot = new BrainSTEMAutoRobot(hardwareMap, telemetry, this, beginPose);
 
@@ -43,37 +48,72 @@ public final class RedFarAuto extends LinearOpMode {
                 .splineToLinearHeading(collectPose, positions.collect1T)
                 .build();
 
-        Action setCollect1 = new AutoActions().setIndex1(robot);
+        Action collectDrive2 = robot.drive.actionBuilder(collectPose)
+                .splineToLinearHeading(collectPose2, positions.collect2T)
+                .build();
+
         Action robotUpdate = new AutoActions().robotUpdate(robot);
+
+        Action setCollect1 = new AutoActions().setIndex1(robot);
 
         Action setCollect2 = new AutoActions().setIndex2(robot);
 
         Action setCollect3 = new AutoActions().setIndex3(robot);
+
+        Action SHOOT1_POS = new AutoActions().SHOOT1_POS(robot);
+
+        Action SHOOT2_POS = new AutoActions().SHOOT2_POS(robot);
+
+        Action SHOOT3_POS = new AutoActions().SHOOT3_POS(robot);
+
+        Action shooterTurnOnFar = new AutoActions().shooterTurnOnFar(robot);
+
+        Action shooterTurnOff= new AutoActions().shooterTurnOff(robot);
+
+        Action fingerServoU = new AutoActions().fingerServoU(robot);
+
+        Action fingerServoD = new AutoActions().fingerServoU(robot);
+
 
 
 
         waitForStart();
 
 
-        if (isStopRequested()) return;
-
-        robot.spindexer.spindexerState = Spindexer.SpindexerState.COLLECT1;
-
         Actions.runBlocking(
                 new ParallelAction(
                         new Action[]{new SequentialAction(
-//
-//                                    setCollect1,
-//                                    new SleepAction(1.0),
-//                                    setCollect2
-
                                 preloadDrive,
-                                collectDrive
+                                shooterTurnOnFar,
+                                new SleepAction(0.2),
+                                fingerServoU,
+                                new SleepAction(0.2),
+                                fingerServoD,
+                                new SleepAction(0.2),
+                                SHOOT2_POS,
+                                new SleepAction(0.2),
+                                fingerServoU,
+                                new SleepAction(0.2),
+                                fingerServoD,
+                                new SleepAction(0.2),
+                                SHOOT3_POS,
+                                new SleepAction(0.2),
+                                fingerServoU,
+                                new SleepAction(0.2),
+                                fingerServoD,
+                                shooterTurnOff
+
+//                                preloadDrive,
+//                                collectDrive,
+//                                collectDrive2
 
 
-                        ), robotUpdate})
+                        ),
+                                robotUpdate})
 
         );
+
+        while (opModeIsActive())
 
 
 //            robot.shooter.setShooterShootFar();

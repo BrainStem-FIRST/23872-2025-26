@@ -27,9 +27,9 @@ public class Collector implements Component {
         this.map = hardwareMap;
         this.telemetry = telemetry;
 
-        this.collectorState = CollectorState.OFF;
+        collectorState = CollectorState.OFF;
 
-        this.collectorState = Collector.CollectorState.OFF;
+        collectorState = Collector.CollectorState.OFF;
 
         collectorMotor = map.get(DcMotorEx.class, "collectorMotor");
     }
@@ -56,3 +56,4 @@ public class Collector implements Component {
 
 
 }
+

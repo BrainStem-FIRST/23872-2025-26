@@ -66,9 +66,9 @@ public final class BlueFarAuto extends LinearOpMode {
 
         Action SHOOT3_POS = new AutoActions().SHOOT3_POS(robot);
 
-        Action shooterMotorOne = new AutoActions().shooterMotorOne(robot);
+        Action shooterTurnOnFar = new AutoActions().shooterTurnOnFar(robot);
 
-        Action shooterMotorTwo = new AutoActions().shooterMotorTwo(robot);
+        Action shooterTurnOff= new AutoActions().shooterTurnOff(robot);
 
         Action fingerServoU = new AutoActions().fingerServoU(robot);
 
@@ -83,24 +83,25 @@ public final class BlueFarAuto extends LinearOpMode {
         Actions.runBlocking(
                 new ParallelAction(
                         new Action[]{new SequentialAction(
-                                shooterMotorOne,
-                                shooterMotorTwo,
-                                new SleepAction(0.25),
+                                shooterTurnOnFar,
+                                new SleepAction(0.2),
                                 fingerServoU,
-                                new SleepAction(0.25),
+                                new SleepAction(0.2),
                                 fingerServoD,
-                                new SleepAction(0.25),
+                                new SleepAction(0.2),
                                 SHOOT2_POS,
-                                new SleepAction(0.25),
+                                new SleepAction(0.2),
                                 fingerServoU,
-                                new SleepAction(0.25),
+                                new SleepAction(0.2),
                                 fingerServoD,
-                                new SleepAction(0.25),
+                                new SleepAction(0.2),
                                 SHOOT3_POS,
-                                new SleepAction(0.25),
+                                new SleepAction(0.2),
                                 fingerServoU,
-                                new SleepAction(0.25),
-                                fingerServoD
+                                new SleepAction(0.2),
+                                fingerServoD,
+                                shooterTurnOff
+
 //                                preloadDrive,
 //                                collectDrive,
 //                                collectDrive2

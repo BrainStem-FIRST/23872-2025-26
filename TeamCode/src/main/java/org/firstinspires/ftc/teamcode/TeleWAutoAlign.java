@@ -129,7 +129,7 @@ public class TeleWAutoAlign extends LinearOpMode {
 
         //Gamepad 1 controls ↓
         if (gamepad1.right_trigger > 0.1) {
-            robot.collector.collectorState = Collector.CollectorState.ON;
+            robot.collector.collectorState = Collector.CollectorState.INTAKE;
         } else {
             robot.collector.collectorState = Collector.CollectorState.OFF;
         }

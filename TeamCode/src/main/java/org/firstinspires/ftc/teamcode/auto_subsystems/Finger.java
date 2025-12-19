@@ -22,14 +22,13 @@ public class Finger implements Component {
     public enum FingerState {
         DOWN,
         UP;
-        public static org.firstinspires.ftc.teamcode.tele_subsystems.Finger.FingerState upPosition;
-        public static org.firstinspires.ftc.teamcode.tele_subsystems.Finger.FingerState downPosition;
+
     }
 
     public Finger(HardwareMap hardwareMap, Telemetry telemetry) {
         this.map = hardwareMap;
         this.telemetry = telemetry;
-        this.fingerState = FingerState.DOWN;
+        fingerState = FingerState.DOWN;
 
         fingerServo = map.get(ServoImplEx.class, "fingerServo");
         fingerServo.setPwmRange(new PwmControl.PwmRange(downPWM, upPWM));

@@ -7,8 +7,6 @@ import com.acmerobotics.roadrunner.Action;
 
 import org.firstinspires.ftc.teamcode.BrainSTEMAutoRobot;
 
-import org.firstinspires.ftc.teamcode.tele_subsystems.Collector;
-
 
 public class AutoActions {
 
@@ -41,7 +39,7 @@ public class AutoActions {
         return new Action() {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                robot.collector.collectorState = Collector.CollectorState.ON;
+                robot.collector.collectorState = Collector.CollectorState.OFF;
                 return false;
             }
         };
@@ -77,21 +75,29 @@ public class AutoActions {
         };
     }
 
-    public Action shooterMotorOne(BrainSTEMAutoRobot robot) {
+    public Action shooterTurnOnFar(BrainSTEMAutoRobot robot) {
         return new Action() {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                robot.shooter.shooterMotorOne = Shooter.ShooterState.SHOOT_FAR;
+                robot.shooter.shooterState = Shooter.ShooterState.SHOOT_FAR;
                 return false;
             }
         };
     }
 
+    public Action shooterTurnOff(BrainSTEMAutoRobot robot) {
+        return new Action() {
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                robot.shooter.shooterState = Shooter.ShooterState.OFF;
+                return false;
+            }
+        };
+    }
     public Action shooterMotorTwo(BrainSTEMAutoRobot robot) {
         return new Action() {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                robot.shooter.shooterMotorTwo = Shooter.ShooterState.SHOOT_FAR;
                 return false;
             }
         };
@@ -101,16 +107,14 @@ public class AutoActions {
         return new Action() {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                robot.shooter.shooterMotorTwo = Shooter.ShooterState.SHOOT_FAR;
                 return false;
             }
         };
-
-
-
     }
 
-    public Action shoot1_pos(BrainSTEMAutoRobot robot) {
+
+
+    public Action SHOOT1_POS(BrainSTEMAutoRobot robot) {
         return new Action() {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
@@ -145,7 +149,7 @@ public class AutoActions {
         return new Action() {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                robot.finger.fingerState = Finger.FingerState.upPosition;
+                robot.finger.fingerState = Finger.FingerState.UP;
                 return false;
             }
         };
@@ -155,7 +159,7 @@ public class AutoActions {
         return new Action() {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                robot.finger.fingerState = Finger.FingerState.downPosition;
+                robot.finger.fingerState = Finger.FingerState.DOWN;
                 return false;
             }
         };

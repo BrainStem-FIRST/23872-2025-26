@@ -8,6 +8,7 @@ import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.BrainSTEMTeleRobot;
 import org.firstinspires.ftc.teamcode.Drawing;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.TankDrive;
@@ -18,12 +19,14 @@ public class LocalizationTest extends LinearOpMode {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         if (TuningOpModes.DRIVE_CLASS.equals(MecanumDrive.class)) {
-            MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
+//            MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
+
+            BrainSTEMTeleRobot robot = new BrainSTEMTeleRobot(hardwareMap, telemetry, this, new Pose2d(0,0,0));
 
             waitForStart();
 
             while (opModeIsActive()) {
-                drive.setDrivePowers(new PoseVelocity2d(
+                robot.drive.setDrivePowers(new PoseVelocity2d(
                         new Vector2d(
                                 -gamepad1.left_stick_y,
                                 -gamepad1.left_stick_x
@@ -32,11 +35,11 @@ public class LocalizationTest extends LinearOpMode {
                 ));
 
                 if(gamepad1.a)
-                    drive.localizer.setPose(new Pose2d(0, 0, 0));
+                    robot.drive.localizer.setPose(new Pose2d(0, 0, 0));
 
-                drive.updatePoseEstimate();
+                robot.drive.updatePoseEstimate();
 
-                Pose2d pose = drive.localizer.getPose();
+                Pose2d pose = robot.drive.localizer.getPose();
                 telemetry.addData("x", pose.position.x);
                 telemetry.addData("y", pose.position.y);
                 telemetry.addData("heading (deg)", Math.toDegrees(pose.heading.toDouble()));

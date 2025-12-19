@@ -7,13 +7,13 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.auto_subsystems.Collector;
+import org.firstinspires.ftc.teamcode.auto_subsystems.Finger;
+import org.firstinspires.ftc.teamcode.auto_subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.auto_subsystems.Spindexer;
 
 import java.util.ArrayList;
 
-import org.firstinspires.ftc.teamcode.tele_subsystems.Collector;
-import org.firstinspires.ftc.teamcode.tele_subsystems.Finger;
-import org.firstinspires.ftc.teamcode.tele_subsystems.Shooter;
 
 
 public class BrainSTEMAutoRobot {
