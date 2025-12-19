@@ -113,7 +113,7 @@ public final class RedFarAuto extends LinearOpMode {
 
         );
 
-        while (opModeIsActive())
+        while (opModeIsActive());
 
 
 //            robot.shooter.setShooterShootFar();
