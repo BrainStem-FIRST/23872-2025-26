@@ -93,6 +93,9 @@ public class Spindexer implements Component {
             double power = spindexerPid.update(spindexerMotor.getCurrentPosition());
             spindexerMotor.setPower(-power);
         }
+
+        telemetry.addData("Spindexer Power", spindexerMotor.getPower());
+        telemetry.addData("Spindexer Position", spindexerMotor.getCurrentPosition());
     }
 
     public boolean isStatic() {

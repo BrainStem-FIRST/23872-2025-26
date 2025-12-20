@@ -99,8 +99,11 @@ public class Shooter implements Component {
                 break;
         }
 
-        telemetry.addData("shooter motor one velocity", shooterMotorOne.getVelocity());
-        telemetry.addData("shooter motor two velocity", shooterMotorTwo.getVelocity());
+//        telemetry.addData("shooter motor one velocity", shooterMotorOne.getVelocity());
+//        telemetry.addData("shooter motor two velocity", shooterMotorTwo.getVelocity());
+        telemetry.addData("Shooter State ", shooterState.toString());
+        telemetry.addData("Shooter 1 Power ", shooterMotorOne.getPower());
+        telemetry.addData("Shooter 2 Power ", shooterMotorTwo.getPower());
     }
 
 

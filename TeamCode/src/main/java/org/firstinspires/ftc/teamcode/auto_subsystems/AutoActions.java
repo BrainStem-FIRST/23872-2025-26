@@ -10,32 +10,19 @@ import org.firstinspires.ftc.teamcode.BrainSTEMAutoRobot;
 
 public class AutoActions {
 
-    public Action setIndex1(BrainSTEMAutoRobot robot) {
+
+
+    public Action setCollectorOn(BrainSTEMAutoRobot robot) {
         return new Action() {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                robot.spindexer.spindexerState = Spindexer.SpindexerState.COLLECT1;
+                robot.collector.collectorState = Collector.CollectorState.ON;
                 return false;
             }
         };
     }
-    public Action rotate120(BrainSTEMAutoRobot robot) {
-        return new Action() {
 
-            private boolean alreadyPressed = false;
-            @Override
-            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-               if (!alreadyPressed){
-                   robot.spindexer.rotate120Degrees();
-                   robot.spindexer.spindexerState = Spindexer.SpindexerState.NORMAL;
-               }
-                return robot.spindexer.spindexerMotor.isBusy();
-
-            }
-        };
-    }
-
-    public Action setCollectorOn(BrainSTEMAutoRobot robot) {
+    public Action setCollectorOff(BrainSTEMAutoRobot robot) {
         return new Action() {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
@@ -49,37 +36,20 @@ public class AutoActions {
         return new Action() {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+
                 robot.update();
                 return true;
             }
         };
     }
 
-    public Action setIndex2(BrainSTEMAutoRobot robot) {
-        return new Action() {
-            @Override
-            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                robot.spindexer.spindexerState = Spindexer.SpindexerState.COLLECT2;
-                return false;
-            }
-        };
-    }
-
-    public Action setIndex3(BrainSTEMAutoRobot robot) {
-        return new Action() {
-            @Override
-            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                robot.spindexer.spindexerState = Spindexer.SpindexerState.COLLECT3;
-                return false;
-            }
-        };
-    }
 
     public Action shooterTurnOnFar(BrainSTEMAutoRobot robot) {
         return new Action() {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                 robot.shooter.shooterState = Shooter.ShooterState.SHOOT_FAR;
+                telemetryPacket.addLine("Shooter On");
                 return false;
             }
         };
@@ -90,66 +60,65 @@ public class AutoActions {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                 robot.shooter.shooterState = Shooter.ShooterState.OFF;
+                telemetryPacket.addLine("Shooter Off");
                 return false;
             }
         };
     }
-    public Action shooterMotorTwo(BrainSTEMAutoRobot robot) {
+//    public Action shooterMotorTwo(BrainSTEMAutoRobot robot) {
+//        return new Action() {
+//            @Override
+//            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+//                return false;
+//            }
+//        };
+//    }
+
+//    public Action shooterMotorOneOff(BrainSTEMAutoRobot robot) {
+//        return new Action() {
+//            @Override
+//            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+//                telemetryPacket.addLine("Shooter Off");
+//                return false;
+//
+//            }
+//        };
+//    }
+
+
+
+
+
+    public Action moveSpindexer120(BrainSTEMAutoRobot robot) {
         return new Action() {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                robot.spindexer.rotateDegrees(org.firstinspires.ftc.teamcode.auto_subsystems.Spindexer.normalRotateDeg);
+                telemetryPacket.addLine("indexer S3");
                 return false;
             }
         };
     }
 
-    public Action shooterMotorOneOff(BrainSTEMAutoRobot robot) {
+    public Action moveSpindexer60(BrainSTEMAutoRobot robot) {
         return new Action() {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                robot.spindexer.rotateDegrees(org.firstinspires.ftc.teamcode.auto_subsystems.Spindexer.shootRotateDeg);
+                telemetryPacket.addLine("indexer S3");
                 return false;
             }
         };
     }
 
 
-
-    public Action SHOOT1_POS(BrainSTEMAutoRobot robot) {
-        return new Action() {
-            @Override
-            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                robot.spindexer.spindexerState = Spindexer.SpindexerState.SHOOT1;
-                return false;
-            }
-        };
-    }
-
-
-    public Action SHOOT2_POS(BrainSTEMAutoRobot robot) {
-        return new Action() {
-            @Override
-            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                robot.spindexer.spindexerState = Spindexer.SpindexerState.SHOOT2;
-                return false;
-            }
-        };
-    }
-
-    public Action SHOOT3_POS(BrainSTEMAutoRobot robot) {
-        return new Action() {
-            @Override
-            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                robot.spindexer.spindexerState = Spindexer.SpindexerState.SHOOT3;
-                return false;
-            }
-        };
-    }
 
     public Action fingerServoU(BrainSTEMAutoRobot robot) {
         return new Action() {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                 robot.finger.fingerState = Finger.FingerState.UP;
+                telemetryPacket.addLine("finger Up");
                 return false;
             }
         };
@@ -160,6 +129,7 @@ public class AutoActions {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                 robot.finger.fingerState = Finger.FingerState.DOWN;
+                telemetryPacket.addLine("finger Down");
                 return false;
             }
         };

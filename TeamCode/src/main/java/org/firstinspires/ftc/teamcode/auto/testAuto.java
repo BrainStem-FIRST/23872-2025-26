@@ -43,13 +43,7 @@ public final class testAuto extends LinearOpMode {
                     .splineToLinearHeading(collectPose, positions.collect1T)
                     .build();
 
-        Action setCollect1 = new AutoActions().setIndex1(robot);
         Action robotUpdate = new AutoActions().robotUpdate(robot);
-
-        Action setCollect2 = new AutoActions().setIndex2(robot);
-
-        Action setCollect3 = new AutoActions().setIndex3(robot);
-
 
 
         waitForStart();
@@ -57,7 +51,6 @@ public final class testAuto extends LinearOpMode {
         
             if (isStopRequested()) return;
 
-            robot.spindexer.spindexerState = Spindexer.SpindexerState.COLLECT1;
 
             Actions.runBlocking(
                     new ParallelAction(

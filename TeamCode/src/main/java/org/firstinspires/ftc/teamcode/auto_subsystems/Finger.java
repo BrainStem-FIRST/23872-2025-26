@@ -4,9 +4,12 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Component;
+
+import java.time.OffsetDateTime;
 
 
 @Config
@@ -21,18 +24,20 @@ public class Finger implements Component {
     public HardwareMap map;
     public enum FingerState {
         DOWN,
-        UP;
-
+        UP
     }
+
+    public ElapsedTime flickerTimer;
 
     public Finger(HardwareMap hardwareMap, Telemetry telemetry) {
         this.map = hardwareMap;
         this.telemetry = telemetry;
-        fingerState = FingerState.DOWN;
+        this.fingerState = FingerState.DOWN;
 
         fingerServo = map.get(ServoImplEx.class, "fingerServo");
         fingerServo.setPwmRange(new PwmControl.PwmRange(downPWM, upPWM));
 
+        flickerTimer = new ElapsedTime();
     }
     @Override
     public void reset() {
@@ -49,6 +54,7 @@ public class Finger implements Component {
                 fingerServo.setPosition(upPosition);
                 break;
         }
+        telemetry.addData("Finger Position ", fingerState.toString());
     }
 
     @Override

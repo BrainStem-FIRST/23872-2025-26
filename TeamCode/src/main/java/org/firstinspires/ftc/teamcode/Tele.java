@@ -134,7 +134,7 @@ public class Tele extends LinearOpMode {
         }
 
         if (gamepad2.left_trigger > 0.9) {
-            robot.spindexer.rotateDegrees(3);
+            robot.spindexer.rotateDegrees(-10);
 
         }
     }

@@ -23,9 +23,10 @@ import org.firstinspires.ftc.teamcode.auto_subsystems.Spindexer;
 public final class BlueFarAuto extends LinearOpMode {
     public static class Positions {
         public double startX = -62.6, startY = -16.6, startA = Math.toRadians(180);
-        public double preloadX = -49, preloadY = -11, preloadA = Math.toRadians(145), preloadT = Math.toRadians(145);
-        public double collect1X = -36, collect1Y = -32, collect1A = Math.toRadians(90), collect1T = Math.toRadians(90);
-        public double collect2X = -10, collect2Y = -42.5, collect2A = Math.toRadians(90), collect2T = Math.toRadians(90);
+        public double preloadX = -49, preloadY = -11, preloadA = Math.toRadians(215), preloadT = Math.toRadians(215);
+        public double collect1X = 36, collect1Y = -32, collect1A = Math.toRadians(275), collect1T = Math.toRadians(275);
+        public double collect2X = -10, collect2Y = -42.5, collect2A = Math.toRadians(275), collect2T = Math.toRadians(275);
+
     }
     public static Positions positions = new Positions();
 
@@ -54,17 +55,9 @@ public final class BlueFarAuto extends LinearOpMode {
 
         Action robotUpdate = new AutoActions().robotUpdate(robot);
 
-        Action setCollect1 = new AutoActions().setIndex1(robot);
+        Action moveSpindexer120 = new AutoActions().moveSpindexer120(robot);
 
-        Action setCollect2 = new AutoActions().setIndex2(robot);
-
-        Action setCollect3 = new AutoActions().setIndex3(robot);
-
-        Action SHOOT1_POS = new AutoActions().SHOOT1_POS(robot);
-
-        Action SHOOT2_POS = new AutoActions().SHOOT2_POS(robot);
-
-        Action SHOOT3_POS = new AutoActions().SHOOT3_POS(robot);
+        Action moveSpindexer60 = new AutoActions().moveSpindexer60(robot);
 
         Action shooterTurnOnFar = new AutoActions().shooterTurnOnFar(robot);
 
@@ -72,7 +65,7 @@ public final class BlueFarAuto extends LinearOpMode {
 
         Action fingerServoU = new AutoActions().fingerServoU(robot);
 
-        Action fingerServoD = new AutoActions().fingerServoU(robot);
+        Action fingerServoD = new AutoActions().fingerServoD(robot);
 
 
 
@@ -83,22 +76,23 @@ public final class BlueFarAuto extends LinearOpMode {
         Actions.runBlocking(
                 new ParallelAction(
                         new Action[]{new SequentialAction(
+                                preloadDrive,
                                 shooterTurnOnFar,
-                                new SleepAction(0.2),
+                                new SleepAction(2),
                                 fingerServoU,
-                                new SleepAction(0.2),
+                                new SleepAction(2),
                                 fingerServoD,
-                                new SleepAction(0.2),
-                                SHOOT2_POS,
-                                new SleepAction(0.2),
+                                new SleepAction(2),
+                                moveSpindexer120,
+                                new SleepAction(2),
                                 fingerServoU,
-                                new SleepAction(0.2),
+                                new SleepAction(2),
                                 fingerServoD,
-                                new SleepAction(0.2),
-                                SHOOT3_POS,
-                                new SleepAction(0.2),
+                                new SleepAction(2),
+                                moveSpindexer120,
+                                new SleepAction(2),
                                 fingerServoU,
-                                new SleepAction(0.2),
+                                new SleepAction(2),
                                 fingerServoD,
                                 shooterTurnOff
 
@@ -111,6 +105,8 @@ public final class BlueFarAuto extends LinearOpMode {
                                 robotUpdate})
 
         );
+
+        while (opModeIsActive());
 
 
 //            robot.shooter.setShooterShootFar();

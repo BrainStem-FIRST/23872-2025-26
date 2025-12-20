@@ -23,9 +23,11 @@ import org.firstinspires.ftc.teamcode.auto_subsystems.Spindexer;
 public final class RedFarAuto extends LinearOpMode {
     public static class Positions {
         public double startX = 62.6, startY = 16.6, startA = Math.toRadians(180);
-        public double preloadX = 49, preloadY = 11, preloadA = Math.toRadians(145), preloadT = Math.toRadians(145);
-        public double collect1X = 36, collect1Y = 32, collect1A = Math.toRadians(90), collect1T = Math.toRadians(90);
-        public double collect2X = 10, collect2Y = 42.5, collect2A = Math.toRadians(90), collect2T = Math.toRadians(90);
+        public double preloadX = 49, preloadY = 11, preloadA = Math.toRadians(120), preloadT = Math.toRadians(120);
+        public double collect1X = 36, collect1Y = 28, collect1A = Math.toRadians(90), collect1T = Math.toRadians(90);
+        public double collect2X = 36, collect2Y = 30, collect2A = Math.toRadians(90), collect2T = Math.toRadians(90);
+        public double collect3X = 36, collect3Y = 32, collect3A = Math.toRadians(90), collect3T = Math.toRadians(90);
+
     }
     public static Positions positions = new Positions();
 
@@ -37,6 +39,7 @@ public final class RedFarAuto extends LinearOpMode {
         Pose2d shootPose = new Pose2d(positions.preloadX, positions.preloadY, positions.preloadA);
         Pose2d collectPose = new Pose2d(positions.collect1X, positions.collect1Y, positions.collect1A);
         Pose2d collectPose2 = new Pose2d(positions.collect2X, positions.collect2Y, positions.collect2A);
+        Pose2d collectPose3 = new Pose2d(positions.collect3X, positions.collect3Y, positions.collect3A);
 
         BrainSTEMAutoRobot robot = new BrainSTEMAutoRobot(hardwareMap, telemetry, this, beginPose);
 
@@ -52,27 +55,27 @@ public final class RedFarAuto extends LinearOpMode {
                 .splineToLinearHeading(collectPose2, positions.collect2T)
                 .build();
 
+        Action collectDrive3 = robot.drive.actionBuilder(collectPose)
+                .splineToLinearHeading(collectPose3, positions.collect3T)
+                .build();
+
         Action robotUpdate = new AutoActions().robotUpdate(robot);
 
-        Action setCollect1 = new AutoActions().setIndex1(robot);
+        Action moveSpindexer120 = new AutoActions().moveSpindexer120(robot);
 
-        Action setCollect2 = new AutoActions().setIndex2(robot);
-
-        Action setCollect3 = new AutoActions().setIndex3(robot);
-
-        Action SHOOT1_POS = new AutoActions().SHOOT1_POS(robot);
-
-        Action SHOOT2_POS = new AutoActions().SHOOT2_POS(robot);
-
-        Action SHOOT3_POS = new AutoActions().SHOOT3_POS(robot);
+        Action moveSpindexer60 = new AutoActions().moveSpindexer60(robot);
 
         Action shooterTurnOnFar = new AutoActions().shooterTurnOnFar(robot);
 
-        Action shooterTurnOff= new AutoActions().shooterTurnOff(robot);
+        Action shooterTurnOff = new AutoActions().shooterTurnOff(robot);
 
         Action fingerServoU = new AutoActions().fingerServoU(robot);
 
-        Action fingerServoD = new AutoActions().fingerServoU(robot);
+        Action fingerServoD = new AutoActions().fingerServoD(robot);
+
+        Action setCollectorOn = new AutoActions().setCollectorOn(robot);
+
+        Action setCollectorOff = new AutoActions().setCollectorOff(robot);
 
 
 
@@ -85,27 +88,33 @@ public final class RedFarAuto extends LinearOpMode {
                         new Action[]{new SequentialAction(
                                 preloadDrive,
                                 shooterTurnOnFar,
-                                new SleepAction(0.2),
+                                new SleepAction(2),
                                 fingerServoU,
-                                new SleepAction(0.2),
+                                new SleepAction(2),
                                 fingerServoD,
-                                new SleepAction(0.2),
-                                SHOOT2_POS,
-                                new SleepAction(0.2),
+                                new SleepAction(2),
+                                moveSpindexer120,
+                                new SleepAction(2),
                                 fingerServoU,
-                                new SleepAction(0.2),
+                                new SleepAction(2),
                                 fingerServoD,
-                                new SleepAction(0.2),
-                                SHOOT3_POS,
-                                new SleepAction(0.2),
+                                new SleepAction(2),
+                                moveSpindexer120,
+                                new SleepAction(2),
                                 fingerServoU,
-                                new SleepAction(0.2),
+                                new SleepAction(2),
                                 fingerServoD,
-                                shooterTurnOff
+                                shooterTurnOff,
+                                setCollectorOn,
+                                new SleepAction(2),
+                                collectDrive,
+                                new SleepAction(2),
+                                collectDrive2,
+                                new SleepAction(2),
+                                collectDrive3,
+                                setCollectorOff
 
-//                                preloadDrive,
-//                                collectDrive,
-//                                collectDrive2
+
 
 
                         ),

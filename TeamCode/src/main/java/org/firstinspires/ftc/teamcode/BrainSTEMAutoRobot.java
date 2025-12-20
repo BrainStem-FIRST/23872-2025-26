@@ -45,7 +45,7 @@ public class BrainSTEMAutoRobot {
         this.opMode = opMode;
         subsystems = new ArrayList<>();
 
-        spindexer = new Spindexer(hwMap, telemetry);
+        spindexer = new Spindexer(hwMap, telemetry, this);
         collector = new Collector(hwMap, telemetry);
         shooter = new Shooter(hwMap, telemetry);
         finger = new Finger(hwMap, telemetry);
@@ -61,6 +61,7 @@ public class BrainSTEMAutoRobot {
 
     public void update() {
         for (Component c : subsystems) {
+            telemetry.update();
             c.update();
         }
     }
