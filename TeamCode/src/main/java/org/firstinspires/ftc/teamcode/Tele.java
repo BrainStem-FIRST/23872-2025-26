@@ -5,20 +5,15 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import org.firstinspires.ftc.teamcode.utils.teleHelpers.GamepadTracker;
+import org.firstinspires.ftc.teamcode.util.GamepadTracker;
 
-import tele_subsystems.Collector;
-import tele_subsystems.Finger;
-import tele_subsystems.Shooter;
-import tele_subsystems.Spindexer;
-
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.ShootThreeBalls;
+import org.firstinspires.ftc.teamcode.tele_subsystems.Collector;
+import org.firstinspires.ftc.teamcode.tele_subsystems.Finger;
+import org.firstinspires.ftc.teamcode.tele_subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.tele_subsystems.Spindexer;
 
 
 @TeleOp(name = "TeleOp")
@@ -34,7 +29,7 @@ public class Tele extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);
 
-        robot = new BrainSTEMTeleRobot(this.hardwareMap, this.telemetry, this, new Pose2d(0, 0, 0));
+        robot = new BrainSTEMTeleRobot(hardwareMap, this.telemetry, this, new Pose2d(0, 0, 0));
         shootThreeBalls = new ShootThreeBalls(this.robot.shooter, this.robot.finger, this.robot.spindexer, telemetry);
 
         gp1 = new GamepadTracker(gamepad1);
@@ -46,7 +41,6 @@ public class Tele extends LinearOpMode {
         waitForStart();
 
         while (!opModeIsActive()) {
-
 
             telemetry.update();
         }
@@ -94,8 +88,12 @@ public class Tele extends LinearOpMode {
 
         //Gamepad 1 controls ↓
         if (gamepad1.right_trigger > 0.1) {
-            robot.collector.collectorState = Collector.CollectorState.ON;
-        } else {
+            robot.collector.collectorState = Collector.CollectorState.INTAKE;
+        }
+        else if (gamepad1.left_trigger > 0.1) {
+            robot.collector.collectorState = Collector.CollectorState.EXTAKE;
+        }
+        else {
             robot.collector.collectorState = Collector.CollectorState.OFF;
         }
 
@@ -129,11 +127,15 @@ public class Tele extends LinearOpMode {
             robot.spindexer.spindexerState = Spindexer.SpindexerState.COLLECT;
         }
 
-
         if (gamepad2.bWasPressed()) {
             robot.finger.fingerState = Finger.FingerState.UP;
             robot.spindexer.indexerCued = true;
             robot.finger.flickerTimer.reset();
+        }
+
+        if (gamepad2.left_trigger > 0.9) {
+            robot.spindexer.rotateDegrees(-10);
+
         }
     }
 }

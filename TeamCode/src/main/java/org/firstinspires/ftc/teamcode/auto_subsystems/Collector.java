@@ -5,9 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Component;
-import org.firstinspires.ftc.teamcode.auto_subsystems.Collector;
-
+import org.firstinspires.ftc.teamcode.util.Component;
 
 
 @Config
@@ -27,9 +25,9 @@ public class Collector implements Component {
         this.map = hardwareMap;
         this.telemetry = telemetry;
 
-        this.collectorState = CollectorState.OFF;
+        collectorState = CollectorState.OFF;
 
-        this.collectorState = Collector.CollectorState.OFF;
+        collectorState = Collector.CollectorState.OFF;
 
         collectorMotor = map.get(DcMotorEx.class, "collectorMotor");
     }
@@ -56,3 +54,4 @@ public class Collector implements Component {
 
 
 }
+

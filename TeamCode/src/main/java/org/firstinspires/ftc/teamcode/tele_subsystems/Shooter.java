@@ -1,4 +1,4 @@
-package tele_subsystems;
+package org.firstinspires.ftc.teamcode.tele_subsystems;
 
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 
@@ -8,8 +8,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Component;
-import org.firstinspires.ftc.teamcode.PIDController;
+import org.firstinspires.ftc.teamcode.util.Component;
+import org.firstinspires.ftc.teamcode.util.PIDController;
 
 @Config
 public class Shooter implements Component {
@@ -44,8 +44,8 @@ public class Shooter implements Component {
         this.map = hardwareMap;
         this.telemetry = telemetry;
 
-        shooterMotorOne = map.get(DcMotorEx.class, "shooterMotorOne");
-        shooterMotorTwo = map.get(DcMotorEx.class, "shooterMotorTwo");
+        shooterMotorOne = hardwareMap.get(DcMotorEx.class, "shooterMotorOne");
+        shooterMotorTwo = hardwareMap.get(DcMotorEx.class, "shooterMotorTwo");
 
         shooterMotorOne.setDirection(REVERSE);
         shooterMotorTwo.setDirection(REVERSE);
@@ -78,7 +78,7 @@ public class Shooter implements Component {
 
                 break;
             case SHOOT_FAR:
-                double power = shooterPid.update(shooterMotorOne.getVelocity());
+                double power = shooterPid.update(Double.parseDouble(String.valueOf(shooterMotorOne.getVelocity())));
                 telemetry.addData("pid power", power);
                 double minPower = pidKF * shooterPid.getTarget();
                 power = power - Math.abs(minPower); // -75, 75
@@ -88,7 +88,7 @@ public class Shooter implements Component {
                 shooterMotorTwo.setPower(-power);
                 break;
             case SHOOT_CLOSE:
-                power = shooterPid.update(shooterMotorTwo.getVelocity());
+                power = shooterPid.update(Double.parseDouble(String.valueOf(shooterMotorTwo.getVelocity())));
                 telemetry.addData("pid power", power);
                 minPower = pidKF * shooterPid.getTarget();
                 power = power - Math.abs(minPower); // -75, 75

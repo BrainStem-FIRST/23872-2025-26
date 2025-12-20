@@ -7,13 +7,15 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.auto_subsystems.Collector;
+import org.firstinspires.ftc.teamcode.auto_subsystems.Finger;
+import org.firstinspires.ftc.teamcode.auto_subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.auto_subsystems.Spindexer;
+import org.firstinspires.ftc.teamcode.rr.MecanumDrive;
+import org.firstinspires.ftc.teamcode.util.Component;
 
 import java.util.ArrayList;
 
-import tele_subsystems.Collector;
-import tele_subsystems.Finger;
-import tele_subsystems.Shooter;
 
 
 public class BrainSTEMAutoRobot {
@@ -45,7 +47,7 @@ public class BrainSTEMAutoRobot {
         this.opMode = opMode;
         subsystems = new ArrayList<>();
 
-        spindexer = new Spindexer(hwMap, telemetry);
+        spindexer = new Spindexer(hwMap, telemetry, this);
         collector = new Collector(hwMap, telemetry);
         shooter = new Shooter(hwMap, telemetry);
         finger = new Finger(hwMap, telemetry);
@@ -61,6 +63,7 @@ public class BrainSTEMAutoRobot {
 
     public void update() {
         for (Component c : subsystems) {
+            telemetry.update();
             c.update();
         }
     }

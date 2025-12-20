@@ -10,10 +10,12 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.util.ArrayList;
 
-import tele_subsystems.Collector;
-import tele_subsystems.Shooter;
-import tele_subsystems.Spindexer;
-import tele_subsystems.Finger;
+import org.firstinspires.ftc.teamcode.rr.MecanumDrive;
+import org.firstinspires.ftc.teamcode.tele_subsystems.Collector;
+import org.firstinspires.ftc.teamcode.tele_subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.tele_subsystems.Spindexer;
+import org.firstinspires.ftc.teamcode.tele_subsystems.Finger;
+import org.firstinspires.ftc.teamcode.util.Component;
 
 public class BrainSTEMTeleRobot {
 

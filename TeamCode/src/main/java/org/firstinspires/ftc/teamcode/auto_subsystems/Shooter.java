@@ -3,10 +3,11 @@ package org.firstinspires.ftc.teamcode.auto_subsystems;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Component;
+import org.firstinspires.ftc.teamcode.util.Component;
 
 @Config
 public class Shooter implements Component {
@@ -24,7 +25,30 @@ public class Shooter implements Component {
         OFF,
         SHOOT_FAR,
         SHOOT_CLOSE,
-        PRESPIN
+        PRESPIN;
+
+        public String getPower() {
+            return "";
+        }
+
+        public String getVelocity() {
+            return "";
+        }
+
+        public void setDirection(DcMotorSimple.Direction direction) {
+        }
+
+        public void setZeroPowerBehavior(DcMotor.ZeroPowerBehavior zeroPowerBehavior) {
+        }
+
+        public void setMode(DcMotor.RunMode runMode) {
+        }
+
+        public void setPower(int i) {
+        }
+
+        public void setPower(double v) {
+        }
     }
 
     public Shooter(HardwareMap hardwareMap, Telemetry telemetry) {
@@ -75,8 +99,11 @@ public class Shooter implements Component {
                 break;
         }
 
-        telemetry.addData("shooter motor one velocity", shooterMotorOne.getVelocity());
-        telemetry.addData("shooter motor two velocity", shooterMotorTwo.getVelocity());
+//        telemetry.addData("shooter motor one velocity", shooterMotorOne.getVelocity());
+//        telemetry.addData("shooter motor two velocity", shooterMotorTwo.getVelocity());
+        telemetry.addData("Shooter State ", shooterState.toString());
+        telemetry.addData("Shooter 1 Power ", shooterMotorOne.getPower());
+        telemetry.addData("Shooter 2 Power ", shooterMotorTwo.getPower());
     }
 
 

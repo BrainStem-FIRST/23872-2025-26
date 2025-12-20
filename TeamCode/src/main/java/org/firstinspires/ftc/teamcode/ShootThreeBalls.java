@@ -1,13 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-import tele_subsystems.Finger;
-import tele_subsystems.Shooter;
-import tele_subsystems.Spindexer;
+import org.firstinspires.ftc.teamcode.tele_subsystems.Finger;
+import org.firstinspires.ftc.teamcode.tele_subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.tele_subsystems.Spindexer;
 
 public class ShootThreeBalls {
 
@@ -75,7 +74,7 @@ public class ShootThreeBalls {
                 shooter.shooterState = Shooter.ShooterState.SHOOT_FAR;
                 finger.fingerState = Finger.FingerState.DOWN;
 
-                double currentVelocity = shooter.shooterMotorOne.getVelocity();
+                double currentVelocity = Double.parseDouble(String.valueOf(shooter.shooterMotorOne.getVelocity()));
                 double tolerance = SHOOTER_TARGET_VELOCITY * SHOOTER_VELOCITY_TOLERANCE;
 
                 telemetry.addData("Current Shooter Velocity", "%.1f / %.1f", currentVelocity, SHOOTER_TARGET_VELOCITY);

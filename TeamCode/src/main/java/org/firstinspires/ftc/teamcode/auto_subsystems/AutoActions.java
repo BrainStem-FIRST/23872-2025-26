@@ -7,35 +7,10 @@ import com.acmerobotics.roadrunner.Action;
 
 import org.firstinspires.ftc.teamcode.BrainSTEMAutoRobot;
 
-import tele_subsystems.Collector;
-
 
 public class AutoActions {
 
-    public Action setIndex1(BrainSTEMAutoRobot robot) {
-        return new Action() {
-            @Override
-            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                robot.spindexer.spindexerState = Spindexer.SpindexerState.COLLECT1;
-                return false;
-            }
-        };
-    }
-    public Action rotate120(BrainSTEMAutoRobot robot) {
-        return new Action() {
 
-            private boolean alreadyPressed = false;
-            @Override
-            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-               if (!alreadyPressed){
-                   robot.spindexer.rotate120Degrees();
-                   robot.spindexer.spindexerState = Spindexer.SpindexerState.NORMAL;
-               }
-                return robot.spindexer.spindexerMotor.isBusy();
-
-            }
-        };
-    }
 
     public Action setCollectorOn(BrainSTEMAutoRobot robot) {
         return new Action() {
@@ -47,36 +22,118 @@ public class AutoActions {
         };
     }
 
+    public Action setCollectorOff(BrainSTEMAutoRobot robot) {
+        return new Action() {
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                robot.collector.collectorState = Collector.CollectorState.OFF;
+                return false;
+            }
+        };
+    }
+
     public Action robotUpdate(BrainSTEMAutoRobot robot) {
         return new Action() {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+
                 robot.update();
                 return true;
             }
         };
     }
 
-    public Action setIndex2(BrainSTEMAutoRobot robot) {
+
+    public Action shooterTurnOnFar(BrainSTEMAutoRobot robot) {
         return new Action() {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                robot.spindexer.spindexerState = Spindexer.SpindexerState.COLLECT2;
+                robot.shooter.shooterState = Shooter.ShooterState.SHOOT_FAR;
+                telemetryPacket.addLine("Shooter On");
                 return false;
             }
         };
     }
 
-    public Action setIndex3(BrainSTEMAutoRobot robot) {
+    public Action shooterTurnOff(BrainSTEMAutoRobot robot) {
         return new Action() {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                robot.spindexer.spindexerState = Spindexer.SpindexerState.COLLECT3;
+                robot.shooter.shooterState = Shooter.ShooterState.OFF;
+                telemetryPacket.addLine("Shooter Off");
+                return false;
+            }
+        };
+    }
+//    public Action shooterMotorTwo(BrainSTEMAutoRobot robot) {
+//        return new Action() {
+//            @Override
+//            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+//                return false;
+//            }
+//        };
+//    }
+
+//    public Action shooterMotorOneOff(BrainSTEMAutoRobot robot) {
+//        return new Action() {
+//            @Override
+//            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+//                telemetryPacket.addLine("Shooter Off");
+//                return false;
+//
+//            }
+//        };
+//    }
+
+
+
+
+
+    public Action moveSpindexer120(BrainSTEMAutoRobot robot) {
+        return new Action() {
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                robot.spindexer.rotateDegrees(org.firstinspires.ftc.teamcode.auto_subsystems.Spindexer.normalRotateDeg);
+                telemetryPacket.addLine("indexer S3");
                 return false;
             }
         };
     }
 
+    public Action moveSpindexer60(BrainSTEMAutoRobot robot) {
+        return new Action() {
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                robot.spindexer.rotateDegrees(org.firstinspires.ftc.teamcode.auto_subsystems.Spindexer.shootRotateDeg);
+                telemetryPacket.addLine("indexer S3");
+                return false;
+            }
+        };
+    }
+
+
+
+    public Action fingerServoU(BrainSTEMAutoRobot robot) {
+        return new Action() {
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                robot.finger.fingerState = Finger.FingerState.UP;
+                telemetryPacket.addLine("finger Up");
+                return false;
+            }
+        };
+    }
+
+    public Action fingerServoD(BrainSTEMAutoRobot robot) {
+        return new Action() {
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                robot.finger.fingerState = Finger.FingerState.DOWN;
+                telemetryPacket.addLine("finger Down");
+                return false;
+            }
+        };
+    }
 
 
 }

@@ -10,21 +10,18 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.utils.teleHelpers.GamepadTracker;
+import org.firstinspires.ftc.teamcode.util.PIDController;
+import org.firstinspires.ftc.teamcode.util.GamepadTracker;
 
 
 
-import tele_subsystems.Collector;
-import tele_subsystems.Finger;
-import tele_subsystems.Shooter;
-import tele_subsystems.Spindexer;
+import org.firstinspires.ftc.teamcode.tele_subsystems.Collector;
+import org.firstinspires.ftc.teamcode.tele_subsystems.Finger;
+import org.firstinspires.ftc.teamcode.tele_subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.tele_subsystems.Spindexer;
 
 import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-
-import com.qualcomm.robotcore.hardware.DcMotor;
-
-
 
 
 @TeleOp(name = "TeleOp")
@@ -133,7 +130,7 @@ public class TeleWAutoAlign extends LinearOpMode {
 
         //Gamepad 1 controls ↓
         if (gamepad1.right_trigger > 0.1) {
-            robot.collector.collectorState = Collector.CollectorState.ON;
+            robot.collector.collectorState = Collector.CollectorState.INTAKE;
         } else {
             robot.collector.collectorState = Collector.CollectorState.OFF;
         }

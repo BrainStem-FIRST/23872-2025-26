@@ -1,101 +1,75 @@
 package org.firstinspires.ftc.teamcode.auto_subsystems;
 
-//import static subsystems.Spindexer.spindexerState.OFF;
-//import static subsystems.Spindexer.spindexerState.ON;
-
 import com.acmerobotics.dashboard.config.Config;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Component;
+import org.firstinspires.ftc.teamcode.BrainSTEMAutoRobot;
+import org.firstinspires.ftc.teamcode.util.Component;
+import org.firstinspires.ftc.teamcode.util.PIDController;
 
 
 @Config
 public class Spindexer implements Component {
+    public static double indexerKP = 0.05;
+    public static double errorThreshold = 5;
+    public static double normalRotateDeg = 120;
+    public static double shootRotateDeg = 30;
+    public static double SPINDEXER_TICKS_PER_REVOLUTION = 241;
 
+    public enum SpindexerState {
+        COLLECT,
+        OFF, SHOOT
+    }
+    public SpindexerState spindexerState;
 
+    public PIDController spindexerPid;
     private int spindexerTargetPosition;
-    public static double SPINDEXER_TICKS_PER_REVOLUTION = 288;
-
-    public static double SPINDEXER_GEAR_RATIO = 1.0;
-
-    public static final double SPINDEXER_TICKS_PER_DEGREE = (SPINDEXER_TICKS_PER_REVOLUTION * SPINDEXER_GEAR_RATIO) / 360.0;
-
-    public static int COLLECT1_POS = 120;
-    public static int COLLECT2_POS = 240;
-    public static int COLLECT3_POS = 0;
-    public static int SHOOT1_POS = 60;
-    public static int SHOOT2_POS = 180;
-    public static int SHOOT3_POS = 300;
-
-    private int ticks;
-
-
-
-
+    private DcMotorEx spindexerMotor;
+    private int curPos;
     private HardwareMap map;
     private Telemetry telemetry;
-    public DcMotorEx spindexerMotor;
-    public SpindexerState spindexerState;
-    public enum SpindexerState {
-        COLLECT1,
-        COLLECT2,
-        COLLECT3,
-        SHOOT1,
-        SHOOT2,
-        SHOOT3,
-        NORMAL
-    }
 
-    public Spindexer(HardwareMap hardwareMap, Telemetry telemetry) {
+    public boolean indexerCued;
+    private BrainSTEMAutoRobot robot;
+    public Spindexer(HardwareMap hardwareMap, Telemetry telemetry, BrainSTEMAutoRobot robot) {
         this.map = hardwareMap;
         this.telemetry = telemetry;
+        this.robot = robot;
 
         spindexerMotor = map.get(DcMotorEx.class, "spindexerMotor");
-
         spindexerMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-
-        spindexerMotor.setTargetPositionTolerance(5);
-
+        spindexerMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         spindexerMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        this.spindexerState = SpindexerState.SHOOT1;
-
-        spindexerMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-
-
+        spindexerPid = new PIDController(indexerKP, 0, 0);
+        spindexerState = SpindexerState.COLLECT;
     }
 
-    public void rotateDegrees(double degrees){
-
-        spindexerTargetPosition = spindexerMotor.getCurrentPosition() + (int)(degrees * SPINDEXER_TICKS_PER_DEGREE);
-
+    public int rotateDegrees(double degrees){
+        spindexerTargetPosition = spindexerMotor.getCurrentPosition() + (int)(degrees / 360. * SPINDEXER_TICKS_PER_REVOLUTION);
+        spindexerPid.reset();
+        spindexerPid.setTarget(spindexerTargetPosition);
         spindexerMotor.setTargetPosition(spindexerTargetPosition);
-
+        spindexerMotor.setTargetPositionTolerance(2);
         spindexerMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        spindexerMotor.setPower(0.5);
+        spindexerMotor.setPower(0.3);
+        return 0;
     }
-    public void rotate120Degrees(){
+    public int getCurrentPosition() {
+        return spindexerMotor.getCurrentPosition();
+    }
+    public void rotate120degrees(){
         spindexerMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         spindexerMotor.setTargetPosition(96);
         spindexerMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         spindexerMotor.setPower(0.5);
-
-    }
-
-
-
-    private int convertDegreesToTicks(double degrees){
-        return (int)(degrees * SPINDEXER_TICKS_PER_DEGREE);
-    }
-
-    private void setTargetPosition(int targetPosition){
-        spindexerMotor.setTargetPosition(targetPosition);
-        spindexerMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        spindexerMotor.setPower(1.0);
+        if (spindexerMotor.getCurrentPosition() == 96){
+            spindexerState = spindexerState.OFF;
+        }
     }
 
 
@@ -106,39 +80,36 @@ public class Spindexer implements Component {
 
     @Override
     public void update() {
-        switch (spindexerState) {
-            case COLLECT1:
-                setTargetPosition(convertDegreesToTicks(COLLECT1_POS));
-                break;
-            case COLLECT2:
-                setTargetPosition(convertDegreesToTicks(COLLECT2_POS));
-                break;
-            case COLLECT3:
-                setTargetPosition(convertDegreesToTicks(COLLECT3_POS));
-                break;
-            case SHOOT1:
-                setTargetPosition(convertDegreesToTicks(SHOOT1_POS));
-                break;
-            case SHOOT2:
-                setTargetPosition(convertDegreesToTicks(SHOOT2_POS));
-                break;
-            case SHOOT3:
-                setTargetPosition(convertDegreesToTicks(SHOOT3_POS));
-                break;
-            case NORMAL:
-                break;
+        if(indexerCued && robot.finger.fingerState.equals(robot.finger.fingerState.DOWN)) {
+            rotateDegrees(normalRotateDeg);
+            indexerCued = false;
         }
+        curPos = spindexerMotor.getCurrentPosition();
+
+        if(isStatic()) {
+            spindexerMotor.setPower(0);
+        }
+        else {
+            double power = spindexerPid.update(spindexerMotor.getCurrentPosition());
+            spindexerMotor.setPower(-power);
+        }
+
+        telemetry.addData("Spindexer Power", spindexerMotor.getPower());
+        telemetry.addData("Spindexer Position", spindexerMotor.getCurrentPosition());
     }
 
-    public boolean isSpindexerBusy(){
-        return spindexerMotor.isBusy();
+    public boolean isStatic() {
+        return Math.abs(curPos - spindexerPid.getTarget()) < errorThreshold;
+    }
+    public double getMotorPos() {
+        return curPos;
     }
 
 
-@Override
-public String test() {
-    return null;
-}
+    @Override
+    public String test() {
+        return null;
+    }
 
 
 }

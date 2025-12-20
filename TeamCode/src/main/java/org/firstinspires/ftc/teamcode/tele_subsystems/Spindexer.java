@@ -1,4 +1,4 @@
-package tele_subsystems;
+package org.firstinspires.ftc.teamcode.tele_subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
 
@@ -8,8 +8,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BrainSTEMTeleRobot;
-import org.firstinspires.ftc.teamcode.Component;
-import org.firstinspires.ftc.teamcode.PIDController;
+import org.firstinspires.ftc.teamcode.util.Component;
+import org.firstinspires.ftc.teamcode.util.PIDController;
 
 
 @Config
@@ -93,6 +93,9 @@ public class Spindexer implements Component {
             double power = spindexerPid.update(spindexerMotor.getCurrentPosition());
             spindexerMotor.setPower(-power);
         }
+
+        telemetry.addData("Spindexer Power", spindexerMotor.getPower());
+        telemetry.addData("Spindexer Position", spindexerMotor.getCurrentPosition());
     }
 
     public boolean isStatic() {

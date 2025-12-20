@@ -7,12 +7,14 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.BrainSTEMAutoRobot;
 import org.firstinspires.ftc.teamcode.auto_subsystems.AutoActions;
 import org.firstinspires.ftc.teamcode.auto_subsystems.Spindexer;
 
+@Disabled
 @Autonomous (name = "Auto")
 @Config
 public final class testAuto extends LinearOpMode {
@@ -43,18 +45,14 @@ public final class testAuto extends LinearOpMode {
                     .splineToLinearHeading(collectPose, positions.collect1T)
                     .build();
 
-        Action setCollect1 = new AutoActions().setIndex1(robot);
         Action robotUpdate = new AutoActions().robotUpdate(robot);
 
-        Action setCollect2 = new AutoActions().setIndex2(robot);
 
-        Action setCollect3 = new AutoActions().setIndex3(robot);
         waitForStart();
 
         
             if (isStopRequested()) return;
 
-            robot.spindexer.spindexerState = Spindexer.SpindexerState.COLLECT1;
 
             Actions.runBlocking(
                     new ParallelAction(
