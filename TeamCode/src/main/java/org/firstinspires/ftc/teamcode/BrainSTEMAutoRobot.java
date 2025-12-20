@@ -11,6 +11,8 @@ import org.firstinspires.ftc.teamcode.auto_subsystems.Collector;
 import org.firstinspires.ftc.teamcode.auto_subsystems.Finger;
 import org.firstinspires.ftc.teamcode.auto_subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.auto_subsystems.Spindexer;
+import org.firstinspires.ftc.teamcode.rr.MecanumDrive;
+import org.firstinspires.ftc.teamcode.util.Component;
 
 import java.util.ArrayList;
 

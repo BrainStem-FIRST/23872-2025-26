@@ -7,12 +7,14 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.BrainSTEMAutoRobot;
 import org.firstinspires.ftc.teamcode.auto_subsystems.AutoActions;
 import org.firstinspires.ftc.teamcode.auto_subsystems.Spindexer;
 
+@Disabled
 @Autonomous (name = "Auto")
 @Config
 public final class testAuto extends LinearOpMode {

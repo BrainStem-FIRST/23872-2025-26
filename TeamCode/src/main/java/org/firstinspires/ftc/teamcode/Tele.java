@@ -8,7 +8,7 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import org.firstinspires.ftc.teamcode.utils.teleHelpers.GamepadTracker;
+import org.firstinspires.ftc.teamcode.util.GamepadTracker;
 
 import org.firstinspires.ftc.teamcode.tele_subsystems.Collector;
 import org.firstinspires.ftc.teamcode.tele_subsystems.Finger;
