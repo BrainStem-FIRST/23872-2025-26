@@ -53,10 +53,13 @@ public final class CloseRedAuto extends LinearOpMode {
 
         Action setCollectorOff = new AutoActions().setCollectorOff(robot);
 
+        Action close1ShootingDrive = robot.drive.actionBuilder(coordinates.getCloseStartPose())
+                .splineToLinearHeading(coordinates.getClose1ShootingPose(), coordinates.getShootingDriveTangent())
+                .build();
 
         Action collect1Drive = robot.drive.actionBuilder(coordinates.getCloseStartPose())
-                        .splineToLinearHeading(coordinates.getCloseCollect3ballsPrePose(), coordinates.getCloseCollect3BallsDriveTangent())
-                        .build();
+                .splineToLinearHeading(coordinates.getCloseCollect3ballsPrePose(), coordinates.getCloseCollect3BallsDriveTangent())
+                .build();
 
 
         Action collect1stBall = robot.drive.actionBuilder(coordinates.getCloseCollect3ballsPrePose())
@@ -71,8 +74,8 @@ public final class CloseRedAuto extends LinearOpMode {
                 .splineToLinearHeading(coordinates.getCloseCollect3BallPose(), coordinates.getCollectTangenet())
                 .build();
 
-        Action closeShootDrive = robot.drive.actionBuilder(coordinates.getCloseCollect3BallPose())
-                .splineToLinearHeading(coordinates.getCloseShootingPose(), coordinates.getCloseShootDriveTangent())
+        Action close2ShootingDrive = robot.drive.actionBuilder(coordinates.getCloseCollect3BallPose())
+                .splineToLinearHeading(coordinates.getClose2ShootingPose(), coordinates.getShootingDriveTangent())
                 .build();
 
 
@@ -86,61 +89,125 @@ public final class CloseRedAuto extends LinearOpMode {
                 new ParallelAction(
                         new Action[]{new SequentialAction(
 
-                                // shoot the 3 preload balls
-                                shooterTurnOnFar, // will need to change to shoot less
-                                new SleepAction(1),
-                                fingerServoU,
-                                new SleepAction(1),
-                                fingerServoD,
-                                new SleepAction(1),
-                                moveSpindexer120,
-                                new SleepAction(1),
-                                fingerServoU,
-                                new SleepAction(1),
-                                fingerServoD,
-                                new SleepAction(1),
-                                moveSpindexer120,
-                                new SleepAction(1),
-                                fingerServoU,
-                                new SleepAction(1),
-                                fingerServoD,
-                                shooterTurnOff,
-
-                                // drive to collect the next 3 balls & collecting
-                                setCollectorOn,
-                                collect1Drive,
-                                moveSpindexer60,
-                                collect1stBall,
-                                new SleepAction(1),
-                                moveSpindexer120,
-                                collect2ndBall,
-                                new SleepAction(1),
-                                moveSpindexer120,
-                                collect3rdBall,
-                                new SleepAction(1),
-                                moveSpindexer60, // set spindexer back to shoot
-                                setCollectorOff,
-
-                                // drive to go shoot the 3 balls that were just collected
+                                close1ShootingDrive,
+                                new SleepAction(0.25),
                                 shooterTurnOnFar,
-                                closeShootDrive,
-                                new SleepAction(1),
+                                new SleepAction(0.25),
                                 fingerServoU,
-                                new SleepAction(1),
+                                new SleepAction(0.25),
                                 fingerServoD,
-                                new SleepAction(1),
+                                new SleepAction(0.15),
                                 moveSpindexer120,
-                                new SleepAction(1),
+                                new SleepAction(0.25),
                                 fingerServoU,
-                                new SleepAction(1),
+                                new SleepAction(0.25),
                                 fingerServoD,
-                                new SleepAction(1),
+                                new SleepAction(0.15),
                                 moveSpindexer120,
-                                new SleepAction(1),
+                                new SleepAction(0.25),
                                 fingerServoU,
-                                new SleepAction(1),
+                                new SleepAction(0.25),
                                 fingerServoD,
-                                shooterTurnOff
+                                new SleepAction(0.15),
+                                moveSpindexer60,
+                                new SleepAction(0.15),
+                                shooterTurnOff,
+                                collect1Drive,
+                                new SleepAction(0.25),
+                                setCollectorOn,
+                                collect1stBall,
+                                new SleepAction(0.25),
+                                moveSpindexer120,
+                                new SleepAction(0.25),
+                                collect2ndBall,
+                                new SleepAction(0.25),
+                                moveSpindexer120,
+                                new SleepAction(0.25),
+                                collect3rdBall,
+                                new SleepAction(0.25),
+                                moveSpindexer60,
+                                new SleepAction(0.15),
+                                close2ShootingDrive,
+                                new SleepAction(0.25),
+                                shooterTurnOnFar,
+                                new SleepAction(0.25),
+                                fingerServoU,
+                                new SleepAction(0.25),
+                                fingerServoD,
+                                new SleepAction(0.15),
+                                moveSpindexer120,
+                                new SleepAction(0.25),
+                                fingerServoU,
+                                new SleepAction(0.25),
+                                fingerServoD,
+                                new SleepAction(0.15),
+                                moveSpindexer120,
+                                new SleepAction(0.25),
+                                fingerServoU,
+                                new SleepAction(0.25),
+                                fingerServoD,
+                                new SleepAction(0.15),
+                                moveSpindexer60
+
+
+
+
+
+                                // shoot the 3 preload balls
+//                                shooterTurnOnFar, // will need to change to shoot less
+//                                new SleepAction(1),
+//                                fingerServoU,
+//                                new SleepAction(1),
+//                                fingerServoD,
+//                                new SleepAction(1),
+//                                moveSpindexer120,
+//                                new SleepAction(1),
+//                                fingerServoU,
+//                                new SleepAction(1),
+//                                fingerServoD,
+//                                new SleepAction(1),
+//                                moveSpindexer120,
+//                                new SleepAction(1),
+//                                fingerServoU,
+//                                new SleepAction(1),
+//                                fingerServoD,
+//                                shooterTurnOff,
+//
+//                                // drive to collect the next 3 balls & collecting
+//                                setCollectorOn,
+//                                collect1Drive,
+//                                moveSpindexer60,
+//                                collect1stBall,
+//                                new SleepAction(1),
+//                                moveSpindexer120,
+//                                collect2ndBall,
+//                                new SleepAction(1),
+//                                moveSpindexer120,
+//                                collect3rdBall,
+//                                new SleepAction(1),
+//                                moveSpindexer60, // set spindexer back to shoot
+//                                setCollectorOff,
+//
+//                                // drive to go shoot the 3 balls that were just collected
+//                                shooterTurnOnFar,
+//                                closeShootDrive,
+//                                new SleepAction(1),
+//                                fingerServoU,
+//                                new SleepAction(1),
+//                                fingerServoD,
+//                                new SleepAction(1),
+//                                moveSpindexer120,
+//                                new SleepAction(1),
+//                                fingerServoU,
+//                                new SleepAction(1),
+//                                fingerServoD,
+//                                new SleepAction(1),
+//                                moveSpindexer120,
+//                                new SleepAction(1),
+//                                fingerServoU,
+//                                new SleepAction(1),
+//                                fingerServoD,
+//                                shooterTurnOff
 
 
 
