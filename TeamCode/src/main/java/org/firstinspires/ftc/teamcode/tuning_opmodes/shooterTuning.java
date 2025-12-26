@@ -10,17 +10,17 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.tele_subsystems.ShooterUnoffical;
+
 
 @TeleOp
 public class shooterTuning extends OpMode {
 
-    public static double kP = 0.0001; // change
+    public static double kP = 0; // change
     public static double kI = 0.0;
     public static double kD = 0.0;
-    public static double kF = 33.9060; //Adjust this first?
-    public double highVelocity = 600;
-    public double lowVelocity = 300;
+    public static double kF = 41.63; //Adjust this first?
+    public double highVelocity = 700;
+    public double lowVelocity = 500;
     double currentTarget = highVelocity;
 
     double[] stepSizes = {10.0, 1.0, 0.1 , 0.01, 0.001, 0.0001};

@@ -48,7 +48,7 @@ public class TeleWAutoAlign extends LinearOpMode {
     private int spindexerCurrentPosition;
 
 
-    public static double kP = 0.3;
+    public static double kP = 1.5;
     public static double DRAWING_TARGET_RADIUS = 2;
 
     enum Mode{
@@ -170,6 +170,7 @@ public class TeleWAutoAlign extends LinearOpMode {
         if(gamepad2.rightBumperWasPressed()) {
             robot.spindexer.adjustPosition(80);
             ballTracker.rotated120();
+           robot.spindexer.spindexerState =  Spindexer.SpindexerState.COLLECT;
         }
         else if(gamepad2.leftBumperWasPressed()) {
             //add in roated - degs.
@@ -183,14 +184,14 @@ public class TeleWAutoAlign extends LinearOpMode {
         else if(gamepad2.xWasPressed() && robot.spindexer.spindexerState == Spindexer.SpindexerState.SHOOT) {
 
             //add in - rotated.
-            robot.spindexer.rotateDegrees(-Spindexer.shootRotateDeg);
+            robot.spindexer.adjustPosition(-80);
             robot.spindexer.spindexerState = Spindexer.SpindexerState.COLLECT;
         }
         if (gamepad2.bWasPressed()) {
 
             ballTracker.recordShot();
             robot.finger.fingerState = Finger.FingerState.UP;
-            robot.spindexer.indexerCued = true;
+//            robot.spindexer.indexerCued = true;
             robot.finger.flickerTimer.reset();
         }
 
@@ -221,20 +222,26 @@ public class TeleWAutoAlign extends LinearOpMode {
         double angle = calculateAngle();
         double headingError = angle - robot.drive.localizer.getPose().heading.toDouble();
 
-        headingError = headingError + 2*Math.PI;
-        headingError = headingError % (2*Math.PI);
-        if (headingError > Math.toRadians(180)){
-            headingError = headingError - 2*(Math.PI);
+
+        while (headingError > Math.PI) {
+            headingError -= 2 * Math.PI;
         }
+        while (headingError < -Math.PI) {
+            headingError += 2 * Math.PI;
+        }
+        if (Math.abs(headingError) <= Math.toRadians(3)){
+            return 0;
+        }
+
         telemetry.addData("error", headingError);
         double power = kP*headingError;
-        telemetry.addData("power", power);
-
-        if (Math.abs(headingError) <= Math.toRadians(3)){
-           return 0;
-        } else {
-            return -power;
+        double minPower = 0.15;
+        if (Math.abs(power) < minPower) {
+            power = Math.copySign(minPower, power);
         }
+
+        telemetry.addData("power", power);
+        return -power;
 
     }
 

@@ -76,8 +76,14 @@ public class Spindexer implements Component {
     public void adjustPosition(int ticks) {
         int currentLivePos = spindexerMotor.getCurrentPosition();
         spindexerTargetPosition = currentLivePos + ticks;
+        int error = currentLivePos - spindexerTargetPosition;
         spindexerPid.setTarget(spindexerTargetPosition);
         spindexerMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        if (Math.abs(error) <= 3){
+            spindexerMotor.setPower(0);
+        } else {
+            spindexerMotor.setPower(-spindexerPid.update(currentLivePos));
+        }
     }
 
     @Override
