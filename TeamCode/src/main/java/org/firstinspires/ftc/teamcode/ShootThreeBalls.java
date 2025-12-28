@@ -46,13 +46,13 @@ public class ShootThreeBalls {
     private int ballsLeftToShoot = 3;
     private int ballsShot = 0;
     public void start() {
-        if (currentState == ShootThreeState.IDLE) {
+
             telemetry.addData("Sequence", "Starting - Spinning up shooter...");
             stageTimer.reset();
             ballsShot = 0;
             ballsLeftToShoot = 3;
             currentState = ShootThreeState.SPIN_SHOOTER_AND_INDEXER;
-        }
+
     }
 
     public ShootThreeState getCurrentState() {

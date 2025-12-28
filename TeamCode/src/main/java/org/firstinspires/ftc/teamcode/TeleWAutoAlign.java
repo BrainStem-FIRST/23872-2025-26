@@ -85,6 +85,7 @@ public class TeleWAutoAlign extends LinearOpMode {
             robot.update();
             gp1.update();
             gp2.update();
+            shootThreeBalls.update();
 
             Pose2d startingPose = new Pose2d(0,0,0); //change]
 
@@ -180,7 +181,7 @@ public class TeleWAutoAlign extends LinearOpMode {
             robot.finger.flickerTimer.reset();
         }
 
-        if (gamepad2.yWasPressed()) {
+        if (gp2.isFirstY()) {
             shootThreeBalls.start();
         }
 
