@@ -121,9 +121,9 @@ public class TeleWAutoAlign extends LinearOpMode {
         double x = gamepad1.left_stick_x * 0.6;
         double rx = gamepad1.right_stick_x * 0.6;
 
-//        if(gamepad2.y){
-//            rx = autoAlignRoboOdo();
-//        }
+        if(gamepad2.y){
+            rx = autoAlignRoboOdo();
+        }
 
         robot.drive.setMotorPowers(
                 y + x + rx,
