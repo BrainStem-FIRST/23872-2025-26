@@ -70,7 +70,7 @@ public class TeleWAutoAlign extends LinearOpMode {
         shootThreeBalls = new ShootThreeBalls(this.robot.shooter, this.robot.finger, this.robot.spindexer, telemetry);
 
         ballTracker = new BallTracker(telemetry);
-
+        robot.shooter.init(hardwareMap, telemetry);
         gp1 = new GamepadTracker(gamepad1);
         gp2 = new GamepadTracker(gamepad2);
 
@@ -104,7 +104,7 @@ public class TeleWAutoAlign extends LinearOpMode {
 
             telemetry.addData("shooter power 1", robot.shooter.shooterMotorOne.getPower());
             telemetry.addData("shooter vel 1", robot.shooter.shooterMotorOne.getVelocity());
-            telemetry.addData("shooter pid target", robot.shooter.shooterPid.getTarget());
+            telemetry.addData("shooter pid target", robot.shooter.shooterPID1.getTarget());
 
             telemetry.addData("spindexer pos", robot.spindexer.getMotorPos());
             telemetry.addData("spindexer target position", robot.spindexer.spindexerPid.getTarget());
@@ -152,16 +152,12 @@ public class TeleWAutoAlign extends LinearOpMode {
         }
 
         if (gamepad1.yWasPressed()) {
-            robot.shooter.shooterState = Shooter.ShooterState.SHOOT_FAR;
-            robot.shooter.shooterPid.reset();
-            robot.shooter.shooterPid.setTarget(Shooter.FAR_SHOOT_VEL);
+            robot.shooter.setShooterShootFar();
         } else if (gamepad1.bWasPressed()) {
-            robot.shooter.shooterState = Shooter.ShooterState.SHOOT_CLOSE;
-            robot.shooter.shooterPid.reset();
-            robot.shooter.shooterPid.setTarget(Shooter.CLOSE_SHOOT_VEL);
-        }
+            robot.shooter.setShooterShootClose();
+           }
         else if (gamepad1.aWasPressed())
-            robot.shooter.shooterState = Shooter.ShooterState.OFF;
+            robot.shooter.setShooterOff();
     }
     private void updateDriver2() {
 

@@ -64,14 +64,14 @@ public class ShootThreeBalls {
         switch (currentState) {
             case IDLE:
 
-                shooter.shooterState = Shooter.ShooterState.OFF;
+                shooter.currentState = Shooter.ShooterState.OFF;
                 finger.fingerState = Finger.FingerState.DOWN;
                 break;
 
 
             case SPIN_SHOOTER_AND_INDEXER:
 
-                shooter.shooterState = Shooter.ShooterState.SHOOT_FAR;
+                shooter.currentState = Shooter.ShooterState.SHOOT_FAR;
                 finger.fingerState = Finger.FingerState.DOWN;
 
                 double currentVelocity = Double.parseDouble(String.valueOf(shooter.shooterMotorOne.getVelocity()));
@@ -91,7 +91,7 @@ public class ShootThreeBalls {
                 break;
 
             case WAIT_FOR_SPINDEXER_TO_END:
-                shooter.shooterState = Shooter.ShooterState.SHOOT_FAR;
+                shooter.currentState = Shooter.ShooterState.SHOOT_FAR;
                 finger.fingerState = Finger.FingerState.DOWN;
 
                 if (spindexer.isStatic()) {
@@ -106,7 +106,7 @@ public class ShootThreeBalls {
                 break;
 
             case LIFT:
-                shooter.shooterState = Shooter.ShooterState.SHOOT_FAR;
+                shooter.currentState = Shooter.ShooterState.SHOOT_FAR;
                 finger.fingerState = Finger.FingerState.UP;
 
                 if (stageTimer.milliseconds() > FINGER_LIFT_TIME) {
@@ -119,7 +119,7 @@ public class ShootThreeBalls {
 
             case LOWER:
 
-                shooter.shooterState = Shooter.ShooterState.SHOOT_FAR; // Keep shooter on
+                shooter.currentState = Shooter.ShooterState.SHOOT_FAR; // Keep shooter on
                 finger.fingerState = Finger.FingerState.DOWN; // Move finger back down
 
              if (stageTimer.milliseconds() > FINGER_LOWER_TIME) {
@@ -145,7 +145,7 @@ public class ShootThreeBalls {
 
             case RESET:
 
-                shooter.shooterState = Shooter.ShooterState.OFF;
+                shooter.currentState = Shooter.ShooterState.OFF;
                 finger.fingerState = Finger.FingerState.DOWN;
                 if (spindexer.isStatic()){
                     telemetry.addData("Stage", "Okay we are good.");
@@ -159,7 +159,7 @@ public class ShootThreeBalls {
                 break;
 
             case STOP:
-                shooter.shooterState = Shooter.ShooterState.OFF; // Turn shooter off
+                shooter.currentState = Shooter.ShooterState.OFF; // Turn shooter off
                 finger.fingerState = Finger.FingerState.DOWN;  // Keep finger down
 
 
