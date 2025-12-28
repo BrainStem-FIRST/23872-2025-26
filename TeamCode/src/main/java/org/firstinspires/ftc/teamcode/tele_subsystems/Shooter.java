@@ -1,9 +1,5 @@
 package org.firstinspires.ftc.teamcode.tele_subsystems;
 
-import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
-
-import android.annotation.SuppressLint;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -79,8 +75,8 @@ public class Shooter implements Component {
         shooterPID1 = new PIDController(ShooterParams.kP, ShooterParams.kI, ShooterParams.kD);
         shooterPID2 = new PIDController(ShooterParams.kP, ShooterParams.kI, ShooterParams.kD);
 
-//        shooterMotorOne.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, shooterPIDF);
-//        shooterMotorTwo.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, shooterPIDF);
+        shooterMotorOne.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, shooterPID1);
+        shooterMotorTwo.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, shooterPID2);
 
         this.currentState = ShooterState.OFF;
     }
@@ -99,28 +95,22 @@ public class Shooter implements Component {
 
     @Override
     public void update() {
-
-        double velocity1 = shooterMotorOne.getVelocity();
-        double velocity2 = shooterMotorTwo.getVelocity();
-        double averageVelocity = (Math.abs(velocity1) + Math.abs(velocity2)) / 2.0;
-
         switch (currentState) {
             case OFF:
+                setShooterVelocity(0);
                 setBothMotors(0, 0);
-                shooterPID1.setTarget(0);
-                shooterPID2.setTarget(0);
                 break;
             case SHOOT_FAR:
                 setShooterVelocity(ShooterParams.FAR_SHOOT_VEL);
-                doPID(velocity1, velocity2);
+                doPID();
+
                 break;
             case SHOOT_CLOSE:
                 setShooterVelocity(ShooterParams.CLOSE_SHOOT_VEL);
-                doPID(velocity1, velocity2);
+                doPID();
+
                 break;
         }
-
-        doPID(velocity1, velocity2);
 
         telemetry.addData("shooter motor one velocity", shooterMotorOne.getVelocity());
         telemetry.addData("shooter motor two velocity", shooterMotorTwo.getVelocity());
@@ -131,7 +121,7 @@ public class Shooter implements Component {
         shooterPID2.setTarget(targetVelocity);
     }
 
-    public void doPID(double vel1, double vel2) {
+    public void doPID() {
         double velocity1 = shooterMotorOne.getVelocity();
         double pid1 = shooterPID1.update(velocity1);
         double minPower1 = ShooterParams.kF * shooterPID1.getTarget(); // kF MUST be small
@@ -149,6 +139,8 @@ public class Shooter implements Component {
         telemetry.addData("FF", minPower1);
         telemetry.addData("PID", pid1);
         telemetry.addData("Power", power1);
+        telemetry.addData("shooter state", currentState);
+        telemetry.addData("pid targets", shooterPID1.getTarget() + " " + shooterPID2.getTarget());
     }
 
     public void setShooterShootFar() {

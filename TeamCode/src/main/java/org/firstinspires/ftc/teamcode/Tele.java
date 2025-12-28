@@ -8,11 +8,12 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.teamcode.tele_subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.util.GamepadTracker;
 
 import org.firstinspires.ftc.teamcode.tele_subsystems.Collector;
 import org.firstinspires.ftc.teamcode.tele_subsystems.Finger;
-import org.firstinspires.ftc.teamcode.tele_subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.tele_subsystems.Spindexer;
 
 
@@ -22,20 +23,20 @@ public class Tele extends LinearOpMode {
     private GamepadTracker gp2;
     private ElapsedTime runtime = new ElapsedTime();
     private BrainSTEMTeleRobot robot;
-    private ShootThreeBalls shootThreeBalls;
 
+
+    private ElapsedTime shoot3balls;
 
     @Override
     public void runOpMode() throws InterruptedException {
         telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);
 
         robot = new BrainSTEMTeleRobot(hardwareMap, this.telemetry, this, new Pose2d(0, 0, 0));
-        shootThreeBalls = new ShootThreeBalls(this.robot.shooter, this.robot.finger, this.robot.spindexer, telemetry);
 
         gp1 = new GamepadTracker(gamepad1);
         gp2 = new GamepadTracker(gamepad2);
 
-//
+        shoot3balls = new ElapsedTime();
 
         waitForStart();
 
@@ -98,11 +99,14 @@ public class Tele extends LinearOpMode {
 
         if (gamepad1.yWasPressed()) {
             robot.shooter.setShooterShootFar();
-        } else if (gamepad1.bWasPressed()) {
+        }
+        if (gamepad1.bWasPressed()) {
             robot.shooter.setShooterShootClose();
         }
-        else if (gamepad1.aWasPressed())
-            robot.shooter.setShooterOff();
+        if (gamepad1.a) {
+            robot.shooter.currentState = Shooter.ShooterState.OFF;
+            telemetry.addLine("pressed");
+        }
     }
     private void updateDriver2() throws InterruptedException {
         // all d2 commands
@@ -123,9 +127,32 @@ public class Tele extends LinearOpMode {
         }
 
         if (gamepad2.bWasPressed()) {
+
             robot.finger.fingerState = Finger.FingerState.UP;
             robot.spindexer.indexerCued = true;
             robot.finger.flickerTimer.reset();
+
+        }
+
+        if (gamepad2.yWasPressed()) {
+
+            robot.finger.fingerState = Finger.FingerState.UP;
+            robot.spindexer.indexerCued = true;
+            robot.finger.flickerTimer.reset();
+            shoot3balls.reset();
+            shoot3balls.startTime();
+            while (shoot3balls.time() < 1);
+            robot.finger.fingerState = Finger.FingerState.UP;
+            robot.spindexer.indexerCued = true;
+            robot.finger.flickerTimer.reset();
+            shoot3balls.reset();
+            shoot3balls.startTime();
+            while (shoot3balls.time() < 1);
+            robot.finger.fingerState = Finger.FingerState.UP;
+            robot.spindexer.indexerCued = true;
+            robot.finger.flickerTimer.reset();
+
+
         }
 
         if (gamepad2.left_trigger > 0.9) {
