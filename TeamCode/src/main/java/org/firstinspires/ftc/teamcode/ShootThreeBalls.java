@@ -79,7 +79,7 @@ public class ShootThreeBalls {
 
                 telemetry.addData("Current Shooter Velocity", "%.1f / %.1f", currentVelocity, SHOOTER_TARGET_VELOCITY);
 
-                if (Math.abs(SHOOTER_TARGET_VELOCITY - currentVelocity) < tolerance) {
+                if (stageTimer.seconds() >3) {
                     telemetry.addData("Shoot 3 Sequence Stage:", "Shooter is spinning up...");
 
                     spindexer.adjustPosition(40);
