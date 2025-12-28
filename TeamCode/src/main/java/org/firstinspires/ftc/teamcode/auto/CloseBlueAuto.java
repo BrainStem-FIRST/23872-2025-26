@@ -72,7 +72,7 @@ public final class CloseBlueAuto extends LinearOpMode {
                 .build();
 
         Action closeShootDrive = robot.drive.actionBuilder(coordinates.getCloseCollect3BallPose())
-                .splineToLinearHeading(coordinates.getCloseShootingPose(), coordinates.getCloseShootDriveTangent())
+//                .splineToLinearHeading(coordinates.getCloseShootingPose(), coordinates.getCloseShootDriveTangent())
                 .build();
 
 

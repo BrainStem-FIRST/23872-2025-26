@@ -34,7 +34,6 @@ public class Tele extends LinearOpMode {
 
         gp1 = new GamepadTracker(gamepad1);
         gp2 = new GamepadTracker(gamepad2);
-        robot.shooter.init(hardwareMap, telemetry);
 
 //
 
@@ -131,6 +130,11 @@ public class Tele extends LinearOpMode {
 
         if (gamepad2.left_trigger > 0.9) {
             robot.spindexer.rotateDegrees(-10);
+
+        }
+
+        if (gamepad2.right_trigger > 0.9) {
+            robot.spindexer.rotateDegrees(10);
 
         }
     }

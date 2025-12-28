@@ -70,7 +70,6 @@ public class TeleWAutoAlign extends LinearOpMode {
         shootThreeBalls = new ShootThreeBalls(this.robot.shooter, this.robot.finger, this.robot.spindexer, telemetry);
 
         ballTracker = new BallTracker(telemetry);
-        robot.shooter.init(hardwareMap, telemetry);
         gp1 = new GamepadTracker(gamepad1);
         gp2 = new GamepadTracker(gamepad2);
 
@@ -191,13 +190,7 @@ public class TeleWAutoAlign extends LinearOpMode {
             robot.finger.flickerTimer.reset();
         }
 
-        if (gp2.isFirstDpadDown()){
-            ballTracker.addColorToQueau(BallTracker.BallColor.GREEN);
-        }
 
-        if (gp2.isFirstDpadUp()){
-            ballTracker.addColorToQueau(BallTracker.BallColor.PURPLE);
-        }
 
     }
 

@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.tele_subsystems;
 
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 
+import android.annotation.SuppressLint;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -16,14 +18,15 @@ import org.firstinspires.ftc.teamcode.util.PIDController;
 public class Shooter implements Component {
 
 
+
     public static class ShooterParams {
         public static double kP = 0.01; // change
         public static double kI = 0.0;
         public static double kD = 0.0;
         public static double kF = 0.00035; //Adjust this first?
 
-        public static double FAR_SHOOT_VEL = 200;
-        public static double CLOSE_SHOOT_VEL = 1000;
+        public static double FAR_SHOOT_VEL = 2000;
+        public static double CLOSE_SHOOT_VEL = 1400;
 
         public static double velocityThreshold = 50; //change
         public static double shotVelDropThreshold = 70; //indicates a ball left
@@ -54,7 +57,7 @@ public class Shooter implements Component {
 //      public PIDController shooterPid;
 
 
-    public void init(HardwareMap hardwareMap, Telemetry telemetry) {
+    public  Shooter(HardwareMap hardwareMap, Telemetry telemetry) {
         this.map = hardwareMap;
         this.telemetry = telemetry;
 
