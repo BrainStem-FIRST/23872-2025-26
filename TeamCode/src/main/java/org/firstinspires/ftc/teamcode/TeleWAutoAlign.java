@@ -8,6 +8,7 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -19,7 +20,7 @@ import org.firstinspires.ftc.teamcode.util.BallTracker;
 import org.firstinspires.ftc.teamcode.util.GamepadTracker;
 import org.firstinspires.ftc.teamcode.util.PIDController;
 
-
+@Disabled
 @TeleOp(name = "Tele w Auto Align")
 @Config
 public class TeleWAutoAlign extends LinearOpMode {
@@ -28,11 +29,8 @@ public class TeleWAutoAlign extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private BrainSTEMTeleRobot robot;
     private ShootThreeBalls shootThreeBalls;
-
     private Limelight3A limelight;
-
     private BallTracker ballTracker;
-
     private int spindexerCurrentPosition;
 
 

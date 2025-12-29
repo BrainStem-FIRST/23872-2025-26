@@ -53,7 +53,7 @@ public final class CloseRedAuto extends LinearOpMode {
 
         Action setCollectorOff = new AutoActions().setCollectorOff(robot);
 
-        Action close1ShootingDrive = robot.drive.actionBuilder(coordinates.getCloseStartPose())
+        Action close1ShootingDrive =         robot.drive.actionBuilder(coordinates.getCloseStartPose())
                 .splineToLinearHeading(coordinates.getClose1ShootingPose(), coordinates.getShootingDriveTangent())
                 .build();
 
@@ -70,9 +70,9 @@ public final class CloseRedAuto extends LinearOpMode {
                 .splineToLinearHeading(coordinates.getCloseCollect2BallPose(), coordinates.getCollectTangenet())
                 .build();
 
-        Action collect3rdBall = robot.drive.actionBuilder(coordinates.getCloseCollect2BallPose())
-                .splineToLinearHeading(coordinates.getCloseCollect3BallPose(), coordinates.getCollectTangenet())
-                .build();
+Action collect3rdBall = robot.drive.actionBuilder(coordinates.getCloseCollect2BallPose())
+    .splineToLinearHeading(coordinates.getCloseCollect3BallPose(), coordinates.getCollectTangenet())
+    .build();
 
         Action close2ShootingDrive = robot.drive.actionBuilder(coordinates.getCloseCollect3BallPose())
                 .splineToLinearHeading(coordinates.getClose2ShootingPose(), coordinates.getShootingDriveTangent())

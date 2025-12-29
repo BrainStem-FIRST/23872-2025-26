@@ -100,6 +100,7 @@ public class AutoActions {
         };
     }
 
+
     public Action moveSpindexer60(BrainSTEMAutoRobot robot) {
         return new Action() {
             @Override

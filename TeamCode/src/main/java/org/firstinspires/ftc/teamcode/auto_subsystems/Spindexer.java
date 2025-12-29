@@ -50,13 +50,13 @@ public class Spindexer implements Component {
     }
 
     public int rotateDegrees(double degrees){
-        spindexerTargetPosition = spindexerMotor.getCurrentPosition() + (int)(degrees / 360. * SPINDEXER_TICKS_PER_REVOLUTION);
+        spindexerTargetPosition = spindexerMotor.getCurrentPosition() - (int)(degrees / 360. * SPINDEXER_TICKS_PER_REVOLUTION);
         spindexerPid.reset();
         spindexerPid.setTarget(spindexerTargetPosition);
         spindexerMotor.setTargetPosition(spindexerTargetPosition);
         spindexerMotor.setTargetPositionTolerance(2);
         spindexerMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        spindexerMotor.setPower(0.3);
+        spindexerMotor.setPower(-0.3);
         return 0;
     }
     public int getCurrentPosition() {
@@ -91,7 +91,7 @@ public class Spindexer implements Component {
         }
         else {
             double power = spindexerPid.update(spindexerMotor.getCurrentPosition());
-            spindexerMotor.setPower(-power);
+            spindexerMotor.setPower(power);
         }
 
         telemetry.addData("Spindexer Power", spindexerMotor.getPower());

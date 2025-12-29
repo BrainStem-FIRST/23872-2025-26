@@ -66,8 +66,8 @@ public class Shooter implements Component {
         shooterMotorOne.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         shooterMotorTwo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        shooterMotorOne.setDirection(DcMotorSimple.Direction.REVERSE);
-        shooterMotorTwo.setDirection(DcMotorSimple.Direction.REVERSE);
+        shooterMotorOne.setDirection(DcMotorSimple.Direction.FORWARD);
+        shooterMotorTwo.setDirection(DcMotorSimple.Direction.FORWARD);
 
         shooterMotorOne.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
         shooterMotorTwo.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
