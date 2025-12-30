@@ -150,6 +150,10 @@ public final class MecanumDrive {
             this.pose = pose;
         }
 
+        public PinpointLocalizer pinpoint() {
+            return (PinpointLocalizer) localizer;
+        }
+
         @Override
         public Pose2d getPose() {
             return pose;
