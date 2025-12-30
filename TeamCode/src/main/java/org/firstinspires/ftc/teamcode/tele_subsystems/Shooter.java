@@ -50,7 +50,7 @@ public class Shooter implements Component {
         SHOOT_FAR,
         SHOOT_CLOSE
     }
-//      public PIDController shooterPid;
+//      public PidDrivePIDController shooterPid;
 
 
     public  Shooter(HardwareMap hardwareMap, Telemetry telemetry) {

@@ -2,11 +2,8 @@ package org.firstinspires.ftc.teamcode.pidDrive;
 
 
 import androidx.annotation.NonNull;
-import org.firstinspires.ftc.teamcode.utils.pidDrive.Tolerance;
 
 import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.Vector2d;
-import org.firstinspires.ftc.teamcode.utils.math.MathUtils;
 
 
 
@@ -76,6 +73,6 @@ public class Waypoint {
     @Override
     @NonNull
     public String toString() {
-        return "x: " + x() + ", y: " + y() + ", heading: " + org.firstinspires.ftc.teamcode.utils.math.MathUtils.format2(headingDeg());
+        return "x: " + x() + ", y: " + y() + ", heading: " + MathUtils.format2(headingDeg());
     }
 }

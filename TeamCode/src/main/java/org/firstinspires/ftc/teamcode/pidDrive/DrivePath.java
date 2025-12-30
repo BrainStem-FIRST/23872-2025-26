@@ -10,8 +10,6 @@ import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Vector2d;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -20,9 +18,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import org.firstinspires.ftc.teamcode.rr.MecanumDrive;
 import org.firstinspires.ftc.teamcode.rr.PinpointLocalizer;
-import org.firstinspires.ftc.teamcode.utils.math.MathUtils;
-
-import org.firstinspires.ftc.teamcode.utils.math.PIDController;
 
 
 
@@ -37,7 +32,7 @@ public class DrivePath implements Action {
     private final Telemetry telemetry;
     private final ArrayList<Waypoint> waypoints; // list of all waypoints in drive path
     private int curWaypointIndex; // the waypoint index the drivetrain is currently trying to go to
-    private PIDController totalDistancePID, waypointDistancePID, headingRadCloseErrorPID, headingRadFarErrorPID;
+    private PidDrivePIDController totalDistancePID, waypointDistancePID, headingRadCloseErrorPID, headingRadFarErrorPID;
     private final ElapsedTime waypointTimer;
     private double curWaypointDirRad, curWaypointDirDeg;
     private boolean first;
@@ -268,22 +263,22 @@ public class DrivePath implements Action {
     private void resetToNewWaypoint() {
         waypointTimer.reset();
 
-        totalDistancePID = new PIDController(getCurParams().speedKp, getCurParams().speedKi, getCurParams().speedKd);
+        totalDistancePID = new PidDrivePIDController(getCurParams().speedKp, getCurParams().speedKi, getCurParams().speedKd);
         totalDistancePID.reset();
         totalDistancePID.setTarget(0);
         totalDistancePID.setOutputBounds(0, 1);
 
-        waypointDistancePID = new PIDController(getCurParams().speedKp, getCurParams().speedKi, getCurParams().speedKd);
+        waypointDistancePID = new PidDrivePIDController(getCurParams().speedKp, getCurParams().speedKi, getCurParams().speedKd);
         waypointDistancePID.reset();
         waypointDistancePID.setTarget(0);
         waypointDistancePID.setOutputBounds(0, 1);
 
-        headingRadCloseErrorPID = new PIDController(getCurParams().closeHeadingKp, getCurParams().closeHeadingKi, getCurParams().closeHeadingKd);
+        headingRadCloseErrorPID = new PidDrivePIDController(getCurParams().closeHeadingKp, getCurParams().closeHeadingKi, getCurParams().closeHeadingKd);
         headingRadCloseErrorPID.reset();
         headingRadCloseErrorPID.setTarget(0);
         headingRadCloseErrorPID.setOutputBounds(-1, 1);
 
-        headingRadFarErrorPID = new PIDController(getCurParams().farHeadingKp, getCurParams().farHeadingKi, getCurParams().farHeadingKd);
+        headingRadFarErrorPID = new PidDrivePIDController(getCurParams().farHeadingKp, getCurParams().farHeadingKi, getCurParams().farHeadingKd);
         headingRadFarErrorPID.reset();
         headingRadFarErrorPID.setTarget(0);
         headingRadFarErrorPID.setOutputBounds(-1, 1);

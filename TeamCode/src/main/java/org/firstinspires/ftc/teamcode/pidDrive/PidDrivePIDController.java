@@ -1,6 +1,7 @@
-package org.firstinspires.ftc.teamcode.utils.math;
+package org.firstinspires.ftc.teamcode.pidDrive;
+
 import com.qualcomm.robotcore.util.Range;
-public class PIDController {
+public class PidDrivePIDController {
 
     private double target;
     private double kP, kI, kD;
@@ -13,7 +14,7 @@ public class PIDController {
 
     private double lowerInputBound = Double.NEGATIVE_INFINITY, higherInputBound = Double.POSITIVE_INFINITY;
     private double lowerOutputBound = Double.NEGATIVE_INFINITY, higherOutputBound = Double.POSITIVE_INFINITY;
-    public PIDController(double kP, double kI, double kD) {
+    public PidDrivePIDController(double kP, double kI, double kD) {
         this.kP = kP;
         this.kI = kI;
         this.kD = kD;

@@ -149,11 +149,6 @@ public final class MecanumDrive {
         public void setPose(Pose2d pose) {
             this.pose = pose;
         }
-
-        public PinpointLocalizer pinpoint() {
-            return (PinpointLocalizer) localizer;
-        }
-
         @Override
         public Pose2d getPose() {
             return pose;
@@ -229,6 +224,9 @@ public final class MecanumDrive {
         rightBack.setMode(mode);
     }
 
+    public PinpointLocalizer pinpoint() {
+        return (PinpointLocalizer) localizer;
+    }
     public MecanumDrive(HardwareMap hardwareMap, Pose2d pose) {
         LynxFirmware.throwIfModulesAreOutdated(hardwareMap);
 
