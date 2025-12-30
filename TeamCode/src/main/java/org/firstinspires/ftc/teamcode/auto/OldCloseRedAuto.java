@@ -1,12 +1,8 @@
 package org.firstinspires.ftc.teamcode.auto;
 
-import androidx.annotation.NonNull;
-
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
-import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.ftc.Actions;
@@ -15,12 +11,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.BrainSTEMAutoRobot;
 import org.firstinspires.ftc.teamcode.auto_subsystems.AutoActions;
-import org.firstinspires.ftc.teamcode.auto_subsystems.Shooter;
-import org.firstinspires.ftc.teamcode.auto_subsystems.Spindexer;
 
 @Autonomous (name = "Red Close Auto")
 @Config
-public final class CloseRedAuto extends LinearOpMode {
+public final class OldCloseRedAuto extends LinearOpMode {
 
 
     Coordinates coordinates;
@@ -74,7 +68,11 @@ Action collect3rdBall = robot.drive.actionBuilder(coordinates.getCloseCollect2Ba
     .splineToLinearHeading(coordinates.getCloseCollect3BallPose(), coordinates.getCollectTangenet())
     .build();
 
-        Action close2ShootingDrive = robot.drive.actionBuilder(coordinates.getCloseCollect3BallPose())
+        Action close2ShootingDrive = robot.drive.actionBuilder(coordinates.getClose2ShootingPose())
+                .splineToLinearHeading(coordinates.getCloseCollect3BallPose(), coordinates.getShootingDriveTangent())
+                .build();
+
+        Action close3ShootingDrive = robot.drive.actionBuilder(coordinates.getClos3ShootingPose())
                 .splineToLinearHeading(coordinates.getClose2ShootingPose(), coordinates.getShootingDriveTangent())
                 .build();
 
@@ -147,7 +145,27 @@ Action collect3rdBall = robot.drive.actionBuilder(coordinates.getCloseCollect2Ba
                                 new SleepAction(0.25),
                                 fingerServoD,
                                 new SleepAction(0.15),
+                                moveSpindexer60,
+                                close3ShootingDrive,
+                                new SleepAction(0.25),
+                                fingerServoU,
+                                new SleepAction(0.25),
+                                fingerServoD,
+                                new SleepAction(0.15),
+                                moveSpindexer120,
+                                new SleepAction(0.25),
+                                fingerServoU,
+                                new SleepAction(0.25),
+                                fingerServoD,
+                                new SleepAction(0.15),
+                                moveSpindexer120,
+                                new SleepAction(0.25),
+                                fingerServoU,
+                                new SleepAction(0.25),
+                                fingerServoD,
+                                new SleepAction(0.15),
                                 moveSpindexer60
+
 
 
 

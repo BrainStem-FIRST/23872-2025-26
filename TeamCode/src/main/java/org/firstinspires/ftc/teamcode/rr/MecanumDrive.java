@@ -149,7 +149,6 @@ public final class MecanumDrive {
         public void setPose(Pose2d pose) {
             this.pose = pose;
         }
-
         @Override
         public Pose2d getPose() {
             return pose;
@@ -225,6 +224,9 @@ public final class MecanumDrive {
         rightBack.setMode(mode);
     }
 
+    public PinpointLocalizer pinpoint() {
+        return (PinpointLocalizer) localizer;
+    }
     public MecanumDrive(HardwareMap hardwareMap, Pose2d pose) {
         LynxFirmware.throwIfModulesAreOutdated(hardwareMap);
 
@@ -495,6 +497,11 @@ public final class MecanumDrive {
         c.setStroke("#3F51B5");
         c.strokePolyline(xPoints, yPoints);
     }
+
+    public static double MAX_VEL = 50.0; // Ensure this is not -50.0
+    public static double MAX_ACCEL = 40.0;
+    public static double MAX_ANG_VEL = Math.toRadians(180.0);
+    public static double MAX_ANG_ACCEL = Math.toRadians(180.0);
 
     public TrajectoryActionBuilder actionBuilder(Pose2d beginPose) {
         return new TrajectoryActionBuilder(
