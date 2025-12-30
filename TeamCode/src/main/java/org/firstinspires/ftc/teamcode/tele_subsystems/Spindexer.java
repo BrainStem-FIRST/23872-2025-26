@@ -100,7 +100,7 @@ public class Spindexer implements Component {
 
     @Override
     public void update() {
-        if(indexerCued && robot.finger.fingerState == Finger.FingerState.DOWN && spindexerTimer.milliseconds() > 900) {
+        if(indexerCued && robot.finger.fingerState == Finger.FingerState.DOWN && spindexerTimer.milliseconds() > 2000) {
             adjustPosition(80);
             indexerCued = false;
         }

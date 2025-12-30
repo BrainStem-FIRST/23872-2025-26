@@ -129,6 +129,10 @@ public class MasterTele extends LinearOpMode {
             robot.spindexer.adjustPosition(-10);
         }
 
+        if (gamepad1.dpadDownWasPressed()){
+            robot.spindexer.adjustPosition(40);
+        }
+
 
     }
 
@@ -158,6 +162,14 @@ public class MasterTele extends LinearOpMode {
             robot.spindexer.indexerCued = true;
             robot.finger.flickerTimer.reset();
             robot.spindexer.spindexerTimer.reset();
+        }
+
+        if (gamepad2.dpadUpWasPressed()){
+            robot.finger.fingerState = Finger.FingerState.UP;
+            robot.finger.flickerTimer.reset();
+        } else if (gamepad2.dpadDownWasPressed()){
+            robot.finger.fingerState = Finger.FingerState.DOWN;
+
         }
 
         // d2 fine adjust

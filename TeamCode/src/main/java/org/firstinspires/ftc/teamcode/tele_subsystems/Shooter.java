@@ -102,15 +102,17 @@ public class Shooter implements Component {
                 setBothMotors(0, 0);
                 break;
             case SHOOT_FAR:
-                setShooterVelocity(ShooterParams.FAR_SHOOT_VEL);
-                doPID();
+//                setShooterVelocity(ShooterParams.FAR_SHOOT_VEL);
+//                doPID();
+                setBothMotors(1,1);
                 break;
             case SHOOT_CLOSE:
-                setShooterVelocity(ShooterParams.CLOSE_SHOOT_VEL);
-                doPID();
+//                setShooterVelocity(ShooterParams.CLOSE_SHOOT_VEL);
+//                doPID();
+                setBothMotors(0.8, 0.8);
                 break;
             case IDLE:
-                setBothMotors(1, 1);
+                setBothMotors(0.4, 0.4);
         }
 
         telemetry.addData("shooter motor one velocity", shooterMotorOne.getVelocity());
