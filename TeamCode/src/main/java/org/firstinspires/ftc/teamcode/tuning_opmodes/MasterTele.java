@@ -71,7 +71,7 @@ public class MasterTele extends LinearOpMode {
         }
     }
 
-    
+
 
     private void updateDriver1() {
         // if statements checking for d1 controls
@@ -136,7 +136,7 @@ public class MasterTele extends LinearOpMode {
         if (gamepad2.bWasPressed()) {
 
             robot.finger.fingerState = Finger.FingerState.UP;
-//            robot.spindexer.indexerCued = true;
+            robot.spindexer.indexerCued = true;
             robot.finger.flickerTimer.reset();
         }
     }

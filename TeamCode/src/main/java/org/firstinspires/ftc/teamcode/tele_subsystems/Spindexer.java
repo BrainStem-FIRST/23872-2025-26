@@ -64,15 +64,15 @@ public class Spindexer implements Component {
     public int getCurrentPosition() {
         return spindexerMotor.getCurrentPosition();
     }
-//    public void rotate120degrees(){
-//        spindexerMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-//        spindexerMotor.setTargetPosition(96);
-//        spindexerMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//        spindexerMotor.setPower(0.5);
-//        if (spindexerMotor.getCurrentPosition() == 96){
-//            spindexerState = spindexerState.OFF;
-//        }
-//    }
+    public void rotate120degrees(){
+        spindexerMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        spindexerMotor.setTargetPosition(96);
+        spindexerMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        spindexerMotor.setPower(0.5);
+        if (spindexerMotor.getCurrentPosition() == 96){
+            spindexerState = spindexerState.OFF;
+        }
+    }
     public void adjustPosition(int ticks) {
         int currentLivePos = spindexerMotor.getCurrentPosition();
         spindexerTargetPosition = currentLivePos + ticks;
@@ -94,7 +94,7 @@ public class Spindexer implements Component {
     @Override
     public void update() {
         if(indexerCued && robot.finger.fingerState == Finger.FingerState.DOWN) {
-            rotateDegrees(normalRotateDeg);
+            adjustPosition(80);
             indexerCued = false;
         }
         curPos = spindexerMotor.getCurrentPosition();
