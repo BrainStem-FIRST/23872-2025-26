@@ -21,6 +21,8 @@ public class Spindexer implements Component {
     public static double normalRotateDeg = 120;
     public static double shootRotateDeg = 30;
     public static double SPINDEXER_TICKS_PER_REVOLUTION = 241;
+    public static double ticksPerDegree = 288 / 360;
+
 
     public enum SpindexerState {
         COLLECT,
@@ -52,7 +54,7 @@ public class Spindexer implements Component {
     }
 
     public int rotateDegrees(double degrees){
-        spindexerTargetPosition = spindexerMotor.getCurrentPosition() + (int)(degrees / 360. * SPINDEXER_TICKS_PER_REVOLUTION);
+        spindexerTargetPosition = spindexerMotor.getCurrentPosition() - (int)(degrees / 360. * SPINDEXER_TICKS_PER_REVOLUTION);
         spindexerPid.reset();
         spindexerPid.setTarget(spindexerTargetPosition);
         spindexerMotor.setTargetPosition(spindexerTargetPosition);
@@ -104,7 +106,7 @@ public class Spindexer implements Component {
         }
         else {
             double power = spindexerPid.update(spindexerMotor.getCurrentPosition());
-            spindexerMotor.setPower(-power);
+            spindexerMotor.setPower(power);
         }
 
         telemetry.addData("Spindexer Power", spindexerMotor.getPower());

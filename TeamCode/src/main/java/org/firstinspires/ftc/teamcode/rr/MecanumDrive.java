@@ -149,7 +149,6 @@ public final class MecanumDrive {
         public void setPose(Pose2d pose) {
             this.pose = pose;
         }
-
         @Override
         public Pose2d getPose() {
             return pose;
@@ -225,6 +224,9 @@ public final class MecanumDrive {
         rightBack.setMode(mode);
     }
 
+    public PinpointLocalizer pinpoint() {
+        return (PinpointLocalizer) localizer;
+    }
     public MecanumDrive(HardwareMap hardwareMap, Pose2d pose) {
         LynxFirmware.throwIfModulesAreOutdated(hardwareMap);
 
@@ -244,7 +246,11 @@ public final class MecanumDrive {
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftBack.setDirection(DcMotorSimple.Direction.REVERSE );
+
 
         // TODO: reverse motor directions if needed
         //   leftFront.setDirection(DcMotorSimple.Direction.REVERSE);

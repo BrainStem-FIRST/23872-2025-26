@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.tuning_opmodes;
+package org.firstinspires.ftc.teamcode;
 
 import static org.firstinspires.ftc.teamcode.TeleWAutoAlign.kP;
 
@@ -76,9 +76,9 @@ public class MasterTele extends LinearOpMode {
     private void updateDriver1() {
         // if statements checking for d1 controls
         //driving ↓
-        double y = -gamepad1.left_stick_y * 0.6;
-        double x = gamepad1.left_stick_x * 0.6;
-        double rx = gamepad1.right_stick_x * 0.6;
+        double y = -gamepad1.left_stick_y * 0.99;
+        double x = gamepad1.left_stick_x * 0.99;
+        double rx = gamepad1.right_stick_x * 0.99;
 
         if (gamepad1.x) {
             rx = autoAlignRoboOdo();
@@ -109,6 +109,10 @@ public class MasterTele extends LinearOpMode {
             robot.shooter.setShooterShootClose();
         }
         if (gamepad1.a) {
+            robot.shooter.currentState = Shooter.ShooterState.OFF;
+            telemetry.addLine("pressed");
+        }
+        if (gamepad1.x) {
             robot.shooter.currentState = Shooter.ShooterState.OFF;
             telemetry.addLine("pressed");
         }
