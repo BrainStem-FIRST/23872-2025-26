@@ -1,7 +1,8 @@
 package org.firstinspires.ftc.teamcode.util;
 
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.Range;
-public class PIDController {
+public class PIDController extends PIDFCoefficients {
 
     private double target;
     private double kP, kI, kD;
