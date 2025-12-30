@@ -164,13 +164,13 @@ public class MasterTele extends LinearOpMode {
             robot.spindexer.spindexerTimer.reset();
         }
 
-        if (gamepad2.dpadUpWasPressed()){
-            robot.finger.fingerState = Finger.FingerState.UP;
-            robot.finger.flickerTimer.reset();
-        } else if (gamepad2.dpadDownWasPressed()){
-            robot.finger.fingerState = Finger.FingerState.DOWN;
-
-        }
+//        if (gamepad2.dpadUpWasPressed()){
+//            robot.finger.fingerState = Finger.FingerState.UP;
+//            robot.finger.flickerTimer.reset();
+//        } else if (gamepad2.dpadDownWasPressed()){
+//            robot.finger.fingerState = Finger.FingerState.DOWN;
+//
+//        }
 
         // d2 fine adjust
         if (gamepad2.left_trigger > 0.5){
