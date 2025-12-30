@@ -16,21 +16,21 @@ public class Coordinates {
 
     // Close Auto Coordinates - all for red side
     //FIXME MAKE SURE THAT ALL THE POSES ARE CORRECT
-    private final Pose2d closeStartPose = new Pose2d(-22, 13, Math.toRadians(145));
-    private final Pose2d close1ShootingPose = new Pose2d(-24, 24,Math.toRadians(145));
-    private final Pose2d closeCollect3ballsPrePose = new Pose2d(-12.0, 30.0, Math.toRadians(90)); // a prepose is used to go to a place right before you need to make a small accurate move
-    private final Pose2d closeCollect1BallPose = new Pose2d(closeCollect3ballsPrePose.position.x, closeCollect3ballsPrePose.position.y + 5, closeCollect3ballsPrePose.heading.toDouble()); // the collect poses are the same as the pre pose, but just moving forward enough to collect the ball
-    private final Pose2d closeCollect2BallPose = new Pose2d(closeCollect1BallPose.position.x, closeCollect1BallPose.position.y + 5, closeCollect1BallPose.heading.toDouble());
-    private final Pose2d closeCollect3BallPose = new Pose2d(closeCollect2BallPose.position.x, closeCollect2BallPose.position.y + 5, closeCollect2BallPose.heading.toDouble());
-    private final Pose2d close2ShootingPose = new Pose2d(-24.0, 24.0, Math.toRadians(145));
-    private final Pose2d close3ShootingPose = new Pose2d(-24, 24, Math.toRadians(145));
-    private final Pose2d close2CollectPose = new Pose2d(12, 24, Math.toRadians(145));
+    public static final Pose2d closeStartPose = new Pose2d(-22, 13, Math.toRadians(145));
+    public final Pose2d close1ShootingPose = new Pose2d(-24, 24,Math.toRadians(145));
+    public final Pose2d closeCollect3ballsPrePose = new Pose2d(-12.0, 30.0, Math.toRadians(90)); // a prepose is used to go to a place right before you need to make a small accurate move
+    public final Pose2d closeCollect1BallPose = new Pose2d(closeCollect3ballsPrePose.position.x, closeCollect3ballsPrePose.position.y + 5, closeCollect3ballsPrePose.heading.toDouble()); // the collect poses are the same as the pre pose, but just moving forward enough to collect the ball
+    public final Pose2d closeCollect2BallPose = new Pose2d(closeCollect1BallPose.position.x, closeCollect1BallPose.position.y + 5, closeCollect1BallPose.heading.toDouble());
+    public final Pose2d closeCollect3BallPose = new Pose2d(closeCollect2BallPose.position.x, closeCollect2BallPose.position.y + 5, closeCollect2BallPose.heading.toDouble());
+    public final Pose2d close2ShootingPose = new Pose2d(-24.0, 24.0, Math.toRadians(145));
+    public final Pose2d close3ShootingPose = new Pose2d(-24, 24, Math.toRadians(145));
+    public final Pose2d close2CollectPose = new Pose2d(12, 24, Math.toRadians(145));
 
 
     // Close Spline Tangents
-    private final double closeCollect3BallsDriveTangent = Math.toRadians(45);
-    private final double collectTangenet = Math.toRadians(90);
-    private final double closeShootDriveTangent = Math.toRadians(135);
+    public final double closeCollect3BallsDriveTangent = Math.toRadians(45);
+    public final double collectTangenet = Math.toRadians(90);
+    public final double closeShootDriveTangent = Math.toRadians(135);
 
     public Coordinates(boolean red){
         this.redSide = red;
@@ -104,14 +104,19 @@ public class Coordinates {
 
 
     //Util
-    private double flipHeading(double heading) { // radians
+    public double flipHeading(double heading) { // radians
         return Angle.norm(2.0 * Math.PI - heading);
     }
-    private Pose2d flipPose(Pose2d pose) {
+    public Pose2d flipPose(Pose2d pose) {
         return new Pose2d(pose.position.x, -pose.position.y, flipHeading(pose.heading.toDouble()));
     }
 
     public Pose2d getClose3ShootingPose() {
         return null;
+    }
+
+    public static class closeStartPose {
+        public closeStartPose(int i, int i1, double radians) {
+        }
     }
 }

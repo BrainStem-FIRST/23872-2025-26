@@ -1,12 +1,15 @@
 package org.firstinspires.ftc.teamcode.pidDrive;
 
+import com.acmerobotics.dashboard.config.Config;
+
 import java.util.Arrays;
 
+@Config
 public class Tolerance {
     public static class DefaultParams {
-        public double xTol = 3;
-        public double yTol = 3;
-        public double headingRadTol = Math.toRadians(5);
+        public double xTol = 1;
+        public double yTol = 1;
+        public double headingRadTol = Math.toRadians(3);
     }
     public static DefaultParams defaultParams = new DefaultParams();
     public double xTol;

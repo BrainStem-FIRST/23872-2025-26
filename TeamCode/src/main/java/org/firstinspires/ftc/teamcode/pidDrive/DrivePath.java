@@ -136,7 +136,8 @@ public class DrivePath implements Action {
             curWaypointIndex++;
             // completely finished drive path
             if (curWaypointIndex >= waypoints.size()) {
-                drivetrain.stop();
+                if(getCurParams().slowDownPercent == 1)
+                    drivetrain.stop();
                 return false;
             }
             // finished current waypoint path, moving on to next waypoint
@@ -234,10 +235,9 @@ public class DrivePath implements Action {
             telemetry.addData("power hypot", powerMag);
             TelemetryPacket packet = new TelemetryPacket();
             Canvas fieldOverlay = packet.fieldOverlay();
-            Pose2d prevWaypointPose = curWaypointIndex == 0 ? startPose : getWaypoint(curWaypointIndex - 1).pose;
-
             fieldOverlay.setStroke("black");
             double angle = pose.heading.toDouble() + Math.atan2(lateralPower, axialPower);
+            fieldOverlay.strokeCircle(pose.position.x, pose.position.y, 10);
             fieldOverlay.strokeLine(pose.position.x, pose.position.y, pose.position.x + Math.cos(angle) * 10 * powerMag, pose.position.y - Math.sin(angle) * 10 * powerMag);
 
             telemetry.update();

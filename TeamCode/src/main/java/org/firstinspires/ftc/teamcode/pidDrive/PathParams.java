@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
 
-import java.util.Arrays;
 import java.util.function.BooleanSupplier;
 
 @Config
@@ -16,9 +15,9 @@ public class PathParams {
     private static final double noMaxTime = -1;
 
     public static class DefaultParams {
-        public double speedKp = 0.02, speedKi = 0, speedKd = 0.01, speedKf = 0.115;
-        public double closeHeadingKp = 0.005, closeHeadingKi = 0, closeHeadingKd = 0.00005, headingKf = 0.17;
-        public double farHeadingKp = 0.01, farHeadingKi = 0, farHeadingKd = 0;
+        public double speedKp = 0.025, speedKi = 0, speedKd = 0.0, speedKf = 0.09;
+        public double closeHeadingKp = 0, closeHeadingKi = 0, closeHeadingKd = 0, headingKf = 0.13;
+        public double farHeadingKp = 0.006, farHeadingKi = 0, farHeadingKd = 0;
         public double applyCloseHeadingPIDErrorDeg = 0;
         public double applyKdLinearError = 10;
         public double lateralWeight = 1.9, axialWeight = 1; // weight the drive powers to correct for differences in driving

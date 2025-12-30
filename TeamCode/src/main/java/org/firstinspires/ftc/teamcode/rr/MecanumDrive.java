@@ -498,6 +498,11 @@ public final class MecanumDrive {
         c.strokePolyline(xPoints, yPoints);
     }
 
+    public static double MAX_VEL = 50.0; // Ensure this is not -50.0
+    public static double MAX_ACCEL = 40.0;
+    public static double MAX_ANG_VEL = Math.toRadians(180.0);
+    public static double MAX_ANG_ACCEL = Math.toRadians(180.0);
+
     public TrajectoryActionBuilder actionBuilder(Pose2d beginPose) {
         return new TrajectoryActionBuilder(
                 TurnAction::new,

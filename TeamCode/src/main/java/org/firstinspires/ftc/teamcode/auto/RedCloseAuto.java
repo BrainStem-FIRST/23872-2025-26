@@ -1,7 +1,10 @@
 package org.firstinspires.ftc.teamcode.auto;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -11,19 +14,34 @@ import org.firstinspires.ftc.teamcode.pidDrive.DrivePath;
 import org.firstinspires.ftc.teamcode.pidDrive.Waypoint;
 
 @Config
-@Autonomous(name="kevin example auto")
-public class KevinExampleAuto extends LinearOpMode {
+@Autonomous(name="RedCloseAuto")
+public class RedCloseAuto extends LinearOpMode {
     public static double x = 24, y = 0, h = 0;
     public static double maxPower = 0.5;
 
+
+
     @Override
     public void runOpMode() throws InterruptedException {
-        Pose2d start = new Pose2d(0, 0, 0);
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+        Pose2d start = new Pose2d(-63, 36, 0);
         Pose2d end = new Pose2d(x, y, h);
 
+        Pose2d close1ShootingPose = new Pose2d(-15, 22, Math.toRadians(135));
+        Pose2d close1CollectPrePose = new Pose2d(-13, 28, Math.toRadians(90));
+        Pose2d collect1Pose = new Pose2d(-13, 43, Math.toRadians(90));
+        Pose2d close2ShootingPose = new Pose2d(-15, 22, Math.toRadians(135));
+
+
         BrainSTEMAutoRobot robot = new BrainSTEMAutoRobot(hardwareMap, telemetry, this, start);
-        DrivePath path = new DrivePath(robot.drive,
-                new Waypoint(end).setMaxPower(maxPower)
+        DrivePath driveToPreloadShoot = new DrivePath(robot.drive, telemetry,
+                new Waypoint(close1ShootingPose)
+        );
+        DrivePath driveToCollectFirstSpike = new DrivePath(robot.drive, telemetry,
+                new Waypoint(close1CollectPrePose)
+        );
+        DrivePath driveToCollect1 = new DrivePath(robot.drive, telemetry,
+                new Waypoint(collect1Pose)
         );
         // READ THIS INFO VERY CAREFULLY
         // the robot starts at "start" and will drive to "end" and then drive back to "start"
@@ -43,6 +61,10 @@ public class KevinExampleAuto extends LinearOpMode {
 
         // how do you know when you're done tuning? idk you decide, when the robot is not oscillating at each waypoint anymore
         waitForStart();
-        Actions.runBlocking(path);
+        Actions.runBlocking(new SequentialAction(
+                driveToPreloadShoot,
+                driveToCollectFirstSpike,
+                driveToCollect1
+        ));
     }
 }
