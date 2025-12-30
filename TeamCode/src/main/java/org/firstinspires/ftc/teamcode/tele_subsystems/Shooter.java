@@ -47,6 +47,7 @@ public class Shooter implements Component {
 
     public enum ShooterState {
         OFF,
+        IDLE,
         SHOOT_FAR,
         SHOOT_CLOSE
     }
@@ -66,8 +67,8 @@ public class Shooter implements Component {
         shooterMotorOne.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         shooterMotorTwo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        shooterMotorOne.setDirection(DcMotorSimple.Direction.FORWARD);
-        shooterMotorTwo.setDirection(DcMotorSimple.Direction.FORWARD);
+        shooterMotorOne.setDirection(DcMotorSimple.Direction.REVERSE);
+        shooterMotorTwo.setDirection(DcMotorSimple.Direction.REVERSE);
 
         shooterMotorOne.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
         shooterMotorTwo.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
@@ -101,15 +102,17 @@ public class Shooter implements Component {
                 setBothMotors(0, 0);
                 break;
             case SHOOT_FAR:
-                setShooterVelocity(ShooterParams.FAR_SHOOT_VEL);
-                doPID();
-
+//                setShooterVelocity(ShooterParams.FAR_SHOOT_VEL);
+//                doPID();
+                setBothMotors(1,1);
                 break;
             case SHOOT_CLOSE:
-                setShooterVelocity(ShooterParams.CLOSE_SHOOT_VEL);
-                doPID();
-
+//                setShooterVelocity(ShooterParams.CLOSE_SHOOT_VEL);
+//                doPID();
+                setBothMotors(0.8, 0.8);
                 break;
+            case IDLE:
+                setBothMotors(0.4, 0.4);
         }
 
         telemetry.addData("shooter motor one velocity", shooterMotorOne.getVelocity());
@@ -133,14 +136,14 @@ public class Shooter implements Component {
         double minPower2 = ShooterParams.kF * shooterPID2.getTarget(); // kF MUST be small
         double power2 = minPower2 + pid2;
         power2 = Math.max(-1.0, Math.min(1.0, power2));
-        setBothMotors(power1, power2);
+        setBothMotors(-power1, -power2);
 
-        telemetry.addData("Velocity", velocity1);
-        telemetry.addData("FF", minPower1);
-        telemetry.addData("PID", pid1);
-        telemetry.addData("Power", power1);
+        telemetry.addData("Shooter Velocity", velocity1);
+        telemetry.addData("Shooter FF", minPower1);
+        telemetry.addData("Shooter PID", pid1);
+        telemetry.addData("shooter Power", shooterMotorOne.getPower());
         telemetry.addData("shooter state", currentState);
-        telemetry.addData("pid targets", shooterPID1.getTarget() + " " + shooterPID2.getTarget());
+        telemetry.addData("shooter pid targets", shooterPID1.getTarget() + " " + shooterPID2.getTarget());
     }
 
     public void setShooterShootFar() {
@@ -151,6 +154,10 @@ public class Shooter implements Component {
     }
     public void setShooterOff() {
         currentState = ShooterState.OFF;
+    }
+
+    public void setShooterIdle(){
+        currentState = ShooterState.IDLE;
     }
 
     @Override

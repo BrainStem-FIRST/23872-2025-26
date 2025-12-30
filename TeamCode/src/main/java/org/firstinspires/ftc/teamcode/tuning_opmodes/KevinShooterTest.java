@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.tuning_opmodes;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+@Disabled
 @TeleOp(name="shooter power test")
 public class KevinShooterTest extends LinearOpMode {
     @Override

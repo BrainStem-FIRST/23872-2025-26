@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BrainSTEMTeleRobot;
@@ -23,6 +24,7 @@ public class Spindexer implements Component {
     public static double SPINDEXER_TICKS_PER_REVOLUTION = 241;
     public static double ticksPerDegree = 288 / 360;
 
+    public ElapsedTime spindexerTimer;
 
     public enum SpindexerState {
         COLLECT,
@@ -51,8 +53,11 @@ public class Spindexer implements Component {
 
         spindexerPid = new PIDController(indexerKP, 0, 0);
         spindexerState = SpindexerState.COLLECT;
+        spindexerTimer = new ElapsedTime();
+        spindexerTimer.startTime();
     }
 
+    @Deprecated
     public int rotateDegrees(double degrees){
         spindexerTargetPosition = spindexerMotor.getCurrentPosition() - (int)(degrees / 360. * SPINDEXER_TICKS_PER_REVOLUTION);
         spindexerPid.reset();
@@ -81,7 +86,7 @@ public class Spindexer implements Component {
         int error = currentLivePos - spindexerTargetPosition;
         spindexerPid.setTarget(spindexerTargetPosition);
         spindexerMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        if (Math.abs(error) <= 3){
+        if (Math.abs(error) <= 1){
             spindexerMotor.setPower(0);
         } else {
             spindexerMotor.setPower(-spindexerPid.update(currentLivePos));
@@ -95,7 +100,7 @@ public class Spindexer implements Component {
 
     @Override
     public void update() {
-        if(indexerCued && robot.finger.fingerState == Finger.FingerState.DOWN) {
+        if(indexerCued && robot.finger.fingerState == Finger.FingerState.DOWN && spindexerTimer.milliseconds() > 2000) {
             adjustPosition(80);
             indexerCued = false;
         }
