@@ -10,6 +10,7 @@ public class Tolerance {
         public double xTol = 1;
         public double yTol = 1;
         public double headingRadTol = Math.toRadians(3);
+        public double headingDegTol;
     }
     public static DefaultParams defaultParams = new DefaultParams();
     public double xTol;
