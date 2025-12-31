@@ -15,7 +15,7 @@ public class PathParams {
     private static final double noMaxTime = -1;
 
     public static class DefaultParams {
-        public double speedKp = 0.025, speedKi = 0, speedKd = 0.0, speedKf = 0.09;
+        public double speedKp = 0.0077, speedKi = 0, speedKd = 0.0, speedKf = 0.28;
         public double closeHeadingKp = 0, closeHeadingKi = 0, closeHeadingKd = 0, headingKf = 0.08;
         public double farHeadingKp = 0.006, farHeadingKi = 0, farHeadingKd = 0;
         public double applyCloseHeadingPIDErrorDeg = 10;
