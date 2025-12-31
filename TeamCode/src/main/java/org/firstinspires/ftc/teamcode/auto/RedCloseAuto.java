@@ -40,6 +40,8 @@ public class RedCloseAuto extends LinearOpMode {
         Pose2d close1ShootingPose = new Pose2d(-15, 22, Math.toRadians(135));
         Pose2d close1CollectPrePose = new Pose2d(-13, 28, Math.toRadians(90));
         Pose2d collect1Pose = new Pose2d(-13, 43, Math.toRadians(90));
+        Pose2d collect2Pose = new Pose2d(-13, 48, Math.toRadians(90));
+        Pose2d collect3Pose = new Pose2d(-13, 53, Math.toRadians(90));
         Pose2d close2ShootingPose = new Pose2d(-15, 22, Math.toRadians(135));
 
 
@@ -53,8 +55,16 @@ public class RedCloseAuto extends LinearOpMode {
         DrivePath driveToCollect1 = new DrivePath(robot.drive, telemetry,
                 new Waypoint(collect1Pose)
         );
+        DrivePath driveToCollect2 = new DrivePath(robot.drive, telemetry,
+                new Waypoint(collect2Pose)
+        );
+        DrivePath driveToCollect3 = new DrivePath(robot.drive, telemetry,
+                new Waypoint(collect3Pose)
+        );
 
         Action setCollectorOn = new AutoActions().setCollectorOn(robot);
+        Action moveSpindexer120 = new AutoActions().moveSpindexer120(robot);
+        Action moveSpindexer60 = new AutoActions().moveSpindexer60(robot);
         Action updateRobot = new AutoActions().robotUpdate(robot);
 
 
@@ -81,10 +91,19 @@ public class RedCloseAuto extends LinearOpMode {
                     new SequentialAction(
                             // put auto stuff here please
                         driveToPreloadShoot,
-                            new SleepAction(0),
+                        new SleepAction(2),
                         driveToCollectFirstSpike,
                         setCollectorOn,
-                        driveToCollect1
+                        driveToCollect1,
+                        moveSpindexer120,
+                        new SleepAction(2),
+                        driveToCollect2,
+                        new SleepAction(2),
+                        moveSpindexer120,
+                        new SleepAction(2),
+                        driveToCollect3,
+                        new SleepAction(2),
+                        moveSpindexer60
                 ),
                 updateRobot
         ));
