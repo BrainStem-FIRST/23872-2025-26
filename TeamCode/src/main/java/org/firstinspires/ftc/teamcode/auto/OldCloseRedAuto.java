@@ -11,7 +11,7 @@
 //import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 //
 //import org.firstinspires.ftc.teamcode.BrainSTEMAutoRobot;
-//import org.firstinspires.ftc.teamcode.auto_subsystems.AutoActions;
+//import org.firstinspires.ftc.teamcode.auto.AutoActions;
 //
 //@Disabled
 //@Autonomous (name = "Red Close Auto")

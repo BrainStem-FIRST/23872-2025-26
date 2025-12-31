@@ -5,17 +5,14 @@ import static org.firstinspires.ftc.teamcode.pidDrive.MathUtils.createPose;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
-import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.BrainSTEMAutoRobot;
-import org.firstinspires.ftc.teamcode.auto_subsystems.AutoActions;
+import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
 import org.firstinspires.ftc.teamcode.pidDrive.DrivePath;
 import org.firstinspires.ftc.teamcode.pidDrive.Waypoint;
 
@@ -27,14 +24,14 @@ public class BetterRedCloseAuto extends LinearOpMode {
     public static double[] collect1Pre = new double[] { -13, 28, 90 };
     public static double[] collect1 = new double[] { -13, 54, 90 };
     public static double collectMaxPower = 0.3;
-    BrainSTEMAutoRobot robot;
+    BrainSTEMRobot robot;
 
     @Override
     public void runOpMode() throws InterruptedException {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         telemetry.setMsTransmissionInterval(20); // faster updates
 
-        robot = new BrainSTEMAutoRobot(hardwareMap, telemetry, this, createPose(start));
+        robot = new BrainSTEMRobot(hardwareMap, telemetry, this, createPose(start));
         AutoActions.setRobot(robot);
 
         DrivePath driveToPreloadShoot = new DrivePath(robot.drive, telemetry,
@@ -44,7 +41,6 @@ public class BetterRedCloseAuto extends LinearOpMode {
                 new Waypoint(createPose(collect1Pre)),
                 new Waypoint(createPose(collect1)).setMaxLinearPower(collectMaxPower)
         );
-
 
         waitForStart();
 

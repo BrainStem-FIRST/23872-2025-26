@@ -16,7 +16,7 @@
 //import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 //
 //import org.firstinspires.ftc.teamcode.BrainSTEMAutoRobot;
-//import org.firstinspires.ftc.teamcode.auto_subsystems.AutoActions;
+//import org.firstinspires.ftc.teamcode.auto.AutoActions;
 //import org.firstinspires.ftc.teamcode.auto_subsystems.Collector;
 //import org.firstinspires.ftc.teamcode.pidDrive.DrivePath;
 //import org.firstinspires.ftc.teamcode.pidDrive.Waypoint;

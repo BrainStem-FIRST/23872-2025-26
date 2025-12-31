@@ -19,7 +19,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import org.firstinspires.ftc.teamcode.rr.MecanumDrive;
 import org.firstinspires.ftc.teamcode.rr.PinpointLocalizer;
-
+import org.firstinspires.ftc.teamcode.util.Drawing;
 
 
 import java.util.ArrayList;
@@ -242,9 +242,8 @@ public class DrivePath implements Action {
             TelemetryPacket packet = new TelemetryPacket();
             Canvas fieldOverlay = packet.fieldOverlay();
             fieldOverlay.setStroke("black");
-            double angle = pose.heading.toDouble() + Math.atan2(lateralPower, axialPower);
-            fieldOverlay.strokeCircle(pose.position.x, pose.position.y, 10);
-            fieldOverlay.strokeLine(pose.position.x, pose.position.y, pose.position.x + Math.cos(angle) * 10 * powerMag, pose.position.y - Math.sin(angle) * 10 * powerMag);
+
+            Drawing.drawRobot(fieldOverlay, pose);
 
             telemetry.update();
             FtcDashboard.getInstance().sendTelemetryPacket(packet);

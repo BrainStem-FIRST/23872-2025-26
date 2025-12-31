@@ -10,12 +10,14 @@ public class Tolerance {
         public double xTol = 1;
         public double yTol = 1;
         public double headingRadTol = Math.toRadians(3);
-        public double headingDegTol;
     }
     public static DefaultParams defaultParams = new DefaultParams();
     public double xTol;
     public double yTol;
     public double headingRadTol;
+    public Tolerance() {
+        this(defaultParams.xTol, defaultParams.yTol, defaultParams.headingRadTol);
+    }
     public Tolerance(double xTol, double yTol, double headingRadTol) {
         this.xTol = xTol;
         this.yTol = yTol;

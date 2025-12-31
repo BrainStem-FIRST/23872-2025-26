@@ -14,13 +14,13 @@ public class Waypoint {
     public final PathParams params;
     private double distToNextWaypoint;
     public Waypoint(Pose2d pose) {
-        this(pose, new Tolerance(Tolerance.defaultParams.xTol, Tolerance.defaultParams.yTol, Tolerance.defaultParams.headingDegTol), new PathParams());
+        this(pose, new Tolerance(), new PathParams());
     }
     public Waypoint(Pose2d pose, Tolerance tolerance) {
         this(pose, tolerance, new PathParams());
     }
     public Waypoint(Pose2d pose, PathParams pathParams) {
-        this(pose, new Tolerance(Tolerance.defaultParams.xTol, Tolerance.defaultParams.yTol, Tolerance.defaultParams.headingDegTol), pathParams);
+        this(pose, new Tolerance(), pathParams);
     }
     public Waypoint(Pose2d pose, Tolerance tolerance, PathParams pathParams) {
         this.pose = pose;

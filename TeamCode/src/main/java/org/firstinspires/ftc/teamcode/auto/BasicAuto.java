@@ -10,13 +10,14 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import org.firstinspires.ftc.teamcode.BrainSTEMAutoRobot;
+
+import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
 
 @Disabled
 @Autonomous (name = "Auto")
 @Config
 public final class BasicAuto extends LinearOpMode {
-    BrainSTEMAutoRobot robot;
+    BrainSTEMRobot robot;
 
     public static class Positions {
         public double startX = 62.6, startY = 16.6, startA = Math.toRadians(180);
@@ -32,7 +33,7 @@ public final class BasicAuto extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         Pose2d beginPose = new Pose2d(positions.startX, positions.startY, positions.startA);
 
-        robot = new BrainSTEMAutoRobot(hardwareMap, telemetry, this, beginPose);
+        robot = new BrainSTEMRobot(hardwareMap, telemetry, this, beginPose);
 
         // DECLARE POSES
 
