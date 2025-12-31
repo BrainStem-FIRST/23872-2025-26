@@ -11,18 +11,31 @@ public class Coordinates {
 
     // Far Auto Coordinates
     //FIXME MAKE SURE THAT ALL THE POSES ARE CORRECT
-    Pose2d farStartPose = new Pose2d(-72, 35.56, Math.toRadians(90));
+
 
 
     // Close Auto Coordinates - all for red side
     private Pose2d closeStartPose = new Pose2d(-63, 36, 0);
 
     private Pose2d close1ShootingPose = new Pose2d(-15, 22, Math.toRadians(135));
-    private Pose2d close1CollectPrePose = new Pose2d(-13, 28, Math.toRadians(90));
+    private Pose2d collect123Prepose = new Pose2d(-13, 10, Math.toRadians(90));
+    private Pose2d collect456Prepose = new Pose2d( 12, 10, Math.toRadians(90));
+    private Pose2d collect789Prepose = new Pose2d(24, 10, Math.toRadians(90));
     private Pose2d collect1Pose = new Pose2d(-13, 43, Math.toRadians(90));
     private Pose2d collect2Pose = new Pose2d(-13, 48, Math.toRadians(90));
     private Pose2d collect3Pose = new Pose2d(-13, 53, Math.toRadians(90));
+    private Pose2d collect4Pose = new Pose2d(12, 32, Math.toRadians(90));
+    private Pose2d collect5Pose = new Pose2d(12, 37, Math.toRadians(90));
+    private Pose2d collect6Pose = new Pose2d(12,41, Math.toRadians(90));
+    private Pose2d collect7Pose = new Pose2d(36, 32, Math.toRadians(90));
+    private Pose2d collect8Pose = new Pose2d(36, 37, Math.toRadians(90));
+    private Pose2d collect9Pose = new Pose2d(36,41, Math.toRadians(90));
     private Pose2d close2ShootingPose = new Pose2d(-15, 22, Math.toRadians(135));
+
+    // Close Far Coors - for red side
+    Pose2d farStartPose = new Pose2d(0, 12, Math.toRadians(0));
+    private Pose2d farShootPose = new Pose2d(55, 9, Math.toRadians(9.2933086) + Math.PI/2);
+
 
 
 
@@ -43,6 +56,9 @@ public class Coordinates {
     public Pose2d getFarStartPose(){
         return ((redSide) ? farStartPose : flipPose(farStartPose));
     }
+    public Pose2d getFarShootingPose(){
+        return ((redSide) ? farShootPose : flipPose(farShootPose));
+    }
 
 
 
@@ -51,12 +67,20 @@ public class Coordinates {
         return ((redSide) ? closeStartPose : flipPose(closeStartPose));
     }
 
+
+
     public Pose2d getClose1ShootingPose(){
         return ((redSide) ? close1ShootingPose : flipPose(close1ShootingPose));
     }
 
-    public Pose2d getClose1CollectPrePose(){
-        return ((redSide) ? close1CollectPrePose : flipPose(close1CollectPrePose));
+    public Pose2d getCollect123Prepose(){
+        return ((redSide) ? collect123Prepose : flipPose(collect123Prepose));
+    }
+    public Pose2d getCollect456Prepose(){
+        return ((redSide) ? collect456Prepose : flipPose(collect456Prepose));
+    }
+    public Pose2d getCollect789Prepose(){
+        return ((redSide) ? collect789Prepose : flipPose(collect789Prepose));
     }
 
     public Pose2d getCollect1Pose(){
@@ -70,6 +94,25 @@ public class Coordinates {
     public Pose2d getCollect3Pose(){
         return ((redSide) ? collect3Pose : flipPose(collect3Pose));
     }
+    public Pose2d getCollect4Pose(){
+        return ((redSide) ? collect4Pose : flipPose(collect4Pose));
+    }
+    public Pose2d getCollect5Pose(){
+        return ((redSide) ? collect5Pose : flipPose(collect5Pose));
+    }
+    public Pose2d getCollect6Pose(){
+        return ((redSide) ? collect6Pose : flipPose(collect6Pose));
+    }
+    public Pose2d getCollect7Pose(){
+        return ((redSide) ? collect7Pose : flipPose(collect7Pose));
+    }
+    public Pose2d getCollect8Pose(){
+        return ((redSide) ? collect8Pose : flipPose(collect8Pose));
+    }
+    public Pose2d getCollect9Pose(){
+        return ((redSide) ? collect9Pose : flipPose(collect9Pose));
+    }
+
 
     public Pose2d getClose2ShootingPose(){
         return ((redSide) ? close2ShootingPose : flipPose(close2ShootingPose));
@@ -99,3 +142,4 @@ public class Coordinates {
         }
     }
 }
+
