@@ -22,6 +22,7 @@ public class BetterRedCloseAuto extends LinearOpMode {
     public static double[] start = new double[] { -63, 36, 0 };
     public static double[] close1Shooting = new double[] { -15, 22, 135 };
     public static double[] collect1Pre = new double[] { -13, 28, 90 };
+    public static double collect1PreSlowDown = 0.4;
     public static double[] collect1 = new double[] { -13, 54, 90 };
     public static double collectMaxPower = 0.3;
     BrainSTEMRobot robot;
@@ -38,7 +39,7 @@ public class BetterRedCloseAuto extends LinearOpMode {
                 new Waypoint(createPose(close1Shooting))
         );
         DrivePath driveToCollectFirstSpike = new DrivePath(robot.drive, telemetry,
-                new Waypoint(createPose(collect1Pre)),
+                new Waypoint(createPose(collect1Pre)).setSlowDownPercent(collect1PreSlowDown),
                 new Waypoint(createPose(collect1)).setMaxLinearPower(collectMaxPower)
         );
 
@@ -62,7 +63,13 @@ public class BetterRedCloseAuto extends LinearOpMode {
                                                 new SleepAction(1),
                                                 AutoActions.moveSpindexer120()
                                         )
-                                )
+                                ),
+                                driveToPreloadShoot,
+                                AutoActions.shooterTurnOnClose()
+
+
+
+
                         ),
                         AutoActions.robotUpdate()
         ));
