@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.BrainSTEMAutoRobot;
+import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
 import org.firstinspires.ftc.teamcode.pidDrive.DrivePath;
 import org.firstinspires.ftc.teamcode.pidDrive.Waypoint;
 
@@ -23,9 +23,9 @@ public class KevinExampleAuto extends LinearOpMode {
         Pose2d start = new Pose2d(0, 0, 0);
         Pose2d end = new Pose2d(x, y, h);
 
-        BrainSTEMAutoRobot robot = new BrainSTEMAutoRobot(hardwareMap, telemetry, this, start);
+        BrainSTEMRobot robot = new BrainSTEMRobot(hardwareMap, telemetry, this, start);
         DrivePath path = new DrivePath(robot.drive,
-                new Waypoint(end).setMaxPower(maxPower)
+                new Waypoint(end).setMaxLinearPower(maxPower)
         );
         // READ THIS INFO VERY CAREFULLY
         // the robot starts at "start" and will drive to "end" and then drive back to "start"

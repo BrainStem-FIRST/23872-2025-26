@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.rr.tuning;
 
-import androidx.annotation.ChecksSdkIntAtLeast;
-
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
@@ -11,7 +9,7 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.BrainSTEMTeleRobot;
+import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
 import org.firstinspires.ftc.teamcode.util.Drawing;
 import org.firstinspires.ftc.teamcode.rr.MecanumDrive;
 import org.firstinspires.ftc.teamcode.rr.TankDrive;
@@ -25,7 +23,7 @@ public class LocalizationTest extends LinearOpMode {
         if (TuningOpModes.DRIVE_CLASS.equals(MecanumDrive.class)) {
 //            MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
 
-            BrainSTEMTeleRobot robot = new BrainSTEMTeleRobot(hardwareMap, telemetry, this, new Pose2d(0,0,0));
+            BrainSTEMRobot robot = new BrainSTEMRobot(hardwareMap, telemetry, this, new Pose2d(0,0,0));
 
             waitForStart();
 

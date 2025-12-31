@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auto_subsystems;
+package org.firstinspires.ftc.teamcode.auto;
 
 import androidx.annotation.NonNull;
 
@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Collector;
 import org.firstinspires.ftc.teamcode.subsystems.Finger;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.Spindexer;
+
 
 public class AutoActions {
 
@@ -75,7 +76,7 @@ public class AutoActions {
 //
 //            }
 //        };
-//    }
+//    }BrainSTEMRobot
 
 
 

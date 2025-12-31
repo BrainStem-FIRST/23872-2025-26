@@ -16,9 +16,9 @@ public class PathParams {
 
     public static class DefaultParams {
         public double speedKp = 0.025, speedKi = 0, speedKd = 0.0, speedKf = 0.09;
-        public double closeHeadingKp = 0, closeHeadingKi = 0, closeHeadingKd = 0, headingKf = 0.13;
+        public double closeHeadingKp = 0, closeHeadingKi = 0, closeHeadingKd = 0, headingKf = 0.08;
         public double farHeadingKp = 0.006, farHeadingKi = 0, farHeadingKd = 0;
-        public double applyCloseHeadingPIDErrorDeg = 0;
+        public double applyCloseHeadingPIDErrorDeg = 10;
         public double applyKdLinearError = 10;
         public double lateralWeight = 1.9, axialWeight = 1; // weight the drive powers to correct for differences in driving
         public double minSpeed = 0, maxSpeed = 1;

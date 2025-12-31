@@ -15,6 +15,9 @@ public class Tolerance {
     public double xTol;
     public double yTol;
     public double headingRadTol;
+    public Tolerance() {
+        this(defaultParams.xTol, defaultParams.yTol, defaultParams.headingRadTol);
+    }
     public Tolerance(double xTol, double yTol, double headingRadTol) {
         this.xTol = xTol;
         this.yTol = yTol;

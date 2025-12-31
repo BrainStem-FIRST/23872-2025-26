@@ -8,9 +8,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.tele_subsystems.Collector;
-import org.firstinspires.ftc.teamcode.tele_subsystems.Finger;
-import org.firstinspires.ftc.teamcode.tele_subsystems.Spindexer;
+import org.firstinspires.ftc.teamcode.subsystems.Collector;
+import org.firstinspires.ftc.teamcode.subsystems.Finger;
+import org.firstinspires.ftc.teamcode.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.util.GamepadTracker;
 
 
@@ -20,7 +20,7 @@ public class MasterTele extends LinearOpMode {
     private GamepadTracker gp1;
     private GamepadTracker gp2;
     private ElapsedTime runtime = new ElapsedTime();
-    private BrainSTEMTeleRobot robot;
+    private BrainSTEMRobot robot;
 
     private ElapsedTime shoot3balls;
 
@@ -28,7 +28,7 @@ public class MasterTele extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);
 
-        robot = new BrainSTEMTeleRobot(hardwareMap, this.telemetry, this, new Pose2d(0, 0, 0));
+        robot = new BrainSTEMRobot(hardwareMap, this.telemetry, this, new Pose2d(0, 0, 0));
 
         gp1 = new GamepadTracker(gamepad1);
         gp2 = new GamepadTracker(gamepad2);
@@ -118,7 +118,7 @@ public class MasterTele extends LinearOpMode {
 
         //d1 spindexer controls
         if (gamepad1.leftBumperWasPressed()){
-            robot.spindexer.adjustPosition(-80);
+            robot.spindexer.adjustPosition(-Spindexer.degrees120);
         } else if (gamepad1.rightBumperWasPressed()){
             robot.spindexer.adjustPosition(80);
         }
