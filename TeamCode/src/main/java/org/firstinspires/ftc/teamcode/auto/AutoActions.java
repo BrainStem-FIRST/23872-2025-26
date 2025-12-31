@@ -51,6 +51,14 @@ public class AutoActions {
         };
     }
 
+    public static Action shooterTurnOnClose() {
+        return telemetryPacket -> {
+            robot.shooter.shooterState = Shooter.ShooterState.SHOOT_CLOSE;
+            telemetryPacket.addLine("Shooter On");
+            return false;
+        };
+    }
+
     public static Action shooterTurnOff() {
         return telemetryPacket -> {
             robot.shooter.shooterState = Shooter.ShooterState.OFF;
