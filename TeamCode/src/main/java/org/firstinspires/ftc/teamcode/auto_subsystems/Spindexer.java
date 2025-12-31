@@ -17,7 +17,7 @@ public class Spindexer implements Component {
     public static double indexerKP = 0.05;
     public static double errorThreshold = 5;
     public static double normalRotateDeg = 120;
-    public static double shootRotateDeg = 30;
+    public static double shootRotateDeg = 60;
     public static double SPINDEXER_TICKS_PER_REVOLUTION = 241;
 
     public enum SpindexerState {
@@ -48,7 +48,6 @@ public class Spindexer implements Component {
         spindexerPid = new PIDController(indexerKP, 0, 0);
         spindexerState = SpindexerState.COLLECT;
     }
-
     public int rotateDegrees(double degrees){
         spindexerTargetPosition = spindexerMotor.getCurrentPosition() - (int)(degrees / 360. * SPINDEXER_TICKS_PER_REVOLUTION);
         spindexerPid.reset();
@@ -58,9 +57,6 @@ public class Spindexer implements Component {
         spindexerMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         spindexerMotor.setPower(-0.3);
         return 0;
-    }
-    public int getCurrentPosition() {
-        return spindexerMotor.getCurrentPosition();
     }
     public void rotate120degrees(){
         spindexerMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);

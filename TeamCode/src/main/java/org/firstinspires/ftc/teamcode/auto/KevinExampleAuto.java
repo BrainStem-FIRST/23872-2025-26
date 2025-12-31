@@ -23,7 +23,7 @@ public class KevinExampleAuto extends LinearOpMode {
 
         BrainSTEMAutoRobot robot = new BrainSTEMAutoRobot(hardwareMap, telemetry, this, start);
         DrivePath path = new DrivePath(robot.drive,
-                new Waypoint(end).setMaxPower(maxPower)
+                new Waypoint(end).setMaxLinearPower(maxPower)
         );
         // READ THIS INFO VERY CAREFULLY
         // the robot starts at "start" and will drive to "end" and then drive back to "start"

@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.util.Component;
 public class Finger implements Component {
     public static int downPWM = 837, upPWM = 1258;
     public static double downPosition = 0.01, upPosition = 0.99;
+    public static double upTime = 0.2, downTime = 0.2;
     private Telemetry telemetry;
     public ServoImplEx fingerServo;
 
