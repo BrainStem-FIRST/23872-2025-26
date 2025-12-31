@@ -4,9 +4,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-import org.firstinspires.ftc.teamcode.tele_subsystems.Finger;
-import org.firstinspires.ftc.teamcode.tele_subsystems.Shooter;
-import org.firstinspires.ftc.teamcode.tele_subsystems.Spindexer;
+import org.firstinspires.ftc.teamcode.subsystems.Finger;
+import org.firstinspires.ftc.teamcode.subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.subsystems.Spindexer;
 
 public class ShootThreeBalls {
 
@@ -64,7 +64,7 @@ public class ShootThreeBalls {
         switch (currentState) {
             case IDLE:
 
-                shooter.currentState = Shooter.ShooterState.OFF;
+                shooter.shooterState = Shooter.ShooterState.OFF;
                 finger.fingerState = Finger.FingerState.DOWN;
                 break;
 

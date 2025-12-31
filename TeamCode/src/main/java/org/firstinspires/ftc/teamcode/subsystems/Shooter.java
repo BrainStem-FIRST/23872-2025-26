@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auto_subsystems;
+package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -36,7 +36,7 @@ public class Shooter implements Component {
     public DcMotorEx shooterMotorOne;
 
 
-    public ShooterState currentState;
+    public ShooterState shooterState;
 
     //PID Controllers
     public PIDController shooterPID1;
@@ -79,7 +79,7 @@ public class Shooter implements Component {
         shooterMotorOne.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, shooterPID1);
         shooterMotorTwo.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, shooterPID2);
 
-        this.currentState = ShooterState.OFF;
+        this.shooterState = ShooterState.OFF;
     }
 
     public void setBothMotors(double power1, double power2) {
@@ -96,7 +96,7 @@ public class Shooter implements Component {
 
     @Override
     public void update() {
-        switch (currentState) {
+        switch (shooterState) {
             case OFF:
                 setShooterVelocity(0);
                 setBothMotors(0, 0);
@@ -142,22 +142,22 @@ public class Shooter implements Component {
         telemetry.addData("Shooter FF", minPower1);
         telemetry.addData("Shooter PID", pid1);
         telemetry.addData("shooter Power", shooterMotorOne.getPower());
-        telemetry.addData("shooter state", currentState);
+        telemetry.addData("shooter state", shooterState);
         telemetry.addData("shooter pid targets", shooterPID1.getTarget() + " " + shooterPID2.getTarget());
     }
 
     public void setShooterShootFar() {
-        currentState = ShooterState.SHOOT_FAR;
+        shooterState = ShooterState.SHOOT_FAR;
     }
     public void setShooterShootClose() {
-        currentState = ShooterState.SHOOT_CLOSE;
+        shooterState = ShooterState.SHOOT_CLOSE;
     }
     public void setShooterOff() {
-        currentState = ShooterState.OFF;
+        shooterState = ShooterState.OFF;
     }
 
     public void setShooterIdle(){
-        currentState = ShooterState.IDLE;
+        shooterState = ShooterState.IDLE;
     }
 
     @Override

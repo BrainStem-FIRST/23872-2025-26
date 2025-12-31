@@ -2,33 +2,24 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.util.ArrayList;
 
 import org.firstinspires.ftc.teamcode.rr.MecanumDrive;
-import org.firstinspires.ftc.teamcode.tele_subsystems.Collector;
-import org.firstinspires.ftc.teamcode.tele_subsystems.Shooter;
-import org.firstinspires.ftc.teamcode.tele_subsystems.Spindexer;
-import org.firstinspires.ftc.teamcode.tele_subsystems.Finger;
+import org.firstinspires.ftc.teamcode.subsystems.Collector;
+import org.firstinspires.ftc.teamcode.subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.subsystems.Spindexer;
+import org.firstinspires.ftc.teamcode.subsystems.Finger;
 import org.firstinspires.ftc.teamcode.util.Component;
 
-public class BrainSTEMTeleRobot {
-
-    // Example Motors and Servos
-
-    public Servo exampleServo;
-    public DcMotorEx exampleMotor;
-
-
+public class BrainSTEMRobot {
     // Don't touch these
     public Telemetry telemetry;
     public OpMode opMode;
-    private ArrayList<Component> subsystems;
+    private final ArrayList<Component> subsystems;
     public Spindexer spindexer;
     public Collector collector;
     public Shooter shooter;
@@ -36,11 +27,7 @@ public class BrainSTEMTeleRobot {
     public Finger finger;
     public MecanumDrive drive;
 
-
-
-
-
-    public BrainSTEMTeleRobot(HardwareMap hwMap, Telemetry telemetry, OpMode opMode, Pose2d startPose) {
+    public BrainSTEMRobot(HardwareMap hwMap, Telemetry telemetry, OpMode opMode, Pose2d startPose) {
 
         this.telemetry = telemetry;
         this.opMode = opMode;
