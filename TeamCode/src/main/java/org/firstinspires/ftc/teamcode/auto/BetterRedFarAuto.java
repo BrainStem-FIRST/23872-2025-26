@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.BrainSTEMAutoRobot;
+import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
 import org.firstinspires.ftc.teamcode.auto_subsystems.AutoActions;
 import org.firstinspires.ftc.teamcode.pidDrive.DrivePath;
 import org.firstinspires.ftc.teamcode.pidDrive.Waypoint;
@@ -43,14 +44,14 @@ public class BetterRedFarAuto extends LinearOpMode {
     public static double[] farShooting = new double[] {57, 9 , 0}; //change
 
     public static double collectMaxPower = 0.3;
-    BrainSTEMAutoRobot robot;
+    BrainSTEMRobot robot;
 
     @Override
     public void runOpMode() throws InterruptedException {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         telemetry.setMsTransmissionInterval(20); // faster updates
 
-        robot = new BrainSTEMAutoRobot(hardwareMap, telemetry, this, createPose(start));
+        robot = new BrainSTEMRobot(hardwareMap, telemetry, this, createPose(start));
         AutoActions.setRobot(robot);
 
         DrivePath driveToPreloadShoot = new DrivePath(robot.drive, telemetry,
