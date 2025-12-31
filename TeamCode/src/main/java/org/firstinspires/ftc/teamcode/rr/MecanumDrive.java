@@ -529,4 +529,7 @@ public final class MecanumDrive {
     public void stop() {
         setMotorPowers(0, 0, 0, 0);
     }
+    public String getDrivePowersString() {
+        return leftFront.getPower() + " " + rightFront.getPower() + " " + leftBack.getPower() + rightBack.getPower();
+    }
 }

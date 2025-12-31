@@ -76,6 +76,7 @@ public class PathParams {
         headingLerpType = defaultParams.headingLerpType;
         tangentHeadingActivateThreshold = defaultParams.tangentHeadingActivateThreshold;
         applyCloseHeadingPIDErrorDeg = defaultParams.applyCloseHeadingPIDErrorDeg;
+        slowDownPercent = 1;
     }
     public boolean hasMaxTime() {
         return maxTime != noMaxTime;

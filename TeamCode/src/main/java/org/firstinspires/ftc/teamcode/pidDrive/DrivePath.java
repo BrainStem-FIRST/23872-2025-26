@@ -17,7 +17,6 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-
 import org.firstinspires.ftc.teamcode.rr.MecanumDrive;
 import org.firstinspires.ftc.teamcode.rr.PinpointLocalizer;
 
@@ -142,6 +141,9 @@ public class DrivePath implements Action {
                     drivetrain.stop();
                 Log.d("DRIVE PATH ", "STOP ");
                 telemetryPacket.addLine("DRIVE PATH STOP ");
+                TelemetryPacket packet = new TelemetryPacket();
+                packet.addLine("called drive.stop()");
+                packet.put("drive powers (fl, fr, bl, br)", drivetrain.getDrivePowersString());
                 return false;
             }
             // finished current waypoint path, moving on to next waypoint
