@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.pidDrive;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.FtcDashboard;
@@ -138,6 +140,8 @@ public class DrivePath implements Action {
             if (curWaypointIndex >= waypoints.size()) {
                 if(getCurParams().slowDownPercent == 1)
                     drivetrain.stop();
+                Log.d("DRIVE PATH ", "STOP ");
+                telemetryPacket.addLine("DRIVE PATH STOP ");
                 return false;
             }
             // finished current waypoint path, moving on to next waypoint

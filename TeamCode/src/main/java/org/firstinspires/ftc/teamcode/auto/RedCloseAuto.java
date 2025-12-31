@@ -1,15 +1,23 @@
 package org.firstinspires.ftc.teamcode.auto;
 
+import androidx.annotation.NonNull;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.BrainSTEMAutoRobot;
+import org.firstinspires.ftc.teamcode.auto_subsystems.AutoActions;
+import org.firstinspires.ftc.teamcode.auto_subsystems.Collector;
 import org.firstinspires.ftc.teamcode.pidDrive.DrivePath;
 import org.firstinspires.ftc.teamcode.pidDrive.Waypoint;
 
@@ -18,6 +26,8 @@ import org.firstinspires.ftc.teamcode.pidDrive.Waypoint;
 public class RedCloseAuto extends LinearOpMode {
     public static double x = 24, y = 0, h = 0;
     public static double maxPower = 0.5;
+
+    BrainSTEMAutoRobot robot;
 
 
 
@@ -33,7 +43,7 @@ public class RedCloseAuto extends LinearOpMode {
         Pose2d close2ShootingPose = new Pose2d(-15, 22, Math.toRadians(135));
 
 
-        BrainSTEMAutoRobot robot = new BrainSTEMAutoRobot(hardwareMap, telemetry, this, start);
+        robot = new BrainSTEMAutoRobot(hardwareMap, telemetry, this, start);
         DrivePath driveToPreloadShoot = new DrivePath(robot.drive, telemetry,
                 new Waypoint(close1ShootingPose)
         );
@@ -43,6 +53,11 @@ public class RedCloseAuto extends LinearOpMode {
         DrivePath driveToCollect1 = new DrivePath(robot.drive, telemetry,
                 new Waypoint(collect1Pose)
         );
+
+        Action setCollectorOn = new AutoActions().setCollectorOn(robot);
+        Action updateRobot = new AutoActions().robotUpdate(robot);
+
+
         // READ THIS INFO VERY CAREFULLY
         // the robot starts at "start" and will drive to "end" and then drive back to "start"
         // why will it do this? because when I declare the "path" variable, I pass in TWO Waypoint objects
@@ -61,10 +76,17 @@ public class RedCloseAuto extends LinearOpMode {
 
         // how do you know when you're done tuning? idk you decide, when the robot is not oscillating at each waypoint anymore
         waitForStart();
-        Actions.runBlocking(new SequentialAction(
-                driveToPreloadShoot,
-                driveToCollectFirstSpike,
-                driveToCollect1
+        Actions.runBlocking(
+                new ParallelAction(
+                    new SequentialAction(
+                            // put auto stuff here please
+                        driveToPreloadShoot,
+                            new SleepAction(0),
+                        driveToCollectFirstSpike,
+                        setCollectorOn,
+                        driveToCollect1
+                ),
+                updateRobot
         ));
     }
 }
