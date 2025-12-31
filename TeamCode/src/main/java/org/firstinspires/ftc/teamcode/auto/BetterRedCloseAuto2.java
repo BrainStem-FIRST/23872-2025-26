@@ -16,9 +16,9 @@ import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
 import org.firstinspires.ftc.teamcode.pidDrive.DrivePath;
 import org.firstinspires.ftc.teamcode.pidDrive.Waypoint;
 
-@Autonomous(name="BetterRedCloseAuto")
+@Autonomous(name="BetterRedCloseAuto2")
 @Config
-public class BetterRedCloseAuto extends LinearOpMode {
+public class BetterRedCloseAuto2 extends LinearOpMode {
     public static double[] start = new double[] { -63, 36, 0 };
     public static double[] close1Shooting = new double[] { -15, 22, 135 };
     public static double[] collect1Pre = new double[] { -13, 28, 90 };
