@@ -7,19 +7,22 @@ import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
 
-import org.firstinspires.ftc.teamcode.BrainSTEMAutoRobot;
-
+import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
+import org.firstinspires.ftc.teamcode.subsystems.Collector;
+import org.firstinspires.ftc.teamcode.subsystems.Finger;
+import org.firstinspires.ftc.teamcode.subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.subsystems.Spindexer;
 
 public class AutoActions {
 
 
-    private static BrainSTEMAutoRobot robot = null;
-    public static void setRobot(BrainSTEMAutoRobot robot) {
+    private static BrainSTEMRobot robot = null;
+    public static void setRobot(BrainSTEMRobot robot) {
         AutoActions.robot = robot;
     }
     public static Action setCollectorOn() {
         return telemetryPacket -> {
-            robot.collector.collectorState = Collector.CollectorState.ON;
+            robot.collector.collectorState = Collector.CollectorState.INTAKE;
             return false;
         };
     }
@@ -79,20 +82,20 @@ public class AutoActions {
 
 
     public static Action moveSpindexer120() {
-        return moveSpindexer(Spindexer.normalRotateDeg);
+        return moveSpindexer(Spindexer.degrees120);
     }
 
 
     public static Action moveSpindexer60() {
-        return moveSpindexer(Spindexer.shootRotateDeg);
+        return moveSpindexer(Spindexer.degrees60);
     }
-    private static Action moveSpindexer(double deg) {
+    private static Action moveSpindexer(int ticks) {
         return new Action() {
             boolean first = true;
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                 if (first) {
-                    robot.spindexer.rotateDegrees(deg);
+                    robot.spindexer.adjustPosition(ticks);
                     first = false;
                 }
                 telemetryPacket.addLine("indexer S3");
