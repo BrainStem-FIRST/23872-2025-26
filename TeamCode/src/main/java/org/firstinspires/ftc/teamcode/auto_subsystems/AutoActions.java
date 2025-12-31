@@ -48,8 +48,27 @@ public class AutoActions {
         return new Action() {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                robot.shooter.shooterState = Shooter.ShooterState.SHOOT_FAR;
-                telemetryPacket.addLine("Shooter On");
+                robot.shooter.setShooterShootFar();
+                return false;
+            }
+        };
+    }
+
+    public Action shooterTurnOnClose(BrainSTEMAutoRobot robot) {
+        return new Action() {
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                robot.shooter.setShooterShootClose();
+                return false;
+            }
+        };
+    }
+
+    public Action shooterTurnOnIdle(BrainSTEMAutoRobot robot) {
+        return new Action() {
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                robot.shooter.setShooterIdle();
                 return false;
             }
         };
@@ -59,42 +78,19 @@ public class AutoActions {
         return new Action() {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                robot.shooter.shooterState = Shooter.ShooterState.OFF;
+                robot.shooter.setShooterOff();
                 telemetryPacket.addLine("Shooter Off");
                 return false;
             }
         };
     }
-//    public Action shooterMotorTwo(BrainSTEMAutoRobot robot) {
-//        return new Action() {
-//            @Override
-//            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-//                return false;
-//            }
-//        };
-//    }
-
-//    public Action shooterMotorOneOff(BrainSTEMAutoRobot robot) {
-//        return new Action() {
-//            @Override
-//            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-//                telemetryPacket.addLine("Shooter Off");
-//                return false;
-//
-//            }
-//        };
-//    }
-
-
-
 
 
     public Action moveSpindexer120(BrainSTEMAutoRobot robot) {
         return new Action() {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                robot.spindexer.rotateDegrees(org.firstinspires.ftc.teamcode.auto_subsystems.Spindexer.normalRotateDeg);
-                telemetryPacket.addLine("indexer S3");
+                robot.spindexer.adjustPosition(-83);
                 return false;
             }
         };
@@ -105,8 +101,7 @@ public class AutoActions {
         return new Action() {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                robot.spindexer.rotateDegrees(org.firstinspires.ftc.teamcode.auto_subsystems.Spindexer.shootRotateDeg);
-                telemetryPacket.addLine("indexer S3");
+                robot.spindexer.adjustPosition(-42);
                 return false;
             }
         };

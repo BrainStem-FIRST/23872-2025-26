@@ -50,9 +50,6 @@ public class Finger implements Component {
                 break;
             case UP:
                 fingerServo.setPosition(upPosition);
-                if(flickerTimer.seconds() > 1) {
-                    fingerState = FingerState.DOWN;
-                }
                 break;
         }
     }

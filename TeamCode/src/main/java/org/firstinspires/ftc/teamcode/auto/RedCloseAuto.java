@@ -44,7 +44,6 @@ public class RedCloseAuto extends LinearOpMode {
         Pose2d collect3Pose = new Pose2d(-13, 53, Math.toRadians(90));
         Pose2d close2ShootingPose = new Pose2d(-15, 22, Math.toRadians(135));
 
-
         robot = new BrainSTEMAutoRobot(hardwareMap, telemetry, this, start);
         DrivePath driveToPreloadShoot = new DrivePath(robot.drive, telemetry,
                 new Waypoint(close1ShootingPose)
@@ -66,6 +65,10 @@ public class RedCloseAuto extends LinearOpMode {
         Action moveSpindexer120 = new AutoActions().moveSpindexer120(robot);
         Action moveSpindexer60 = new AutoActions().moveSpindexer60(robot);
         Action updateRobot = new AutoActions().robotUpdate(robot);
+        Action setShooterIdle = new AutoActions().shooterTurnOnIdle(robot);
+        Action setShooterClose = new AutoActions().shooterTurnOnClose(robot);
+        Action fingerUp = new AutoActions().fingerServoU(robot);
+        Action fingerDown = new AutoActions().fingerServoD(robot);
 
 
         // READ THIS INFO VERY CAREFULLY
@@ -90,21 +93,69 @@ public class RedCloseAuto extends LinearOpMode {
                 new ParallelAction(
                     new SequentialAction(
                             // put auto stuff here please
-                        driveToPreloadShoot,
-                        new SleepAction(2),
-                        driveToCollectFirstSpike,
-                        setCollectorOn,
-                        driveToCollect1,
-                        moveSpindexer120,
-                        new SleepAction(2),
-                        driveToCollect2,
-                        new SleepAction(2),
-                        moveSpindexer120,
-                        new SleepAction(2),
-                        driveToCollect3,
-                        new SleepAction(2),
-                        moveSpindexer60,
-                        driveToPreloadShoot
+                            setShooterClose,
+                            driveToPreloadShoot,
+
+                            new SequentialAction(
+                                    fingerUp,
+                                    new SleepAction(0.6),
+                                    new ParallelAction(
+                                            fingerDown,
+                                            moveSpindexer120
+                                    ),
+                                    fingerUp,
+                                    new SleepAction(0.6),
+                                    new ParallelAction(
+                                            fingerDown,
+                                            moveSpindexer120
+                                    ),
+                                    fingerUp,
+                                    new SleepAction(0.6),
+                                    new ParallelAction(
+                                            fingerDown,
+                                            moveSpindexer120
+                                    ),
+                                    setShooterIdle
+                            ),
+                            new ParallelAction(
+                                    driveToCollectFirstSpike,
+                                    setCollectorOn
+                            ),
+                            driveToCollect1,
+
+                        // collect sequence
+                            moveSpindexer60,
+                            new SleepAction(0.75),
+                            driveToCollect2,
+                            new SleepAction(0.75),
+                            moveSpindexer120,
+                            new SleepAction(0.75),
+                            driveToCollect3,
+                            new SleepAction(0.75),
+                            moveSpindexer60,
+                            setShooterClose,
+                            driveToPreloadShoot,
+                            new SequentialAction(
+                                    fingerUp,
+                                    new SleepAction(0.6),
+                                    new ParallelAction(
+                                            fingerDown,
+                                            moveSpindexer120
+                                    ),
+                                    fingerUp,
+                                    new SleepAction(0.6),
+                                    new ParallelAction(
+                                            fingerDown,
+                                            moveSpindexer120
+                                    ),
+                                    fingerUp,
+                                    new SleepAction(0.6),
+                                    new ParallelAction(
+                                            fingerDown,
+                                            moveSpindexer120
+                                    ),
+                                    setShooterIdle
+                            )
                 ),
                 updateRobot
         ));
