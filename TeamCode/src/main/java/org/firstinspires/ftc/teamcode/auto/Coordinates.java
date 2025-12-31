@@ -15,26 +15,14 @@ public class Coordinates {
 
 
     // Close Auto Coordinates - all for red side
-    //FIXME MAKE SURE THAT ALL THE POSES ARE CORRECT
-    public static final Pose2d closeStartPose = new Pose2d(-22, 13, Math.toRadians(145));
-    public final Pose2d close1ShootingPose = new Pose2d(-24, 24,Math.toRadians(145));
-    public final Pose2d closeCollect3ballsPrePose = new Pose2d(-12.0, 30.0, Math.toRadians(90)); // a prepose is used to go to a place right before you need to make a small accurate move
-    public final Pose2d closeCollect1BallPose = new Pose2d(closeCollect3ballsPrePose.position.x, closeCollect3ballsPrePose.position.y + 5, closeCollect3ballsPrePose.heading.toDouble()); // the collect poses are the same as the pre pose, but just moving forward enough to collect the ball
-    public final Pose2d closeCollect2BallPose = new Pose2d(closeCollect1BallPose.position.x, closeCollect1BallPose.position.y + 5, closeCollect1BallPose.heading.toDouble());
-    public final Pose2d closeCollect3BallPose = new Pose2d(closeCollect2BallPose.position.x, closeCollect2BallPose.position.y + 5, closeCollect2BallPose.heading.toDouble());
-    public final Pose2d close2ShootingPose = new Pose2d(-24.0, 24.0, Math.toRadians(145));
-    public final Pose2d close3ShootingPose = new Pose2d(-24, 24, Math.toRadians(145));
-    public final Pose2d close2CollectPose = new Pose2d(12, 24, Math.toRadians(145));
+    private Pose2d closeStartPose = new Pose2d(-63, 36, 0);
 
-
-    // Close Spline Tangents
-    public final double closeCollect3BallsDriveTangent = Math.toRadians(45);
-    public final double collectTangenet = Math.toRadians(90);
-    public final double closeShootDriveTangent = Math.toRadians(135);
-
-    public Coordinates(boolean red){
-        this.redSide = red;
-    }
+    private Pose2d close1ShootingPose = new Pose2d(-15, 22, Math.toRadians(135));
+    private Pose2d close1CollectPrePose = new Pose2d(-13, 28, Math.toRadians(90));
+    private Pose2d collect1Pose = new Pose2d(-13, 43, Math.toRadians(90));
+    private Pose2d collect2Pose = new Pose2d(-13, 48, Math.toRadians(90));
+    private Pose2d collect3Pose = new Pose2d(-13, 53, Math.toRadians(90));
+    private Pose2d close2ShootingPose = new Pose2d(-15, 22, Math.toRadians(135));
 
 
 
@@ -47,6 +35,10 @@ public class Coordinates {
             just mirrored of each-other.
      */
 
+    public Coordinates(boolean red){
+        this.redSide = red;
+    }
+
     // far side get functions
     public Pose2d getFarStartPose(){
         return ((redSide) ? farStartPose : flipPose(farStartPose));
@@ -55,51 +47,38 @@ public class Coordinates {
 
 
     // close side get functions
-
-
     public Pose2d getCloseStartPose(){
-        return (redSide ? closeStartPose : flipPose(closeStartPose));
+        return ((redSide) ? closeStartPose : flipPose(closeStartPose));
     }
 
     public Pose2d getClose1ShootingPose(){
-        return (redSide ? close1ShootingPose : flipPose(close1ShootingPose));
+        return ((redSide) ? close1ShootingPose : flipPose(close1ShootingPose));
     }
 
-    public Pose2d getCloseCollect3ballsPrePose(){
-        return (redSide ? closeCollect3ballsPrePose : flipPose(closeCollect3ballsPrePose));
+    public Pose2d getClose1CollectPrePose(){
+        return ((redSide) ? close1CollectPrePose : flipPose(close1CollectPrePose));
     }
 
-    public Pose2d getCloseCollect1BallPose(){
-        return (redSide ? closeCollect1BallPose : flipPose(closeCollect1BallPose));
+    public Pose2d getCollect1Pose(){
+        return ((redSide) ? collect1Pose : flipPose(collect1Pose));
     }
 
-    public Pose2d getCloseCollect2BallPose(){
-        return (redSide ? closeCollect2BallPose : flipPose(closeCollect2BallPose));
+    public Pose2d getCollect2Pose(){
+        return ((redSide) ? collect2Pose : flipPose(collect2Pose));
     }
 
-    public Pose2d getCloseCollect3BallPose(){
-        return (redSide ? closeCollect3BallPose : flipPose(closeCollect3BallPose));
+    public Pose2d getCollect3Pose(){
+        return ((redSide) ? collect3Pose : flipPose(collect3Pose));
     }
 
     public Pose2d getClose2ShootingPose(){
-        return (redSide ? close2ShootingPose : flipPose(close2ShootingPose));
+        return ((redSide) ? close2ShootingPose : flipPose(close2ShootingPose));
     }
 
-    public Pose2d getClos3ShootingPose(){
-        return (redSide ? close3ShootingPose : flipPose(close3ShootingPose));
-    }
 
-    public double getCloseCollect3BallsDriveTangent(){
-        return (redSide ? closeCollect3BallsDriveTangent : flipHeading(closeCollect3BallsDriveTangent));
-    }
 
-    public double getCollectTangenet(){
-        return (redSide ? collectTangenet : flipHeading(collectTangenet));
-    }
 
-    public double getShootingDriveTangent(){
-        return (redSide ? closeShootDriveTangent : flipHeading(closeCollect3BallsDriveTangent));
-    }
+
 
 
 

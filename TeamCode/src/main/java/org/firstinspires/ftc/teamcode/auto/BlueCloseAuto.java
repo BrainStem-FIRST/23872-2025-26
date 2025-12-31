@@ -21,51 +21,49 @@ import org.firstinspires.ftc.teamcode.auto_subsystems.Collector;
 import org.firstinspires.ftc.teamcode.pidDrive.DrivePath;
 import org.firstinspires.ftc.teamcode.pidDrive.Waypoint;
 
+
 @Config
-@Autonomous(name="BlueCloseAuto")
+@Autonomous(name="Blue Close Auto")
 public class BlueCloseAuto extends LinearOpMode {
     public static double x = 24, y = 0, h = 0;
-    public static double maxPower = 0.3;
+    public static double maxPower = 0.5;
 
     BrainSTEMAutoRobot robot;
-
 
 
     @Override
     public void runOpMode() throws InterruptedException {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        Pose2d start = new Pose2d(-63, -36, 0);
+        Coordinates coordinates = new Coordinates(false);
+        Pose2d start = coordinates.getCloseStartPose();
         Pose2d end = new Pose2d(x, y, h);
-
-        Pose2d close1ShootingPose = new Pose2d(-15, -22, Math.toRadians(-135));
-        Pose2d close1CollectPrePose = new Pose2d(-13, -28, Math.toRadians(-90));
-        Pose2d collect1Pose = new Pose2d(-13, -43, Math.toRadians(-90));
-        Pose2d collect2Pose = new Pose2d(-13, -48, Math.toRadians(-90));
-        Pose2d collect3Pose = new Pose2d(-13, -53, Math.toRadians(-90));
-        Pose2d close2ShootingPose = new Pose2d(-15, -22, Math.toRadians(-135));
 
 
         robot = new BrainSTEMAutoRobot(hardwareMap, telemetry, this, start);
         DrivePath driveToPreloadShoot = new DrivePath(robot.drive, telemetry,
-                new Waypoint(close1ShootingPose)
+                new Waypoint(coordinates.getClose1ShootingPose())
         );
         DrivePath driveToCollectFirstSpike = new DrivePath(robot.drive, telemetry,
-                new Waypoint(close1CollectPrePose)
+                new Waypoint(coordinates.getClose1CollectPrePose())
         );
         DrivePath driveToCollect1 = new DrivePath(robot.drive, telemetry,
-                new Waypoint(collect1Pose)
+                new Waypoint(coordinates.getCollect1Pose())
         );
         DrivePath driveToCollect2 = new DrivePath(robot.drive, telemetry,
-                new Waypoint(collect2Pose)
+                new Waypoint(coordinates.getCollect2Pose())
         );
         DrivePath driveToCollect3 = new DrivePath(robot.drive, telemetry,
-                new Waypoint(collect3Pose)
+                new Waypoint(coordinates.getCollect3Pose())
         );
 
         Action setCollectorOn = new AutoActions().setCollectorOn(robot);
         Action moveSpindexer120 = new AutoActions().moveSpindexer120(robot);
         Action moveSpindexer60 = new AutoActions().moveSpindexer60(robot);
         Action updateRobot = new AutoActions().robotUpdate(robot);
+        Action setShooterIdle = new AutoActions().shooterTurnOnIdle(robot);
+        Action setShooterClose = new AutoActions().shooterTurnOnClose(robot);
+        Action fingerUp = new AutoActions().fingerServoU(robot);
+        Action fingerDown = new AutoActions().fingerServoD(robot);
 
 
         // READ THIS INFO VERY CAREFULLY
@@ -90,21 +88,61 @@ public class BlueCloseAuto extends LinearOpMode {
                 new ParallelAction(
                         new SequentialAction(
                                 // put auto stuff here please
+                                setShooterClose,
                                 driveToPreloadShoot,
-                                new SleepAction(2),
-                                driveToCollectFirstSpike,
-                                setCollectorOn,
+
+                                // shoot stuff
+                                fingerUp,
+                                new SleepAction(1.5),
+                                fingerDown,
+                                new SleepAction(0.3),
+                                moveSpindexer120,
+                                fingerUp,
+                                new SleepAction(1.5),
+                                fingerDown,
+                                new SleepAction(0.3),
+                                moveSpindexer120,
+                                fingerUp,
+                                new SleepAction(1.5),
+                                fingerDown,
+                                new SleepAction(0.3),
+                                moveSpindexer120,
+                                setShooterIdle,
+
+                                new ParallelAction(
+                                        driveToCollectFirstSpike,
+                                        setCollectorOn
+                                ),
                                 driveToCollect1,
-                               // moveSpindexer120,
-                                new SleepAction(0.5),
+
+                                // collect sequence
+                                moveSpindexer60,
+                                new SleepAction(0.75),
                                 driveToCollect2,
-                                new SleepAction(0.5),
-                                //moveSpindexer120,
-                                new SleepAction(0.5),
+                                new SleepAction(0.75),
+                                moveSpindexer120,
+                                new SleepAction(0.75),
                                 driveToCollect3,
-                                new SleepAction(0.5),
-                                //moveSpindexer60,
-                                driveToPreloadShoot
+                                new SleepAction(0.75),
+                                moveSpindexer60,
+                                setShooterClose,
+                                driveToPreloadShoot,
+                                fingerUp,
+                                new SleepAction(1.5),
+                                fingerDown,
+                                new SleepAction(0.3),
+                                moveSpindexer120,
+                                fingerUp,
+                                new SleepAction(1.5),
+                                fingerDown,
+                                new SleepAction(0.3),
+                                moveSpindexer120,
+                                fingerUp,
+                                new SleepAction(1.5),
+                                fingerDown,
+                                new SleepAction(0.3),
+                                moveSpindexer120,
+                                setShooterIdle
                         ),
                         updateRobot
                 ));
