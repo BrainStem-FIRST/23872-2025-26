@@ -21,28 +21,28 @@ import org.firstinspires.ftc.teamcode.auto_subsystems.Collector;
 import org.firstinspires.ftc.teamcode.pidDrive.DrivePath;
 import org.firstinspires.ftc.teamcode.pidDrive.Waypoint;
 
-
 @Config
-@Autonomous(name="RedCloseAuto")
-public class RedCloseAuto extends LinearOpMode {
+@Autonomous(name="BlueCloseAuto")
+public class BlueCloseAuto extends LinearOpMode {
     public static double x = 24, y = 0, h = 0;
-    public static double maxPower = 0.5;
+    public static double maxPower = 0.3;
 
     BrainSTEMAutoRobot robot;
+
 
 
     @Override
     public void runOpMode() throws InterruptedException {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        Pose2d start = new Pose2d(-63, 36, 0);
+        Pose2d start = new Pose2d(-63, -36, 0);
         Pose2d end = new Pose2d(x, y, h);
 
-        Pose2d close1ShootingPose = new Pose2d(-15, 22, Math.toRadians(135));
-        Pose2d close1CollectPrePose = new Pose2d(-13, 28, Math.toRadians(90));
-        Pose2d collect1Pose = new Pose2d(-13, 43, Math.toRadians(90));
-        Pose2d collect2Pose = new Pose2d(-13, 48, Math.toRadians(90));
-        Pose2d collect3Pose = new Pose2d(-13, 53, Math.toRadians(90));
-        Pose2d close2ShootingPose = new Pose2d(-15, 22, Math.toRadians(135));
+        Pose2d close1ShootingPose = new Pose2d(-15, -22, Math.toRadians(-135));
+        Pose2d close1CollectPrePose = new Pose2d(-13, -28, Math.toRadians(-90));
+        Pose2d collect1Pose = new Pose2d(-13, -43, Math.toRadians(-90));
+        Pose2d collect2Pose = new Pose2d(-13, -48, Math.toRadians(-90));
+        Pose2d collect3Pose = new Pose2d(-13, -53, Math.toRadians(-90));
+        Pose2d close2ShootingPose = new Pose2d(-15, -22, Math.toRadians(-135));
 
 
         robot = new BrainSTEMAutoRobot(hardwareMap, telemetry, this, start);
@@ -88,25 +88,25 @@ public class RedCloseAuto extends LinearOpMode {
         waitForStart();
         Actions.runBlocking(
                 new ParallelAction(
-                    new SequentialAction(
-                            // put auto stuff here please
-                        driveToPreloadShoot,
-                        new SleepAction(2),
-                        driveToCollectFirstSpike,
-                        setCollectorOn,
-                        driveToCollect1,
-                        moveSpindexer120,
-                        new SleepAction(2),
-                        driveToCollect2,
-                        new SleepAction(2),
-                        moveSpindexer120,
-                        new SleepAction(2),
-                        driveToCollect3,
-                        new SleepAction(2),
-                        moveSpindexer60,
-                        driveToPreloadShoot
-                ),
-                updateRobot
-        ));
+                        new SequentialAction(
+                                // put auto stuff here please
+                                driveToPreloadShoot,
+                                new SleepAction(2),
+                                driveToCollectFirstSpike,
+                                setCollectorOn,
+                                driveToCollect1,
+                               // moveSpindexer120,
+                                new SleepAction(0.5),
+                                driveToCollect2,
+                                new SleepAction(0.5),
+                                //moveSpindexer120,
+                                new SleepAction(0.5),
+                                driveToCollect3,
+                                new SleepAction(0.5),
+                                //moveSpindexer60,
+                                driveToPreloadShoot
+                        ),
+                        updateRobot
+                ));
     }
 }

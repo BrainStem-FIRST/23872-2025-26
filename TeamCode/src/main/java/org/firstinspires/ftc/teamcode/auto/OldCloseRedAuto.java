@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.BrainSTEMAutoRobot;
 import org.firstinspires.ftc.teamcode.auto_subsystems.AutoActions;
 
 @Disabled
-@Autonomous (name = "Red Close Auto")
+@Autonomous (name = "BADRedCloseAuto")
 @Config
 public final class OldCloseRedAuto extends LinearOpMode {
 
