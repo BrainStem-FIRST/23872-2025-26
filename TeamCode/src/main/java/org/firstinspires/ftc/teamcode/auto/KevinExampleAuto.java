@@ -11,8 +11,8 @@ import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
 import org.firstinspires.ftc.teamcode.pidDrive.DrivePath;
 import org.firstinspires.ftc.teamcode.pidDrive.Waypoint;
 
-@Disabled
-//@Config
+
+@Config
 @Autonomous(name="kevin example auto")
 public class KevinExampleAuto extends LinearOpMode {
     public static double x = 24, y = 0, h = 0;

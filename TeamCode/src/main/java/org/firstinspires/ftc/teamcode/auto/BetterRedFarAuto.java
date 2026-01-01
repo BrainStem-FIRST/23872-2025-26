@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.auto_subsystems.AutoActions;
 import org.firstinspires.ftc.teamcode.pidDrive.DrivePath;
 import org.firstinspires.ftc.teamcode.pidDrive.Waypoint;
 
-@Autonomous(name="BetterRedCloseAuto")
+@Autonomous(name="BetterRedFarAuto")
 @Config
 public class BetterRedFarAuto extends LinearOpMode {
     public static double[] start = new double[] { 60, 24, 0 };

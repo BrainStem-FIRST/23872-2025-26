@@ -35,7 +35,7 @@ public class MasterTele extends LinearOpMode {
 
         shoot3balls = new ElapsedTime();
 
-        robot.shooter.setShooterIdle();
+        robot.shooter.setShooterOff();
 
         waitForStart();
 

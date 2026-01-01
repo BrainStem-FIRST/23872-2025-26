@@ -64,9 +64,7 @@ public class BetterRedCloseAuto2 extends LinearOpMode {
                                                 AutoActions.moveSpindexer120()
                                         )
                                 ),
-                                driveToPreloadShoot,
-                                AutoActions.shooterTurnOnClose()
-
+                                driveToPreloadShoot
 
 
 
