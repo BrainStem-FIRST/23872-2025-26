@@ -22,19 +22,19 @@ public class Shooter implements Component {
         public static double kD = 0.0;
         public static double kF = 0.00035; //Adjust this first?
 
-        public static double FAR_SHOOT_VEL = 1200;
-        public static double CLOSE_SHOOT_VEL = 600;
+        public static double FAR_SHOOT_VEL = 2000;
+        public static double CLOSE_SHOOT_VEL = 1500;
 
         public static double STOP_SHOOT = 0;
 
-        public static double MAX_TICKS_PER_SEC = 1200;
+        public static double MAX_TICKS_PER_SEC = 2300;
 
         public static double IDLE_SHOOT= 400;
 
         public static double velocityThreshold = 50; //change
         public static double shotVelDropThreshold = 70; //indicates a ball left
 
-        public static double IDLE_POWER = 0.3;
+        public static double IDLE_POWER = 0.25;
 
     }
 
@@ -105,6 +105,7 @@ public class Shooter implements Component {
         ballsShot = 0;
     }
 
+
     @Override
     public void update() {
         switch (shooterState) {
@@ -127,19 +128,10 @@ public class Shooter implements Component {
 
         shooterMotorTwo.setPower(shooterMotorOne.getPower());
 
-
-        /*
-            set 1 motor to use PID
-
-
-
-
-         */
-
-
         telemetry.addData("shooter motor one velocity", shooterMotorOne.getVelocity());
         telemetry.addData("shooter motor two velocity", shooterMotorTwo.getVelocity());
-
+        telemetry.addData("shooter one Power", shooterMotorOne.getPower());
+        telemetry.addData("shooter two power", shooterMotorTwo.getPower());
         telemetry.addData("shooter motor state", shooterState);
 
     }
@@ -176,7 +168,8 @@ public class Shooter implements Component {
         telemetry.addData("Shooter Velocity", velocity1);
         telemetry.addData("Shooter FF", minPower1);
         telemetry.addData("Shooter PID", pid1);
-        telemetry.addData("shooter Power", shooterMotorOne.getPower());
+        telemetry.addData("shooter one Power", shooterMotorOne.getPower());
+        telemetry.addData("shooter two power", shooterMotorTwo.getPower());
         telemetry.addData("shooter state", shooterState);
         telemetry.addData("shooter pid targets", shooterPID1.getTarget() + " " + shooterPID2.getTarget());
     }
