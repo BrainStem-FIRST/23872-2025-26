@@ -46,7 +46,6 @@ public class DrivePath implements Action {
         this.drivetrain = drivetrain;
         this.odo = drivetrain.pinpoint();
         this.telemetry = telemetry;
-
         this.waypoints = new ArrayList<>();
         this.waypoints.addAll(Arrays.asList(waypoints));
         for(int i = 0; i < this.waypoints.size() - 1; i++) {

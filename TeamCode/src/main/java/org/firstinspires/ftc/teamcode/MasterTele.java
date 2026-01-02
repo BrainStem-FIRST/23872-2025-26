@@ -55,7 +55,7 @@ public class MasterTele extends LinearOpMode {
 
             telemetry.addData("shooter power 1", robot.shooter.shooterMotorOne.getPower());
             telemetry.addData("shooter vel 1", robot.shooter.shooterMotorOne.getVelocity());
-            telemetry.addData("shooter pid target", robot.shooter.shooterPID1.getTarget());
+            telemetry.addData("shooter pid target", robot.shooter.shooterPID.getTarget());
 
             telemetry.addData("spindexer pos", robot.spindexer.getMotorPos());
             telemetry.addData("spindexer target position", robot.spindexer.spindexerPid.getTarget());
@@ -115,33 +115,8 @@ public class MasterTele extends LinearOpMode {
             robot.spindexer.indexerCued = true;
             robot.finger.flickerTimer.reset();
         }
-
-        //d1 spindexer controls
-        if (gamepad1.leftBumperWasPressed()){
-            robot.spindexer.adjustPosition(-Spindexer.degrees120);
-        } else if (gamepad1.rightBumperWasPressed()){
-            robot.spindexer.adjustPosition(80);
-        }
-
-        if (gamepad1.dpadRightWasPressed()){
-            robot.spindexer.adjustPosition(10);
-        } else if (gamepad1.dpadLeftWasPressed()){
-            robot.spindexer.adjustPosition(-10);
-        }
-
-        if (gamepad1.dpadDownWasPressed()){
-            robot.spindexer.adjustPosition(40);
-        }
-
-
     }
-
     private void updateDriver2() {
-
-        robot.spindexer.getCurrentPosition();
-
-
-
         // d2 controls
         if (gamepad2.rightBumperWasPressed()) {
             robot.spindexer.adjustPosition(80);
@@ -152,7 +127,7 @@ public class MasterTele extends LinearOpMode {
             robot.spindexer.adjustPosition(40);
             robot.spindexer.spindexerState = Spindexer.SpindexerState.SHOOT;
         } else if (gamepad2.xWasPressed() && robot.spindexer.spindexerState == Spindexer.SpindexerState.SHOOT) {
-            robot.spindexer.adjustPosition(-80);
+            robot.spindexer.adjustPosition(-40);
             robot.spindexer.spindexerState = Spindexer.SpindexerState.COLLECT;
         }
 

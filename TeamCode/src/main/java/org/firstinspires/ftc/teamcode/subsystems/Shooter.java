@@ -11,30 +11,30 @@ import org.firstinspires.ftc.teamcode.rr.PinpointLocalizer;
 import org.firstinspires.ftc.teamcode.util.Component;
 import org.firstinspires.ftc.teamcode.util.PIDController;
 
+
 @Config
 public class Shooter implements Component {
 
-
+    private final Telemetry telemetry;
 
     public static class ShooterParams {
-        public static double kP = 0.01; // change
-        public static double kI = 0.0;
-        public static double kD = 0.0;
-        public static double kF = 0.00035; //Adjust this first?
+        public  double kP = 0.011; // was 0.01
+        public  double kI = 0.01;
+        public  double kD = 0.0;
+        //was .00035
+        public int avgMotorDir = -1;
+        public int motorPowerDir = 1;
 
-        public static double FAR_SHOOT_VEL = 2000;
-        public static double CLOSE_SHOOT_VEL = 1500;
 
-        public static double STOP_SHOOT = 0;
 
-        public static double MAX_TICKS_PER_SEC = 2300;
+        public  double FAR_SHOOT_VEL = 2000;
+        public  double CLOSE_SHOOT_VEL = 1175;
+//close shoot vel og 1500
+        public  double STOP_SHOOT = 0;
 
-        public static double IDLE_SHOOT= 400;
+        public  double MAX_TICKS_PER_SEC = 2300;
 
-        public static double velocityThreshold = 50; //change
-        public static double shotVelDropThreshold = 70; //indicates a ball left
-
-        public static double IDLE_POWER = 0.25;
+        public  double IDLE_POWER = -0.25;
 
     }
 
@@ -43,7 +43,7 @@ public class Shooter implements Component {
     // hardware constants
 
     private HardwareMap map;
-    private Telemetry telemetry;
+    public double avgMotorVel;
     public DcMotorEx shooterMotorTwo;
     public DcMotorEx shooterMotorOne;
 
@@ -51,10 +51,10 @@ public class Shooter implements Component {
     public ShooterState shooterState;
 
     //PID Controllers
-    public PIDController shooterPID1;
-    public PIDController shooterPID2;
+    public PIDController shooterPID;
+//    public PIDController shooterPID2;
 
-    private double targetVelocity = ShooterParams.FAR_SHOOT_VEL;
+    private double targetVelocity = PARAMS.FAR_SHOOT_VEL;
     private int ballsShot = 0;
 
     public enum ShooterState {
@@ -79,19 +79,15 @@ public class Shooter implements Component {
         shooterMotorOne.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         shooterMotorTwo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        shooterMotorOne.setDirection(DcMotorSimple.Direction.REVERSE);
-        shooterMotorTwo.setDirection(DcMotorSimple.Direction.REVERSE);
+        shooterMotorOne.setDirection(DcMotorSimple.Direction.FORWARD);
+        shooterMotorTwo.setDirection(DcMotorSimple.Direction.FORWARD);
 
         shooterMotorOne.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
         shooterMotorTwo.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
 
-        shooterPID1 = new PIDController(ShooterParams.kP, ShooterParams.kI, ShooterParams.kD);
-        shooterPID1.setInputBounds(0,ShooterParams.MAX_TICKS_PER_SEC);
-        shooterPID1.setOutputBounds(0,1);
-        shooterPID2 = new PIDController(ShooterParams.kP, ShooterParams.kI, ShooterParams.kD);
-
-        shooterMotorOne.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, shooterPID1);
-        shooterMotorTwo.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, shooterPID2);
+        shooterPID = new PIDController(PARAMS.kP, PARAMS.kI, PARAMS.kD);
+        shooterPID.setInputBounds(0,PARAMS.MAX_TICKS_PER_SEC);
+        shooterPID.setOutputBounds(0,1);
 
         this.shooterState = ShooterState.OFF;
     }
@@ -100,27 +96,28 @@ public class Shooter implements Component {
 
     @Override
     public void reset() {
-        shooterPID1.reset();
-        shooterPID2.reset();
+        shooterPID.reset();
+//        shooterPID2.reset();
         ballsShot = 0;
     }
 
 
     @Override
     public void update() {
+        avgMotorVel = PARAMS.avgMotorDir * (shooterMotorOne.getVelocity()+shooterMotorTwo.getVelocity())/2;
         switch (shooterState) {
             case OFF:
-                setBothMotors(ShooterParams.STOP_SHOOT);
+                setBothMotors(PARAMS.STOP_SHOOT);
                 break;
             case SHOOT_FAR:
-                setBothMotors(ShooterParams.FAR_SHOOT_VEL);
+                setBothMotors(PARAMS.FAR_SHOOT_VEL);
                 break;
             case SHOOT_CLOSE:
-                setBothMotors(ShooterParams.CLOSE_SHOOT_VEL);
+                setBothMotors(PARAMS.CLOSE_SHOOT_VEL);
                 break;
             case IDLE:
-                shooterMotorOne.setPower(ShooterParams.IDLE_POWER);
-                shooterMotorTwo.setPower(ShooterParams.IDLE_POWER);
+                shooterMotorOne.setPower(PARAMS.IDLE_POWER);
+                shooterMotorTwo.setPower(PARAMS.IDLE_POWER);
 
                 break;
 
@@ -130,62 +127,42 @@ public class Shooter implements Component {
 
         telemetry.addData("shooter motor one velocity", shooterMotorOne.getVelocity());
         telemetry.addData("shooter motor two velocity", shooterMotorTwo.getVelocity());
+        telemetry.addData("avg motor vel", avgMotorVel);
         telemetry.addData("shooter one Power", shooterMotorOne.getPower());
         telemetry.addData("shooter two power", shooterMotorTwo.getPower());
         telemetry.addData("shooter motor state", shooterState);
 
     }
-
-    public void setShooterVelocity(double targetVelocity) {
-        shooterPID1.setTarget(targetVelocity);
-        shooterPID2.setTarget(targetVelocity);
-    }
     public void setBothMotors(double targetVelocity) {
-        shooterPID1.setTarget(targetVelocity);
-        double power = shooterPID1.update(shooterMotorOne.getVelocity());
+        shooterPID.setTarget(targetVelocity);
+        double power = shooterPID.update(avgMotorVel);
         telemetry.addData("Shooter Calculated PID Power", power);
 //        power = Math.max(0, Math.min(1.0, power));
         telemetry.addData("Shooter Adjusted PID Power", power);
-        shooterMotorOne.setPower(-power);
-        shooterMotorTwo.setPower(-power);
+        shooterMotorOne.setPower(PARAMS.motorPowerDir * power);
+        shooterMotorTwo.setPower(PARAMS.motorPowerDir * power);
 
 //        shooterMotorTwo.setPower(power2);
 //        shooterMotorOne.setPower(power1);
 
     }
-    public void doPID() {
-        double velocity1 = shooterMotorOne.getVelocity();
-        double pid1 = shooterPID1.update(velocity1);
-        double minPower1 = ShooterParams.kF * shooterPID1.getTarget(); // kF MUST be small
-        double power1 = minPower1 + pid1;
-        power1 = Math.max(-1.0, Math.min(1.0, power1));
-
-
-        shooterMotorOne.setPower(power1);
-        shooterMotorTwo.setPower(power1);
-
-
-        telemetry.addData("Shooter Velocity", velocity1);
-        telemetry.addData("Shooter FF", minPower1);
-        telemetry.addData("Shooter PID", pid1);
-        telemetry.addData("shooter one Power", shooterMotorOne.getPower());
-        telemetry.addData("shooter two power", shooterMotorTwo.getPower());
-        telemetry.addData("shooter state", shooterState);
-        telemetry.addData("shooter pid targets", shooterPID1.getTarget() + " " + shooterPID2.getTarget());
-    }
 
     public void setShooterShootFar() {
         shooterState = ShooterState.SHOOT_FAR;
+        shooterPID.reset();
     }
     public void setShooterShootClose() {
         shooterState = ShooterState.SHOOT_CLOSE;
+        shooterPID.reset();
     }
     public void setShooterOff() {
         shooterState = ShooterState.OFF;
+        shooterPID.reset();
     }
 
     public void setShooterIdle(){
         shooterState = ShooterState.IDLE;
+        shooterPID.reset();
     }
 
     @Override
