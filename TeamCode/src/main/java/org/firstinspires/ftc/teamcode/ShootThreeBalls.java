@@ -82,7 +82,7 @@ public class ShootThreeBalls {
                 if (stageTimer.seconds() >3) {
                     telemetry.addData("Shoot 3 Sequence Stage:", "Shooter is spinning up...");
 
-                    spindexer.adjustPosition(40);
+                    spindexer.setSpindexerTargetAdjustment(40);
 
                     currentState = ShootThreeState.WAIT_FOR_SPINDEXER_TO_END;
                     stageTimer.reset();
@@ -127,14 +127,14 @@ public class ShootThreeBalls {
                 ballsShot++; // ball has been shot
                 if (ballsShot == 3) {
                     telemetry.addData("Stage", "All %d balls shot. We are stopping.", ballsLeftToShoot);
-                    spindexer.adjustPosition(40);
+//                    spindexer.adjustPosition(40);
                     stageTimer.reset();
                     currentState = ShootThreeState.RESET;
                 } else {
 
                     telemetry.addData("Stage", "Ball %d shot. We are spinning.", ballsShot);
 
-                     spindexer.adjustPosition(80);
+//                     spindexer.adjustPosition(80);
 
                      currentState = ShootThreeState. WAIT_FOR_SPINDEXER_TO_END;
                      stageTimer.reset();

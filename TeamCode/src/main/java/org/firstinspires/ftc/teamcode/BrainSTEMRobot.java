@@ -36,7 +36,7 @@ public class BrainSTEMRobot {
         spindexer = new Spindexer(hwMap, telemetry, this);
         collector = new Collector(hwMap, telemetry);
         shooter = new Shooter(hwMap, telemetry);
-        finger = new Finger(hwMap, telemetry);
+        finger = new Finger(hwMap, telemetry, this);
 
         subsystems.add(spindexer);
         subsystems.add(collector);

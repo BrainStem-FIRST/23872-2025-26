@@ -104,7 +104,7 @@ public class AutoActions {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                 if (first) {
-                    robot.spindexer.adjustPosition(ticks);
+                    robot.spindexer.setSpindexerTargetAdjustment(ticks);
                     first = false;
                 }
                 telemetryPacket.addLine("indexer S3");

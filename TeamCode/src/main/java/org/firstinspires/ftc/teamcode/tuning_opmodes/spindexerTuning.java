@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import org.firstinspires.ftc.teamcode.util.GamepadTracker;
 import org.firstinspires.ftc.teamcode.util.PIDController;
 
-@Disabled
+
 @TeleOp
 
 public class spindexerTuning extends OpMode {
@@ -29,7 +29,7 @@ public class spindexerTuning extends OpMode {
     public double lowPosition = 0;
     double currentTarget = lowPosition;
 
-    double[] stepSizes = {100.0, 10.0, 1.0, 0.1, 0.01};
+    double[] stepSizes = {100.0, 10.0, 1.0, 0.1, 0.01, 0.001};
 
     int stepIndex = 2;
     int pidParam = 0; // 0 = P, 1 = I, 2 = D
@@ -75,7 +75,7 @@ public class spindexerTuning extends OpMode {
 
         if (gamepad1.xWasPressed()) {
             telemetry.addData("X Button Pressed", "true");
-            currentTarget += 80.111111111111111111111111;
+            currentTarget += 80;
         }
 
 
@@ -119,7 +119,7 @@ public class spindexerTuning extends OpMode {
         if (Math.abs(error) <= 3){
             spinnerMotor.setPower(0);
         } else {
-            spinnerMotor.setPower(-spinnerPIDController.update(currentPosition));
+            spinnerMotor.setPower(spinnerPIDController.update(currentPosition));
         }
 //        spinnerMotor.setPower(-spinnerPIDController.update(currentPosition));
 

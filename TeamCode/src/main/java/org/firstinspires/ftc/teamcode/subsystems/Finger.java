@@ -7,13 +7,14 @@ import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
 import org.firstinspires.ftc.teamcode.util.Component;
 
 
 @Config
 public class Finger implements Component {
     public static int downPWM = 837, upPWM = 1258;
-    public static double downPosition = 0.01, upPosition = 0.99;
+    public static double downPosition = 0.1, upPosition = 0.99;
     public static double upTime = 0.2, downTime = 0.2;
     private Telemetry telemetry;
     public ServoImplEx fingerServo;
@@ -28,9 +29,12 @@ public class Finger implements Component {
 
     public ElapsedTime flickerTimer;
 
-    public Finger(HardwareMap hardwareMap, Telemetry telemetry) {
+    private Spindexer spindexer;
+
+    public Finger(HardwareMap hardwareMap, Telemetry telemetry, BrainSTEMRobot robot) {
         this.map = hardwareMap;
         this.telemetry = telemetry;
+        this.spindexer = robot.spindexer;
         this.fingerState = FingerState.DOWN;
 
         fingerServo = map.get(ServoImplEx.class, "fingerServo");
@@ -50,12 +54,15 @@ public class Finger implements Component {
                 fingerServo.setPosition(downPosition);
                 break;
             case UP:
+                spindexer.resetTimer();
                 fingerServo.setPosition(upPosition);
                 if(flickerTimer.seconds() > 1) {
                     fingerState = FingerState.DOWN;
                 }
                     break;
         }
+
+        telemetry.addData("Finger State", fingerState);
     }
 
     @Override

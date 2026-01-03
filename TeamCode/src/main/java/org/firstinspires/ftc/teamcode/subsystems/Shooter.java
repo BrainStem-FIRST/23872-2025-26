@@ -18,9 +18,10 @@ public class Shooter implements Component {
     private final Telemetry telemetry;
 
     public static class ShooterParams {
-        public  double kP = 0.011; // was 0.01
-        public  double kI = 0.01;
+        public  double kP = 0.006; // was 0.01
+        public  double kI = 0.0;
         public  double kD = 0.0;
+        public double kV = 0.000455;
         //was .00035
         public int avgMotorDir = -1;
         public int motorPowerDir = 1;
@@ -28,7 +29,7 @@ public class Shooter implements Component {
 
 
         public  double FAR_SHOOT_VEL = 2000;
-        public  double CLOSE_SHOOT_VEL = 1175;
+        public  double CLOSE_SHOOT_VEL = 1050;
 //close shoot vel og 1500
         public  double STOP_SHOOT = 0;
 
@@ -136,6 +137,7 @@ public class Shooter implements Component {
     public void setBothMotors(double targetVelocity) {
         shooterPID.setTarget(targetVelocity);
         double power = shooterPID.update(avgMotorVel);
+        power += -PARAMS.kV * targetVelocity;
         telemetry.addData("Shooter Calculated PID Power", power);
 //        power = Math.max(0, Math.min(1.0, power));
         telemetry.addData("Shooter Adjusted PID Power", power);

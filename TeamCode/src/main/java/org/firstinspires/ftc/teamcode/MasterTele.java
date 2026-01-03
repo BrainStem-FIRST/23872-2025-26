@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Collector;
 import org.firstinspires.ftc.teamcode.subsystems.Finger;
 import org.firstinspires.ftc.teamcode.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.util.GamepadTracker;
-
+import org.firstinspires.ftc.teamcode.util.PIDController;
 
 
 @TeleOp(name = "Competition Tele")
@@ -21,6 +21,16 @@ public class MasterTele extends LinearOpMode {
     private GamepadTracker gp2;
     private ElapsedTime runtime = new ElapsedTime();
     private BrainSTEMRobot robot;
+
+    public static double kP = 1.1;
+    public static double kI = 0.13;
+    public static double kD = 0;
+
+    private PIDController alignmentPID;
+
+    Vector2d goal = new Vector2d(-72, 72); //default: red
+    private boolean red = true;
+
 
     private ElapsedTime shoot3balls;
 
@@ -36,6 +46,21 @@ public class MasterTele extends LinearOpMode {
         shoot3balls = new ElapsedTime();
 
         robot.shooter.setShooterOff();
+
+        alignmentPID = new PIDController(kP, kI, kD);
+
+        if (gamepad1.x){
+            goal = new Vector2d(-72, -72);
+            red = false;
+        } else if (gamepad1.a){
+            red = true;
+        }
+
+        if (red){
+            telemetry.addLine("Color is Red");
+        } else {
+            telemetry.addLine("Color is Blue");
+        }
 
         waitForStart();
 
@@ -60,7 +85,7 @@ public class MasterTele extends LinearOpMode {
             telemetry.addData("spindexer pos", robot.spindexer.getMotorPos());
             telemetry.addData("spindexer target position", robot.spindexer.spindexerPid.getTarget());
             telemetry.addData("spindexer state", robot.spindexer.spindexerState);
-            telemetry.addData("indexer cued", robot.spindexer.indexerCued);
+//            telemetry.addData("indexer cued", robot.spindexer.indexerCued);
             telemetry.addData("finger timer", robot.finger.flickerTimer.seconds());
 
             telemetry.update();
@@ -70,13 +95,27 @@ public class MasterTele extends LinearOpMode {
     }
 
 
-
     private void updateDriver1() {
         // if statements checking for d1 controls
         //driving ↓
         double y = -gamepad1.left_stick_y * 0.99;
         double x = gamepad1.left_stick_x * 0.99;
         double rx = gamepad1.right_stick_x * 0.75;
+
+        if (gamepad2.y) {
+//            rx = autoAlignRoboOdo();
+            double targetAngle = Math.atan2(goal.y, goal.x);
+            double currentHeading = robot.drive.localizer.getPose().heading.toDouble();
+
+
+            alignmentPID.setTarget(targetAngle);
+            rx = alignmentPID.update(currentHeading);
+
+            telemetry.addData("current target angle", targetAngle);
+            telemetry.addData("current heading angle", currentHeading);
+
+        }
+
 
 
         robot.drive.setMotorPowers(
@@ -110,61 +149,66 @@ public class MasterTele extends LinearOpMode {
         }
 
         // d1 shooting controls
-        if (gamepad1.xWasPressed()){
+        if (gamepad1.xWasPressed()) {
             robot.finger.fingerState = Finger.FingerState.UP;
-            robot.spindexer.indexerCued = true;
+//            robot.spindexer.indexerCued = true;
             robot.finger.flickerTimer.reset();
         }
     }
+
     private void updateDriver2() {
         // d2 controls
         if (gamepad2.rightBumperWasPressed()) {
-            robot.spindexer.adjustPosition(80);
+            robot.spindexer.setSpindexerTargetAdjustment(80);
             robot.spindexer.spindexerState = Spindexer.SpindexerState.COLLECT;
         } else if (gamepad2.leftBumperWasPressed()) {
-            robot.spindexer.adjustPosition(-80);
+            robot.spindexer.setSpindexerTargetAdjustment(-80);
         } else if (gamepad2.aWasPressed() && robot.spindexer.spindexerState == Spindexer.SpindexerState.COLLECT) {
-            robot.spindexer.adjustPosition(40);
+            robot.spindexer.setSpindexerTargetAdjustment(40);
             robot.spindexer.spindexerState = Spindexer.SpindexerState.SHOOT;
         } else if (gamepad2.xWasPressed() && robot.spindexer.spindexerState == Spindexer.SpindexerState.SHOOT) {
-            robot.spindexer.adjustPosition(-40);
+            robot.spindexer.setSpindexerTargetAdjustment(-40);
             robot.spindexer.spindexerState = Spindexer.SpindexerState.COLLECT;
         }
+
+
 
         // d2 shoot 1 ball
         if (gamepad2.bWasPressed()) {
             robot.finger.fingerState = Finger.FingerState.UP;
-            robot.spindexer.indexerCued = true;
+//            robot.spindexer.indexerCued = true;
             robot.finger.flickerTimer.reset();
             robot.spindexer.spindexerTimer.reset();
         }
 
-//        if (gamepad2.dpadUpWasPressed()){
-//            robot.finger.fingerState = Finger.FingerState.UP;
-//            robot.finger.flickerTimer.reset();
-//        } else if (gamepad2.dpadDownWasPressed()){
-//            robot.finger.fingerState = Finger.FingerState.DOWN;
-//
-//        }
+        if (gamepad2.dpadUpWasPressed()){
+            robot.finger.fingerState = Finger.FingerState.UP;
+            robot.finger.flickerTimer.reset();
+        } else if (gamepad2.dpadDownWasPressed()){
+            robot.finger.fingerState = Finger.FingerState.DOWN;
 
-        // d2 fine adjust
-        if (gamepad2.left_trigger > 0.5){
-            robot.spindexer.adjustPosition(-10);
-        } else if (gamepad2.right_trigger > 0.5){
-            robot.spindexer.adjustPosition(10);
         }
 
-        //d2 shooter
-        if (gamepad2.dpadUpWasPressed()){
+
+        if (gamepad2.left_trigger > 0.5){
+            robot.spindexer.setSpindexerTargetAdjustment(-5);
+        } else if (gamepad2.right_trigger > 0.5){
+            robot.spindexer.setSpindexerTargetAdjustment(5);
+        }
+//
+            //d2 shooter
+        if (gamepad2.dpadUpWasPressed()) {
             robot.shooter.setShooterOff();
         }
     }
-    private double calculateAngle(){
+
+    private double calculateAngle() {
         Vector2d redGoal = new Vector2d(-72, 72);
+        Math.atan2(redGoal.x, redGoal.y);
         double dx = redGoal.x - robot.drive.localizer.getPose().position.x;
         double dy = redGoal.y - robot.drive.localizer.getPose().position.y;
 
-        double angle = Math.atan2(dy,dx);
+        double angle = Math.atan2(dy, dx);
         telemetry.addData("dx", dx);
         telemetry.addData("dy", dy);
         telemetry.addData("angle", angle);
@@ -182,12 +226,13 @@ public class MasterTele extends LinearOpMode {
         while (headingError < -Math.PI) {
             headingError += 2 * Math.PI;
         }
-        if (Math.abs(headingError) <= Math.toRadians(3)){
+        if (Math.abs(headingError) <= Math.toRadians(3)) {
             return 0;
         }
 
         telemetry.addData("error", headingError);
-        double power = 0.05*headingError; //FIXME
+//        double power = alignP * headingError; //FIXME
+        double power = 0;
         double minPower = 0.15;
         if (Math.abs(power) < minPower) {
             power = Math.copySign(minPower, power);
