@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
@@ -21,8 +22,8 @@ public class Spindexer implements Component {
     public static double errorThreshold = 5;
     public static int degrees120 = 80, degrees60 = 40;
     public static double MILLIAMPS_FOR_JAM = 500;
+    public static double maxPower = 0.45;
 
-    public static double antiJam;
 
     public ElapsedTime spindexerTimer;
     public ElapsedTime antijamTimer;
@@ -66,42 +67,52 @@ public class Spindexer implements Component {
         spindexerTargetPosition += spindexerTargetAdjustment;
         spindexerTargetAdjustment = 0;
 
+        spindexerPid.setTarget(spindexerTargetPosition);
+        spindexerMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        if(isStatic()) {
+            spindexerMotor.setPower(0);
+        }
+        else {
+            double power = spindexerPid.update(spindexerMotor.getCurrentPosition());
+            power = Range.clip(power, -maxPower, maxPower);
+            spindexerMotor.setPower(power);
+        }
+
+        telemetry.addData("spindexer power", spindexerMotor.getPower());
+
         // 1. detecting a jam
 //        if (spindexerMotor.getCurrent(CurrentUnit.MILLIAMPS) > MILLIAMPS_FOR_JAM && antijamTimer.milliseconds() >1500){
 //            antijamTimer.reset();
 //        }
-
-        if (antijamTimer.milliseconds() > 500 && spindexerMotor.getCurrent(CurrentUnit.MILLIAMPS) > MILLIAMPS_FOR_JAM) {
-            double currentpower = spindexerMotor.getPower();
-            telemetry.addData("antijam running", "true");
-
-
-            if (currentpower > 0 ){
-                antiJam = -0.2;
-            } else {
-                antiJam = 0.2;
-            }
-
-            telemetry.addData("antijam running timer", antijamTimer.milliseconds());
-            telemetry.addData("AntiJam Power", spindexerMotor.getPower());
-
-
-        }
-        if (antijamTimer.milliseconds() < 500) {
-            telemetry.addData("Status", "CLEARING JAM");
-            spindexerMotor.setPower(antiJam);
-        } else {
-            spindexerPid.setTarget(spindexerTargetPosition);
-            spindexerMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-            if(isStatic()) {
-                spindexerMotor.setPower(0);
-            }
-            else {
-                double power = spindexerPid.update(spindexerMotor.getCurrentPosition());
-                spindexerMotor.setPower(power);
-            }
-        }
+//
+//        if (antijamTimer.milliseconds() < 500) {
+//            double currentpower = spindexerMotor.getPower();
+//            telemetry.addData("antijam running", "true");
+//
+//            if (currentpower > 0 ){
+//                spindexerMotor.setPower(-0.2);
+//            } else if (currentpower < 0){
+//                spindexerMotor.setPower(0.2);
+//            } else {
+//                spindexerMotor.setPower(0.0);
+//            }
+//            telemetry.addData("antijam running timer", antijamTimer.milliseconds());
+//            telemetry.addData("AntiJam Power", spindexerMotor.getPower());
+//
+//
+//        } else {
+//            spindexerPid.setTarget(spindexerTargetPosition);
+//            spindexerMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//
+//            if(isStatic()) {
+//                spindexerMotor.setPower(0);
+//            }
+//            else {
+//                double power = spindexerPid.update(spindexerMotor.getCurrentPosition());
+//                spindexerMotor.setPower(power);
+//            }
+//        }
     }
 
     public void setSpindexerTargetAdjustment(int adjust) {
@@ -123,15 +134,10 @@ public class Spindexer implements Component {
 
     @Override
     public void update() {
-
-        if (indexerCued && robot.finger.fingerState == Finger.FingerState.DOWN && spindexerTimer.milliseconds() > 250) {
-            setSpindexerTargetAdjustment(degrees120);
-            indexerCued = false;
-        }
-
-
+        if(spindexerTimer.milliseconds() > 500) {
             adjustPosition();
-
+//            indexerCued = false;
+        }
         curPos = spindexerMotor.getCurrentPosition();
 
         telemetry.addData("Spindexer Power", spindexerMotor.getPower());

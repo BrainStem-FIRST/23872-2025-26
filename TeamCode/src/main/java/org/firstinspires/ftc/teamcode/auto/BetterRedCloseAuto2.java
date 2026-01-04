@@ -21,49 +21,41 @@ import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 @Autonomous(name="BetterRedCloseAuto2")
 @Config
 public class BetterRedCloseAuto2 extends LinearOpMode {
-    public static double[] start = new double[] { -63, 36, 0 };
-    public static double[] close1Shooting = new double[] { -15, 22, 135 };
-    public static double[] collect1Pre = new double[] { -13, 28, 90 };
+    public static double[] start = new double[] { -62.5, 41, 0 };
+    public static double[] close1Shooting = new double[] { -35, 35, 135 };
+    public static double[] collect1Pre = new double[] { -12, 20, 90 };
     public static double collect1PreSlowDown = 0.4;
-    public static double[] collect1 = new double[] { -13, 54, 90 };
-    public static double[] collect2 = new double[] {  };
-    //add pos 2
-    public static double[] collect2Pre = new double[] {  };
-    //add pre pos 2
-    public static double[] collect3 = new double[] {  };
-    //add pos 3
-    public static double[] collect3Pre = new double[] {  };
+    public static double[] collect1 = new double[] { -12, 56, 90 };
+//    public static double[] collect2 = new double[] {  };
+//    //add pos 2
+//    public static double[] collect2Pre = new double[] {  };
+//    //add pre pos 2
+//    public static double[] collect3 = new double[] {  };
+//    //add pos 3
+//    public static double[] collect3Pre = new double[] {  };
     //add pre pos 3
     public static double collectMaxPower = 0.3;
     BrainSTEMRobot robot;
 
     public SequentialAction ShootingSequence() {
         return new SequentialAction(
+                AutoActions.fingerServoU(),
+                new SleepAction(1.2),
+                AutoActions.moveSpindexer120(),
+                new SleepAction(1),
+                AutoActions.fingerServoU(),
+                new SleepAction(1.2),
+                AutoActions.moveSpindexer120(),
+                new SleepAction(1),
+                AutoActions.fingerServoU(),
+                new SleepAction(1.2),
                 AutoActions.moveSpindexer60(),
-                new SleepAction(0.15),
-                AutoActions.fingerServoU(),
-                new SleepAction(0.125),
-                AutoActions.fingerServoD(),
-                new SleepAction(0.125),
-                AutoActions.moveSpindexer120(),
-                new SleepAction(0.25),
-                AutoActions.fingerServoU(),
-                new SleepAction(0.125),
-                AutoActions.fingerServoD(),
-                new SleepAction(0.125),
-                AutoActions.moveSpindexer120(),
-                new SleepAction(0.25),
-                AutoActions.fingerServoU(),
-                new SleepAction(0.125),
-                AutoActions.fingerServoD(),
-                new SleepAction(0.125),
-                AutoActions.moveSpindexer60()
+                AutoActions.turnShooterOnIdle()
         );
     }
 
     public SequentialAction CollectingSequence() {
         return new SequentialAction(
-                AutoActions.moveSpindexer60(),
                 new SleepAction(1),
                 AutoActions.moveSpindexer120(),
                 new SleepAction(1),
@@ -83,42 +75,50 @@ public class BetterRedCloseAuto2 extends LinearOpMode {
                 new Waypoint(createPose(close1Shooting))
         );
         DrivePath driveToCollectFirstSpike = new DrivePath(robot.drive, telemetry,
-                new Waypoint(createPose(collect1Pre)).setSlowDownPercent(collect1PreSlowDown),
-                new Waypoint(createPose(collect1)).setMaxLinearPower(collectMaxPower)
+                new Waypoint(createPose(collect1Pre)).setSlowDownPercent(collectMaxPower),
+                new Waypoint(createPose(collect1)).setMaxLinearPower(0.2)
         );
 
-        DrivePath driveToCollectSecondSpike = new DrivePath(robot.drive, telemetry,
-                new Waypoint(createPose(collect2Pre)).setSlowDownPercent(collect1PreSlowDown),
-                new Waypoint(createPose(collect2)).setMaxLinearPower(collectMaxPower)
-        );
-        DrivePath driveToCollectThirdSpike = new DrivePath(robot.drive, telemetry,
-                new Waypoint(createPose(collect3Pre)).setSlowDownPercent(collect1PreSlowDown),
-                new Waypoint(createPose(collect3)).setMaxLinearPower(collectMaxPower)
-        );
+//        DrivePath driveToCollectSecondSpike = new DrivePath(robot.drive, telemetry,
+//                new Waypoint(createPose(collect2Pre)).setSlowDownPercent(collect1PreSlowDown),
+//                new Waypoint(createPose(collect2)).setMaxLinearPower(collectMaxPower)
+//        );
+//        DrivePath driveToCollectThirdSpike = new DrivePath(robot.drive, telemetry,
+//                new Waypoint(createPose(collect3Pre)).setSlowDownPercent(collect1PreSlowDown),
+//                new Waypoint(createPose(collect3)).setMaxLinearPower(collectMaxPower)
+//        );
 
         waitForStart();
 
         Actions.runBlocking(
                 new ParallelAction(
                         new SequentialAction(
-                                // shoot preloads
-                                driveToPreloadShoot,
+                                AutoActions.turnShooterOnIdle(),
+                                // drive to shooting
+//                                driveToPreloadShoot,
+                                // turn shooter on
                                 AutoActions.shooterTurnOnClose(),
+                                // shoot 3
                                 ShootingSequence(),
                                 // collect first spike
-                                AutoActions.setCollectorOn(),
                                 new ParallelAction(
-                                        driveToCollectFirstSpike,
+//                                        driveToCollectFirstSpike,
+                                        AutoActions.setCollectorOn(),
                                         new SequentialAction(
                                                 CollectingSequence()
                                         )
                                 ),
-                                driveToPreloadShoot,
                                 AutoActions.shooterTurnOnClose(),
+//                                driveToPreloadShoot,
+                                AutoActions.shooterTurnOnClose(),
+                                AutoActions.moveSpindexer60(),
+                                new SleepAction(0.15),
                                 ShootingSequence()
 
                         ),
                         AutoActions.robotUpdate()
         ));
     }
+
+
 }

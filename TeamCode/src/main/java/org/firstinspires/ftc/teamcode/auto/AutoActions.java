@@ -59,6 +59,14 @@ public class AutoActions {
         };
     }
 
+    public static Action turnShooterOnIdle() {
+        return telemetryPacket -> {
+            robot.shooter.shooterState = Shooter.ShooterState.IDLE;
+            telemetryPacket.addLine("Shooter Idle");
+            return false;
+        };
+    }
+
     public static Action shooterTurnOff() {
         return telemetryPacket -> {
             robot.shooter.shooterState = Shooter.ShooterState.OFF;
@@ -117,6 +125,7 @@ public class AutoActions {
         return new SequentialAction (
                 telemetryPacket -> {
                     robot.finger.fingerState = Finger.FingerState.UP;
+                    robot.finger.flickerTimer.reset();
                     telemetryPacket.addLine("finger Up");
                     return false;
                 },

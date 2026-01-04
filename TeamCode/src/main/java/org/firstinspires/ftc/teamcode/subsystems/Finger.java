@@ -21,6 +21,8 @@ public class Finger implements Component {
 
     public FingerState fingerState;
 
+    public double targetPosition;
+
     public HardwareMap map;
     public enum FingerState {
         DOWN,
@@ -41,9 +43,21 @@ public class Finger implements Component {
         fingerServo.setPwmRange(new PwmControl.PwmRange(downPWM, upPWM));
 
         flickerTimer = new ElapsedTime();
+        targetPosition = downPosition;
     }
     @Override
     public void reset() {
+
+    }
+
+    public void setTargetPosition() {
+        fingerServo.setPosition(targetPosition);
+
+        if(flickerTimer.seconds() > 1 && fingerState == FingerState.UP)
+            fingerState = FingerState.DOWN;
+
+        if(fingerState == FingerState.DOWN)
+            flickerTimer.reset();
 
     }
 
@@ -51,18 +65,18 @@ public class Finger implements Component {
     public void update() {
         switch (fingerState) {
             case DOWN:
-                fingerServo.setPosition(downPosition);
+                targetPosition = downPosition;
                 break;
             case UP:
+                targetPosition = upPosition;
+                telemetry.addData("Finger Timer", flickerTimer.milliseconds());
                 spindexer.spindexerTimer.reset();
-                fingerServo.setPosition(upPosition);
-                if(flickerTimer.seconds() > 1) {
-                    fingerState = FingerState.DOWN;
-                }
-                    break;
+                break;
         }
+        setTargetPosition();
 
         telemetry.addData("Finger State", fingerState);
+
     }
 
     public void moveFingerSlowly(){

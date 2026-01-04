@@ -199,17 +199,18 @@ public class MasterTele extends LinearOpMode {
     private void updateDriver2() {
         // d2 controls
         if (gamepad2.rightBumperWasPressed()) {
-            robot.spindexer.setSpindexerTargetAdjustment(80);
+            robot.spindexer.setSpindexerTargetAdjustment(40);
             robot.spindexer.spindexerState = Spindexer.SpindexerState.COLLECT;
         } else if (gamepad2.leftBumperWasPressed()) {
-            robot.spindexer.setSpindexerTargetAdjustment(-80);
-        } else if (gamepad2.aWasPressed() && robot.spindexer.spindexerState == Spindexer.SpindexerState.COLLECT) {
-            robot.spindexer.setSpindexerTargetAdjustment(40);
-            robot.spindexer.spindexerState = Spindexer.SpindexerState.SHOOT;
-        } else if (gamepad2.xWasPressed() && robot.spindexer.spindexerState == Spindexer.SpindexerState.SHOOT) {
             robot.spindexer.setSpindexerTargetAdjustment(-40);
-            robot.spindexer.spindexerState = Spindexer.SpindexerState.COLLECT;
         }
+//        } else if (gamepad2.aWasPressed() && robot.spindexer.spindexerState == Spindexer.SpindexerState.COLLECT) {
+//            robot.spindexer.setSpindexerTargetAdjustment(40);
+//            robot.spindexer.spindexerState = Spindexer.SpindexerState.SHOOT;
+//        } else if (gamepad2.xWasPressed() && robot.spindexer.spindexerState == Spindexer.SpindexerState.SHOOT) {
+//            robot.spindexer.setSpindexerTargetAdjustment(-40);
+//            robot.spindexer.spindexerState = Spindexer.SpindexerState.COLLECT;
+//        }
 
 
 
@@ -232,9 +233,9 @@ public class MasterTele extends LinearOpMode {
 
 
         if (gamepad2.left_trigger > 0.5){
-            robot.spindexer.setSpindexerTargetAdjustment(-5);
+            robot.spindexer.setSpindexerTargetAdjustment(-2);
         } else if (gamepad2.right_trigger > 0.5){
-            robot.spindexer.setSpindexerTargetAdjustment(5);
+            robot.spindexer.setSpindexerTargetAdjustment(2);
         }
 //
             //d2 shooter
