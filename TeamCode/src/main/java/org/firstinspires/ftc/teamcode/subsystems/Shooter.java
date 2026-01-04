@@ -28,14 +28,14 @@ public class Shooter implements Component {
 
 
 
-        public  double FAR_SHOOT_VEL = 2000;
-        public  double CLOSE_SHOOT_VEL = 1050;
+        public  double FAR_SHOOT_VEL = 1300;
+        public  double CLOSE_SHOOT_VEL = 1200;
 //close shoot vel og 1500
         public  double STOP_SHOOT = 0;
 
         public  double MAX_TICKS_PER_SEC = 2300;
 
-        public  double IDLE_POWER = -0.25;
+        public  double IDLE_POWER = 0;
 
     }
 
@@ -136,13 +136,15 @@ public class Shooter implements Component {
     }
     public void setBothMotors(double targetVelocity) {
         shooterPID.setTarget(targetVelocity);
-        double power = shooterPID.update(avgMotorVel);
-        power += -PARAMS.kV * targetVelocity;
-        telemetry.addData("Shooter Calculated PID Power", power);
-//        power = Math.max(0, Math.min(1.0, power));
-        telemetry.addData("Shooter Adjusted PID Power", power);
-        shooterMotorOne.setPower(PARAMS.motorPowerDir * power);
-        shooterMotorTwo.setPower(PARAMS.motorPowerDir * power);
+        double shooterOnePower = shooterPID.update(PARAMS.avgMotorDir * shooterMotorOne.getVelocity()) - PARAMS.kV * targetVelocity;
+        double shooterTwoPower = shooterPID.update(PARAMS.avgMotorDir * shooterMotorTwo.getVelocity()) - PARAMS.kV * targetVelocity;
+
+        telemetry.addData("Shooter Calculated M1 PID Power", shooterOnePower);
+        telemetry.addData("Shooter Calculated M2 PID Power", shooterTwoPower);
+
+        shooterMotorOne.setPower(PARAMS.motorPowerDir * shooterOnePower);
+        shooterMotorTwo.setPower(PARAMS.motorPowerDir * shooterTwoPower);
+
 
 //        shooterMotorTwo.setPower(power2);
 //        shooterMotorOne.setPower(power1);

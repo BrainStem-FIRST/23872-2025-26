@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.util.PIDController;
 
 @Config
 public class Spindexer implements Component {
-    public static double indexerKP = 0.02;
+    public static double indexerKP = 0.01; // 0.02
     public static double errorThreshold = 5;
     public static int degrees120 = 80, degrees60 = 40;
     public static double MILLIAMPS_FOR_JAM = 500;
@@ -69,14 +69,14 @@ public class Spindexer implements Component {
         spindexerTargetPosition += spindexerTargetAdjustment;
         spindexerTargetAdjustment = 0;
 
-        if (spindexerMotor.getCurrent(CurrentUnit.MILLIAMPS) > MILLIAMPS_FOR_JAM && antijamTimer.milliseconds() > 500) {
+        if (spindexerMotor.getCurrent(CurrentUnit.MILLIAMPS) > MILLIAMPS_FOR_JAM && antijamTimer.milliseconds() > 1000) {
             double currentpower = spindexerMotor.getPower();
             telemetry.addData("antijam running:", "true");
 
 
-            if (currentpower > 0 && antijamTimer.milliseconds() < 250){
+            if (currentpower > 0 && antijamTimer.milliseconds() < 500){
                 spindexerMotor.setPower(-0.2);
-            } else if (antijamTimer.milliseconds() < 250){
+            } else if (antijamTimer.milliseconds() < 500){
                 spindexerMotor.setPower(0.2);
             } else {
                 spindexerMotor.setPower(0.0);
@@ -113,7 +113,9 @@ public class Spindexer implements Component {
 
     }
 
-   
+//   public boolean isSpindexerJammed(){
+//        if ()
+//   }
 
     @Override
     public void update() {

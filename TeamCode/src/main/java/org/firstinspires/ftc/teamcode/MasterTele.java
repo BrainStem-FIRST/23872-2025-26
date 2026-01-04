@@ -79,6 +79,7 @@ public class MasterTele extends LinearOpMode {
             updateDriver2();
 
             telemetry.addData("shooter power 1", robot.shooter.shooterMotorOne.getPower());
+            telemetry.addData("shootr power 2", robot.shooter.shooterMotorTwo.getPower());
             telemetry.addData("shooter vel 1", robot.shooter.shooterMotorOne.getVelocity());
             telemetry.addData("shooter pid target", robot.shooter.shooterPID.getTarget());
 
@@ -183,6 +184,7 @@ public class MasterTele extends LinearOpMode {
 
         if (gamepad2.dpadUpWasPressed()){
             robot.finger.fingerState = Finger.FingerState.UP;
+
             robot.finger.flickerTimer.reset();
         } else if (gamepad2.dpadDownWasPressed()){
             robot.finger.fingerState = Finger.FingerState.DOWN;
