@@ -54,7 +54,7 @@ public class Finger implements Component {
                 fingerServo.setPosition(downPosition);
                 break;
             case UP:
-                spindexer.resetTimer();
+                spindexer.spindexerTimer.reset();
                 fingerServo.setPosition(upPosition);
                 if(flickerTimer.seconds() > 1) {
                     fingerState = FingerState.DOWN;

@@ -124,7 +124,7 @@ public class Shooter implements Component {
 
         }
 
-        shooterMotorTwo.setPower(shooterMotorOne.getPower());
+//        shooterMotorTwo.setPower(shooterMotorOne.getPower());
 
         telemetry.addData("shooter motor one velocity", shooterMotorOne.getVelocity());
         telemetry.addData("shooter motor two velocity", shooterMotorTwo.getVelocity());

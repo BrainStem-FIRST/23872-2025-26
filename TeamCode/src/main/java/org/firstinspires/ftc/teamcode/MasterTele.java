@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.subsystems.Collector;
 import org.firstinspires.ftc.teamcode.subsystems.Finger;
 import org.firstinspires.ftc.teamcode.subsystems.Spindexer;
@@ -32,7 +33,6 @@ public class MasterTele extends LinearOpMode {
     private boolean red = true;
 
 
-    private ElapsedTime shoot3balls;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -43,7 +43,6 @@ public class MasterTele extends LinearOpMode {
         gp1 = new GamepadTracker(gamepad1);
         gp2 = new GamepadTracker(gamepad2);
 
-        shoot3balls = new ElapsedTime();
 
         robot.shooter.setShooterOff();
 
@@ -78,19 +77,59 @@ public class MasterTele extends LinearOpMode {
             updateDriver1();
             updateDriver2();
 
-            telemetry.addData("shooter power 1", robot.shooter.shooterMotorOne.getPower());
-            telemetry.addData("shootr power 2", robot.shooter.shooterMotorTwo.getPower());
-            telemetry.addData("shooter vel 1", robot.shooter.shooterMotorOne.getVelocity());
-            telemetry.addData("shooter pid target", robot.shooter.shooterPID.getTarget());
+//            telemetry.addData("shooter power 1", robot.shooter.shooterMotorOne.getPower());
+//            telemetry.addData("shootr power 2", robot.shooter.shooterMotorTwo.getPower());
+//            telemetry.addData("shooter vel 1", robot.shooter.shooterMotorOne.getVelocity());
+//            telemetry.addData("shooter pid target", robot.shooter.shooterPID.getTarget());
+//
+//            telemetry.addData("spindexer pos", robot.spindexer.getMotorPos());
+//            telemetry.addData("spindexer target position", robot.spindexer.spindexerPid.getTarget());
+//            telemetry.addData("spindexer state", robot.spindexer.spindexerState);
+////            telemetry.addData("indexer cued", robot.spindexer.indexerCued);
+//
+//            telemetry.addData("finger timer", robot.finger.flickerTimer.seconds());
+//
+//            telemetry.update();
 
-            telemetry.addData("spindexer pos", robot.spindexer.getMotorPos());
-            telemetry.addData("spindexer target position", robot.spindexer.spindexerPid.getTarget());
-            telemetry.addData("spindexer state", robot.spindexer.spindexerState);
-//            telemetry.addData("indexer cued", robot.spindexer.indexerCued);
-            telemetry.addData("finger timer", robot.finger.flickerTimer.seconds());
+            telemetry.addLine("\n=== EMERGENCY DIAGNOSING ===");
+            if (robot.spindexer.antijamTimer.milliseconds() < 500) {
+                telemetry.addLine("STATUS: Spindexer Jammed");
+            } else {
+                telemetry.addLine("STATUS: No Jam");
+            }
+
+            if (robot.shooter.shooterPID.getTarget() > 1000 && robot.shooter.avgMotorVel < 500) {
+                telemetry.addLine("\n SHOOTER JAMMED OR UNPLUGGED");
+                telemetry.addData("Target", robot.shooter.shooterPID.getTarget());
+                telemetry.addData("Actual", robot.shooter.avgMotorVel);
+            }
+            
+            telemetry.addLine("\n=== DRIVE ===");
+            telemetry.addData("Pose", robot.drive.localizer.getPose().toString());
+            telemetry.addData("Align Target", alignmentPID.getTarget());
+
+            telemetry.addLine("\n=== SHOOTER ===");
+            telemetry.addData("State", robot.shooter.shooterState);
+            telemetry.addData("Avg Vel", robot.shooter.avgMotorVel); // From Shooter.java
+            telemetry.addData("Target Vel", robot.shooter.shooterPID.getTarget());
+            telemetry.addData("At Speed", Math.abs(robot.shooter.avgMotorVel - robot.shooter.shooterPID.getTarget()) < 50);
+            telemetry.addData("Current (mA)", robot.spindexer.spindexerMotor.getCurrent(CurrentUnit.MILLIAMPS));
+            telemetry.addData("AntiJam Timer", robot.spindexer.antijamTimer);
+
+
+            telemetry.addLine("\n=== SPINDEXER ===");
+            telemetry.addData("State", robot.spindexer.spindexerState);
+            telemetry.addData("Position", robot.spindexer.getCurrentPosition());
+            telemetry.addData("Target", robot.spindexer.spindexerPid.getTarget());
+
+
+
+            telemetry.addLine("\n=== SUBSYSTEMS ===");
+            telemetry.addData("Collector", robot.collector.collectorState);
+            telemetry.addData("Finger", robot.finger.fingerState);
+            telemetry.addData("Flicker Timer", robot.finger.flickerTimer.seconds());
 
             telemetry.update();
-
 
         }
     }
@@ -112,8 +151,8 @@ public class MasterTele extends LinearOpMode {
             alignmentPID.setTarget(targetAngle);
             rx = alignmentPID.update(currentHeading);
 
-            telemetry.addData("current target angle", targetAngle);
-            telemetry.addData("current heading angle", currentHeading);
+//            telemetry.addData("current target angle", targetAngle);
+//            telemetry.addData("current heading angle", currentHeading);
 
         }
 
@@ -177,9 +216,9 @@ public class MasterTele extends LinearOpMode {
         // d2 shoot 1 ball
         if (gamepad2.bWasPressed()) {
             robot.finger.fingerState = Finger.FingerState.UP;
-//            robot.spindexer.indexerCued = true;
+            robot.spindexer.indexerCued = true;
             robot.finger.flickerTimer.reset();
-            robot.spindexer.spindexerTimer.reset();
+//            robot.spindexer.spindexerTimer.reset();
         }
 
         if (gamepad2.dpadUpWasPressed()){
@@ -211,37 +250,37 @@ public class MasterTele extends LinearOpMode {
         double dy = redGoal.y - robot.drive.localizer.getPose().position.y;
 
         double angle = Math.atan2(dy, dx);
-        telemetry.addData("dx", dx);
-        telemetry.addData("dy", dy);
-        telemetry.addData("angle", angle);
+//        telemetry.addData("dx", dx);
+//        telemetry.addData("dy", dy);
+//        telemetry.addData("angle", angle);
         return angle;
     }
-    private double autoAlignRoboOdo() {
-
-        double angle = calculateAngle();
-        double headingError = angle - robot.drive.localizer.getPose().heading.toDouble();
-
-
-        while (headingError > Math.PI) {
-            headingError -= 2 * Math.PI;
-        }
-        while (headingError < -Math.PI) {
-            headingError += 2 * Math.PI;
-        }
-        if (Math.abs(headingError) <= Math.toRadians(3)) {
-            return 0;
-        }
-
-        telemetry.addData("error", headingError);
-//        double power = alignP * headingError; //FIXME
-        double power = 0;
-        double minPower = 0.15;
-        if (Math.abs(power) < minPower) {
-            power = Math.copySign(minPower, power);
-        }
-
-        telemetry.addData("power", power);
-        return -power;
-
-    }
+//    private double autoAlignRoboOdo() {
+//
+//        double angle = calculateAngle();
+//        double headingError = angle - robot.drive.localizer.getPose().heading.toDouble();
+//
+//
+//        while (headingError > Math.PI) {
+//            headingError -= 2 * Math.PI;
+//        }
+//        while (headingError < -Math.PI) {
+//            headingError += 2 * Math.PI;
+//        }
+//        if (Math.abs(headingError) <= Math.toRadians(3)) {
+//            return 0;
+//        }
+//
+//        telemetry.addData("error", headingError);
+////        double power = alignP * headingError; //FIXME
+//        double power = 0;
+//        double minPower = 0.15;
+//        if (Math.abs(power) < minPower) {
+//            power = Math.copySign(minPower, power);
+//        }
+//
+//        telemetry.addData("power", power);
+//        return -power;
+//
+//    }
 }
