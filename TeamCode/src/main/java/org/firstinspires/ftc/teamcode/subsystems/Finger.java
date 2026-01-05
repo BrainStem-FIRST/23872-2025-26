@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.util.Component;
 public class Finger implements Component {
     public static int downPWM = 837, upPWM = 1258;
     public static double downPosition = 0.07, upPosition = 0.99;
-    public static double upTime = 0.2, downTime = 0.2;
+    public static double upTime = 0.3, downTime = 0.3;
     private Telemetry telemetry;
     public ServoImplEx fingerServo;
 
@@ -53,7 +53,7 @@ public class Finger implements Component {
     public void setTargetPosition() {
         fingerServo.setPosition(targetPosition);
 
-        if(flickerTimer.seconds() > 1 && fingerState == FingerState.UP)
+        if(flickerTimer.seconds() > 0.5 && fingerState == FingerState.UP)
             fingerState = FingerState.DOWN;
 
         if(fingerState == FingerState.DOWN)

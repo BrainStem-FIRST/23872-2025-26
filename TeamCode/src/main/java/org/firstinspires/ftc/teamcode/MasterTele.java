@@ -168,7 +168,7 @@ public class MasterTele extends LinearOpMode {
 
 
         //d1 intake controls
-        if (gamepad1.right_trigger > 0.1) {
+        if (gamepad1.right_trigger > 0.1 || !robot.spindexer.isStatic()) {
             robot.collector.collectorState = Collector.CollectorState.INTAKE;
         } else if (gamepad1.left_trigger > 0.1) {
             robot.collector.collectorState = Collector.CollectorState.EXTAKE;
@@ -228,15 +228,14 @@ public class MasterTele extends LinearOpMode {
             robot.finger.flickerTimer.reset();
         } else if (gamepad2.dpadDownWasPressed()){
             robot.finger.fingerState = Finger.FingerState.DOWN;
-
+        }
+        if (gp2.isFirstLeftTrigger()){
+            robot.spindexer.setSpindexerTargetAdjustment(-10);
+        } else if (gp2.isFirstRightTrigger()){
+            robot.spindexer.setSpindexerTargetAdjustment(10);
         }
 
-
-        if (gamepad2.left_trigger > 0.5){
-            robot.spindexer.setSpindexerTargetAdjustment(-2);
-        } else if (gamepad2.right_trigger > 0.5){
-            robot.spindexer.setSpindexerTargetAdjustment(2);
-        }
+        //encoder ticks
 //
             //d2 shooter
         if (gamepad2.dpadUpWasPressed()) {

@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.SleepAction;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -12,17 +11,18 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
 import org.firstinspires.ftc.teamcode.util.Component;
-import org.firstinspires.ftc.teamcode.util.GamepadTracker;
 import org.firstinspires.ftc.teamcode.util.PIDController;
 
 
 @Config
 public class Spindexer implements Component {
-    public static double indexerKP = 0.01; // 0.02
+    public static double indexerKP = 0.02; // 0.02
+    public static double indexerKD = 0;
+    public static double indexerKF = 0.01;
     public static double errorThreshold = 5;
     public static int degrees120 = 80, degrees60 = 40;
     public static double MILLIAMPS_FOR_JAM = 500;
-    public static double maxPower = 0.45;
+    public static double maxPower = 0.6;
 
 
     public ElapsedTime spindexerTimer;
@@ -36,7 +36,7 @@ public class Spindexer implements Component {
 
     public PIDController spindexerPid;
     private int spindexerTargetPosition;
-    public int spindexerTargetAdjustment;
+    private int spindexerTargetAdjustment;
     public DcMotorEx spindexerMotor;
     private int curPos;
     private HardwareMap map;
@@ -54,7 +54,7 @@ public class Spindexer implements Component {
         spindexerMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         spindexerMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        spindexerPid = new PIDController(indexerKP, 0, 0);
+        spindexerPid = new PIDController(indexerKP, 0, indexerKD);
         spindexerState = SpindexerState.COLLECT;
         spindexerTimer = new ElapsedTime();
         antijamTimer = new ElapsedTime();
@@ -63,7 +63,7 @@ public class Spindexer implements Component {
     public int getCurrentPosition() {
         return spindexerMotor.getCurrentPosition();
     }
-    public void adjustPosition() {
+    public void updateIndexerPosition() {
         spindexerTargetPosition += spindexerTargetAdjustment;
         spindexerTargetAdjustment = 0;
 
@@ -75,6 +75,7 @@ public class Spindexer implements Component {
         }
         else {
             double power = spindexerPid.update(spindexerMotor.getCurrentPosition());
+            power += Math.signum(power) * indexerKF;
             power = Range.clip(power, -maxPower, maxPower);
             spindexerMotor.setPower(power);
         }
@@ -119,10 +120,6 @@ public class Spindexer implements Component {
         spindexerTargetAdjustment = adjust;
     }
 
-    public void resetTimer() {
-        spindexerTimer.reset();
-    }
-
     @Override
     public void reset() {
 
@@ -134,10 +131,13 @@ public class Spindexer implements Component {
 
     @Override
     public void update() {
+        // only update position of indexer of finger is down
         if(spindexerTimer.milliseconds() > 500) {
-            adjustPosition();
-//            indexerCued = false;
+            updateIndexerPosition();
         }
+        else
+            spindexerMotor.setPower(0);
+
         curPos = spindexerMotor.getCurrentPosition();
 
         telemetry.addData("Spindexer Power", spindexerMotor.getPower());
@@ -151,11 +151,6 @@ public class Spindexer implements Component {
     public boolean isStatic() {
         return Math.abs(curPos - spindexerPid.getTarget()) < errorThreshold;
     }
-    public double getMotorPos() {
-        return curPos;
-    }
-
-
     @Override
     public String test() {
         return null;
