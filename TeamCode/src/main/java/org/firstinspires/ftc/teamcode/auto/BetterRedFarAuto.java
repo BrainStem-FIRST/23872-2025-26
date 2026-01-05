@@ -12,6 +12,7 @@ import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 
@@ -19,7 +20,7 @@ import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
 import org.firstinspires.ftc.teamcode.auto_subsystems.AutoActions;
 import org.firstinspires.ftc.teamcode.pidDrive.DrivePath;
 import org.firstinspires.ftc.teamcode.pidDrive.Waypoint;
-
+@Disabled
 @Autonomous(name="BetterRedFarAuto")
 @Config
 public class BetterRedFarAuto extends LinearOpMode {

@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.pidDrive.DrivePath;
 import org.firstinspires.ftc.teamcode.pidDrive.Waypoint;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
-@Autonomous(name="BetterRedCloseAuto2")
+@Autonomous(name="Seneca Valley Auto")
 @Config
 public class BetterRedCloseAuto2 extends LinearOpMode {
     public static double[] start = new double[] { -62.5, 41, 0 };
