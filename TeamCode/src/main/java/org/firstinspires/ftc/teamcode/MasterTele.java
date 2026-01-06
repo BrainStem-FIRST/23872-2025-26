@@ -23,9 +23,7 @@ public class MasterTele extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private BrainSTEMRobot robot;
 
-    public static double kP = 1.1;
-    public static double kI = 0.13;
-    public static double kD = 0;
+    public static double kP = 1.1, kI = 0.13, kD = 0;
 
     private PIDController alignmentPID;
 
@@ -168,7 +166,7 @@ public class MasterTele extends LinearOpMode {
 
 
         //d1 intake controls
-        if (gamepad1.right_trigger > 0.1 || !robot.spindexer.isStatic()) {
+        if (gamepad1.right_trigger > 0.1 ) {
             robot.collector.collectorState = Collector.CollectorState.INTAKE;
         } else if (gamepad1.left_trigger > 0.1) {
             robot.collector.collectorState = Collector.CollectorState.EXTAKE;
@@ -199,10 +197,9 @@ public class MasterTele extends LinearOpMode {
     private void updateDriver2() {
         // d2 controls
         if (gamepad2.rightBumperWasPressed()) {
-            robot.spindexer.setSpindexerTargetAdjustment(40);
-            robot.spindexer.spindexerState = Spindexer.SpindexerState.COLLECT;
+            robot.spindexer.setSpindexerTargetAdjustment(48);
         } else if (gamepad2.leftBumperWasPressed()) {
-            robot.spindexer.setSpindexerTargetAdjustment(-40);
+            robot.spindexer.setSpindexerTargetAdjustment(-48);
         }
 //        } else if (gamepad2.aWasPressed() && robot.spindexer.spindexerState == Spindexer.SpindexerState.COLLECT) {
 //            robot.spindexer.setSpindexerTargetAdjustment(40);

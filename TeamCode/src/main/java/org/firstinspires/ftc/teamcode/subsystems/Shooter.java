@@ -18,10 +18,10 @@ public class Shooter implements Component {
     private final Telemetry telemetry;
 
     public static class ShooterParams {
-        public  double kP = 0.006; // was 0.01
+        public  double kP = 0.0001; // was 0.01
         public  double kI = 0.0;
-        public  double kD = 0.0;
-        public double kV = 0.000455;
+        public  double kD = 0.001;
+        public double kV = 0.00035;
         //was .00035
         public int avgMotorDir = -1;
         public int motorPowerDir = 1;
@@ -80,8 +80,8 @@ public class Shooter implements Component {
         shooterMotorOne.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         shooterMotorTwo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        shooterMotorOne.setDirection(DcMotorSimple.Direction.FORWARD);
-        shooterMotorTwo.setDirection(DcMotorSimple.Direction.FORWARD);
+        shooterMotorTwo.setDirection(DcMotorSimple.Direction.REVERSE);
+        shooterMotorOne.setDirection(DcMotorSimple.Direction.REVERSE);
 
         shooterMotorOne.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
         shooterMotorTwo.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
@@ -137,13 +137,13 @@ public class Shooter implements Component {
     public void setBothMotors(double targetVelocity) {
         shooterPID.setTarget(targetVelocity);
         double shooterOnePower = shooterPID.update(PARAMS.avgMotorDir * shooterMotorOne.getVelocity()) - PARAMS.kV * targetVelocity;
-        double shooterTwoPower = shooterPID.update(PARAMS.avgMotorDir * shooterMotorTwo.getVelocity()) - PARAMS.kV * targetVelocity;
+        double shooterTwoPower = shooterPID.update(PARAMS.avgMotorDir * shooterMotorTwo.getVelocity()) - 0.000387 * targetVelocity;
 
         telemetry.addData("Shooter Calculated M1 PID Power", shooterOnePower);
         telemetry.addData("Shooter Calculated M2 PID Power", shooterTwoPower);
 
-        shooterMotorOne.setPower(PARAMS.motorPowerDir * shooterOnePower);
-        shooterMotorTwo.setPower(PARAMS.motorPowerDir * shooterTwoPower);
+        shooterMotorOne.setPower(-PARAMS.motorPowerDir * shooterOnePower);
+        shooterMotorTwo.setPower(-PARAMS.motorPowerDir * shooterTwoPower);
 
 
 //        shooterMotorTwo.setPower(power2);

@@ -24,7 +24,15 @@ public class Spindexer implements Component {
     public static double MILLIAMPS_FOR_JAM = 500;
     public static double maxPower = 0.6;
 
+    //anti jam
+    public static double MIN_VEL_TO_START_CHECKING = 5;
+    public static double minTimeToStartChecking = 1;
+    public static double unJamTime = 0.3;
+    public static double minErrorToStartChecking = 30;
 
+    private double previousVelocity = 0;
+    private int lastGoodPosition = 0;
+    public boolean isUnjamming = false;
     public ElapsedTime spindexerTimer;
     public ElapsedTime antijamTimer;
 
@@ -68,7 +76,6 @@ public class Spindexer implements Component {
         spindexerTargetAdjustment = 0;
 
         spindexerPid.setTarget(spindexerTargetPosition);
-        spindexerMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         if(isStatic()) {
             spindexerMotor.setPower(0);
@@ -131,14 +138,42 @@ public class Spindexer implements Component {
 
     @Override
     public void update() {
-        // only update position of indexer of finger is down
-        if(spindexerTimer.milliseconds() > 500) {
-            updateIndexerPosition();
+        double error = spindexerMotor.getCurrentPosition() - spindexerTargetPosition;
+
+//        if (!isUnjamming) {
+//            previousVelocity = spindexerMotor.getPower();
+//        }
+
+        if ((Math.abs(spindexerMotor.getVelocity()) < MIN_VEL_TO_START_CHECKING) && (Math.abs(error) > minErrorToStartChecking)){
+            isUnjamming = true;
         }
         else
-            spindexerMotor.setPower(0);
+            isUnjamming = false;
 
-        curPos = spindexerMotor.getCurrentPosition();
+        if(!isUnjamming)
+            antijamTimer.reset();
+
+//        if ((spindexerMotor.getVelocity() > MIN_VEL_TO_START_CHECKING) && (error < minErrorToStartChecking)){
+//            isUnjamming = false;
+//        }
+
+        if (isUnjamming && antijamTimer.seconds() > minTimeToStartChecking) {
+            if(antijamTimer.seconds() > unJamTime + minTimeToStartChecking)
+                isUnjamming = false;
+            else
+                spindexerMotor.setPower(-Math.signum(error) * 0.2);
+
+            return;
+        }
+
+        if (spindexerTimer.milliseconds() > 500) {
+            updateIndexerPosition();
+        } else spindexerMotor.setPower(0);
+
+
+
+
+
 
         telemetry.addData("Spindexer Power", spindexerMotor.getPower());
         telemetry.addData("Spindexer Position", spindexerMotor.getCurrentPosition());
