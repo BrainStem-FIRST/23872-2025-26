@@ -113,7 +113,7 @@ public class RedClosest extends LinearOpMode {
                                 shootBalls()
 
                         ),
-                        AutoActions.robotUpdate()
+                        AutoActions.robotUpdate(telemetry)
                 ));
     }
 

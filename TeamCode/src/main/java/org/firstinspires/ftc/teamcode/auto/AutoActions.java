@@ -2,16 +2,21 @@ package org.firstinspires.ftc.teamcode.auto;
 
 import androidx.annotation.NonNull;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
 import org.firstinspires.ftc.teamcode.subsystems.Collector;
 import org.firstinspires.ftc.teamcode.subsystems.Finger;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.Spindexer;
+
+import java.util.Timer;
 
 
 public class AutoActions {
@@ -35,9 +40,11 @@ public class AutoActions {
         };
     }
 
-    public static Action robotUpdate() {
+    public static Action robotUpdate(Telemetry telemetry) {
         return telemetryPacket -> {
             robot.update();
+            telemetry.addData("Finger state", robot.finger.fingerState);
+            telemetry.addData("Finger flicker time", robot.finger.flickerTimer);
             return true;
         };
     }
@@ -56,6 +63,28 @@ public class AutoActions {
             robot.shooter.shooterState = Shooter.ShooterState.SHOOT_CLOSE;
             telemetryPacket.addLine("Shooter On");
             return false;
+        };
+    }
+    public static Action waitForAccurateShooterVelocity() {
+        return new Action() {
+            final ElapsedTime timer = new ElapsedTime();
+            boolean first = true;
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                if (first) {
+                    first = false;
+                    timer.reset();
+                }
+
+                if (timer.seconds() >= 4)
+                    return false;
+
+                double error1 = Math.abs(Math.abs(robot.shooter.shooterMotorOne.getVelocity()) - robot.shooter.shooterPID.getTarget());
+                double error2 = Math.abs(Math.abs(robot.shooter.shooterMotorTwo.getVelocity()) - robot.shooter.shooterPID.getTarget());
+
+                double threshold = 30;
+                return (error1 > threshold || error2 > threshold);
+            }
         };
     }
 
@@ -99,23 +128,32 @@ public class AutoActions {
 
 
     public static Action moveSpindexer120() {
-        return moveSpindexer(Spindexer.degrees120);
+        return moveSpindexer(Spindexer.ticks120);
     }
 
 
     public static Action moveSpindexer60() {
-        return moveSpindexer(Spindexer.degrees60);
+        return moveSpindexer(Spindexer.ticks60);
     }
     private static Action moveSpindexer(int ticks) {
         return new Action() {
             boolean first = true;
+            double maxTime = 2;
+            final ElapsedTime timer = new ElapsedTime();
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                 if (first) {
                     robot.spindexer.setSpindexerTargetAdjustment(ticks);
+                    timer.reset();
                     first = false;
                 }
-                telemetryPacket.addLine("indexer S3");
+
+                if (timer.seconds() >= maxTime)
+                    return false;
+
+                TelemetryPacket packet = new TelemetryPacket();
+                packet.addLine("move spindexer " + ticks);
+                FtcDashboard.getInstance().sendTelemetryPacket(packet);
                 return !robot.spindexer.isStatic();
             }
         };
@@ -126,7 +164,9 @@ public class AutoActions {
                 telemetryPacket -> {
                     robot.finger.fingerState = Finger.FingerState.UP;
                     robot.finger.flickerTimer.reset();
-                    telemetryPacket.addLine("finger Up");
+                    TelemetryPacket packet = new TelemetryPacket();
+                    packet.addLine("finger servo up");
+                    FtcDashboard.getInstance().sendTelemetryPacket(packet);
                     return false;
                 },
                 new SleepAction(Finger.upTime)

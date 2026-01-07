@@ -29,13 +29,13 @@ public class Shooter implements Component {
 
 
         public  double FAR_SHOOT_VEL = 1300;
-        public  double CLOSE_SHOOT_VEL = 1200;
+        public  double CLOSE_SHOOT_VEL = 1375;
 //close shoot vel og 1500
         public  double STOP_SHOOT = 0;
 
         public  double MAX_TICKS_PER_SEC = 2300;
 
-        public  double IDLE_POWER = 0;
+        public  double IDLE_POWER = 0.2;
 
     }
 

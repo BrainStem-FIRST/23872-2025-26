@@ -82,12 +82,12 @@ public class AutoActions {
 
 
     public static Action moveSpindexer120() {
-        return moveSpindexer(Spindexer.degrees120);
+        return moveSpindexer(Spindexer.ticks120);
     }
 
 
     public static Action moveSpindexer60() {
-        return moveSpindexer(Spindexer.degrees60);
+        return moveSpindexer(Spindexer.ticks60);
     }
     private static Action moveSpindexer(int ticks) {
         return new Action() {
