@@ -21,15 +21,17 @@ public class Shooter implements Component {
         public  double kP = 0.0001; // was 0.01
         public  double kI = 0.0;
         public  double kD = 0.001;
-        public double kV = 0.00035;
+        public double kV = 0.000345;
         //was .00035
         public int avgMotorDir = -1;
         public int motorPowerDir = 1;
 
+        public double AUTO = 1150;
 
 
-        public  double FAR_SHOOT_VEL = 1300;
-        public  double CLOSE_SHOOT_VEL = 1375;
+
+        public  double FAR_SHOOT_VEL = 1375;
+        public  double CLOSE_SHOOT_VEL = 1250;
 //close shoot vel og 1500
         public  double STOP_SHOOT = 0;
 
@@ -62,7 +64,8 @@ public class Shooter implements Component {
         OFF,
         IDLE,
         SHOOT_FAR,
-        SHOOT_CLOSE
+        SHOOT_CLOSE,
+        AUTO
     }
 //      public PidDrivePIDController shooterPid;
 
@@ -121,6 +124,10 @@ public class Shooter implements Component {
                 shooterMotorTwo.setPower(PARAMS.IDLE_POWER);
 
                 break;
+            case AUTO:
+                shooterMotorOne.setPower(PARAMS.AUTO);
+                shooterMotorTwo.setPower(PARAMS.AUTO);
+                break;
 
         }
 
@@ -132,12 +139,13 @@ public class Shooter implements Component {
         telemetry.addData("shooter one Power", shooterMotorOne.getPower());
         telemetry.addData("shooter two power", shooterMotorTwo.getPower());
         telemetry.addData("shooter motor state", shooterState);
+        telemetry.addData("Shooter Target Vel", targetVelocity);
 
     }
     public void setBothMotors(double targetVelocity) {
         shooterPID.setTarget(targetVelocity);
         double shooterOnePower = shooterPID.update(PARAMS.avgMotorDir * shooterMotorOne.getVelocity()) - PARAMS.kV * targetVelocity;
-        double shooterTwoPower = shooterPID.update(PARAMS.avgMotorDir * shooterMotorTwo.getVelocity()) - 0.000387 * targetVelocity;
+        double shooterTwoPower = shooterPID.update(PARAMS.avgMotorDir * shooterMotorTwo.getVelocity()) - 0.0004* targetVelocity;
 
         telemetry.addData("Shooter Calculated M1 PID Power", shooterOnePower);
         telemetry.addData("Shooter Calculated M2 PID Power", shooterTwoPower);

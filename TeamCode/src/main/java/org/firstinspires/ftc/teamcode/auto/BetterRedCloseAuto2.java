@@ -30,6 +30,7 @@ public class BetterRedCloseAuto2 extends LinearOpMode {
     public static double[] collect1 = new double[] { -13, 34, 90 };
     public static double[] collect2 = new double[] { -13, 42, 90 };
     public static double[] collect3 = new double[] { -13, 47, 90 };
+    public static double[] strafePos = new double[] { -24, 14, 90 };
 //    //add pos 2
 //    public static double[] collect2Pre = new double[] {  };
 //    //add pos 3
@@ -40,15 +41,15 @@ public class BetterRedCloseAuto2 extends LinearOpMode {
     public SequentialAction ShootingSequence() {
         return new SequentialAction(
                 AutoActions.fingerServoU(),
-                new SleepAction(2),
+                new SleepAction(0.4),
                 AutoActions.moveSpindexer120(),
                 new SleepAction(0.3),
                 AutoActions.fingerServoU(),
-                new SleepAction(2),
+                new SleepAction(0.4),
                 AutoActions.moveSpindexer120(),
                 new SleepAction(0.3),
                 AutoActions.fingerServoU(),
-                new SleepAction(2),
+                new SleepAction(0.4),
                 AutoActions.moveSpindexer60(),
                 AutoActions.turnShooterOnIdle()
         );
@@ -80,14 +81,17 @@ public class BetterRedCloseAuto2 extends LinearOpMode {
                 new Waypoint(createPose(collect1Pre)).setSlowDownPercent(0.1)
         );
         DrivePath driveToCollectFirstSpike = new DrivePath(robot.drive, telemetry,
-                new Waypoint(createPose(collect1)).setMaxLinearPower(0.09).setMaxTime(3)
+                new Waypoint(createPose(collect1)).setMaxLinearPower(0.15).setMaxTime(3)
         );
 
         DrivePath driveToCollectSecondSpike = new DrivePath(robot.drive, telemetry,
-                new Waypoint(createPose(collect2)).setMaxLinearPower(0.1).setMaxTime(3)
+                new Waypoint(createPose(collect2)).setMaxLinearPower(0.15).setMaxTime(3)
         );
         DrivePath driveToCollectThirdSpike = new DrivePath(robot.drive, telemetry,
-                new Waypoint(createPose(collect3)).setMaxLinearPower(0.1).setMaxTime(3)
+                new Waypoint(createPose(collect3)).setMaxLinearPower(0.15).setMaxTime(3)
+        );
+        DrivePath driveOffLine = new DrivePath(robot.drive, telemetry,
+                new Waypoint(createPose(strafePos)).setMaxLinearPower(0.5)
         );
 
         waitForStart();
@@ -106,7 +110,7 @@ public class BetterRedCloseAuto2 extends LinearOpMode {
                                 ShootingSequence(),
 
                                 AutoActions.setCollectorOn(),
-                                new SleepAction(2),
+                                new SleepAction(0.3),
                                 // Slow shooter for less battery drainage
                                 // Collection sequence
 //                                AutoActions.moveSpindexer120(),
@@ -123,15 +127,15 @@ public class BetterRedCloseAuto2 extends LinearOpMode {
 //                                ),
 
 //                                AutoActions.setCollectorOff(),
-                                new SleepAction(0.75),
-                                AutoActions.moveSpindexer120(),
                                 new SleepAction(0.5),
+                                AutoActions.moveSpindexer120(),
+                                new SleepAction(0.3),
                                 driveToCollectSecondSpike,
-                                new SleepAction(2),
+                                new SleepAction(0.5),
                                 AutoActions.moveSpindexer120(),
                                 new SleepAction(0.75),
                                 driveToCollectThirdSpike,
-                                new SleepAction(2),
+                                new SleepAction(0.5),
                                 AutoActions.moveSpindexer120(),
                                 new SleepAction(0.4),
                                 AutoActions.moveSpindexer60(),
@@ -140,10 +144,12 @@ public class BetterRedCloseAuto2 extends LinearOpMode {
                                 AutoActions.shooterTurnOnClose(),
                                 // Drive to shoot position
                                 driveToPreloadShoot,
-                                new SleepAction(1),
+                                new SleepAction(0.5),
                                 // Last shooting sequence
                                 AutoActions.waitForAccurateShooterVelocity(),
-                                ShootingSequence()
+                                ShootingSequence(),
+                                new SleepAction(0.4),
+                                driveOffLine
                         ),
                         AutoActions.robotUpdate(telemetry)
         ));

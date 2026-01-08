@@ -139,20 +139,20 @@ public class MasterTele extends LinearOpMode {
         double y = -gamepad1.left_stick_y * 0.99;
         double x = gamepad1.left_stick_x * 0.99;
         double rx = gamepad1.right_stick_x * 0.75;
-
-        if (gamepad2.y) {
-//            rx = autoAlignRoboOdo();
-            double targetAngle = Math.atan2(goal.y, goal.x);
-            double currentHeading = robot.drive.localizer.getPose().heading.toDouble();
-
-
-            alignmentPID.setTarget(targetAngle);
-            rx = alignmentPID.update(currentHeading);
-
-//            telemetry.addData("current target angle", targetAngle);
-//            telemetry.addData("current heading angle", currentHeading);
-
-        }
+//
+//        if (gamepad2.y) {
+////            rx = autoAlignRoboOdo();
+//            double targetAngle = Math.atan2(goal.y, goal.x);
+//            double currentHeading = robot.drive.localizer.getPose().heading.toDouble();
+//
+//
+//            alignmentPID.setTarget(targetAngle);
+//            rx = alignmentPID.update(currentHeading);
+//
+////            telemetry.addData("current target angle", targetAngle);
+////            telemetry.addData("current heading angle", currentHeading);
+//
+//        }
 
 
 
@@ -176,18 +176,18 @@ public class MasterTele extends LinearOpMode {
 
 
         //d1 shooter controls
-        if (gamepad1.yWasPressed()) {
+        if (gamepad2.yWasPressed()) {
             robot.shooter.setShooterShootFar();
         }
-        if (gamepad1.bWasPressed()) {
+        if (gamepad2.bWasPressed()) {
             robot.shooter.setShooterShootClose();
         }
-        if (gamepad1.aWasPressed()) {
+        if (gamepad2.aWasPressed()) {
             robot.shooter.setShooterIdle();
         }
 
         // d1 shooting controls
-        if (gamepad1.xWasPressed()) {
+        if (gamepad2.xWasPressed()) {
             robot.finger.fingerState = Finger.FingerState.UP;
 //            robot.spindexer.indexerCued = true;
             robot.finger.flickerTimer.reset();
@@ -196,9 +196,9 @@ public class MasterTele extends LinearOpMode {
 
     private void updateDriver2() {
         // d2 controls
-        if (gamepad2.rightBumperWasPressed()) {
+        if (gamepad2.rightBumperWasPressed() || gamepad1.rightBumperWasPressed()) {
             robot.spindexer.setSpindexerTargetAdjustment(48);
-        } else if (gamepad2.leftBumperWasPressed()) {
+        } else if (gamepad2.leftBumperWasPressed() || gamepad1.leftBumperWasPressed()) {
             robot.spindexer.setSpindexerTargetAdjustment(-48);
         }
 //        } else if (gamepad2.aWasPressed() && robot.spindexer.spindexerState == Spindexer.SpindexerState.COLLECT) {
@@ -219,17 +219,17 @@ public class MasterTele extends LinearOpMode {
 //            robot.spindexer.spindexerTimer.reset();
         }
 
-        if (gamepad2.dpadUpWasPressed()){
+        if (gamepad1.dpadUpWasPressed()){
             robot.finger.fingerState = Finger.FingerState.UP;
 
             robot.finger.flickerTimer.reset();
-        } else if (gamepad2.dpadDownWasPressed()){
+        } else if (gamepad1.dpadDownWasPressed()){
             robot.finger.fingerState = Finger.FingerState.DOWN;
         }
         if (gp2.isFirstLeftTrigger()){
-            robot.spindexer.setSpindexerTargetAdjustment(-5);
+            robot.spindexer.setSpindexerTargetAdjustment(2);
         } else if (gp2.isFirstRightTrigger()){
-            robot.spindexer.setSpindexerTargetAdjustment(5);
+            robot.spindexer.setSpindexerTargetAdjustment(-2);
         }
 
         //encoder ticks
