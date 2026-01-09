@@ -11,7 +11,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.subsystems.Collector;
 import org.firstinspires.ftc.teamcode.subsystems.Finger;
-import org.firstinspires.ftc.teamcode.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.util.GamepadTracker;
 import org.firstinspires.ftc.teamcode.util.PIDController;
 
@@ -96,11 +95,11 @@ public class MasterTele extends LinearOpMode {
                 telemetry.addLine("STATUS: No Jam");
             }
 
-            if (robot.shooter.shooterPID.getTarget() > 1000 && robot.shooter.avgMotorVel < 500) {
-                telemetry.addLine("\n SHOOTER JAMMED OR UNPLUGGED");
-                telemetry.addData("Target", robot.shooter.shooterPID.getTarget());
-                telemetry.addData("Actual", robot.shooter.avgMotorVel);
-            }
+//            if (robot.shooter.shooterPID.getTarget() > 1000 && robot.shooter.avgMotorVel < 500) {
+//                telemetry.addLine("\n SHOOTER JAMMED OR UNPLUGGED");
+//                telemetry.addData("Target", robot.shooter.shooterPID.getTarget());
+//                telemetry.addData("Actual", robot.shooter.avgMotorVel);
+//            }
             
             telemetry.addLine("\n=== DRIVE ===");
             telemetry.addData("Pose", robot.drive.localizer.getPose().toString());
@@ -109,8 +108,7 @@ public class MasterTele extends LinearOpMode {
             telemetry.addLine("\n=== SHOOTER ===");
             telemetry.addData("State", robot.shooter.shooterState);
             telemetry.addData("Avg Vel", robot.shooter.avgMotorVel); // From Shooter.java
-            telemetry.addData("Target Vel", robot.shooter.shooterPID.getTarget());
-            telemetry.addData("At Speed", Math.abs(robot.shooter.avgMotorVel - robot.shooter.shooterPID.getTarget()) < 50);
+            telemetry.addData("At Speed", Math.abs(robot.shooter.avgMotorVel - robot.shooter.shooterPID1.getTarget()) < 50);
             telemetry.addData("Current (mA)", robot.spindexer.spindexerMotor.getCurrent(CurrentUnit.MILLIAMPS));
             telemetry.addData("AntiJam Timer", robot.spindexer.antijamTimer);
 

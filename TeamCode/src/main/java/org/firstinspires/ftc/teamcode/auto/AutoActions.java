@@ -16,8 +16,6 @@ import org.firstinspires.ftc.teamcode.subsystems.Finger;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.Spindexer;
 
-import java.util.Timer;
-
 
 public class AutoActions {
 
@@ -79,8 +77,8 @@ public class AutoActions {
                 if (timer.seconds() >= 4)
                     return false;
 
-                double error1 = Math.abs(Math.abs(robot.shooter.shooterMotorOne.getVelocity()) - robot.shooter.shooterPID.getTarget());
-                double error2 = Math.abs(Math.abs(robot.shooter.shooterMotorTwo.getVelocity()) - robot.shooter.shooterPID.getTarget());
+                double error1 = Math.abs(Math.abs(robot.shooter.shooterMotorOne.getVelocity()) - robot.shooter.shooterPID1.getTarget());
+                double error2 = Math.abs(Math.abs(robot.shooter.shooterMotorTwo.getVelocity()) - robot.shooter.shooterPID2.getTarget());
 
                 double threshold = 30;
                 return (error1 > threshold || error2 > threshold);
