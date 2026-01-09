@@ -227,9 +227,9 @@ public class MasterTele extends LinearOpMode {
             robot.finger.fingerState = Finger.FingerState.DOWN;
         }
         if (gp2.isFirstLeftTrigger()){
-            robot.spindexer.setSpindexerTargetAdjustment(2);
+            robot.spindexer.setSpindexerTargetAdjustment(3);
         } else if (gp2.isFirstRightTrigger()){
-            robot.spindexer.setSpindexerTargetAdjustment(-2);
+            robot.spindexer.setSpindexerTargetAdjustment(-3);
         }
 
         //encoder ticks

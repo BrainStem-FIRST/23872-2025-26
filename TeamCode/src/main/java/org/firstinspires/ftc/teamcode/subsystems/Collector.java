@@ -47,7 +47,7 @@ public class Collector implements Component {
                 collectorMotor.setPower(0);
                 break;
             case INTAKE:
-                collectorMotor.setPower(0.99);
+                collectorMotor.setPower(0.95);
                 break;
             case EXTAKE:
                 collectorMotor.setPower(-0.8);
