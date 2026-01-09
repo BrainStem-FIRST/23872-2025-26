@@ -183,7 +183,7 @@ public class MasterTele extends LinearOpMode {
             robot.shooter.setShooterShootClose();
         }
         if (gamepad2.aWasPressed()) {
-            robot.shooter.setShooterIdle();
+            robot.shooter.setShooterOff();
         }
 
         // d1 shooting controls
