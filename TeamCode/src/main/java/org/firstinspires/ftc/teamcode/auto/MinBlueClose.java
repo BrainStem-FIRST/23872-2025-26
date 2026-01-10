@@ -16,9 +16,9 @@ import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
 import org.firstinspires.ftc.teamcode.utils.pidDrive.DrivePath;
 import org.firstinspires.ftc.teamcode.utils.pidDrive.Waypoint;
 
-@Autonomous(name="Blue Close")
+@Autonomous(name="untested Blue Close")
 @Config
-public class BlueClose extends LinearOpMode {
+public class MinBlueClose extends LinearOpMode {
     public static double[] start = new double[] { -62.5, -41, 0 };
 
     //1st Spike!!
@@ -50,7 +50,7 @@ public class BlueClose extends LinearOpMode {
         // Max power for collecting artifacts
         private double COLLECT_DRIVE_MAX_POWER = 0.15;
     }
-    public static BlueClose.PARAMS PARAMS = new BlueClose.PARAMS();
+    public static MinBlueClose.PARAMS PARAMS = new MinBlueClose.PARAMS();
 
     public SequentialAction ShootingSequence() {
         return new SequentialAction(
@@ -94,7 +94,7 @@ public class BlueClose extends LinearOpMode {
 
         //1st Spike ===================================================================
         DrivePath driveToCollect1Pre = new DrivePath(robot.drive, telemetry,
-                new Waypoint(createPose(collect1Mid)).setSlowDownPercent(0.5),
+                new Waypoint(createPose(collect1Mid)).setSlowDownPercent(0.3),
                 new Waypoint(createPose(collect1Pre)).setSlowDownPercent(0.1)
         );
         DrivePath driveToCollectFirstSpike = new DrivePath(robot.drive, telemetry,
@@ -132,74 +132,105 @@ public class BlueClose extends LinearOpMode {
         Actions.runBlocking(
                 new ParallelAction(
                         new SequentialAction(
-                                // Ramp up shooter and drive to preload shoot
-                                AutoActions.shooterTurnOnClose(),
+                                // PRELOAD SHOOT
                                 new ParallelAction(
-                                        AutoActions.waitForAccurateShooterVelocity(),
-                                        driveToPreloadShoot
+                                        AutoActions.shooterTurnOnClose(),
+                                        driveToPreloadShoot,
+                                        AutoActions.waitForAccurateShooterVelocity()
                                 ),
-
-                                // "Domino Sequence"
                                 ShootingSequence(),
 
+                                // 1ST SPIKE
                                 AutoActions.setCollectorOn(),
-                                new SleepAction(0.3),
-
-                                //1st Spike Does Work ==========================
                                 driveToCollect1Pre,
-                                driveToCollectFirstSpike,
-//                                AutoActions.setCollectorOff(),
-                                new SleepAction(0.6),
-                                AutoActions.moveSpindexer120(),
-                                new SleepAction(PARAMS.SPIND_TO_DRIVE_WAIT),
-                                driveToCollectSecondSpike,
-                                new SleepAction(PARAMS.COLLECT_TO_SPIND_WAIT),
 
-                                AutoActions.moveSpindexer120(),
-                                new SleepAction(PARAMS.SPIND_TO_DRIVE_WAIT),
-                                driveToCollectThirdSpike,
-                                new SleepAction(PARAMS.COLLECT_TO_SPIND_WAIT),
-                                AutoActions.moveSpindexer120(),
-                                new SleepAction(PARAMS.SPIND_TO_DRIVE_WAIT),
+                                // Ball 1
+                                new ParallelAction(
+                                        driveToCollectFirstSpike,
+                                        new SequentialAction(
+                                                new SleepAction(0.5),
+                                                AutoActions.moveSpindexer120()
+                                        )
+                                ),
 
+                                new SleepAction(0.2),
+
+                                // Ball 2
+                                new ParallelAction(
+                                        driveToCollectSecondSpike,
+                                        new SequentialAction(
+                                                new SleepAction(0.5),
+                                                AutoActions.moveSpindexer120()
+                                        )
+                                ),
+
+                                new SleepAction(0.2),
+
+                                // Ball 3
+                                new ParallelAction(
+                                        driveToCollectThirdSpike,
+                                        new SequentialAction(
+                                                new SleepAction(0.5),
+                                                AutoActions.moveSpindexer120()
+                                        )
+                                ),
+
+                                new SleepAction(0.2),
+
+                                // Trans to shoot
                                 new ParallelAction(
                                         AutoActions.setCollectorOff(),
-                                        AutoActions.moveSpindexer60()
+                                        AutoActions.moveSpindexer60(),
+                                        AutoActions.shooterTurnOnClose(),
+                                        driveToPreloadShoot
                                 ),
-
-
-                                // Shooting sequence for 1st spike
-                                // Turn shooter back on
-                                AutoActions.shooterTurnOnClose(),
-                                // Drive to shoot position
-                                driveToPreloadShoot,
-                                new SleepAction(0.3),
-                                // Last shooting sequence
                                 AutoActions.waitForAccurateShooterVelocity(),
                                 ShootingSequence(),
-                                new SleepAction(0.3),
 
-                                //2nd Spike May Not Work ==========================
+                                // 2ND SPIKE
                                 AutoActions.setCollectorOn(),
-                                new SleepAction(0.3),
                                 driveToCollect2Pre,
-                                driveToCollectFourthSpike,
-                                new SleepAction(0.6),
-                                AutoActions.moveSpindexer120(),
-                                new SleepAction(PARAMS.SPIND_TO_DRIVE_WAIT),
-                                driveToCollectFifthSpike,
-                                new SleepAction(PARAMS.COLLECT_TO_SPIND_WAIT),
-                                AutoActions.moveSpindexer120(),
-                                new SleepAction(PARAMS.SPIND_TO_DRIVE_WAIT),
-                                driveToCollectSixthSpike,
-                                new SleepAction(PARAMS.COLLECT_TO_SPIND_WAIT),
-                                AutoActions.moveSpindexer120(),
-                                new SleepAction(PARAMS.SPIND_TO_DRIVE_WAIT),
-                                AutoActions.moveSpindexer60(),
-                                new SleepAction(0.3),
-                                driveToPreloadShoot,
-                                new SleepAction(0.3),
+
+                                // Ball 4
+                                new ParallelAction(
+                                        driveToCollectFourthSpike,
+                                        new SequentialAction(
+                                                new SleepAction(0.5),
+                                                AutoActions.moveSpindexer120()
+                                        )
+                                ),
+
+                                new SleepAction(0.2),
+
+                                // Ball 5
+                                new ParallelAction(
+                                        driveToCollectFifthSpike,
+                                        new SequentialAction(
+                                                new SleepAction(0.5),
+                                                AutoActions.moveSpindexer120()
+                                        )
+                                ),
+
+                                new SleepAction(0.2),
+
+                                // Ball 6
+                                new ParallelAction(
+                                        driveToCollectSixthSpike,
+                                        new SequentialAction(
+                                                new SleepAction(0.5),
+                                                AutoActions.moveSpindexer120()
+                                        )
+                                ),
+
+                                // trans to shoot
+                                new ParallelAction(
+                                        AutoActions.moveSpindexer60(),
+                                        AutoActions.shooterTurnOnClose(),
+                                        driveToPreloadShoot
+                                ),
+                                AutoActions.waitForAccurateShooterVelocity(),
                                 ShootingSequence(),
+
                                 driveOffLine
 
 

@@ -193,16 +193,16 @@ public class MasterTele extends LinearOpMode {
             robot.finger.flickerTimer.reset();
         }
 
-        if (gamepad2.aWasPressed() && currentAction == null) {
-            currentAction = ShootingSequence();
-        }
-
-        if (currentAction != null) {
-            TelemetryPacket packet = new TelemetryPacket();
-            boolean keepGoing = currentAction.run(packet);
-            if (!keepGoing)
-                currentAction = null;
-        }
+//        if (gamepad2.aWasPressed() && currentAction == null) {
+//            currentAction = ShootingSequence();
+//        }
+//
+//        if (currentAction != null) {
+//            TelemetryPacket packet = new TelemetryPacket();
+//            boolean keepGoing = currentAction.run(packet);
+//            if (!keepGoing)
+//                currentAction = null;
+//        }
 
         if (gamepad2.yWasPressed()) {
             robot.shooter.setShooterShootFar();

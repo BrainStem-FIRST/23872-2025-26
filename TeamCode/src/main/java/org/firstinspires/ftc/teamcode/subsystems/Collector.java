@@ -53,7 +53,7 @@ public class Collector implements Component {
                 collectorMotor.setPower(-0.8);
                 break;
             case AUTO:
-                collectorMotor.setPower(0.85);
+                collectorMotor.setPower(0.8);
         }
     }
     @Override
