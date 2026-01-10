@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.util;
+package org.firstinspires.ftc.teamcode.utils;
 
 public class StickyButton {
     private boolean previousState = false, currentState = false;

@@ -1,19 +1,20 @@
-package org.firstinspires.ftc.teamcode.util;
-
-import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+package org.firstinspires.ftc.teamcode.utils.math;
 import com.qualcomm.robotcore.util.Range;
-public class PIDController extends PIDFCoefficients {
+public class PIDController {
 
     private double target;
     private double kP, kI, kD;
-    private double proportional, integral, derivative;
+    private boolean permanentKDSign;
+    private int kDMult;
+    private double proportional;
+    private double integral;
+    private double derivative;
     private boolean shouldReset;
 
     private double previousTime, previousError;
 
     private double lowerInputBound = Double.NEGATIVE_INFINITY, higherInputBound = Double.POSITIVE_INFINITY;
     private double lowerOutputBound = Double.NEGATIVE_INFINITY, higherOutputBound = Double.POSITIVE_INFINITY;
-
     public PIDController(double kP, double kI, double kD) {
         this.kP = kP;
         this.kI = kI;
@@ -22,9 +23,31 @@ public class PIDController extends PIDFCoefficients {
         shouldReset = true;
     }
 
+    public double getProportional() {
+        return proportional;
+    }
+    public double getIntegral() {
+        return integral;
+    }
+    public double getDerivative() {
+        return derivative;
+    }
     public void setPIDValues(double kP, double kI, double kD){
         this.kP = kP;
         this.kI = kI;
+        this.kD = kD;
+    }
+    public void setPermanentKdSign(int kDMult) {
+        permanentKDSign = true;
+        this.kDMult = kDMult;
+    }
+    public void setKp(double kP) {
+        this.kP = kP;
+    }
+    public void setKi(double kI) {
+        this.kI = kI;
+    }
+    public void setKd(double kD) {
         this.kD = kD;
     }
 
@@ -86,6 +109,8 @@ public class PIDController extends PIDFCoefficients {
             integral += kI * error * dT;
 
             derivative = kD * (error - previousError) / dT;
+            if(permanentKDSign)
+                derivative = Math.abs(derivative) * kDMult;
         }
 
         previousTime = currentTime;

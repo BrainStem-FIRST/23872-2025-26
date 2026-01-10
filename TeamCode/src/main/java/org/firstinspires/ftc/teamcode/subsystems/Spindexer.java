@@ -10,8 +10,8 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
-import org.firstinspires.ftc.teamcode.util.Component;
-import org.firstinspires.ftc.teamcode.util.PIDController;
+import org.firstinspires.ftc.teamcode.utils.Component;
+import org.firstinspires.ftc.teamcode.utils.PIDController;
 
 
 @Config
@@ -29,6 +29,8 @@ public class Spindexer implements Component {
     public static double minTimeToStartChecking = 1;
     public static double unJamTime = 0.3;
     public static double minErrorToStartChecking = 30;
+
+    public int SPINDEXER_TIME;
 
     private double previousVelocity = 0;
     private int lastGoodPosition = 0;
@@ -124,7 +126,7 @@ public class Spindexer implements Component {
 //            return;
 //        }
         updateIndexerPosition();
-        if (spindexerTimer.milliseconds() > 500) {
+        if (spindexerTimer.milliseconds() > SPINDEXER_TIME) {
             updateIndexerPosition();
         } else spindexerMotor.setPower(0);
 

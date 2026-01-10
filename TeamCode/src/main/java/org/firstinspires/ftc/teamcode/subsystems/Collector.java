@@ -2,11 +2,10 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.util.Component;
+import org.firstinspires.ftc.teamcode.utils.Component;
 
 
 @Config
@@ -20,7 +19,8 @@ public class Collector implements Component {
 
         OFF,
         INTAKE,
-        EXTAKE
+        EXTAKE,
+        AUTO
     }
 
     public Collector(HardwareMap hardwareMap, Telemetry telemetry) {
@@ -52,6 +52,8 @@ public class Collector implements Component {
             case EXTAKE:
                 collectorMotor.setPower(-0.8);
                 break;
+            case AUTO:
+                collectorMotor.setPower(0.85);
         }
     }
     @Override

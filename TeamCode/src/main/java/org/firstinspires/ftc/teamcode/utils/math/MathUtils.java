@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.pidDrive;
+package org.firstinspires.ftc.teamcode.utils.math;
 
 import com.acmerobotics.roadrunner.Pose2d;
 
@@ -11,6 +11,12 @@ public class MathUtils {
         if(rad >= 0 && rad < Math.PI * 2)
             return rad;
         return (rad % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
+    }
+    public static double angleNormDeltaRad(double rad) {
+        rad = angleNormRad(rad);
+        if (rad > Math.PI)
+            rad -= 2 * Math.PI;
+        return rad;
     }
     public static String format1(Number num) {
         return format(num, 1);
@@ -47,6 +53,11 @@ public class MathUtils {
         if (pose == null)
             return "null";
         return format2(pose.position.x) + ", " + format2(pose.position.y) + " " + format2(Math.toDegrees(pose.heading.toDouble()));
+    }
+    public static String formatPose3(Pose2d pose) {
+        if (pose == null)
+            return "null";
+        return format3(pose.position.x) + ", " + format3(pose.position.y) + " " + format3(Math.toDegrees(pose.heading.toDouble()));
     }
     public static Pose2d createPose(double[] pose) {
         if (pose.length < 3)

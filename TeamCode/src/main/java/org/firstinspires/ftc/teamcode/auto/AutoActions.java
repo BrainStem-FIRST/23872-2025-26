@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -26,7 +27,7 @@ public class AutoActions {
     }
     public static Action setCollectorOn() {
         return telemetryPacket -> {
-            robot.collector.collectorState = Collector.CollectorState.INTAKE;
+            robot.collector.collectorState = Collector.CollectorState.AUTO;
             return false;
         };
     }
@@ -43,6 +44,10 @@ public class AutoActions {
             robot.update();
             telemetry.addData("Finger state", robot.finger.fingerState);
             telemetry.addData("Finger flicker time", robot.finger.flickerTimer);
+            Pose2d robotPose = robot.drive.localizer.getPose();
+            BrainSTEMRobot.autoX = robotPose.position.x;
+            BrainSTEMRobot.autoY = robotPose.position.y;
+            BrainSTEMRobot.autoH = robotPose.heading.toDouble();
             return true;
         };
     }

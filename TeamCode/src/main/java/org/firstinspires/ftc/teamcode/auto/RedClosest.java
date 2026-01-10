@@ -1,12 +1,11 @@
 package org.firstinspires.ftc.teamcode.auto;
 
-import static org.firstinspires.ftc.teamcode.auto.AutoActions.fingerServoU;
 import static org.firstinspires.ftc.teamcode.auto.BetterRedFarAuto.collect123Pre;
 import static org.firstinspires.ftc.teamcode.auto.BetterRedFarAuto.collect3;
 import static org.firstinspires.ftc.teamcode.auto.BetterRedFarAuto.collect456Pre;
 import static org.firstinspires.ftc.teamcode.auto.BetterRedFarAuto.collect6;
 import static org.firstinspires.ftc.teamcode.auto.BetterRedFarAuto.collect9;
-import static org.firstinspires.ftc.teamcode.pidDrive.MathUtils.createPose;
+import static org.firstinspires.ftc.teamcode.utils.pidDrive.UtilFunctions.createPose;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -21,8 +20,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
-import org.firstinspires.ftc.teamcode.pidDrive.DrivePath;
-import org.firstinspires.ftc.teamcode.pidDrive.Waypoint;
+import org.firstinspires.ftc.teamcode.utils.pidDrive.DrivePath;
+import org.firstinspires.ftc.teamcode.utils.pidDrive.Waypoint;
 @Disabled
 @Autonomous(name="Closee")
 @Config

@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
-import org.firstinspires.ftc.teamcode.util.Component;
+import org.firstinspires.ftc.teamcode.utils.Component;
 
 
 @Config

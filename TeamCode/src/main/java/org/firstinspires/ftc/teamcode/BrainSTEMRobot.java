@@ -13,9 +13,11 @@ import org.firstinspires.ftc.teamcode.subsystems.Collector;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.subsystems.Finger;
-import org.firstinspires.ftc.teamcode.util.Component;
+import org.firstinspires.ftc.teamcode.utils.Component;
 
 public class BrainSTEMRobot {
+
+    public static double autoX, autoY, autoH;
     // Don't touch these
     public Telemetry telemetry;
     public OpMode opMode;

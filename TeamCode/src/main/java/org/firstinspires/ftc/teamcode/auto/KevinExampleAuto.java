@@ -4,28 +4,29 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
-import org.firstinspires.ftc.teamcode.pidDrive.DrivePath;
-import org.firstinspires.ftc.teamcode.pidDrive.Waypoint;
+import org.firstinspires.ftc.teamcode.utils.pidDrive.DrivePath;
+import org.firstinspires.ftc.teamcode.utils.pidDrive.Waypoint;
 
 
 @Config
 @Autonomous(name="kevin example auto")
 public class KevinExampleAuto extends LinearOpMode {
-    public static double x = 24, y = 0, h = 0;
-    public static double maxPower = 0.5;
+    public static double x = 48, y = 0, h = 0;
+    public static double x2 = 0, y2 = 0, h2 = 0;
 
     @Override
     public void runOpMode() throws InterruptedException {
         Pose2d start = new Pose2d(0, 0, 0);
-        Pose2d end = new Pose2d(x, y, h);
+        Pose2d p1 = new Pose2d(x, y, h);
+        Pose2d p2 = new Pose2d(x2, y2, h2);
 
         BrainSTEMRobot robot = new BrainSTEMRobot(hardwareMap, telemetry, this, start);
         DrivePath path = new DrivePath(robot.drive,
-                new Waypoint(end).setMaxLinearPower(maxPower)
+                new Waypoint(p1),
+                new Waypoint(p2)
         );
         // READ THIS INFO VERY CAREFULLY
         // the robot starts at "start" and will drive to "end" and then drive back to "start"

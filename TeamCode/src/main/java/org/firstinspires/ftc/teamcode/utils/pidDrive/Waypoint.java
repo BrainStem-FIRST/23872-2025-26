@@ -1,10 +1,11 @@
-package org.firstinspires.ftc.teamcode.pidDrive;
+package org.firstinspires.ftc.teamcode.utils.pidDrive;
 
 
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.roadrunner.Pose2d;
 
+import org.firstinspires.ftc.teamcode.utils.math.MathUtils;
 
 import java.util.function.BooleanSupplier;
 
@@ -14,15 +15,15 @@ public class Waypoint {
     public final PathParams params;
     private double distToNextWaypoint;
     public Waypoint(Pose2d pose) {
-        this(pose, new Tolerance(), new PathParams());
+        this(pose, new Tolerance(Tolerance.defaultParams.xTol, Tolerance.defaultParams.yTol, Tolerance.defaultParams.headingDegTol), new PathParams());
     }
     public Waypoint(Pose2d pose, Tolerance tolerance) {
         this(pose, tolerance, new PathParams());
     }
     public Waypoint(Pose2d pose, PathParams pathParams) {
-        this(pose, new Tolerance(), pathParams);
+        this(pose, new Tolerance(Tolerance.defaultParams.xTol, Tolerance.defaultParams.yTol, Tolerance.defaultParams.headingDegTol), pathParams);
     }
-    public Waypoint(Pose2d pose, Tolerance tolerance, PathParams pathParams) {
+   public Waypoint(Pose2d pose, Tolerance tolerance, PathParams pathParams) {
         this.pose = pose;
         this.tolerance = tolerance;
         this.params = pathParams;
@@ -37,16 +38,13 @@ public class Waypoint {
         return Math.toDegrees(pose.heading.toDouble());
     }
     public double headingRad() {
-        return pose.heading.toDouble();
+       return pose.heading.toDouble();
     }
 
-    // DO NOT CALL THIS FUNCTION YOURSELF
-    public void setDistToNextWaypoint(double dist) { distToNextWaypoint = dist; }
-    // DO NOT CALL THIS FUNCTION YOURSELF
-    public double getDistToNextWaypoint() {
+    protected void setDistToNextWaypoint(double dist) { distToNextWaypoint = dist; }
+    protected double getDistToNextWaypoint() {
         return distToNextWaypoint;
     }
-
 
     public Waypoint setLateralAxialWeights(double lat, double ax) {
         params.lateralWeight = lat;
@@ -85,14 +83,18 @@ public class Waypoint {
         params.customEndCondition = endCondition;
         return this;
     }
-    public Waypoint setHeadingLerpType(PathParams.HeadingLerpType lerpType) {
+    public Waypoint setHeadingLerp(PathParams.HeadingLerpType lerpType) {
         params.headingLerpType = lerpType;
+        return this;
+    }
+    public Waypoint prioritizeHeadingInBeginning() {
+        params.prioritizeHeadingInBeginning = true;
         return this;
     }
 
     @Override
     @NonNull
     public String toString() {
-        return "x: " + x() + ", y: " + y() + ", heading: " + MathUtils.format2(headingDeg());
+       return "x: " + x() + ", y: " + y() + ", heading: " + MathUtils.format2(headingDeg());
     }
 }

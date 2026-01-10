@@ -1,20 +1,20 @@
-package org.firstinspires.ftc.teamcode.pidDrive;
+package org.firstinspires.ftc.teamcode.utils;
 
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.Range;
-public class PidDrivePIDController {
+public class PIDController extends PIDFCoefficients {
 
     private double target;
     private double kP, kI, kD;
-    private double proportional;
-    private double integral;
-    private double derivative;
+    private double proportional, integral, derivative;
     private boolean shouldReset;
 
     private double previousTime, previousError;
 
     private double lowerInputBound = Double.NEGATIVE_INFINITY, higherInputBound = Double.POSITIVE_INFINITY;
     private double lowerOutputBound = Double.NEGATIVE_INFINITY, higherOutputBound = Double.POSITIVE_INFINITY;
-    public PidDrivePIDController(double kP, double kI, double kD) {
+
+    public PIDController(double kP, double kI, double kD) {
         this.kP = kP;
         this.kI = kI;
         this.kD = kD;
@@ -22,27 +22,9 @@ public class PidDrivePIDController {
         shouldReset = true;
     }
 
-    public double getProportional() {
-        return proportional;
-    }
-    public double getIntegral() {
-        return integral;
-    }
-    public double getDerivative() {
-        return derivative;
-    }
     public void setPIDValues(double kP, double kI, double kD){
         this.kP = kP;
         this.kI = kI;
-        this.kD = kD;
-    }
-    public void setKp(double kP) {
-        this.kP = kP;
-    }
-    public void setKi(double kI) {
-        this.kI = kI;
-    }
-    public void setKd(double kD) {
         this.kD = kD;
     }
 
@@ -104,7 +86,6 @@ public class PidDrivePIDController {
             integral += kI * error * dT;
 
             derivative = kD * (error - previousError) / dT;
-            derivative = -Math.abs(derivative);
         }
 
         previousTime = currentTime;

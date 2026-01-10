@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.auto;
 
 import com.acmerobotics.roadrunner.Pose2d;
 
-import org.firstinspires.ftc.teamcode.util.Angle;
+import org.firstinspires.ftc.teamcode.utils.Angle;
 
 public class Coordinates {
 

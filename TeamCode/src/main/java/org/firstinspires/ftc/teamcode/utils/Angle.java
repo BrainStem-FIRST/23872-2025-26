@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.util;
+package org.firstinspires.ftc.teamcode.utils;
 
 public class Angle {
     public static double norm(double a) { // wraps angle to be between 0 and 2pi
