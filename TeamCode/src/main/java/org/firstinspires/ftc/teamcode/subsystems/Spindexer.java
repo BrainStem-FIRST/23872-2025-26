@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.utils.PIDController;
 
 @Config
 public class Spindexer implements Component {
-    public static double indexerKP = 0.019; // 0.02
+    public static double indexerKP = 0.0188; // 0.02
     public static double indexerKD = 0;
     public static double indexerKF = 0.01;
     public static double errorThreshold = 5;

@@ -63,7 +63,7 @@ public class AutoActions {
 
     public static Action shooterTurnOnClose() {
         return telemetryPacket -> {
-            robot.shooter.shooterState = Shooter.ShooterState.SHOOT_CLOSE;
+            robot.shooter.shooterState = Shooter.ShooterState.AUTO;
             telemetryPacket.addLine("Shooter On");
             return false;
         };
@@ -138,6 +138,11 @@ public class AutoActions {
     public static Action moveSpindexer60() {
         return moveSpindexer(Spindexer.ticks60);
     }
+
+    public static Action moveSpindexerALittle() {
+        return moveSpindexer(8);
+    }
+
     private static Action moveSpindexer(int ticks) {
         return new Action() {
             boolean first = true;

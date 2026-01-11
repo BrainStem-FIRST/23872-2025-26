@@ -23,20 +23,20 @@ public class MinBlueClose extends LinearOpMode {
 
     //1st Spike!!
     public static double[] close1Shooting = new double[] {-24, -24, -135};
-    public static double[] collect1Pre = new double[] { -12, -34, -90 };
-    public static double[] collect1Mid = new double[] { -12, -22, -90 };
-    public static double[] collect1 = new double[] { -13, -40, -90 };
-    public static double[] collect2 = new double[] { -13, -45, -90 };
-    public static double[] collect3 = new double[] { -13, -50, -90 };
+    public static double[] collect1Pre = new double[] { -13, -30, -90 };
+    public static double[] collect1Mid = new double[] { -13, -22, -90 };
+    public static double[] collect1 = new double[] { -13, -39, -90 };
+    public static double[] collect2 = new double[] { -13, -44, -90 };
+    public static double[] collect3 = new double[] { -13, -49, -90 };
     public static double[] strafePos = new double[] { -36, -17, -90 };
 
     //2nd spike!!
-    public static double[] collect2Pre = new double[] { 12, -28, -90 };
-    public static double[] collect2Mid = new double[] { 12, -22, -90 };
+    public static double[] collect2Pre = new double[] { 12, -30, -90 };
+    public static double[] collect2Mid = new double[] { 12, -21, -90 };
 
-    public static double[] collect4 = new double[] { 12, -40, -90 };
-    public static double[] collect5 = new double[] { 12, -45, -90 };
-    public static double[] collect6 = new double[] { 12, -50, -90 };
+    public static double[] collect4 = new double[] { 11, -39, -90 };
+    public static double[] collect5 = new double[] { 11, -44, -90 };
+    public static double[] collect6 = new double[] { 11, -49, -90 };
     public static double collectMaxPower = 0.3;
     BrainSTEMRobot robot;
 
@@ -48,7 +48,7 @@ public class MinBlueClose extends LinearOpMode {
         private double SPIND_TO_DRIVE_WAIT = 0.3;
 
         // Max power for collecting artifacts
-        private double COLLECT_DRIVE_MAX_POWER = 0.15;
+        private double COLLECT_DRIVE_MAX_POWER = 0.3;
     }
     public static MinBlueClose.PARAMS PARAMS = new MinBlueClose.PARAMS();
 
@@ -57,11 +57,11 @@ public class MinBlueClose extends LinearOpMode {
                 AutoActions.fingerServoU(),
                 new SleepAction(0.4),
                 AutoActions.moveSpindexer120(),
-                new SleepAction(0.2),
+                new SleepAction(0.3),
                 AutoActions.fingerServoU(),
                 new SleepAction(0.4),
                 AutoActions.moveSpindexer120(),
-                new SleepAction(0.2),
+                new SleepAction(0.3),
                 AutoActions.fingerServoU(),
                 new SleepAction(0.4),
                 AutoActions.moveSpindexer60(),
@@ -114,7 +114,7 @@ public class MinBlueClose extends LinearOpMode {
         //2nd Spike!! ===================================================================
         DrivePath driveToCollect2Pre = new DrivePath(robot.drive, telemetry,
                 new Waypoint(createPose(collect2Pre)).setSlowDownPercent(0.3),
-                new Waypoint(createPose(collect2Pre)).setSlowDownPercent(0.1)
+                new Waypoint(createPose(collect2Pre)).setSlowDownPercent(0.3)
         );
         DrivePath driveToCollectFourthSpike = new DrivePath(robot.drive, telemetry,
                 new Waypoint(createPose(collect4)).setMaxLinearPower(PARAMS.COLLECT_DRIVE_MAX_POWER).setMaxTime(3)
@@ -135,47 +135,41 @@ public class MinBlueClose extends LinearOpMode {
                                 // PRELOAD SHOOT
                                 new ParallelAction(
                                         AutoActions.shooterTurnOnClose(),
-                                        driveToPreloadShoot,
-                                        AutoActions.waitForAccurateShooterVelocity()
+                                        driveToPreloadShoot
+//                                        AutoActions.waitForAccurateShooterVelocity()
                                 ),
+
+                                new SleepAction(0.3),
                                 ShootingSequence(),
 
                                 // 1ST SPIKE
                                 AutoActions.setCollectorOn(),
                                 driveToCollect1Pre,
 
+
                                 // Ball 1
                                 new ParallelAction(
                                         driveToCollectFirstSpike,
                                         new SequentialAction(
-                                                new SleepAction(0.5),
+                                                new SleepAction(1.5),
                                                 AutoActions.moveSpindexer120()
                                         )
                                 ),
-
-                                new SleepAction(0.2),
 
                                 // Ball 2
                                 new ParallelAction(
                                         driveToCollectSecondSpike,
                                         new SequentialAction(
-                                                new SleepAction(0.5),
+                                                new SleepAction(1.5),
                                                 AutoActions.moveSpindexer120()
                                         )
                                 ),
-
-                                new SleepAction(0.2),
-
                                 // Ball 3
                                 new ParallelAction(
-                                        driveToCollectThirdSpike,
-                                        new SequentialAction(
-                                                new SleepAction(0.5),
-                                                AutoActions.moveSpindexer120()
-                                        )
+                                        driveToCollectThirdSpike
                                 ),
 
-                                new SleepAction(0.2),
+                                new SleepAction(1),
 
                                 // Trans to shoot
                                 new ParallelAction(
@@ -184,51 +178,60 @@ public class MinBlueClose extends LinearOpMode {
                                         AutoActions.shooterTurnOnClose(),
                                         driveToPreloadShoot
                                 ),
-                                AutoActions.waitForAccurateShooterVelocity(),
+
+                                new SleepAction(0.5),
+
                                 ShootingSequence(),
 
                                 // 2ND SPIKE
                                 AutoActions.setCollectorOn(),
                                 driveToCollect2Pre,
 
+
                                 // Ball 4
                                 new ParallelAction(
                                         driveToCollectFourthSpike,
                                         new SequentialAction(
-                                                new SleepAction(0.5),
+                                                new SleepAction(1),
                                                 AutoActions.moveSpindexer120()
                                         )
                                 ),
 
-                                new SleepAction(0.2),
+                                new SleepAction(0.5),
 
                                 // Ball 5
                                 new ParallelAction(
                                         driveToCollectFifthSpike,
                                         new SequentialAction(
-                                                new SleepAction(0.5),
+                                                new SleepAction(1),
                                                 AutoActions.moveSpindexer120()
                                         )
                                 ),
 
-                                new SleepAction(0.2),
+                                new SleepAction(0.5),
 
                                 // Ball 6
                                 new ParallelAction(
                                         driveToCollectSixthSpike,
                                         new SequentialAction(
-                                                new SleepAction(0.5),
+                                                new SleepAction(1),
                                                 AutoActions.moveSpindexer120()
                                         )
                                 ),
 
+                                AutoActions.setCollectorOn(),
+                                new SleepAction(0.3),
+                                AutoActions.setCollectorOff(),
                                 // trans to shoot
                                 new ParallelAction(
                                         AutoActions.moveSpindexer60(),
                                         AutoActions.shooterTurnOnClose(),
                                         driveToPreloadShoot
                                 ),
-                                AutoActions.waitForAccurateShooterVelocity(),
+//                                AutoActions.waitForAccurateShooterVelocity(),
+
+                                new SleepAction(0.5),
+
                                 ShootingSequence(),
 
                                 driveOffLine

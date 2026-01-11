@@ -22,21 +22,21 @@ public class RedClose extends LinearOpMode {
     public static double[] start = new double[] { -62.5, 41, 0 };
 
     //1st Spike!!
-    public static double[] close1Shooting = new double[] {-24, 24, 135};
-    public static double[] collect1Pre = new double[] { -12, 34, 90 };
+    public static double[] close1Shooting = new double[] {-25, 25, 135};
+    public static double[] collect1Pre = new double[] { -12, 30, 90 };
     public static double[] collect1Mid = new double[] { -12, 22, 90 };
-    public static double[] collect1 = new double[] { -13, 40, 90 };
-    public static double[] collect2 = new double[] { -13, 45, 90 };
-    public static double[] collect3 = new double[] { -13, 50, 90 };
+    public static double[] collect1 = new double[] { -12, 39, 90 };
+    public static double[] collect2 = new double[] { -12, 44, 90 };
+    public static double[] collect3 = new double[] { -12, 49, 90 };
     public static double[] strafePos = new double[] { -36, 17, 90 };
 
     //2nd spike!!
-    public static double[] collect2Pre = new double[] { 12, 28, 90 };
-    public static double[] collect2Mid = new double[] { 12, 22, 90 };
+    public static double[] collect2Pre = new double[] { 10, 28, 90 };
+    public static double[] collect2Mid = new double[] { 10, 22, 90 };
 
-    public static double[] collect4 = new double[] { 12, 40, 90 };
-    public static double[] collect5 = new double[] { 12, 45, 90 };
-    public static double[] collect6 = new double[] { 12, 50, 90 };
+    public static double[] collect4 = new double[] { 10, 39, 90 };
+    public static double[] collect5 = new double[] { 10, 43, 90 };
+    public static double[] collect6 = new double[] { 10, 39, 90 };
     public static double collectMaxPower = 0.3;
     BrainSTEMRobot robot;
 
@@ -94,18 +94,18 @@ public class RedClose extends LinearOpMode {
 
         //1st Spike ===================================================================
         DrivePath driveToCollect1Pre = new DrivePath(robot.drive, telemetry,
-                new Waypoint(createPose(collect1Mid)).setSlowDownPercent(0.3),
+                new Waypoint(createPose(collect1Mid)).setSlowDownPercent(0.5),
                 new Waypoint(createPose(collect1Pre)).setSlowDownPercent(0.1)
         );
         DrivePath driveToCollectFirstSpike = new DrivePath(robot.drive, telemetry,
-                new Waypoint(createPose(collect1)).setMaxLinearPower(PARAMS.COLLECT_DRIVE_MAX_POWER).setMaxTime(3)
+                new Waypoint(createPose(collect1)).setMaxLinearPower(0.1).setMaxTime(3)
         );
 
         DrivePath driveToCollectSecondSpike = new DrivePath(robot.drive, telemetry,
-                new Waypoint(createPose(collect2)).setMaxLinearPower(PARAMS.COLLECT_DRIVE_MAX_POWER).setMaxTime(3)
+                new Waypoint(createPose(collect2)).setMaxLinearPower(0.1).setMaxTime(3)
         );
         DrivePath driveToCollectThirdSpike = new DrivePath(robot.drive, telemetry,
-                new Waypoint(createPose(collect3)).setMaxLinearPower(PARAMS.COLLECT_DRIVE_MAX_POWER).setMaxTime(3)
+                new Waypoint(createPose(collect3)).setMaxLinearPower(0.125).setMaxTime(3)
         );
         DrivePath driveOffLine = new DrivePath(robot.drive, telemetry,
                 new Waypoint(createPose(strafePos)).setMaxLinearPower(0.5)
@@ -113,7 +113,7 @@ public class RedClose extends LinearOpMode {
 
         //2nd Spike!! ===================================================================
         DrivePath driveToCollect2Pre = new DrivePath(robot.drive, telemetry,
-                new Waypoint(createPose(collect2Pre)).setSlowDownPercent(0.5),
+                new Waypoint(createPose(collect2Pre)).setSlowDownPercent(0.3),
                 new Waypoint(createPose(collect2Pre)).setSlowDownPercent(0.1)
         );
         DrivePath driveToCollectFourthSpike = new DrivePath(robot.drive, telemetry,
@@ -158,8 +158,6 @@ public class RedClose extends LinearOpMode {
                                 AutoActions.moveSpindexer120(),
                                 new SleepAction(PARAMS.SPIND_TO_DRIVE_WAIT),
                                 driveToCollectThirdSpike,
-                                new SleepAction(PARAMS.COLLECT_TO_SPIND_WAIT),
-                                AutoActions.moveSpindexer120(),
                                 new SleepAction(PARAMS.SPIND_TO_DRIVE_WAIT),
 
                                 new ParallelAction(
@@ -173,9 +171,9 @@ public class RedClose extends LinearOpMode {
                                 AutoActions.shooterTurnOnClose(),
                                 // Drive to shoot position
                                 driveToPreloadShoot,
-                                new SleepAction(0.3),
+                                new SleepAction(1.1),
                                 // Last shooting sequence
-                                AutoActions.waitForAccurateShooterVelocity(),
+
                                 ShootingSequence(),
                                 new SleepAction(0.3),
 
@@ -192,8 +190,6 @@ public class RedClose extends LinearOpMode {
                                 AutoActions.moveSpindexer120(),
                                 new SleepAction(PARAMS.SPIND_TO_DRIVE_WAIT),
                                 driveToCollectSixthSpike,
-                                new SleepAction(PARAMS.COLLECT_TO_SPIND_WAIT),
-                                AutoActions.moveSpindexer120(),
                                 new SleepAction(PARAMS.SPIND_TO_DRIVE_WAIT),
                                 AutoActions.moveSpindexer60(),
                                 new SleepAction(0.3),

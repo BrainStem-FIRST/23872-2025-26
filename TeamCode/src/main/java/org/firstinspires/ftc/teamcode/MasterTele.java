@@ -220,10 +220,10 @@ public class MasterTele extends LinearOpMode {
             robot.finger.fingerState = Finger.FingerState.DOWN;
         }
         if (gp2.isFirstLeftTrigger()){
-            robot.spindexer.SPINDEXER_TIME = 250;
+            robot.spindexer.SPINDEXER_TIME = 0;
             robot.spindexer.setSpindexerTargetAdjustment(3);
         } else if (gp2.isFirstRightTrigger()){
-            robot.spindexer.SPINDEXER_TIME = 250;
+            robot.spindexer.SPINDEXER_TIME = 0;
             robot.spindexer.setSpindexerTargetAdjustment(-3);
         }
 

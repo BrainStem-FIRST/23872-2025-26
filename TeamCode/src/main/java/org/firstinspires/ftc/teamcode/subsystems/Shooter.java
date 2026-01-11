@@ -26,12 +26,13 @@ public class Shooter implements Component {
         public double kV1 = 0.00049;
         public double kV2 = 0.00044;
 
-        public double AUTO = 1150;
+        public double AUTO = 288;
 
 
 
         public double FAR_SHOOT_VEL = 1060;
         public  double CLOSE_SHOOT_VEL = 300;
+
 //close shoot vel og 980 DT
         public  double STOP_SHOOT = 0;
 
@@ -130,8 +131,7 @@ public class Shooter implements Component {
 
                 break;
             case AUTO:
-                shooterMotorOne.setPower(PARAMS.AUTO);
-                shooterMotorTwo.setPower(PARAMS.AUTO);
+                setBothMotorVelocities(PARAMS.AUTO);
                 break;
 
         }
