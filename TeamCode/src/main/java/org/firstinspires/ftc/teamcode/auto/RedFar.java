@@ -16,27 +16,28 @@ import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
 import org.firstinspires.ftc.teamcode.utils.pidDrive.DrivePath;
 import org.firstinspires.ftc.teamcode.utils.pidDrive.Waypoint;
 
-@Autonomous(name="Blue Close")
+@Autonomous(name="Red Far")
 @Config
-public class BlueClose extends LinearOpMode {
-    public static double[] start = new double[] { -62.5, -41, 0 };
+public class RedFar extends LinearOpMode {
+    public static double[] start = new double[] { 62.6, 16.6, 180};
+
 
     //1st Spike!!
-    public static double[] close1Shooting = new double[] {-22, -22, -135};
-    public static double[] collect1Pre = new double[] { -12, -30, -90 };
-    public static double[] collect1Mid = new double[] { -12, -22, -90 };
-    public static double[] collect1 = new double[] { -12, -39, -90 };
-    public static double[] collect2 = new double[] { -12, -44, -90 };
-    public static double[] collect3 = new double[] { -12, -49, -90 };
-    public static double[] strafePos = new double[] { -36, -17, -90 };
+    public static double[] farShooting = new double[] {-55, 9, (9.2933086) + Math.PI/2}; //change
+    public static double[] collect1Pre = new double[] { -12, 30, 90 };
+    public static double[] collect1Mid = new double[] { -12, 22, 90 };
+    public static double[] collect1 = new double[] { -12, 39, 90 };
+    public static double[] collect2 = new double[] { -12, 44, 90 };
+    public static double[] collect3 = new double[] { -12, 49, 90 };
+    public static double[] strafePos = new double[] { -36, 17, 90 };
 
     //2nd spike!!
-    public static double[] collect2Pre = new double[] { 10, -28, -90 };
-    public static double[] collect2Mid = new double[] { 10, -22, -90 };
+    public static double[] collect2Pre = new double[] { 10, 28, 90 };
+    public static double[] collect2Mid = new double[] { 10, 22, 90 };
 
-    public static double[] collect4 = new double[] { 10, -40, -90 };
-    public static double[] collect5 = new double[] { 10, -45, -90 };
-    public static double[] collect6 = new double[] { 10, -50, -90 };
+    public static double[] collect4 = new double[] { 10, 39, 90 };
+    public static double[] collect5 = new double[] { 10, 43, 90 };
+    public static double[] collect6 = new double[] { 10, 39, 90 };
     public static double collectMaxPower = 0.3;
     BrainSTEMRobot robot;
 
@@ -50,7 +51,7 @@ public class BlueClose extends LinearOpMode {
         // Max power for collecting artifacts
         private double COLLECT_DRIVE_MAX_POWER = 0.15;
     }
-    public static BlueClose.PARAMS PARAMS = new BlueClose.PARAMS();
+    public static RedFar.PARAMS PARAMS = new RedFar.PARAMS();
 
     public SequentialAction ShootingSequence() {
         return new SequentialAction(
@@ -89,7 +90,7 @@ public class BlueClose extends LinearOpMode {
 
 
         DrivePath driveToPreloadShoot = new DrivePath(robot.drive, telemetry,
-                new Waypoint(createPose(close1Shooting)).setMaxLinearPower(1)
+                new Waypoint(createPose(farShooting)).setMaxLinearPower(1)
         );
 
         //1st Spike ===================================================================
@@ -140,63 +141,63 @@ public class BlueClose extends LinearOpMode {
                                 ),
 
                                 // "Domino Sequence"
-                                ShootingSequence(),
+                                ShootingSequence()
 
-                                AutoActions.setCollectorOn(),
-                                new SleepAction(0.3),
-
-                                //1st Spike Does Work ==========================
-                                driveToCollect1Pre,
-                                driveToCollectFirstSpike,
-//                                AutoActions.setCollectorOff(),
-                                new SleepAction(0.6),
-                                AutoActions.moveSpindexer120(),
-                                new SleepAction(PARAMS.SPIND_TO_DRIVE_WAIT),
-                                driveToCollectSecondSpike,
-                                new SleepAction(PARAMS.COLLECT_TO_SPIND_WAIT),
-
-                                AutoActions.moveSpindexer120(),
-                                new SleepAction(PARAMS.SPIND_TO_DRIVE_WAIT),
-                                driveToCollectThirdSpike,
-                                new SleepAction(PARAMS.SPIND_TO_DRIVE_WAIT),
-
-                                new ParallelAction(
-                                        AutoActions.setCollectorOff(),
-                                        AutoActions.moveSpindexer60()
-                                ),
-
-
-                                // Shooting sequence for 1st spike
-                                // Turn shooter back on
-                                AutoActions.shooterTurnOnClose(),
-                                // Drive to shoot position
-                                driveToPreloadShoot,
-                                new SleepAction(1.1),
-                                // Last shooting sequence
-
-                                ShootingSequence(),
-                                new SleepAction(0.3),
-
-                                //2nd Spike May Not Work ==========================
-                                AutoActions.setCollectorOn(),
-                                new SleepAction(0.3),
-                                driveToCollect2Pre,
-                                driveToCollectFourthSpike,
-                                new SleepAction(0.6),
-                                AutoActions.moveSpindexer120(),
-                                new SleepAction(PARAMS.SPIND_TO_DRIVE_WAIT),
-                                driveToCollectFifthSpike,
-                                new SleepAction(PARAMS.COLLECT_TO_SPIND_WAIT),
-                                AutoActions.moveSpindexer120(),
-                                new SleepAction(PARAMS.SPIND_TO_DRIVE_WAIT),
-                                driveToCollectSixthSpike,
-                                new SleepAction(PARAMS.SPIND_TO_DRIVE_WAIT),
-                                AutoActions.moveSpindexer60(),
-                                new SleepAction(0.3),
-                                driveToPreloadShoot,
-                                new SleepAction(0.3),
-                                ShootingSequence(),
-                                driveOffLine
+//                                AutoActions.setCollectorOn(),
+//                                new SleepAction(0.3),
+//
+//                                //1st Spike Does Work ==========================
+//                                driveToCollect1Pre,
+//                                driveToCollectFirstSpike,
+////                                AutoActions.setCollectorOff(),
+//                                new SleepAction(0.6),
+//                                AutoActions.moveSpindexer120(),
+//                                new SleepAction(PARAMS.SPIND_TO_DRIVE_WAIT),
+//                                driveToCollectSecondSpike,
+//                                new SleepAction(PARAMS.COLLECT_TO_SPIND_WAIT),
+//
+//                                AutoActions.moveSpindexer120(),
+//                                new SleepAction(PARAMS.SPIND_TO_DRIVE_WAIT),
+//                                driveToCollectThirdSpike,
+//                                new SleepAction(PARAMS.SPIND_TO_DRIVE_WAIT),
+//
+//                                new ParallelAction(
+//                                        AutoActions.setCollectorOff(),
+//                                        AutoActions.moveSpindexer60()
+//                                ),
+//
+//
+//                                // Shooting sequence for 1st spike
+//                                // Turn shooter back on
+//                                AutoActions.shooterTurnOnClose(),
+//                                // Drive to shoot position
+//                                driveToPreloadShoot,
+//                                new SleepAction(1.1),
+//                                // Last shooting sequence
+//
+//                                ShootingSequence(),
+//                                new SleepAction(0.3),
+//
+//                                //2nd Spike May Not Work ==========================
+//                                AutoActions.setCollectorOn(),
+//                                new SleepAction(0.3),
+//                                driveToCollect2Pre,
+//                                driveToCollectFourthSpike,
+//                                new SleepAction(0.6),
+//                                AutoActions.moveSpindexer120(),
+//                                new SleepAction(PARAMS.SPIND_TO_DRIVE_WAIT),
+//                                driveToCollectFifthSpike,
+//                                new SleepAction(PARAMS.COLLECT_TO_SPIND_WAIT),
+//                                AutoActions.moveSpindexer120(),
+//                                new SleepAction(PARAMS.SPIND_TO_DRIVE_WAIT),
+//                                driveToCollectSixthSpike,
+//                                new SleepAction(PARAMS.SPIND_TO_DRIVE_WAIT),
+//                                AutoActions.moveSpindexer60(),
+//                                new SleepAction(0.3),
+//                                driveToPreloadShoot,
+//                                new SleepAction(0.3),
+//                                ShootingSequence(),
+//                                driveOffLine
 
 
                         ),

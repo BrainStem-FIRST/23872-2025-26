@@ -26,7 +26,7 @@ public class Shooter implements Component {
         public double kV1 = 0.00049;
         public double kV2 = 0.00044;
 
-        public double AUTO = 288;
+        public double AUTO = 300;
 
 
 

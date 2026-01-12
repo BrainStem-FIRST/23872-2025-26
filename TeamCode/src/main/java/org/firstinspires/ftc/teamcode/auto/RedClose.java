@@ -22,7 +22,7 @@ public class RedClose extends LinearOpMode {
     public static double[] start = new double[] { -62.5, 41, 0 };
 
     //1st Spike!!
-    public static double[] close1Shooting = new double[] {-25, 25, 135};
+    public static double[] close1Shooting = new double[] {-22, 22, 135};
     public static double[] collect1Pre = new double[] { -12, 30, 90 };
     public static double[] collect1Mid = new double[] { -12, 22, 90 };
     public static double[] collect1 = new double[] { -12, 39, 90 };
