@@ -25,9 +25,11 @@ public class BrainSTEMRobot {
     public Spindexer spindexer;
     public Collector collector;
     public Shooter shooter;
-
     public Finger finger;
     public MecanumDrive drive;
+//    public Pivot pivot;
+//    public Ramp ramp;
+//    public OneWShooter shooterOne;
 
     public BrainSTEMRobot(HardwareMap hwMap, Telemetry telemetry, OpMode opMode, Pose2d startPose) {
 
@@ -38,6 +40,9 @@ public class BrainSTEMRobot {
         spindexer = new Spindexer(hwMap, telemetry, this);
         collector = new Collector(hwMap, telemetry);
         shooter = new Shooter(hwMap, telemetry);
+//        shooterOne = new OneWShooter(hwMap, telemetry);
+//        ramp = new Ramp(hwMap, telemetry);
+//        pivot = new Pivot(hwMap, telemetry);
         finger = new Finger(hwMap, telemetry, this);
 
         subsystems.add(spindexer);

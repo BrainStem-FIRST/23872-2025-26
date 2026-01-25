@@ -12,23 +12,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
 import org.firstinspires.ftc.teamcode.utils.Component;
 import org.firstinspires.ftc.teamcode.utils.PIDController;
+import org.firstinspires.ftc.teamcode.Constants;
 
 
 @Config
 public class Spindexer implements Component {
-    public static double indexerKP = 0.0188; // 0.02
-    public static double indexerKD = 0;
-    public static double indexerKF = 0.01;
-    public static double errorThreshold = 5;
-    public static int ticks120 =96, ticks60 = 48;
-    public static double MILLIAMPS_FOR_JAM = 500;
-    public static double maxPower = 0.6;
-
-    //anti jam
-    public static double MIN_VEL_TO_START_CHECKING = 5;
-    public static double minTimeToStartChecking = 1;
-    public static double unJamTime = 0.3;
-    public static double minErrorToStartChecking = 30;
 
     public int SPINDEXER_TIME;
 
@@ -62,7 +50,11 @@ public class Spindexer implements Component {
         spindexerMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         spindexerMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        spindexerPid = new PIDController(indexerKP, 0, indexerKD);
+        spindexerPid = new PIDController(
+                Constants.SpindexerConstants.INDEXER_KP,
+                0,
+                Constants.SpindexerConstants.INDEXER_KI
+        );
         spindexerState = SpindexerState.COLLECT;
         spindexerTimer = new ElapsedTime();
         antijamTimer = new ElapsedTime();
@@ -76,11 +68,10 @@ public class Spindexer implements Component {
             spindexerMotor.setPower(0);
         else {
             double power = spindexerPid.update(spindexerMotor.getCurrentPosition());
-            power += Math.signum(power) * indexerKF;
-            power = Range.clip(power, -maxPower, maxPower);
+            power += Math.signum(power) * Constants.SpindexerConstants.INDEXER_KF;
+            power = Range.clip(power, -Constants.SpindexerConstants.MAX_POWER, Constants.SpindexerConstants.MAX_POWER);
             spindexerMotor.setPower(power);
         }
-        telemetry.addData("spindexer power", spindexerMotor.getPower());
     }
 
     public void setSpindexerTargetAdjustment(int adjust) {
@@ -92,19 +83,11 @@ public class Spindexer implements Component {
 
     }
 
-//   public boolean isSpindexerJammed(){
-//        if ()
-//   }
-
     @Override
     public void update() {
         double error = spindexerMotor.getCurrentPosition() - spindexerPid.getTarget();
 
-//        if (!isUnjamming) {
-//            previousVelocity = spindexerMotor.getPower();
-//        }
-
-        if ((Math.abs(spindexerMotor.getVelocity()) < MIN_VEL_TO_START_CHECKING) && (Math.abs(error) > minErrorToStartChecking)){
+        if ((Math.abs(spindexerMotor.getVelocity()) < Constants.SpindexerConstants.MIN_VEL_TO_START_CHECKING) && (Math.abs(error) > Constants.SpindexerConstants.MIN_ERROR_TO_START_CHECKING)){
             isUnjamming = true;
         }
         else
@@ -113,35 +96,10 @@ public class Spindexer implements Component {
         if(!isUnjamming)
             antijamTimer.reset();
 
-//        if ((spindexerMotor.getVelocity() > MIN_VEL_TO_START_CHECKING) && (error < minErrorToStartChecking)){
-//            isUnjamming = false;
-//        }
-
-//        if (isUnjamming && antijamTimer.seconds() > minTimeToStartChecking) {
-//            if(antijamTimer.seconds() > unJamTime + minTimeToStartChecking)
-//                isUnjamming = false;
-//            else
-//                spindexerMotor.setPower(-Math.signum(error) * 0.2);
-//
-//            return;
-//        }
         updateIndexerPosition();
         if (spindexerTimer.milliseconds() > SPINDEXER_TIME) {
             updateIndexerPosition();
         } else spindexerMotor.setPower(0);
-
-
-
-
-
-
-        telemetry.addData("spindexer error", getError());
-        telemetry.addData("is static", isStatic());
-        telemetry.addData("Spindexer Power", spindexerMotor.getPower());
-        telemetry.addData("Spindexer Position", spindexerMotor.getCurrentPosition());
-        telemetry.addData("Spindexer Current", spindexerMotor.getCurrent(CurrentUnit.MILLIAMPS));
-        telemetry.addData("antijam running timer:", antijamTimer.milliseconds());
-
 
     }
 
@@ -149,7 +107,7 @@ public class Spindexer implements Component {
         return Math.abs(spindexerMotor.getCurrentPosition() - spindexerPid.getTarget());
     }
     public boolean isStatic() {
-        return getError() < errorThreshold;
+        return getError() < Constants.SpindexerConstants.ERROR_THRESHOLD;
     }
     @Override
     public String test() {

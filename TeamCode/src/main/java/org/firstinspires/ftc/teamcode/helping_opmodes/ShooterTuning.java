@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.tuning_opmodes;
+package org.firstinspires.ftc.teamcode.helping_opmodes;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -7,14 +7,11 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
-
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @Disabled
 @TeleOp
-public class shooterTuning extends OpMode {
+public class ShooterTuning extends OpMode {
 
     public static double kP = 0; // change
     public static double kI = 0.0;

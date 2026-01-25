@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.tuning_opmodes;
+package org.firstinspires.ftc.teamcode.helping_opmodes;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.utils.PIDController;
 
 @TeleOp
 
-public class spindexerTuning extends OpMode {
+public class SpindexerTuning extends OpMode {
 
     private GamepadTracker gp1;
     private GamepadTracker gp2;

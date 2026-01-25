@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.tuning_opmodes;
+package org.firstinspires.ftc.teamcode.helping_opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;

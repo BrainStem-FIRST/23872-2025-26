@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
+import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Collector;
 import org.firstinspires.ftc.teamcode.subsystems.Finger;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
@@ -79,7 +80,7 @@ public class AutoActions {
                     timer.reset();
                 }
 
-                if (timer.seconds() >= 4)
+                if (timer.seconds() >= 2)
                     return false;
 
                 double error1 = Math.abs(Math.abs(robot.shooter.shooterMotorOne.getVelocity()) - robot.shooter.shooterPID1.getTarget());
@@ -131,12 +132,12 @@ public class AutoActions {
 
 
     public static Action moveSpindexer120() {
-        return moveSpindexer(Spindexer.ticks120);
+        return moveSpindexer(Constants.SpindexerConstants.TICKS_120);
     }
 
 
     public static Action moveSpindexer60() {
-        return moveSpindexer(Spindexer.ticks60);
+        return moveSpindexer(Constants.SpindexerConstants.TICKS_60);
     }
 
     public static Action moveSpindexerALittle() {
@@ -177,9 +178,11 @@ public class AutoActions {
                     FtcDashboard.getInstance().sendTelemetryPacket(packet);
                     return false;
                 },
-                new SleepAction(Finger.upTime)
+                new SleepAction(Constants.FingerConstants.UP_TIME)
         );
     }
+
+
 
     public static Action fingerServoD() {
         return new SequentialAction (
@@ -188,7 +191,23 @@ public class AutoActions {
                     telemetryPacket.addLine("finger Down");
                     return false;
                 },
-                new SleepAction(Finger.downTime)
+                new SleepAction(Constants.FingerConstants.DOWN_TIME)
         );
     }
+
+    public Action triggerSpindexerAtPos(double targetY) {
+        return new Action() {
+            private boolean triggered = false;
+            @Override
+            public boolean run(TelemetryPacket packet) {
+                if (!triggered && Math.abs(robot.drive.localizer.getPose().position.y - targetY) < 2.0) {
+                    robot.spindexer.setSpindexerTargetAdjustment(80);
+                    triggered = true;
+                }
+                return !triggered;
+            }
+        };
+    }
+
+
 }

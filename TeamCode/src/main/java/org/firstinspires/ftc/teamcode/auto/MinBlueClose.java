@@ -5,6 +5,8 @@ import static org.firstinspires.ftc.teamcode.utils.pidDrive.UtilFunctions.create
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
@@ -21,7 +23,7 @@ import org.firstinspires.ftc.teamcode.utils.pidDrive.Waypoint;
 public class MinBlueClose extends LinearOpMode {
     public static double[] start = new double[] { -62.5, -41, 0 };
 
-    //1st Spike!!
+    // 1st Spike
     public static double[] close1Shooting = new double[] {-24, -24, -135};
     public static double[] collect1Pre = new double[] { -13, -30, -90 };
     public static double[] collect1Mid = new double[] { -13, -22, -90 };
@@ -30,13 +32,18 @@ public class MinBlueClose extends LinearOpMode {
     public static double[] collect3 = new double[] { -13, -49, -90 };
     public static double[] strafePos = new double[] { -36, -17, -90 };
 
-    //2nd spike!!
-    public static double[] collect2Pre = new double[] { 12, -30, -90 };
-    public static double[] collect2Mid = new double[] { 12, -21, -90 };
-
+    // 2nd spike
+    public static double[] collect2Pre = new double[] { 11, -30, -90 };
     public static double[] collect4 = new double[] { 11, -39, -90 };
     public static double[] collect5 = new double[] { 11, -44, -90 };
     public static double[] collect6 = new double[] { 11, -49, -90 };
+
+    // 3rd spike
+    public static double[] collect3Pre = new double[] { 36, -30, -90 };
+    public static double[] collect3Mid = new double[] { 36, -21, -90 };
+    public static double[] collect7 = new double[] { 36, -39, -90 };
+    public static double[] collect8 = new double[] { 36, -44, -90 };
+    public static double[] collect9 = new double[] { 36, -49, -90 };
     public static double collectMaxPower = 0.3;
     BrainSTEMRobot robot;
 
@@ -69,15 +76,19 @@ public class MinBlueClose extends LinearOpMode {
         );
     }
 
-    public SequentialAction CollectingSequence() {
-        return new SequentialAction(
-                new SleepAction(0.5),
-                AutoActions.moveSpindexer120(),
-                new SleepAction(0.5),
-                AutoActions.moveSpindexer120()
-        );
+    public Action triggerSpindexerAtPos(double targetY) {
+        return new Action() {
+            private boolean triggered = false;
+            @Override
+            public boolean run(TelemetryPacket packet) {
+                if (!triggered && Math.abs(robot.drive.localizer.getPose().position.y - targetY) < 2.0) {
+                    robot.spindexer.setSpindexerTargetAdjustment(80);
+                    triggered = true;
+                }
+                return !triggered;
+            }
+        };
     }
-
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -88,43 +99,35 @@ public class MinBlueClose extends LinearOpMode {
         AutoActions.setRobot(robot);
 
 
+        // WAYPOINTS ===============================================================================
         DrivePath driveToPreloadShoot = new DrivePath(robot.drive, telemetry,
                 new Waypoint(createPose(close1Shooting)).setMaxLinearPower(1)
         );
 
-        //1st Spike ===================================================================
-        DrivePath driveToCollect1Pre = new DrivePath(robot.drive, telemetry,
-                new Waypoint(createPose(collect1Mid)).setSlowDownPercent(0.3),
-                new Waypoint(createPose(collect1Pre)).setSlowDownPercent(0.1)
-        );
-        DrivePath driveToCollectFirstSpike = new DrivePath(robot.drive, telemetry,
-                new Waypoint(createPose(collect1)).setMaxLinearPower(PARAMS.COLLECT_DRIVE_MAX_POWER).setMaxTime(3)
-        );
+        // 1st Spike -------
 
-        DrivePath driveToCollectSecondSpike = new DrivePath(robot.drive, telemetry,
-                new Waypoint(createPose(collect2)).setMaxLinearPower(PARAMS.COLLECT_DRIVE_MAX_POWER).setMaxTime(3)
-        );
-        DrivePath driveToCollectThirdSpike = new DrivePath(robot.drive, telemetry,
+        DrivePath driveToCollectFirstSpike = new DrivePath(robot.drive, telemetry,
+                new Waypoint(createPose(collect1Pre)).setSlowDownPercent(0.2),
                 new Waypoint(createPose(collect3)).setMaxLinearPower(PARAMS.COLLECT_DRIVE_MAX_POWER).setMaxTime(3)
         );
-        DrivePath driveOffLine = new DrivePath(robot.drive, telemetry,
-                new Waypoint(createPose(strafePos)).setMaxLinearPower(0.5)
-        );
 
-        //2nd Spike!! ===================================================================
-        DrivePath driveToCollect2Pre = new DrivePath(robot.drive, telemetry,
-                new Waypoint(createPose(collect2Pre)).setSlowDownPercent(0.3),
-                new Waypoint(createPose(collect2Pre)).setSlowDownPercent(0.3)
-        );
-        DrivePath driveToCollectFourthSpike = new DrivePath(robot.drive, telemetry,
-                new Waypoint(createPose(collect4)).setMaxLinearPower(PARAMS.COLLECT_DRIVE_MAX_POWER).setMaxTime(3)
-        );
 
-        DrivePath driveToCollectFifthSpike = new DrivePath(robot.drive, telemetry,
-                new Waypoint(createPose(collect5)).setMaxLinearPower(PARAMS.COLLECT_DRIVE_MAX_POWER).setMaxTime(3)
-        );
-        DrivePath driveToCollectSixthSpike = new DrivePath(robot.drive, telemetry,
+        // 2nd Spike -------
+
+        DrivePath driveToCollectSecondSpike = new DrivePath(robot.drive, telemetry,
+                new Waypoint(createPose(collect2Pre)).setSlowDownPercent(0.2),
                 new Waypoint(createPose(collect6)).setMaxLinearPower(PARAMS.COLLECT_DRIVE_MAX_POWER).setMaxTime(3)
+        );
+
+        // 3rd Spike -------
+        DrivePath driveToCollectThirdSpike = new DrivePath(robot.drive, telemetry,
+                new Waypoint(createPose(collect2Pre)).setSlowDownPercent(0.2),
+                new Waypoint(createPose(collect9)).setMaxLinearPower(PARAMS.COLLECT_DRIVE_MAX_POWER).setMaxTime(3)
+        );
+        // Drive off line -------
+
+        DrivePath driveOffLine = new DrivePath(robot.drive, telemetry,
+                new Waypoint(createPose(strafePos))
         );
 
         waitForStart();
@@ -135,102 +138,53 @@ public class MinBlueClose extends LinearOpMode {
                                 // PRELOAD SHOOT
                                 new ParallelAction(
                                         AutoActions.shooterTurnOnClose(),
-                                        driveToPreloadShoot
-//                                        AutoActions.waitForAccurateShooterVelocity()
+                                        driveToPreloadShoot,
+                                        AutoActions.waitForAccurateShooterVelocity()
                                 ),
-
-                                new SleepAction(0.3),
                                 ShootingSequence(),
 
                                 // 1ST SPIKE
-                                AutoActions.setCollectorOn(),
-                                driveToCollect1Pre,
 
-
-                                // Ball 1
                                 new ParallelAction(
+                                        AutoActions.setCollectorOn(),
                                         driveToCollectFirstSpike,
                                         new SequentialAction(
-                                                new SleepAction(1.5),
-                                                AutoActions.moveSpindexer120()
+                                                triggerSpindexerAtPos(-44),
+                                                triggerSpindexerAtPos(-49)
                                         )
                                 ),
 
-                                // Ball 2
-                                new ParallelAction(
-                                        driveToCollectSecondSpike,
-                                        new SequentialAction(
-                                                new SleepAction(1.5),
-                                                AutoActions.moveSpindexer120()
-                                        )
-                                ),
-                                // Ball 3
-                                new ParallelAction(
-                                        driveToCollectThirdSpike
-                                ),
-
-                                new SleepAction(1),
-
-                                // Trans to shoot
+                                // trans to shoot
                                 new ParallelAction(
                                         AutoActions.setCollectorOff(),
                                         AutoActions.moveSpindexer60(),
                                         AutoActions.shooterTurnOnClose(),
+                                        AutoActions.waitForAccurateShooterVelocity(),
                                         driveToPreloadShoot
                                 ),
-
-                                new SleepAction(0.5),
 
                                 ShootingSequence(),
 
                                 // 2ND SPIKE
-                                AutoActions.setCollectorOn(),
-                                driveToCollect2Pre,
 
-
-                                // Ball 4
                                 new ParallelAction(
-                                        driveToCollectFourthSpike,
+                                        AutoActions.setCollectorOn(),
+                                        driveToCollectSecondSpike,
                                         new SequentialAction(
-                                                new SleepAction(1),
-                                                AutoActions.moveSpindexer120()
+                                                triggerSpindexerAtPos(-44),
+                                                triggerSpindexerAtPos(-49)
                                         )
                                 ),
 
-                                new SleepAction(0.5),
 
-                                // Ball 5
-                                new ParallelAction(
-                                        driveToCollectFifthSpike,
-                                        new SequentialAction(
-                                                new SleepAction(1),
-                                                AutoActions.moveSpindexer120()
-                                        )
-                                ),
-
-                                new SleepAction(0.5),
-
-                                // Ball 6
-                                new ParallelAction(
-                                        driveToCollectSixthSpike,
-                                        new SequentialAction(
-                                                new SleepAction(1),
-                                                AutoActions.moveSpindexer120()
-                                        )
-                                ),
-
-                                AutoActions.setCollectorOn(),
-                                new SleepAction(0.3),
-                                AutoActions.setCollectorOff(),
                                 // trans to shoot
                                 new ParallelAction(
                                         AutoActions.moveSpindexer60(),
+                                        AutoActions.setCollectorOff(),
                                         AutoActions.shooterTurnOnClose(),
+                                        AutoActions.waitForAccurateShooterVelocity(),
                                         driveToPreloadShoot
                                 ),
-//                                AutoActions.waitForAccurateShooterVelocity(),
-
-                                new SleepAction(0.5),
 
                                 ShootingSequence(),
 

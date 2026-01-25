@@ -24,34 +24,29 @@ import org.firstinspires.ftc.teamcode.utils.PIDController;
 public class MasterTele extends LinearOpMode {
     private GamepadTracker gp1;
     private GamepadTracker gp2;
-    private ElapsedTime runtime = new ElapsedTime();
     private BrainSTEMRobot robot;
-
-    public static double kP = 1.1, kI = 0.13, kD = 0;
 
     private PIDController alignmentPID;
 
     Vector2d goal = new Vector2d(-72, 72); //default: red
     private boolean red = true;
-    private
-    Action currentAction = null;
 
-    public SequentialAction ShootingSequence() {
-        return new SequentialAction(
-                AutoActions.fingerServoU(),
-                new SleepAction(0.4),
-                AutoActions.moveSpindexer120(),
-                new SleepAction(0.3),
-                AutoActions.fingerServoU(),
-                new SleepAction(0.4),
-                AutoActions.moveSpindexer120(),
-                new SleepAction(0.3),
-                AutoActions.fingerServoU(),
-                new SleepAction(0.4),
-                AutoActions.moveSpindexer60(),
-                AutoActions.turnShooterOnIdle()
-        );
-    }
+//    public SequentialAction ShootingSequence() {
+//        return new SequentialAction(
+//                AutoActions.fingerServoU(),
+//                new SleepAction(0.4),
+//                AutoActions.moveSpindexer120(),
+//                new SleepAction(0.3),
+//                AutoActions.fingerServoU(),
+//                new SleepAction(0.4),
+//                AutoActions.moveSpindexer120(),
+//                new SleepAction(0.3),
+//                AutoActions.fingerServoU(),
+//                new SleepAction(0.4),
+//                AutoActions.moveSpindexer60(),
+//                AutoActions.turnShooterOnIdle()
+//        );
+//    }
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -65,7 +60,11 @@ public class MasterTele extends LinearOpMode {
 
         robot.shooter.setShooterOff();
 
-        alignmentPID = new PIDController(kP, kI, kD);
+        alignmentPID = new PIDController(
+                Constants.DriveConstants.ALIGNMENT_KP,
+                Constants.DriveConstants.ALIGNMENT_KI,
+                Constants.DriveConstants.ALIGNMENT_KD
+        );
 
         if (gamepad1.x){
             goal = new Vector2d(-72, -72);
@@ -111,7 +110,7 @@ public class MasterTele extends LinearOpMode {
 
             telemetry.addLine("\n=== SHOOTER ===");
             telemetry.addData("State", robot.shooter.shooterState);
-            telemetry.addData("Avg Vel", robot.shooter.avgMotorVel); // From Shooter.java
+            telemetry.addData("Avg Vel", robot.shooter.avgMotorVel);
             telemetry.addData("At Speed", Math.abs(robot.shooter.avgMotorVel - robot.shooter.shooterPID1.getTarget()) < 50);
             telemetry.addData("Current (mA)", robot.spindexer.spindexerMotor.getCurrent(CurrentUnit.MILLIAMPS));
             telemetry.addData("AntiJam Timer", robot.spindexer.antijamTimer);
@@ -152,8 +151,6 @@ public class MasterTele extends LinearOpMode {
 
         }
 
-
-
         robot.drive.setMotorPowers(
                 y + x + rx,
                 y - x - rx,
@@ -161,7 +158,6 @@ public class MasterTele extends LinearOpMode {
                 y + x - rx
 
         );
-
 
         //d1 intake controls
         if (gamepad1.right_trigger > 0.1 ) {
@@ -171,8 +167,6 @@ public class MasterTele extends LinearOpMode {
         } else {
             robot.collector.collectorState = Collector.CollectorState.OFF;
         }
-
-
 
     }
 
@@ -185,8 +179,6 @@ public class MasterTele extends LinearOpMode {
             robot.spindexer.SPINDEXER_TIME = 500;
             robot.spindexer.setSpindexerTargetAdjustment(-48);
         }
-
-
 
         if (gamepad2.xWasPressed()) {
             robot.finger.fingerState = Finger.FingerState.UP;

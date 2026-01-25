@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.utils.Component;
 
 
@@ -44,16 +45,16 @@ public class Collector implements Component {
     public void update() {
         switch (collectorState) {
             case OFF:
-                collectorMotor.setPower(0);
+                collectorMotor.setPower(Constants.CollectorConstants.OFF_POWER);
                 break;
             case INTAKE:
-                collectorMotor.setPower(0.95);
+                collectorMotor.setPower(Constants.CollectorConstants.INTAKE_POWER);
                 break;
             case EXTAKE:
-                collectorMotor.setPower(-0.8);
+                collectorMotor.setPower(Constants.CollectorConstants.EXTAKE_POWER);
                 break;
             case AUTO:
-                collectorMotor.setPower(0.77);
+                collectorMotor.setPower(Constants.CollectorConstants.AUTO_POWER);
         }
     }
     @Override
