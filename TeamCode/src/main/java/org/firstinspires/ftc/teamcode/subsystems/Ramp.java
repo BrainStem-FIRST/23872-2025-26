@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.utils.Component;
 
-/*
+
 @Config
 public class Ramp implements Component {
     private Telemetry telemetry;
@@ -32,9 +32,9 @@ public class Ramp implements Component {
         this.telemetry = telemetry;
         this.rampState = RampState.DOWN;
 
-        rampServo = map.get(ServoImplEx.class, "fingerServo");
-        rampServo.setPwmRange(new PwmControl.PwmRange(Constants.RampConstants.DOWN_PWM, Constants.RampConstants.UP_PWM));
-
+        rampServo = map.get(ServoImplEx.class, "rampServo");
+//        rampServo.setPwmRange(new PwmControl.PwmRange(Constants.RampConstants.DOWN_PWM, Constants.RampConstants.UP_PWM));
+        // TODO: Check if this is needed
         targetPosition = Constants.RampConstants.DOWN_POSITION;
     }
     @Override
@@ -63,6 +63,9 @@ public class Ramp implements Component {
 
     }
 
+    public void setRampUp() { rampState = RampState.UP;}
+    public void setRampDown() { rampState = RampState.DOWN;};
+
 
     @Override
     public String test() {
@@ -71,4 +74,3 @@ public class Ramp implements Component {
 
 }
 
- */

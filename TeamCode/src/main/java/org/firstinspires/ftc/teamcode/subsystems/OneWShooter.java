@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.utils.PIDController;
 
 
 
-/*
+
 
 @Config
 public class OneWShooter implements Component {
@@ -36,6 +36,13 @@ public class OneWShooter implements Component {
 
     //PID Controllers
     public PIDController shooterPID;
+
+    public double targetVel;
+    public double currentVel1;
+    public double currentVel2;
+
+    public double error1;
+    public double error2;
 
 
     public enum ShooterState {
@@ -94,56 +101,71 @@ public class OneWShooter implements Component {
             case OFF:
                 shooterMotorOne.setPower(0);
                 shooterMotorTwo.setPower(0);
+
+                targetVel = 0;
                 break;
             case SHOOT_FAR:
                 setBoth(Constants.ShooterConstants.FAR_SHOOT_VEL);
+                targetVel = Constants.ShooterConstants.FAR_SHOOT_VEL;
                 break;
             case SHOOT_CLOSE:
                 setBoth(Constants.ShooterConstants.CLOSE_SHOOT_VEL);
+                targetVel = Constants.ShooterConstants.CLOSE_SHOOT_VEL;
                 break;
             case IDLE:
                 shooterMotorOne.setPower(Constants.ShooterConstants.IDLE_POWER);
                 shooterMotorTwo.setPower(Constants.ShooterConstants.IDLE_POWER);
 
+                targetVel = 0;
+
                 break;
             case AUTO:
                 setBoth(Constants.ShooterConstants.AUTO_VEL);
+
+                targetVel = Constants.ShooterConstants.AUTO_VEL;
                 break;
 
         }
 
         telemetry.addData("shooter motor state", shooterState);
 
-    }
-    public void setBothMotorVelocities(double targetVelocity) {
-        shooterPID.setTarget(targetVelocity);
-        double error = targetVelocity - Math.abs(shooterMotorOne.getVelocity());
+        currentVel1 = Math.abs(shooterMotorOne.getVelocity());
+        currentVel2 = Math.abs(shooterMotorTwo.getVelocity());
 
-        double pidOutput = shooterPID.updateWithError(error);
-
-        double shooterPower = pidOutput + Constants.ShooterConstants.kV1 * targetVelocity;
-
-        shooterPower = Range.clip(shooterPower, 0, Constants.ShooterConstants.MAX_POWER);
-
-        if (powerMotors) {
-            shooterMotorOne.setPower(shooterPower);
-            shooterMotorTwo.setPower(shooterPower);
-        }
-
-        telemetry.addData("Shooter Target Vel", targetVelocity);
-        telemetry.addData("shooter error 1", error);
-        telemetry.addData("shooter motor one velocity", shooterMotorOne.getVelocity());
-        telemetry.addData("shooter motor two velocity", shooterMotorTwo.getVelocity());
-
-        telemetry.addData("Shooter PID output 1", pidOutput);
-        telemetry.addData("Shooter total output 1", shooterPower);
-
-        telemetry.addData("shooter one Power", shooterMotorOne.getPower());
-        telemetry.addData("shooter two power", shooterMotorTwo.getPower());
-
+        error1 = Math.abs(currentVel1 - targetVel);
+        error2 = Math.abs(currentVel2 - targetVel);
 
 
     }
+//    public void setBothMotorVelocities(double targetVelocity) {
+//        shooterPID.setTarget(targetVelocity);
+//        double error = targetVelocity - Math.abs(shooterMotorOne.getVelocity());
+//
+//        double pidOutput = shooterPID.updateWithError(error);
+//
+//        double shooterPower = pidOutput + Constants.ShooterConstants.kV1 * targetVelocity;
+//
+//        shooterPower = Range.clip(shooterPower, 0, Constants.ShooterConstants.MAX_POWER);
+//
+//        if (powerMotors) {
+//            shooterMotorOne.setPower(shooterPower);
+//            shooterMotorTwo.setPower(shooterPower);
+//        }
+//
+//        telemetry.addData("Shooter Target Vel", targetVelocity);
+//        telemetry.addData("shooter error 1", error);
+//        telemetry.addData("shooter motor one velocity", shooterMotorOne.getVelocity());
+//        telemetry.addData("shooter motor two velocity", shooterMotorTwo.getVelocity());
+//
+//        telemetry.addData("Shooter PID output 1", pidOutput);
+//        telemetry.addData("Shooter total output 1", shooterPower);
+//
+//        telemetry.addData("shooter one Power", shooterMotorOne.getPower());
+//        telemetry.addData("shooter two power", shooterMotorTwo.getPower());
+//
+//
+//
+//    }
 
     public void setBoth(double power) {
         shooterMotorTwo.setVelocity(power);
@@ -173,4 +195,4 @@ public class OneWShooter implements Component {
     }
 }
 
- */
+

@@ -13,6 +13,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
+import org.firstinspires.ftc.teamcode.subsystems.sensors.Limelight;
+import org.firstinspires.ftc.teamcode.utils.BallTracker;
 import org.firstinspires.ftc.teamcode.utils.pidDrive.DrivePath;
 import org.firstinspires.ftc.teamcode.utils.pidDrive.Waypoint;
 
@@ -20,6 +22,10 @@ import org.firstinspires.ftc.teamcode.utils.pidDrive.Waypoint;
 @Config
 public class BlueClose extends LinearOpMode {
     public static double[] start = new double[] { -62.5, -41, 0 };
+
+    //Obelisk look
+    public static double[] lookAtOb = new double[] {-22, -24, -214};
+
 
     //1st Spike!!
     public static double[] close1Shooting = new double[] {-22, -22, -135};
@@ -54,20 +60,14 @@ public class BlueClose extends LinearOpMode {
 
     public SequentialAction ShootingSequence() {
         return new SequentialAction(
-                AutoActions.fingerServoU(),
-                new SleepAction(0.4),
-                AutoActions.moveSpindexer120(),
-                new SleepAction(0.2),
-                AutoActions.fingerServoU(),
-                new SleepAction(0.4),
-                AutoActions.moveSpindexer120(),
-                new SleepAction(0.2),
-                AutoActions.fingerServoU(),
-                new SleepAction(0.4),
-                AutoActions.moveSpindexer60(),
+               AutoActions.shootAll(),
                 AutoActions.turnShooterOnIdle()
         );
     }
+
+
+
+
 
     public SequentialAction CollectingSequence() {
         return new SequentialAction(
@@ -87,6 +87,9 @@ public class BlueClose extends LinearOpMode {
         robot = new BrainSTEMRobot(hardwareMap, telemetry, this, createPose(start));
         AutoActions.setRobot(robot);
 
+        DrivePath driveToOb = new DrivePath(robot.drive, telemetry,
+                new Waypoint(createPose(lookAtOb)).setMaxLinearPower(1)
+        );
 
         DrivePath driveToPreloadShoot = new DrivePath(robot.drive, telemetry,
                 new Waypoint(createPose(close1Shooting)).setMaxLinearPower(1)
@@ -133,7 +136,12 @@ public class BlueClose extends LinearOpMode {
                 new ParallelAction(
                         new SequentialAction(
                                 // Ramp up shooter and drive to preload shoot
-                                AutoActions.shooterTurnOnClose(),
+
+                               new ParallelAction(
+                                       AutoActions.shooterTurnOnClose(),
+                                       driveToOb
+
+                               ) ,
                                 new ParallelAction(
                                         AutoActions.waitForAccurateShooterVelocity(),
                                         driveToPreloadShoot

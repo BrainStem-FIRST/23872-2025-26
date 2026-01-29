@@ -2,26 +2,40 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.SequentialAction;
-import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
-import org.firstinspires.ftc.teamcode.auto.AutoActions;
 import org.firstinspires.ftc.teamcode.subsystems.Collector;
-import org.firstinspires.ftc.teamcode.subsystems.Finger;
 import org.firstinspires.ftc.teamcode.utils.GamepadTracker;
 import org.firstinspires.ftc.teamcode.utils.PIDController;
 
+/*
+TELEOP CONTROLS
 
+D1 – DRIVE / ACQUIRE (hands stay on sticks)
+LS                : Drive
+RS                : Turn
+RB (hold)         : Intake ON
+RT (hold)         : Intake REV
+LB                : Spindexer +60
+LT                : Spindexer -60
+Y (hold)          : Auto-align
+
+D2 – SHOOT
+Y                 : Shooter HIGH (tap)
+A                 : Shooter LOW (tap)
+B                 : Shooter IDLE (tap)
+X                 : Shooter OFF (tap)
+LB                : Ramp UP (tap)
+LT                : Ramp DOWN (tap)
+RB                : FIRE (tap)
+D-Pad U / D        : Spindexer fine + / - (tap)
+*/
 @TeleOp(name = "Competition Tele")
-public class MasterTele extends LinearOpMode {
+public class PotentialTele extends LinearOpMode {
     private GamepadTracker gp1;
     private GamepadTracker gp2;
     private BrainSTEMRobot robot;
@@ -30,23 +44,6 @@ public class MasterTele extends LinearOpMode {
 
     Vector2d goal = new Vector2d(-72, 72); //default: red
     private boolean red = true;
-
-//    public SequentialAction ShootingSequence() {
-//        return new SequentialAction(
-//                AutoActions.fingerServoU(),
-//                new SleepAction(0.4),
-//                AutoActions.moveSpindexer120(),
-//                new SleepAction(0.3),
-//                AutoActions.fingerServoU(),
-//                new SleepAction(0.4),
-//                AutoActions.moveSpindexer120(),
-//                new SleepAction(0.3),
-//                AutoActions.fingerServoU(),
-//                new SleepAction(0.4),
-//                AutoActions.moveSpindexer60(),
-//                AutoActions.turnShooterOnIdle()
-//        );
-//    }
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -66,6 +63,7 @@ public class MasterTele extends LinearOpMode {
                 Constants.DriveConstants.ALIGNMENT_KD
         );
 
+        // Switch goal
         if (gamepad1.x){
             goal = new Vector2d(-72, -72);
             red = false;
@@ -82,7 +80,6 @@ public class MasterTele extends LinearOpMode {
         waitForStart();
 
         while (!opModeIsActive()) {
-
             telemetry.update();
         }
 
@@ -95,15 +92,6 @@ public class MasterTele extends LinearOpMode {
             updateDriver1();
             updateDriver2();
 
-
-            telemetry.addLine("\n=== EMERGENCY DIAGNOSING ===");
-            if (robot.spindexer.antijamTimer.milliseconds() < 500) {
-                telemetry.addLine("STATUS: Spindexer Jammed");
-            } else {
-                telemetry.addLine("STATUS: No Jam");
-            }
-
-            
             telemetry.addLine("\n=== DRIVE ===");
             telemetry.addData("Pose", robot.drive.localizer.getPose().toString());
             telemetry.addData("Align Target", alignmentPID.getTarget());
@@ -111,9 +99,7 @@ public class MasterTele extends LinearOpMode {
             telemetry.addLine("\n=== SHOOTER ===");
             telemetry.addData("State", robot.shooter.shooterState);
             telemetry.addData("Vel", robot.shooter.shooterMotorOne.getVelocity());
-//            telemetry.addData("At Speed", Math.abs(robot.shooter.shooterMotorOne.getVelocity() - robot.shooter.get.getTarget()) < 50);
-            // TODO: get error with internal PID
-
+            telemetry.addData("At Speed", Math.abs(robot.shooter.shooterMotorOne.getVelocity() - robot.shooter.targetVel) < 50);
 
             telemetry.addLine("\n=== SPINDEXER ===");
             telemetry.addData("State", robot.spindexer.spindexerState);
@@ -122,12 +108,13 @@ public class MasterTele extends LinearOpMode {
             telemetry.addData("Current (mA)", robot.spindexer.spindexerMotor.getCurrent(CurrentUnit.MILLIAMPS));
             telemetry.addData("AntiJam Timer", robot.spindexer.antijamTimer);
 
-
-
             telemetry.addLine("\n=== SUBSYSTEMS ===");
             telemetry.addData("Collector", robot.collector.collectorState);
-//            telemetry.addData("Finger", robot.finger.fingerState);
-//            telemetry.addData("Flicker Timer", robot.finger.flickerTimer.seconds());
+            telemetry.addData("Ramp", robot.ramp.rampState);
+
+            telemetry.addLine("\n=== MOTIF LOGIC ===");
+            telemetry.addData("List", robot.limelight.ballTracker.pos);
+            telemetry.addData("Target Motif", robot.limelight.ballTracker.targetMotif);
 
             telemetry.update();
 
@@ -136,8 +123,8 @@ public class MasterTele extends LinearOpMode {
 
 
     private void updateDriver1() {
-        // if statements checking for d1 controls
-        //driving ↓
+
+        // DRIVING ==========================================
         double y = -gamepad1.left_stick_y * 0.99;
         double x = gamepad1.left_stick_x * 0.99;
         double rx = gamepad1.right_stick_x * 0.75;
@@ -146,10 +133,8 @@ public class MasterTele extends LinearOpMode {
             double targetAngle = Math.atan2(goal.y, goal.x);
             double currentHeading = robot.drive.localizer.getPose().heading.toDouble();
 
-
             alignmentPID.setTarget(targetAngle);
             rx = alignmentPID.update(currentHeading);
-
         }
 
         robot.drive.setMotorPowers(
@@ -157,92 +142,56 @@ public class MasterTele extends LinearOpMode {
                 y - x - rx,
                 y - x + rx,
                 y + x - rx
-
         );
 
-        //d1 intake controls
+        // SUBSYSTEM CONTROLS =====================================================
         if (gamepad1.right_trigger > 0.1 ) {
             robot.collector.collectorState = Collector.CollectorState.INTAKE;
-        } else if (gamepad1.left_trigger > 0.1) {
+        } else if (gamepad1.right_bumper) {
             robot.collector.collectorState = Collector.CollectorState.EXTAKE;
         } else {
             robot.collector.collectorState = Collector.CollectorState.OFF;
         }
 
-    }
-
-    private void updateDriver2() {
-        // d2 controls
-        if (gamepad2.rightBumperWasPressed() || gamepad1.rightBumperWasPressed()) {
-            robot.spindexer.SPINDEXER_TIME = 500;
+        if (gp1.isFirstLeftBumper()) {
+            robot.spindexer.SPINDEXER_TIME = 0;
             robot.spindexer.setSpindexerTargetAdjustment(48);
             robot.limelight.ballTracker.rotated60();
-        } else if (gamepad2.leftBumperWasPressed() || gamepad1.leftBumperWasPressed()) {
-            robot.spindexer.SPINDEXER_TIME = 500;
+        } else if (gp1.isFirstLeftTrigger()) {
+            robot.spindexer.SPINDEXER_TIME = 0;
             robot.spindexer.setSpindexerTargetAdjustment(-48);
             robot.limelight.ballTracker.rotatedNeg60();
         }
 
-        if (gamepad2.xWasPressed()) {
-//            robot.finger.fingerState = Finger.FingerState.UP;
-//            robot.finger.flickerTimer.reset();
-            robot.ramp.setRampUp();
-        }
-
-//        if (gamepad2.aWasPressed() && currentAction == null) {
-//            currentAction = ShootingSequence();
-//        }
-//
-//        if (currentAction != null) {
-//            TelemetryPacket packet = new TelemetryPacket();
-//            boolean keepGoing = currentAction.run(packet);
-//            if (!keepGoing)
-//                currentAction = null;
-//        }
-
-        if (gamepad2.yWasPressed()) {
-            robot.shooter.setShooterShootFar();
-        }
-
-        if (gamepad2.bWasPressed()) {
-            robot.shooter.setShooterShootClose();
-        }
-
-//        if (gamepad2.aWasPressed()) {
-//            robot.spindexer.setSpindexerTargetAdjustment(robot.limelight.ballTracker.getBestRotation());
-//            robot.ramp.setRampUp();
-//            robot.spindexer.setSpindexerTargetAdjustment(Constants.SpindexerConstants.TICKS_360);
-//        }
-
-
-        if (gamepad1.dpadUpWasPressed()){
-//            robot.finger.fingerState = Finger.FingerState.UP;
-//            robot.finger.flickerTimer.reset();
-            robot.ramp.setRampUp();
-        } else if (gamepad1.dpadDownWasPressed()){
-//            robot.finger.fingerState = Finger.FingerState.DOWN;
-            robot.ramp.setRampUp();
-        }
-        if (gp2.isFirstLeftTrigger()){
-            robot.spindexer.SPINDEXER_TIME = 0;
-            robot.spindexer.setSpindexerTargetAdjustment(3);
-        } else if (gp2.isFirstRightTrigger()){
-            robot.spindexer.SPINDEXER_TIME = 0;
-            robot.spindexer.setSpindexerTargetAdjustment(-3);
-        }
-
-        if (gamepad2.dpadUpWasPressed()) {
-            robot.shooter.setShooterOff();
-        }
     }
 
-    private double calculateAngle() {
-        Vector2d redGoal = new Vector2d(-72, 72);
-        Math.atan2(redGoal.x, redGoal.y);
-        double dx = redGoal.x - robot.drive.localizer.getPose().position.x;
-        double dy = redGoal.y - robot.drive.localizer.getPose().position.y;
+    private void updateDriver2() {
 
-        double angle = Math.atan2(dy, dx);
-        return angle;
+        if (gp2.isFirstY()) {
+            robot.shooter.setShooterShootFar();
+        } else if (gp2.isFirstA()) {
+            robot.shooter.setShooterShootClose();
+        } else if (gp2.isFirstB()) {
+            robot.shooter.setShooterIdle();
+        } else if (gp2.isFirstX()) {
+            robot.shooter.setShooterOff();
+        }
+
+        if (gp2.isFirstLeftBumper()) {
+            robot.ramp.setRampUp();
+        } else if (gp2.isFirstLeftTrigger()) {
+            robot.ramp.setRampDown();
+        }
+
+        if (gp2.isFirstRightBumper()) {
+            robot.spindexer.setSpindexerTargetAdjustment(robot.limelight.ballTracker.getBestRotation());
+        }
+
+        if (gp2.isFirstDpadUp()) {
+            robot.spindexer.setSpindexerTargetAdjustment(5);
+        } else if (gp2.isFirstDpadDown()) {
+            robot.spindexer.setSpindexerTargetAdjustment(-5);
+        }
+
     }
 }
