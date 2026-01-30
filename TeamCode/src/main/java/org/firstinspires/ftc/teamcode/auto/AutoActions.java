@@ -9,16 +9,11 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.sun.tools.javac.comp.Todo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Collector;
-import org.firstinspires.ftc.teamcode.subsystems.Finger;
-import org.firstinspires.ftc.teamcode.subsystems.Shooter;
-import org.firstinspires.ftc.teamcode.subsystems.Spindexer;
-import org.firstinspires.ftc.teamcode.subsystems.sensors.Limelight;
 
 
 public class AutoActions {
@@ -96,19 +91,19 @@ public class AutoActions {
     // SPINDEXER
 
     public static Action moveSpindexer120() {
-        robot.limelight.ballTracker.rotated120();
+//        robot.limelight.ballTrackerNew.rotated120();
         return moveSpindexer(Constants.SpindexerConstants.TICKS_120);
     }
 
 
     public static Action moveSpindexer60() {
-        robot.limelight.ballTracker.rotated60();
+//        robot.limelight.ballTrackerNew.rotated60();
         return moveSpindexer(Constants.SpindexerConstants.TICKS_60);
     }
 
 
     public static Action moveSpindexer360() {
-        robot.limelight.ballTracker.rotated60();
+//        robot.limelight.ballTrackerNew.rotated60();
         return moveSpindexer(Constants.SpindexerConstants.TICKS_360);
     }
 
@@ -173,7 +168,7 @@ public class AutoActions {
     public static Action rampUp() {
         return new SequentialAction (
                 telemetryPacket -> {
-                    robot.ramp.setRampUp();
+//                    robot.ramp.setRampUp();
                     return false;
                 }
         );
@@ -181,7 +176,7 @@ public class AutoActions {
     public static Action rampDown() {
         return new SequentialAction (
                 telemetryPacket -> {
-                    robot.ramp.setRampDown();
+//                    robot.ramp.setRampDown();
                     return false;
                 }
         );
@@ -192,7 +187,7 @@ public class AutoActions {
     public static Action pivotClose() {
         return new SequentialAction (
                 telemetryPacket -> {
-                    robot.pivot.sePivotShootClose();
+//                    robot.pivot.sePivotShootClose();
                     return false;
                 }
         );
@@ -231,7 +226,7 @@ public class AutoActions {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 if (frist) {
-                    int rotationAmount = robot.limelight.ballTracker.getBestRotation();
+                    int rotationAmount = robot.limelight.ballTrackerNew.getBestRotation();
 
                     if (rotationAmount == 0) {
                         return false;
@@ -260,7 +255,7 @@ public class AutoActions {
             public boolean run(@NonNull TelemetryPacket packet) {
                 if (!triggered && Math.abs(robot.drive.localizer.getPose().position.y - targetY) < 2.0) {
                     robot.spindexer.setSpindexerTargetAdjustment(96);
-                    robot.limelight.ballTracker.rotated60();
+//                    robot.limelight.ballTrackerNew.rotated60();
                     triggered = true;
                 }
                 return !triggered;

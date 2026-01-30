@@ -105,12 +105,15 @@ public class OneWShooter implements Component {
                 targetVel = 0;
                 break;
             case SHOOT_FAR:
-                setBoth(Constants.ShooterConstants.FAR_SHOOT_VEL);
-                targetVel = Constants.ShooterConstants.FAR_SHOOT_VEL;
+//                setBoth(Constants.ShooterConstants.FAR_SHOOT_VEL);
+//                targetVel = Constants.ShooterConstants.FAR_SHOOT_VEL;
+
+                shooterMotorOne.setPower(0.8);
+                shooterMotorTwo.setPower(0.8);
                 break;
             case SHOOT_CLOSE:
-                setBoth(Constants.ShooterConstants.CLOSE_SHOOT_VEL);
-                targetVel = Constants.ShooterConstants.CLOSE_SHOOT_VEL;
+                shooterMotorOne.setPower(0.5);
+                shooterMotorTwo.setPower(0.5);
                 break;
             case IDLE:
                 shooterMotorOne.setPower(Constants.ShooterConstants.IDLE_POWER);
@@ -129,11 +132,16 @@ public class OneWShooter implements Component {
 
         telemetry.addData("shooter motor state", shooterState);
 
+
+
         currentVel1 = Math.abs(shooterMotorOne.getVelocity());
         currentVel2 = Math.abs(shooterMotorTwo.getVelocity());
 
         error1 = Math.abs(currentVel1 - targetVel);
         error2 = Math.abs(currentVel2 - targetVel);
+
+        telemetry.addData("Shooter Target", targetVel);
+        telemetry.addData("Shooter Current", shooterMotorOne.getVelocity());
 
 
     }

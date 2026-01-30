@@ -13,6 +13,10 @@ import org.firstinspires.ftc.teamcode.utils.GamepadTracker;
 import org.firstinspires.ftc.teamcode.utils.PIDController;
 
 /*
+
+
+
+
 TELEOP CONTROLS
 
 D1 – DRIVE / ACQUIRE (hands stay on sticks)
@@ -33,8 +37,47 @@ LB                : Ramp UP (tap)
 LT                : Ramp DOWN (tap)
 RB                : FIRE (tap)
 D-Pad U / D        : Spindexer fine + / - (tap)
-*/
-@TeleOp(name = "Competition Tele")
+
+WIRING ========================================
+Control:
+
+Motors:
+0: FL
+1: BL
+2: shooterMotorOne + encoder
+3: spindexerMotor + external encoder
+
+Servos:
+0: leftPark
+1:
+2:
+3:
+4:
+5: leftHood
+
+
+
+
+Expansion:
+0: FR
+1: BR
+2: shooterMotorTwo + encoder
+3: collectorMotor
+
+Servos:
+
+0: rightHood
+1:
+2:
+3:
+4:
+5: rightPark
+
+
+
+
+ */
+@TeleOp(name = "Potential Tele Yay")
 public class PotentialTele extends LinearOpMode {
     private GamepadTracker gp1;
     private GamepadTracker gp2;
@@ -110,11 +153,19 @@ public class PotentialTele extends LinearOpMode {
 
             telemetry.addLine("\n=== SUBSYSTEMS ===");
             telemetry.addData("Collector", robot.collector.collectorState);
-            telemetry.addData("Ramp", robot.ramp.rampState);
+//            telemetry.addData("Ramp", robot.ramp.rampState);
 
-            telemetry.addLine("\n=== MOTIF LOGIC ===");
-            telemetry.addData("List", robot.limelight.ballTracker.pos);
-            telemetry.addData("Target Motif", robot.limelight.ballTracker.targetMotif);
+//            telemetry.addData("R", robot.ballSensor.colorSensor.red());
+//            telemetry.addData("G", robot.ballSensor.colorSensor.green());
+//            telemetry.addData("B", robot.ballSensor.colorSensor.blue());
+//            telemetry.addData("Alpha", robot.ballSensor.colorSensor.alpha());
+
+            telemetry.addData("Detected Color", robot.ballSensor.detectColor());
+
+
+
+
+
 
             telemetry.update();
 
@@ -155,12 +206,12 @@ public class PotentialTele extends LinearOpMode {
 
         if (gp1.isFirstLeftBumper()) {
             robot.spindexer.SPINDEXER_TIME = 0;
-            robot.spindexer.setSpindexerTargetAdjustment(48);
-            robot.limelight.ballTracker.rotated60();
+            robot.spindexer.setSpindexerTargetAdjustment(Constants.SpindexerConstants.TICKS_120);
+//            robot.limelight.ballTrackerNew.rotated60();
         } else if (gp1.isFirstLeftTrigger()) {
             robot.spindexer.SPINDEXER_TIME = 0;
             robot.spindexer.setSpindexerTargetAdjustment(-48);
-            robot.limelight.ballTracker.rotatedNeg60();
+//            robot.limelight.ballTrackerNew.rotatedNeg60();
         }
 
     }
@@ -178,13 +229,13 @@ public class PotentialTele extends LinearOpMode {
         }
 
         if (gp2.isFirstLeftBumper()) {
-            robot.ramp.setRampUp();
+//            robot.ramp.setRampUp();
         } else if (gp2.isFirstLeftTrigger()) {
-            robot.ramp.setRampDown();
+//            robot.ramp.setRampDown();
         }
 
         if (gp2.isFirstRightBumper()) {
-            robot.spindexer.setSpindexerTargetAdjustment(robot.limelight.ballTracker.getBestRotation());
+            robot.spindexer.setSpindexerTargetAdjustment((robot.limelight.ballTrackerNew.getBestRotation()/Constants.SpindexerConstants.TICKS_360) * 8192);
         }
 
         if (gp2.isFirstDpadUp()) {

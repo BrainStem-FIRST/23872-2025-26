@@ -28,7 +28,8 @@ public class Spindexer implements Component {
 
     public enum SpindexerState {
         COLLECT,
-        OFF, SHOOT
+        MOVING,
+        NOT_MOVING,
     }
     public SpindexerState spindexerState;
 
@@ -37,6 +38,7 @@ public class Spindexer implements Component {
     private int curPos;
     private HardwareMap map;
     private Telemetry telemetry;
+
 
     public boolean indexerCued;
     private BrainSTEMRobot robot;
@@ -55,7 +57,7 @@ public class Spindexer implements Component {
                 0,
                 Constants.SpindexerConstants.INDEXER_KI
         );
-        spindexerState = SpindexerState.COLLECT;
+        spindexerState = SpindexerState.NOT_MOVING;
         spindexerTimer = new ElapsedTime();
         antijamTimer = new ElapsedTime();
         spindexerTimer.startTime();
@@ -75,6 +77,7 @@ public class Spindexer implements Component {
     }
 
     public void setSpindexerTargetAdjustment(int adjust) {
+
         spindexerPid.setTarget(spindexerPid.getTarget() + adjust);
     }
 
@@ -100,6 +103,14 @@ public class Spindexer implements Component {
         if (spindexerTimer.milliseconds() > SPINDEXER_TIME) {
             updateIndexerPosition();
         } else spindexerMotor.setPower(0);
+
+
+        switch (spindexerState) {
+            case MOVING:
+            case NOT_MOVING:
+            case COLLECT:
+
+        }
 
     }
 

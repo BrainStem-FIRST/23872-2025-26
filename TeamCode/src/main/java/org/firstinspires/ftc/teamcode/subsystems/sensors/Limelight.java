@@ -1,28 +1,23 @@
 package org.firstinspires.ftc.teamcode.subsystems.sensors;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.hardware.limelightvision.LLResultTypes;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
-import org.firstinspires.ftc.robotcore.internal.opmode.TelemetryImpl;
 import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
 import org.firstinspires.ftc.teamcode.utils.BallTracker;
+import org.firstinspires.ftc.teamcode.utils.BallTrackerNew;
 import org.firstinspires.ftc.teamcode.utils.Component;
-
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.limelightvision.LLResult;
 
 @Config
 public class Limelight implements Component {
-    public int pipeline = 1;
+    public int pipeline = 0;
     private Limelight3A limelight;
 
-    public BallTracker ballTracker;
+    public BallTrackerNew ballTrackerNew;
 
 
 
@@ -35,13 +30,14 @@ public class Limelight implements Component {
         limelight.start();
 
 
-       ballTracker = new BallTracker();
+       ballTrackerNew = new BallTrackerNew(robot.spindexer);
 
     }
 
 
     @Override
     public void update() {
+        ballTrackerNew.update();
         updateObeliskColors();
 
     }
@@ -66,13 +62,13 @@ public class Limelight implements Component {
         }
         switch(feducialResult){
             case(21):
-                ballTracker.targetMotif = ballTracker.motif3;
+                ballTrackerNew.targetMotif = ballTrackerNew.motif3;
                 break;
             case(22):
-                ballTracker.targetMotif = ballTracker.motif2;
+                ballTrackerNew.targetMotif = ballTrackerNew.motif2;
                 break;
             case(23):
-                ballTracker.targetMotif = ballTracker.motif1;
+                ballTrackerNew.targetMotif = ballTrackerNew.motif1;
                 break;
         }
     }

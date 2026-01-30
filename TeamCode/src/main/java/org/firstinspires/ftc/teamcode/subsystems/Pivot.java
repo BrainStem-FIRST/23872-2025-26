@@ -20,11 +20,11 @@ public class Pivot implements Component {
     public Pivot(HardwareMap hardwareMap, Telemetry telemetry){
 
 
-        leftServo = hardwareMap.get(Servo.class, "leftPivot");
-        rightServo = hardwareMap.get(Servo.class, "rightPivot");
+        leftServo = hardwareMap.get(Servo.class, "leftHood");
+        rightServo = hardwareMap.get(Servo.class, "rightHood");
 
-        leftServo.setDirection(Servo.Direction.FORWARD); // change
-        rightServo.setDirection(Servo.Direction.REVERSE); // change
+//        leftServo.setDirection(Servo.Direction.FORWARD); // change
+//        rightServo.setDirection(Servo.Direction.REVERSE); // change
 
     }
 
@@ -37,8 +37,12 @@ public class Pivot implements Component {
         rightServo.setPosition(goodTarR);
     }
 
-    public void sePivotShootClose(){ setPosition(0.25,0.25);} // change
-    public void setPivotShootFar() { setPosition(0.75,0.75);} // change
+    public void sePivotShootClose(){
+//        setPosition(0.25,0.25);
+    } // change
+    public void setPivotShootFar() {
+//        setPosition(0.75,0.75);
+    } // change
 
     @Override
     public void reset() {
@@ -55,5 +59,7 @@ public class Pivot implements Component {
         return "";
     }
 }
+
+
 
 

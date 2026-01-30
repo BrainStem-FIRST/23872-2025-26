@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -12,10 +13,11 @@ import org.firstinspires.ftc.teamcode.rr.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Collector;
 import org.firstinspires.ftc.teamcode.subsystems.OneWShooter;
 import org.firstinspires.ftc.teamcode.subsystems.Pivot;
-import org.firstinspires.ftc.teamcode.subsystems.Ramp;
+//import org.firstinspires.ftc.teamcode.subsystems.Ramp;
 import org.firstinspires.ftc.teamcode.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.subsystems.sensors.Limelight;
 import org.firstinspires.ftc.teamcode.utils.BallSensor;
+import org.firstinspires.ftc.teamcode.utils.BallTrackerNew;
 import org.firstinspires.ftc.teamcode.utils.Component;
 
 public class BrainSTEMRobot {
@@ -37,8 +39,11 @@ public class BrainSTEMRobot {
     public Limelight limelight;
     public BallSensor ballSensor;
     public Pivot pivot;
-    public Ramp ramp;
+//    public Ramp ramp;
     public OneWShooter shooter;
+
+    private boolean goodToMove = false;
+    private ElapsedTime moveDelayTimer = new ElapsedTime();
 
     public BrainSTEMRobot(HardwareMap hwMap, Telemetry telemetry, OpMode opMode, Pose2d startPose) {
 
@@ -52,7 +57,7 @@ public class BrainSTEMRobot {
         collector = new Collector(hwMap, telemetry);
 //        shooter = new Shooter(hwMap, telemetry);
         shooter = new OneWShooter(hwMap, telemetry);
-        ramp = new Ramp(hwMap, telemetry);
+//        ramp = new Ramp(hwMap, telemetry);
         pivot = new Pivot(hwMap, telemetry);
 //        finger = new Finger(hwMap, telemetry, this);
         limelight = new Limelight(hwMap, telemetry, this);
@@ -65,7 +70,7 @@ public class BrainSTEMRobot {
         subsystems.add(shooter);
 //        subsystems.add(finger);
 //        subsystems.add(shooterOne);
-        subsystems.add(ramp);
+//        subsystems.add(ramp);
         subsystems.add(pivot);
 
         // Defining the Motors
@@ -82,14 +87,54 @@ public class BrainSTEMRobot {
             limelight.update();
         }
 
-        String newBall = ballSensor.scanForNewBall();
+        boolean isMotorBusy = spindexer.spindexerMotor.isBusy();
 
-        if (spindexer.isStatic() && newBall != null) {
-            telemetry.addData("New Ball Detected", newBall);
-            limelight.ballTracker.addBall(newBall);
-//
-//            spindexer.setSpindexerTargetAdjustment(48);
-//            limelight.ballTracker.rotated60();
+        ballSensor.setIfIndexerIsMoving(isMotorBusy);
+
+
+
+        if (!goodToMove) {
+            String newBall = ballSensor.scanForNewBall();
+
+            if (newBall != null) {
+                limelight.ballTrackerNew.addBall(BallTrackerNew.BallColor.valueOf(newBall));
+                goodToMove = true;
+                moveDelayTimer.reset();
+            }
+        }
+
+
+
+        if (goodToMove && moveDelayTimer.milliseconds() > 500) {
+            // TODO: fine tune time
+            spindexer.setSpindexerTargetAdjustment(Constants.SpindexerConstants.TICKS_120);
+            goodToMove = false;
+        }
+
+
+        if (spindexer.spindexerMotor.isBusy() && Math.abs(spindexer.spindexerMotor.getCurrentPosition() - spindexer.spindexerMotor.getTargetPosition()) < 20) {
+
         }
     }
+
+    private void printBallStatus() {
+        BallTrackerNew ballTracker = limelight.ballTrackerNew;
+
+        telemetry.addLine("=== SPINDEXER SLoTs ++++++");
+        telemetry.addData("Slot A", ballTracker.slotA.color);
+        telemetry.addData("Slot B", ballTracker.slotB.color);
+        telemetry.addData("Slot C", ballTracker.slotC.color);
+
+
+        telemetry.addLine("=== PATTERN MATCHING ===");
+        telemetry.addData("Target Motif", ballTracker.targetMotif);
+        telemetry.addData("Feducial ID", Limelight.feducialResult);
+
+        telemetry.addLine("--- SENSOR STATE ---");
+        telemetry.addData("Is indexing?", spindexer.spindexerMotor.isBusy());
+        telemetry.addData("good to move?", goodToMove);
+
+        telemetry.update();
+    }
+
 }

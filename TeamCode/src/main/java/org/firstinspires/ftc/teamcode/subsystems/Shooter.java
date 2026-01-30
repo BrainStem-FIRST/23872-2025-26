@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -13,7 +14,7 @@ import org.firstinspires.ftc.teamcode.utils.PIDController;
 import org.firstinspires.ftc.teamcode.Constants;
 
 
-@Config
+@Disabled
 public class Shooter implements Component {
 
     private final Telemetry telemetry;
@@ -112,6 +113,7 @@ public class Shooter implements Component {
 //        shooterMotorTwo.setPower(shooterMotorOne.getPower());
 
 //        telemetry.addData("avg motor vel", avgMotorVel);
+
         telemetry.addData("shooter motor state", shooterState);
 
     }

@@ -194,12 +194,12 @@ public final class TuningOpModes {
                         PARAMS.maxProfileAccel,
                         encoderGroups,
                         Arrays.asList(
-                                md.leftFront,
-                                md.leftBack
+                                md.FL,
+                                md.BL
                         ),
                         Arrays.asList(
-                                md.rightFront,
-                                md.rightBack
+                                md.FR,
+                                md.BR
                         ),
                         leftEncs,
                         rightEncs,

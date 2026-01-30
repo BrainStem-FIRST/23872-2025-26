@@ -2,20 +2,13 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.SequentialAction;
-import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
-import org.firstinspires.ftc.teamcode.auto.AutoActions;
 import org.firstinspires.ftc.teamcode.subsystems.Collector;
-import org.firstinspires.ftc.teamcode.subsystems.Finger;
 import org.firstinspires.ftc.teamcode.utils.GamepadTracker;
 import org.firstinspires.ftc.teamcode.utils.PIDController;
 
@@ -176,17 +169,17 @@ public class MasterTele extends LinearOpMode {
         if (gamepad2.rightBumperWasPressed() || gamepad1.rightBumperWasPressed()) {
             robot.spindexer.SPINDEXER_TIME = 500;
             robot.spindexer.setSpindexerTargetAdjustment(48);
-            robot.limelight.ballTracker.rotated60();
+//            robot.limelight.ballTrackerNew.rotated60();
         } else if (gamepad2.leftBumperWasPressed() || gamepad1.leftBumperWasPressed()) {
             robot.spindexer.SPINDEXER_TIME = 500;
             robot.spindexer.setSpindexerTargetAdjustment(-48);
-            robot.limelight.ballTracker.rotatedNeg60();
+//            robot.limelight.ballTrackerNew.rotatedNeg60();
         }
 
         if (gamepad2.xWasPressed()) {
 //            robot.finger.fingerState = Finger.FingerState.UP;
 //            robot.finger.flickerTimer.reset();
-            robot.ramp.setRampUp();
+//            robot.ramp.setRampUp();
         }
 
 //        if (gamepad2.aWasPressed() && currentAction == null) {
@@ -218,10 +211,10 @@ public class MasterTele extends LinearOpMode {
         if (gamepad1.dpadUpWasPressed()){
 //            robot.finger.fingerState = Finger.FingerState.UP;
 //            robot.finger.flickerTimer.reset();
-            robot.ramp.setRampUp();
+//            robot.ramp.setRampUp();
         } else if (gamepad1.dpadDownWasPressed()){
 //            robot.finger.fingerState = Finger.FingerState.DOWN;
-            robot.ramp.setRampUp();
+//            robot.ramp.setRampUp();
         }
         if (gp2.isFirstLeftTrigger()){
             robot.spindexer.SPINDEXER_TIME = 0;

@@ -11,7 +11,6 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.SequentialAction;
-import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -65,7 +64,7 @@ public class HippoBlueClose extends LinearOpMode {
             public boolean run(@NonNull TelemetryPacket packet) {
                 if (!triggered && Math.abs(robot.drive.localizer.getPose().position.y - targetY) < 1.0) {
                     robot.spindexer.setSpindexerTargetAdjustment(Constants.SpindexerConstants.TICKS_120);
-                    robot.limelight.ballTracker.rotated120();
+//                    robot.limelight.ballTrackerNew.rotated120();
                     triggered = true;
                 }
                 return !triggered;

@@ -30,18 +30,19 @@ public class Constants {
 
 
         public static class SpindexerConstants {
+            // TODO: Update ticks for new encoder
 
             // PID Constants
-            public static double INDEXER_KP = 0.0188;
+            public static double INDEXER_KP = 0.0188/28;
             public static double INDEXER_KI = 0.0;
             public static final double INDEXER_KD = 0.0;
             public static double INDEXER_KF = 0.01;
 
             // Position Constants (ticks)
-            public static final int TICKS_120 = 96;
-            public static final int TICKS_60 = 48;
-            public static final int TICKS_360 = 288;
-            public static double ERROR_THRESHOLD = 5;
+            public static final int TICKS_120 = 96 * (8192/288);
+            public static final int TICKS_60 = 48* (8192/288);
+            public static final int TICKS_360 = 288 * (8192/288);
+            public static double ERROR_THRESHOLD = 5*(8192/288);
 
             // Limits
             public static double MAX_POWER = 0.6;
@@ -89,10 +90,14 @@ public class Constants {
     public static final class PivotConstants {
 
         // Servo Position
-        public static final int LEFT_DOWN_POS = 0; // change
-        public static final int LefT_UP_POS = 1; // change
 
-        public static final int RIGHT_DOWN_POS = 0; // change
+        // On Control hub
+        public static final int LEFT_DOWN_POS = 400; // change
+        public static final int LefT_UP_POS = 2400; // change
+
+
+        // On expansion hub
+        public static final int RIGHT_DOWN_POS = 2400; // change
         public static final int RIGHT_UP_POS = 1; // change
     }
 
