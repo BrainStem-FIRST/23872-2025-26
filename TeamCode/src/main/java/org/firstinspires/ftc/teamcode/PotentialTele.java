@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.utils.PIDController;
 
 TELEOP CONTROLS
 
-D1 – DRIVE / ACQUIRE (hands stay on sticks)
+D1 – DRIVE / ACQUIRE
 LS                : Drive
 RS                : Turn
 RB (hold)         : Intake ON
@@ -135,39 +135,7 @@ public class PotentialTele extends LinearOpMode {
             updateDriver1();
             updateDriver2();
 
-            telemetry.addLine("\n=== DRIVE ===");
-            telemetry.addData("Pose", robot.drive.localizer.getPose().toString());
-            telemetry.addData("Align Target", alignmentPID.getTarget());
 
-            telemetry.addLine("\n=== SHOOTER ===");
-            telemetry.addData("State", robot.shooter.shooterState);
-            telemetry.addData("Vel", robot.shooter.shooterMotorOne.getVelocity());
-            telemetry.addData("At Speed", Math.abs(robot.shooter.shooterMotorOne.getVelocity() - robot.shooter.targetVel) < 50);
-
-            telemetry.addLine("\n=== SPINDEXER ===");
-            telemetry.addData("State", robot.spindexer.spindexerState);
-            telemetry.addData("Position", robot.spindexer.getCurrentPosition());
-            telemetry.addData("Target", robot.spindexer.spindexerPid.getTarget());
-            telemetry.addData("Current (mA)", robot.spindexer.spindexerMotor.getCurrent(CurrentUnit.MILLIAMPS));
-            telemetry.addData("AntiJam Timer", robot.spindexer.antijamTimer);
-
-            telemetry.addLine("\n=== SUBSYSTEMS ===");
-            telemetry.addData("Collector", robot.collector.collectorState);
-//            telemetry.addData("Ramp", robot.ramp.rampState);
-
-//            telemetry.addData("R", robot.ballSensor.colorSensor.red());
-//            telemetry.addData("G", robot.ballSensor.colorSensor.green());
-//            telemetry.addData("B", robot.ballSensor.colorSensor.blue());
-//            telemetry.addData("Alpha", robot.ballSensor.colorSensor.alpha());
-
-            telemetry.addData("Detected Color", robot.ballSensor.detectColor());
-
-
-
-
-
-
-            telemetry.update();
 
         }
     }
@@ -205,21 +173,19 @@ public class PotentialTele extends LinearOpMode {
         }
 
         if (gp1.isFirstLeftBumper()) {
-            robot.spindexer.SPINDEXER_TIME = 0;
-            robot.spindexer.setSpindexerTargetAdjustment(Constants.SpindexerConstants.TICKS_120);
+
+            robot.spindexer.setSpindexerTargetAdjustment(Constants.spindexerConstants.TICKS_120);
 //            robot.limelight.ballTrackerNew.rotated60();
         } else if (gp1.isFirstLeftTrigger()) {
-            robot.spindexer.SPINDEXER_TIME = 0;
-            robot.spindexer.setSpindexerTargetAdjustment(-48);
-//            robot.limelight.ballTrackerNew.rotatedNeg60();
+
         }
 
     }
 
     private void updateDriver2() {
 
-        if (gp2.isFirstY()) {
-            robot.shooter.setShooterShootFar();
+        if (gamepad2.yWasPressed()) {
+            robot.shooter.shooterMotorOne.setPower(0.5);
         } else if (gp2.isFirstA()) {
             robot.shooter.setShooterShootClose();
         } else if (gp2.isFirstB()) {
@@ -229,19 +195,19 @@ public class PotentialTele extends LinearOpMode {
         }
 
         if (gp2.isFirstLeftBumper()) {
+
+            robot.pivot.setPivotShootClose();
 //            robot.ramp.setRampUp();
         } else if (gp2.isFirstLeftTrigger()) {
-//            robot.ramp.setRampDown();
+            robot.pivot.setPivotShootFar();
         }
 
         if (gp2.isFirstRightBumper()) {
-            robot.spindexer.setSpindexerTargetAdjustment((robot.limelight.ballTrackerNew.getBestRotation()/Constants.SpindexerConstants.TICKS_360) * 8192);
+            robot.spindexer.setSpindexerTargetAdjustment((robot.limelight.ballTrackerNew.getBestRotation()/Constants.spindexerConstants.TICKS_360) * 8192);
         }
 
         if (gp2.isFirstDpadUp()) {
-            robot.spindexer.setSpindexerTargetAdjustment(5);
-        } else if (gp2.isFirstDpadDown()) {
-            robot.spindexer.setSpindexerTargetAdjustment(-5);
+            robot.spindexer.setSpindexerTargetAdjustment(100);
         }
 
     }

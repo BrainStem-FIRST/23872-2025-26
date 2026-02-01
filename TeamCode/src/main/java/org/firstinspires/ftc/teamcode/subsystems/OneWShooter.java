@@ -64,24 +64,27 @@ public class OneWShooter implements Component {
         shooterMotorOne.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         shooterMotorTwo.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
 
+        shooterMotorOne.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        shooterMotorTwo.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+
         shooterMotorTwo.setDirection(DcMotorSimple.Direction.FORWARD); // change
-        shooterMotorOne.setDirection(DcMotorSimple.Direction.REVERSE); // change
+        shooterMotorOne.setDirection(DcMotorSimple.Direction.FORWARD); // change
 
         shooterMotorOne.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
         shooterMotorTwo.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
 //
-//        shooterPID = new PIDController(Constants.ShooterConstants.kP_ONE, Constants.ShooterConstants.kI, Constants.ShooterConstants.kD);
-//        shooterPID.setInputBounds(0, Constants.ShooterConstants.MAX_TICKS_PER_SEC);
-//        shooterPID.setOutputBounds(0,1);
+        shooterPID = new PIDController(Constants.ShooterConstants.kP_ONE, Constants.ShooterConstants.kI, Constants.ShooterConstants.kD);
+        shooterPID.setInputBounds(0, Constants.ShooterConstants.MAX_TICKS_PER_SEC);
+        shooterPID.setOutputBounds(0,1);
 
-        PIDFCoefficients newPIDF = new PIDFCoefficients(
-                Constants.ShooterConstants.kP_ONE,
-                Constants.ShooterConstants.kI,
-                Constants.ShooterConstants.kD,
-                Constants.ShooterConstants.kF
-        );
-        shooterMotorOne.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, newPIDF);
-        shooterMotorTwo.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, newPIDF);
+//        PIDFCoefficients newPIDF = new PIDFCoefficients(
+//                Constants.ShooterConstants.kP_ONE,
+//                Constants.ShooterConstants.kI,
+//                Constants.ShooterConstants.kD,
+//                Constants.ShooterConstants.kF
+//        );
+//        shooterMotorOne.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, newPIDF);
+//        shooterMotorTwo.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, newPIDF);
 
 
         this.shooterState = ShooterState.OFF;
@@ -105,15 +108,13 @@ public class OneWShooter implements Component {
                 targetVel = 0;
                 break;
             case SHOOT_FAR:
-//                setBoth(Constants.ShooterConstants.FAR_SHOOT_VEL);
-//                targetVel = Constants.ShooterConstants.FAR_SHOOT_VEL;
+                setBothMotorVelocities(Constants.ShooterConstants.FAR_SHOOT_VEL);
+                targetVel = Constants.ShooterConstants.FAR_SHOOT_VEL;
 
-                shooterMotorOne.setPower(0.8);
-                shooterMotorTwo.setPower(0.8);
                 break;
             case SHOOT_CLOSE:
-                shooterMotorOne.setPower(0.5);
-                shooterMotorTwo.setPower(0.5);
+                setBothMotorVelocities(Constants.ShooterConstants.CLOSE_SHOOT_VEL);
+                targetVel = Constants.ShooterConstants.CLOSE_SHOOT_VEL;
                 break;
             case IDLE:
                 shooterMotorOne.setPower(Constants.ShooterConstants.IDLE_POWER);
@@ -123,7 +124,8 @@ public class OneWShooter implements Component {
 
                 break;
             case AUTO:
-                setBoth(Constants.ShooterConstants.AUTO_VEL);
+                setBothMotorVelocities(Constants.ShooterConstants.CLOSE_SHOOT_VEL);
+                targetVel = Constants.ShooterConstants.CLOSE_SHOOT_VEL;
 
                 targetVel = Constants.ShooterConstants.AUTO_VEL;
                 break;
@@ -145,35 +147,35 @@ public class OneWShooter implements Component {
 
 
     }
-//    public void setBothMotorVelocities(double targetVelocity) {
-//        shooterPID.setTarget(targetVelocity);
-//        double error = targetVelocity - Math.abs(shooterMotorOne.getVelocity());
-//
-//        double pidOutput = shooterPID.updateWithError(error);
-//
-//        double shooterPower = pidOutput + Constants.ShooterConstants.kV1 * targetVelocity;
-//
-//        shooterPower = Range.clip(shooterPower, 0, Constants.ShooterConstants.MAX_POWER);
-//
-//        if (powerMotors) {
-//            shooterMotorOne.setPower(shooterPower);
-//            shooterMotorTwo.setPower(shooterPower);
-//        }
-//
-//        telemetry.addData("Shooter Target Vel", targetVelocity);
-//        telemetry.addData("shooter error 1", error);
-//        telemetry.addData("shooter motor one velocity", shooterMotorOne.getVelocity());
-//        telemetry.addData("shooter motor two velocity", shooterMotorTwo.getVelocity());
-//
-//        telemetry.addData("Shooter PID output 1", pidOutput);
-//        telemetry.addData("Shooter total output 1", shooterPower);
-//
-//        telemetry.addData("shooter one Power", shooterMotorOne.getPower());
-//        telemetry.addData("shooter two power", shooterMotorTwo.getPower());
-//
-//
-//
-//    }
+    public void setBothMotorVelocities(double targetVelocity) {
+        shooterPID.setTarget(targetVelocity);
+        double error = targetVelocity - Math.abs(shooterMotorOne.getVelocity());
+
+        double pidOutput = shooterPID.updateWithError(error);
+
+        double shooterPower = pidOutput + Constants.ShooterConstants.kV1 * targetVelocity;
+
+        shooterPower = Range.clip(shooterPower, 0, Constants.ShooterConstants.MAX_POWER);
+
+        if (powerMotors) {
+            shooterMotorOne.setPower(shooterPower);
+            shooterMotorTwo.setPower(shooterPower);
+        }
+
+        telemetry.addData("Shooter Target Vel", targetVelocity);
+        telemetry.addData("shooter error 1", error);
+        telemetry.addData("shooter motor one velocity", shooterMotorOne.getVelocity());
+        telemetry.addData("shooter motor two velocity", shooterMotorTwo.getVelocity());
+
+        telemetry.addData("Shooter PID output 1", pidOutput);
+        telemetry.addData("Shooter total output 1", shooterPower);
+
+        telemetry.addData("shooter one Power", shooterMotorOne.getPower());
+        telemetry.addData("shooter two power", shooterMotorTwo.getPower());
+
+
+
+    }
 
     public void setBoth(double power) {
         shooterMotorTwo.setVelocity(power);

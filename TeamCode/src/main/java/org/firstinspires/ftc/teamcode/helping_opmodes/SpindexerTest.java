@@ -30,7 +30,7 @@ public class SpindexerTest extends OpMode {
     public void runOpMode() throws InterruptedException {
         if (gamepad1.a) {
             robot.spindexer.SPINDEXER_TIME = 0;
-            robot.spindexer.setSpindexerTargetAdjustment(Constants.SpindexerConstants.TICKS_120);
+            robot.spindexer.setSpindexerTargetAdjustment(Constants.spindexerConstants.TICKS_120);
         }
 
     }

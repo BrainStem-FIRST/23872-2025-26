@@ -17,6 +17,9 @@ import org.firstinspires.ftc.teamcode.Constants;
 @Disabled
 public class Shooter implements Component {
 
+    // setMotorEnable to compensate for voltage
+    // write pidf stuff that accounts for voltage
+
     private final Telemetry telemetry;
 
     public static boolean powerMotors = true;
@@ -59,7 +62,7 @@ public class Shooter implements Component {
         shooterMotorOne.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         shooterMotorTwo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        shooterMotorTwo.setDirection(DcMotorSimple.Direction.REVERSE);
+//        shooterMotorTwo.setDirection(DcMotorSimple.Direction.REVERSE);
         shooterMotorOne.setDirection(DcMotorSimple.Direction.REVERSE);
 
         shooterMotorOne.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);

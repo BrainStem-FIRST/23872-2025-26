@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -18,13 +19,16 @@ import org.firstinspires.ftc.teamcode.Constants;
 @Config
 public class Spindexer implements Component {
 
-    public int SPINDEXER_TIME;
+    public int SPINDEXER_TIME = 0;
 
     private double previousVelocity = 0;
     private int lastGoodPosition = 0;
     public boolean isUnjamming = false;
     public ElapsedTime spindexerTimer;
     public ElapsedTime antijamTimer;
+
+    private boolean wasMoving = false;
+    public boolean justFinishedMoving = false;
 
     public enum SpindexerState {
         COLLECT,
@@ -47,33 +51,45 @@ public class Spindexer implements Component {
         this.telemetry = telemetry;
         this.robot = robot;
 
+
+
         spindexerMotor = map.get(DcMotorEx.class, "spindexerMotor");
         spindexerMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         spindexerMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         spindexerMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        spindexerMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
 
         spindexerPid = new PIDController(
-                Constants.SpindexerConstants.INDEXER_KP,
+                Constants.spindexerConstants.INDEXER_KP,
                 0,
-                Constants.SpindexerConstants.INDEXER_KI
+                Constants.spindexerConstants.INDEXER_KD
         );
         spindexerState = SpindexerState.NOT_MOVING;
         spindexerTimer = new ElapsedTime();
         antijamTimer = new ElapsedTime();
         spindexerTimer.startTime();
+
+        spindexerPid.setTarget(0);
     }
     public int getCurrentPosition() {
         return spindexerMotor.getCurrentPosition();
     }
-    public void updateIndexerPosition() {
-        if(isStatic())
+    public double updateIndexerPosition() {
+        double power = spindexerPid.update(spindexerMotor.getCurrentPosition());
+
+
+            power += Math.signum(power) * Constants.spindexerConstants.INDEXER_KF;
+
+        power = Range.clip(power, -Constants.spindexerConstants.MAX_POWER, Constants.spindexerConstants.MAX_POWER);
+
+        if (isStatic()) {
             spindexerMotor.setPower(0);
-        else {
-            double power = spindexerPid.update(spindexerMotor.getCurrentPosition());
-            power += Math.signum(power) * Constants.SpindexerConstants.INDEXER_KF;
-            power = Range.clip(power, -Constants.SpindexerConstants.MAX_POWER, Constants.SpindexerConstants.MAX_POWER);
-            spindexerMotor.setPower(power);
+        } else {
+            spindexerMotor.setPower(-power);
         }
+
+        return power;
     }
 
     public void setSpindexerTargetAdjustment(int adjust) {
@@ -90,7 +106,7 @@ public class Spindexer implements Component {
     public void update() {
         double error = spindexerMotor.getCurrentPosition() - spindexerPid.getTarget();
 
-        if ((Math.abs(spindexerMotor.getVelocity()) < Constants.SpindexerConstants.MIN_VEL_TO_START_CHECKING) && (Math.abs(error) > Constants.SpindexerConstants.MIN_ERROR_TO_START_CHECKING)){
+        if ((Math.abs(spindexerMotor.getVelocity()) < Constants.spindexerConstants.MIN_VEL_TO_START_CHECKING) && (Math.abs(error) > Constants.spindexerConstants.MIN_ERROR_TO_START_CHECKING)){
             isUnjamming = true;
         }
         else
@@ -100,25 +116,25 @@ public class Spindexer implements Component {
             antijamTimer.reset();
 
         updateIndexerPosition();
-        if (spindexerTimer.milliseconds() > SPINDEXER_TIME) {
-            updateIndexerPosition();
-        } else spindexerMotor.setPower(0);
 
 
-        switch (spindexerState) {
-            case MOVING:
-            case NOT_MOVING:
-            case COLLECT:
+        boolean isCurrentlyMoving = !isStatic();
+        justFinishedMoving = wasMoving && !isCurrentlyMoving;
+        wasMoving = isCurrentlyMoving;
 
+
+        if (isStatic()) {
+            spindexerState = SpindexerState.NOT_MOVING;
+        } else {
+            spindexerState = SpindexerState.MOVING;
         }
-
     }
 
     public double getError() {
         return Math.abs(spindexerMotor.getCurrentPosition() - spindexerPid.getTarget());
     }
     public boolean isStatic() {
-        return getError() < Constants.SpindexerConstants.ERROR_THRESHOLD;
+        return getError() < Constants.spindexerConstants.ERROR_THRESHOLD;
     }
     @Override
     public String test() {

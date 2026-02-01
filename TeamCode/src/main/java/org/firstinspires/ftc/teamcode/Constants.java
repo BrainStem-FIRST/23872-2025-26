@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Vector2d;
 
+@Config
 public class Constants {
-
         public static class ShooterConstants {
 
             // PID Constants
@@ -18,8 +19,8 @@ public class Constants {
 
             // Vel Targets (ticks per second)
             public static double AUTO_VEL = 300;
-            public static double FAR_SHOOT_VEL = 1060;
-            public static double CLOSE_SHOOT_VEL = 300;
+            public static double FAR_SHOOT_VEL = 1500;
+            public static double CLOSE_SHOOT_VEL = 1000;
 
             // Limits
             public static final double MAX_TICKS_PER_SEC = 2300;
@@ -29,29 +30,30 @@ public class Constants {
         }
 
 
+
         public static class SpindexerConstants {
             // TODO: Update ticks for new encoder
 
             // PID Constants
-            public static double INDEXER_KP = 0.0188/28;
-            public static double INDEXER_KI = 0.0;
-            public static final double INDEXER_KD = 0.0;
-            public static double INDEXER_KF = 0.01;
+            public double INDEXER_KP = 0.00055; //0.00018
+            public double INDEXER_KI = 0.0;
+            public double INDEXER_KD = 0.00002;
+            public double INDEXER_KF = 0.12;
 
             // Position Constants (ticks)
-            public static final int TICKS_120 = 96 * (8192/288);
-            public static final int TICKS_60 = 48* (8192/288);
-            public static final int TICKS_360 = 288 * (8192/288);
-            public static double ERROR_THRESHOLD = 5*(8192/288);
+            public int TICKS_120 = 96 * (8192/288);
+            public int TICKS_60 = 48* (8192/288);
+            public int TICKS_360 = 288 * (8192/288);
+            public double ERROR_THRESHOLD = 5*(8192/288);
 
             // Limits
-            public static double MAX_POWER = 0.6;
+            public double MAX_POWER = 0.5;
 
             // Anti-Jam Detection Constants
-            public static final double MIN_VEL_TO_START_CHECKING = 5;
-            public static final double MIN_ERROR_TO_START_CHECKING = 30;
+            public double MIN_VEL_TO_START_CHECKING = 5;
+            public double MIN_ERROR_TO_START_CHECKING = 30;
         }
-
+        public static SpindexerConstants spindexerConstants = new SpindexerConstants();
 
         public static class CollectorConstants {
             // Power Constants
@@ -91,6 +93,8 @@ public class Constants {
 
         // Servo Position
 
+        public static double DUAL_OFFSET = 0.02;
+
         // On Control hub
         public static final int LEFT_DOWN_POS = 400; // change
         public static final int LefT_UP_POS = 2400; // change
@@ -100,6 +104,8 @@ public class Constants {
         public static final int RIGHT_DOWN_POS = 2400; // change
         public static final int RIGHT_UP_POS = 1; // change
     }
+
+    public static PivotConstants pivotConstants = new PivotConstants();
 
     public static class DriveConstants {
 

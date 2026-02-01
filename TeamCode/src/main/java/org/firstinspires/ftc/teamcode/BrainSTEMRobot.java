@@ -9,6 +9,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.util.ArrayList;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.rr.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Collector;
 import org.firstinspires.ftc.teamcode.subsystems.OneWShooter;
@@ -43,7 +44,11 @@ public class BrainSTEMRobot {
     public OneWShooter shooter;
 
     private boolean goodToMove = false;
-    private ElapsedTime moveDelayTimer = new ElapsedTime();
+    private BallTrackerNew.BallColor detectedColor;
+    private ElapsedTime ballDetectTimer = new ElapsedTime();
+
+
+    private boolean checkingColorAfterMovingSpind = false;
 
     public BrainSTEMRobot(HardwareMap hwMap, Telemetry telemetry, OpMode opMode, Pose2d startPose) {
 
@@ -77,6 +82,7 @@ public class BrainSTEMRobot {
         drive = new MecanumDrive(hwMap,startPose);
     }
 
+
     public void update() {
         for (Component c : subsystems) {
             c.update();
@@ -87,37 +93,62 @@ public class BrainSTEMRobot {
             limelight.update();
         }
 
+        // GIVE SPIND STATE TO BALL SENSOR
         boolean isMotorBusy = spindexer.spindexerMotor.isBusy();
-
         ballSensor.setIfIndexerIsMoving(isMotorBusy);
 
-
-
-        if (!goodToMove) {
+        // DETECT BALL IF SPIND IS NOT MOVING
+        if (!isMotorBusy && !goodToMove) {
             String newBall = ballSensor.scanForNewBall();
-
-            if (newBall != null) {
-                limelight.ballTrackerNew.addBall(BallTrackerNew.BallColor.valueOf(newBall));
+            if (newBall != null && !newBall.equals("EMPTY")) {
+                detectedColor = BallTrackerNew.BallColor.valueOf(newBall);
                 goodToMove = true;
-                moveDelayTimer.reset();
+                ballDetectTimer.reset();
             }
         }
 
-
-
-        if (goodToMove && moveDelayTimer.milliseconds() > 500) {
-            // TODO: fine tune time
-            spindexer.setSpindexerTargetAdjustment(Constants.SpindexerConstants.TICKS_120);
+        // ADD BALL TO BALL TRACK + MOVE SPINDEXER (THIS CAN BE REMOVED)
+        // TODO: fine tune settle time
+        if (goodToMove && ballDetectTimer.milliseconds() > 50) {
+            limelight.ballTrackerNew.addBall(detectedColor);
+            spindexer.setSpindexerTargetAdjustment(Constants.spindexerConstants.TICKS_120);
             goodToMove = false;
+            detectedColor = null;
         }
 
 
-        if (spindexer.spindexerMotor.isBusy() && Math.abs(spindexer.spindexerMotor.getCurrentPosition() - spindexer.spindexerMotor.getTargetPosition()) < 20) {
 
+
+        // CHECK IF SPINDEXER JUST FINISHED MOVING!!! ========================================================
+
+        if (spindexer.justFinishedMoving) {
+            checkingColorAfterMovingSpind = true;
         }
+
+        // CHECK COLOR AFTER MOVEMENT!!! ======================================================== AhHHHh
+        if (checkingColorAfterMovingSpind) {
+            String colorAfterMovingSpind = ballSensor.checkColorAfterMovement();
+
+            if (colorAfterMovingSpind != null) {
+                checkingColorAfterMovingSpind = false;
+
+                telemetry.addData("after movement clr", colorAfterMovingSpind);
+                if (colorAfterMovingSpind.equals("EMPTY")) {
+
+                    telemetry.addLine("empty");
+                } else {
+
+                    telemetry.addData("not empty!? ball color", colorAfterMovingSpind);
+                }
+            }
+        }
+
+        // TELEMETRY ===============================================================================
+        allTelemetry();
+        telemetry.update();
     }
 
-    private void printBallStatus() {
+    private void allTelemetry() {
         BallTrackerNew ballTracker = limelight.ballTrackerNew;
 
         telemetry.addLine("=== SPINDEXER SLoTs ++++++");
@@ -134,7 +165,42 @@ public class BrainSTEMRobot {
         telemetry.addData("Is indexing?", spindexer.spindexerMotor.isBusy());
         telemetry.addData("good to move?", goodToMove);
 
-        telemetry.update();
+        telemetry.addLine("\n=== DRIVE ===");
+        telemetry.addData("Pose", drive.localizer.getPose().toString());
+
+        telemetry.addLine("\n=== SHOOTER ===");
+        telemetry.addData("State", shooter.shooterState);
+        telemetry.addData("Vel", shooter.shooterMotorOne.getVelocity());
+        telemetry.addData("At Speed", Math.abs(shooter.shooterMotorOne.getVelocity() - shooter.targetVel) < 50);
+        telemetry.addData("Giving power", shooter.shooterMotorOne.getPower());
+
+        telemetry.addLine("\n=== SPINDEXER ===");
+        telemetry.addData("State", spindexer.spindexerState);
+        telemetry.addData("Position", spindexer.getCurrentPosition());
+        telemetry.addData("Target", spindexer.spindexerPid.getTarget());
+        telemetry.addData("Current (mA)", spindexer.spindexerMotor.getCurrent(CurrentUnit.MILLIAMPS));
+        telemetry.addData("AntiJam Timer", spindexer.antijamTimer);
+        telemetry.addData("Power giving - PID", spindexer.updateIndexerPosition());
+        telemetry.addData("Power giving - MOTOR", spindexer.spindexerMotor.getPower());
+
+        telemetry.addData("PIVOT left pos", pivot.getLeftPos());
+        telemetry.addData("pIVOT right pos", pivot.getRightPos());
+
+
+        telemetry.addLine("\n=== SUBSYSTEMS ===");
+        telemetry.addData("Collector", collector.collectorState);
+//            telemetry.addData("Ramp", robot.ramp.rampState);
+
+        telemetry.addData("R", ballSensor.rPercent);
+        telemetry.addData("G", ballSensor.gPercent);
+        telemetry.addData("B", ballSensor.bPercent);
+
+        telemetry.addData("Detected Color", ballSensor.detectColor());
+
+
+
+
+
     }
 
 }

@@ -204,7 +204,7 @@ public class MasterTele extends LinearOpMode {
 //        if (gamepad2.aWasPressed()) {
 //            robot.spindexer.setSpindexerTargetAdjustment(robot.limelight.ballTracker.getBestRotation());
 //            robot.ramp.setRampUp();
-//            robot.spindexer.setSpindexerTargetAdjustment(Constants.SpindexerConstants.TICKS_360);
+//            robot.spindexer.setSpindexerTargetAdjustment(Constants.spindexerConstants.TICKS_360);
 //        }
 
 

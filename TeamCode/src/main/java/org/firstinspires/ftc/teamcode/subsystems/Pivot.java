@@ -2,7 +2,9 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Const;
@@ -13,9 +15,10 @@ import org.firstinspires.ftc.teamcode.utils.Component;
 
 @Config
 public class Pivot implements Component {
-
+    public static boolean activateLeft = true, activateRight = false;
     private Servo leftServo;
     private Servo rightServo;
+    public static int leftLower = 2367, leftHigher = 483, rightLower = 533, rightHigher = 2450;
 
     public Pivot(HardwareMap hardwareMap, Telemetry telemetry){
 
@@ -23,8 +26,27 @@ public class Pivot implements Component {
         leftServo = hardwareMap.get(Servo.class, "leftHood");
         rightServo = hardwareMap.get(Servo.class, "rightHood");
 
-//        leftServo.setDirection(Servo.Direction.FORWARD); // change
-//        rightServo.setDirection(Servo.Direction.REVERSE); // change
+        ServoImplEx leftServoEx = (ServoImplEx) leftServo;
+        ServoImplEx rightServoEx = (ServoImplEx) rightServo;
+
+
+        PwmControl.PwmRange axonRange = new PwmControl.PwmRange(leftLower, leftHigher);
+        leftServoEx.setPwmRange(axonRange);
+        rightServoEx.setPwmRange(new PwmControl.PwmRange(rightLower, rightHigher));
+
+
+
+    }
+
+    public void setDualServoPosition(double position) {
+
+//        leftServo.setPosition(Range.clip(position + Constants.PivotConstants.DUAL_OFFSET, 0, 1));
+        if(activateLeft)
+            leftServo.setPosition(position);
+        if(activateRight)
+            rightServo.setPosition(position);
+
+//        rightServo.setPosition(1.0 - position);
 
     }
 
@@ -36,12 +58,17 @@ public class Pivot implements Component {
         leftServo.setPosition(goodTarL);
         rightServo.setPosition(goodTarR);
     }
-
-    public void sePivotShootClose(){
-//        setPosition(0.25,0.25);
-    } // change
+    public double getLeftPos() {
+        return leftServo.getPosition();
+    }
+    public double getRightPos() {
+        return rightServo.getPosition();
+    }
+    public void setPivotShootClose(){
+        setDualServoPosition(0.25);
+    }
     public void setPivotShootFar() {
-//        setPosition(0.75,0.75);
+        setDualServoPosition(0.75);
     } // change
 
     @Override

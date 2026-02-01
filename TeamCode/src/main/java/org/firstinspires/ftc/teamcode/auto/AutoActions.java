@@ -92,19 +92,19 @@ public class AutoActions {
 
     public static Action moveSpindexer120() {
 //        robot.limelight.ballTrackerNew.rotated120();
-        return moveSpindexer(Constants.SpindexerConstants.TICKS_120);
+        return moveSpindexer(Constants.spindexerConstants.TICKS_120);
     }
 
 
     public static Action moveSpindexer60() {
 //        robot.limelight.ballTrackerNew.rotated60();
-        return moveSpindexer(Constants.SpindexerConstants.TICKS_60);
+        return moveSpindexer(Constants.spindexerConstants.TICKS_60);
     }
 
 
     public static Action moveSpindexer360() {
 //        robot.limelight.ballTrackerNew.rotated60();
-        return moveSpindexer(Constants.SpindexerConstants.TICKS_360);
+        return moveSpindexer(Constants.spindexerConstants.TICKS_360);
     }
 
     public static Action moveSpindexerALittle() {
