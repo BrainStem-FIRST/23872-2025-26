@@ -82,7 +82,7 @@ public class MinBlueClose extends LinearOpMode {
             @Override
             public boolean run(TelemetryPacket packet) {
                 if (!triggered && Math.abs(robot.drive.localizer.getPose().position.y - targetY) < 2.0) {
-                    robot.spindexer.setSpindexerTargetAdjustment(80);
+                    robot.spindexer.setTargetAdj(80);
                     triggered = true;
                 }
                 return !triggered;

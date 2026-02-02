@@ -71,7 +71,7 @@ public class BallTrackerNew {
     public void setSlotClr(Slot slot, BallColor color) {
         slot.color = color;
     }
-    public Slot getSlotAtShottingPos() {
+    public Slot getSlotAtShootingPos() {
         if (slotA.currentAbsPos < 2830 && slotA.currentAbsPos > 2630) return slotA;
         if (slotB.currentAbsPos < 2830 && slotB.currentAbsPos > 2630) return slotB;
         return slotC;
@@ -81,6 +81,14 @@ public class BallTrackerNew {
         if (slotA.currentAbsPos < 100 || slotA.currentAbsPos > 8092) return slotA;
         if (slotB.currentAbsPos < 100 || slotB.currentAbsPos > 8092) return slotB;
         return slotC;
+    }
+
+    public Slot getSlotAtEndPost() {
+        if (slotA.currentAbsPos < 100 || slotA.currentAbsPos > 8092) return slotA;
+        if (slotB.currentAbsPos < 100 || slotB.currentAbsPos > 8092) return slotB;
+        return slotC;
+
+        // CHANGE
     }
 
 

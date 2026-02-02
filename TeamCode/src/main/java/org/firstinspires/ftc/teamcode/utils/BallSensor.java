@@ -52,9 +52,9 @@ public class BallSensor {
 
     public String scanForNewBall() {
 
-//        if (isIndexing) {
-//            return null;
-//        }
+        if (isIndexing) {
+            return null;
+        }
 
         boolean currentBeamState = beamBreak.getState(); // note false is broken
 

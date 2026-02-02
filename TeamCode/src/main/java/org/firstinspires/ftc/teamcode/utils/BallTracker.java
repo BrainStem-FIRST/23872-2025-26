@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Queue;
-
+@Deprecated
 public class BallTracker {
     // HAS TO BE IN SHOOT POS BEFORE
     //only tracks state - to be tested

@@ -63,7 +63,7 @@ public class HippoBlueClose extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 if (!triggered && Math.abs(robot.drive.localizer.getPose().position.y - targetY) < 1.0) {
-                    robot.spindexer.setSpindexerTargetAdjustment(Constants.spindexerConstants.TICKS_120);
+                    robot.spindexer.setTargetAdj(Constants.spindexerConstants.TICKS_120);
 //                    robot.limelight.ballTrackerNew.rotated120();
                     triggered = true;
                 }

@@ -68,12 +68,12 @@ public class Shooter implements Component {
         shooterMotorOne.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
         shooterMotorTwo.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
 
-        shooterPID1 = new PIDController(Constants.ShooterConstants.kP_ONE, Constants.ShooterConstants.kI, Constants.ShooterConstants.kD);
-        shooterPID1.setInputBounds(0, Constants.ShooterConstants.MAX_TICKS_PER_SEC);
+        shooterPID1 = new PIDController(Constants.shooterConstants.kP_ONE, Constants.shooterConstants.kI, Constants.shooterConstants.kD);
+        shooterPID1.setInputBounds(0, Constants.shooterConstants.MAX_TICKS_PER_SEC);
         shooterPID1.setOutputBounds(0,1);
 
-        shooterPID2 = new PIDController(Constants.ShooterConstants.kP_TWO, Constants.ShooterConstants.kI, Constants.ShooterConstants.kD);
-        shooterPID2.setInputBounds(0, Constants.ShooterConstants.MAX_TICKS_PER_SEC);
+        shooterPID2 = new PIDController(Constants.shooterConstants.kP_TWO, Constants.shooterConstants.kI, Constants.shooterConstants.kD);
+        shooterPID2.setInputBounds(0, Constants.shooterConstants.MAX_TICKS_PER_SEC);
         shooterPID2.setOutputBounds(0,1);
 
         this.shooterState = ShooterState.OFF;
@@ -97,18 +97,18 @@ public class Shooter implements Component {
                 shooterMotorTwo.setPower(0);
                 break;
             case SHOOT_FAR:
-                setBothMotorVelocities(Constants.ShooterConstants.FAR_SHOOT_VEL);
+                setBothMotorVelocities(Constants.shooterConstants.FAR_SHOOT_VEL);
                 break;
             case SHOOT_CLOSE:
-                setBothMotorVelocities(Constants.ShooterConstants.CLOSE_SHOOT_VEL);
+                setBothMotorVelocities(Constants.shooterConstants.CLOSE_SHOOT_VEL);
                 break;
             case IDLE:
-                shooterMotorOne.setPower(Constants.ShooterConstants.IDLE_POWER);
-                shooterMotorTwo.setPower(Constants.ShooterConstants.IDLE_POWER);
+                shooterMotorOne.setPower(Constants.shooterConstants.IDLE_POWER);
+                shooterMotorTwo.setPower(Constants.shooterConstants.IDLE_POWER);
 
                 break;
             case AUTO:
-                setBothMotorVelocities(Constants.ShooterConstants.AUTO_VEL);
+                setBothMotorVelocities(Constants.shooterConstants.AUTO_VEL);
                 break;
 
         }
@@ -129,11 +129,11 @@ public class Shooter implements Component {
         double pidOutput1 = shooterPID1.updateWithError(error1);
         double pidOutput2 = shooterPID2.updateWithError(error2);
 
-        double shooterOnePower = pidOutput1 + Constants.ShooterConstants.kV1 * targetVelocity;
-        double shooterTwoPower = pidOutput2 + Constants.ShooterConstants.kV2 * targetVelocity;
+        double shooterOnePower = pidOutput1 + Constants.shooterConstants.kV1 * targetVelocity;
+        double shooterTwoPower = pidOutput2 + Constants.shooterConstants.kV2 * targetVelocity;
 
-        shooterOnePower = Range.clip(shooterOnePower, 0, Constants.ShooterConstants.MAX_POWER);
-        shooterTwoPower = Range.clip(shooterTwoPower, 0, Constants.ShooterConstants.MAX_POWER);
+        shooterOnePower = Range.clip(shooterOnePower, 0, Constants.shooterConstants.MAX_POWER);
+        shooterTwoPower = Range.clip(shooterTwoPower, 0, Constants.shooterConstants.MAX_POWER);
 
         if (powerMotors) {
             shooterMotorOne.setPower(shooterOnePower);

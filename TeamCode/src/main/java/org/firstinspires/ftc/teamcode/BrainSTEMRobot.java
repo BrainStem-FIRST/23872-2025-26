@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Collector;
 import org.firstinspires.ftc.teamcode.subsystems.OneWShooter;
 import org.firstinspires.ftc.teamcode.subsystems.Pivot;
 //import org.firstinspires.ftc.teamcode.subsystems.Ramp;
+import org.firstinspires.ftc.teamcode.subsystems.Ramp;
 import org.firstinspires.ftc.teamcode.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.subsystems.sensors.Limelight;
 import org.firstinspires.ftc.teamcode.utils.BallSensor;
@@ -33,19 +34,19 @@ public class BrainSTEMRobot {
     private final ArrayList<Component> subsystems;
     public Spindexer spindexer;
     public Collector collector;
-//    public Shooter shooter;
-//    public Finger finger;
     public MecanumDrive drive;
 
     public Limelight limelight;
     public BallSensor ballSensor;
     public Pivot pivot;
-//    public Ramp ramp;
+    public Ramp ramp;
     public OneWShooter shooter;
 
     private boolean goodToMove = false;
     private BallTrackerNew.BallColor detectedColor;
     private ElapsedTime ballDetectTimer = new ElapsedTime();
+
+    public boolean isSpindStopped;
 
 
     private boolean checkingColorAfterMovingSpind = false;
@@ -60,11 +61,9 @@ public class BrainSTEMRobot {
 
         spindexer = new Spindexer(hwMap, telemetry, this);
         collector = new Collector(hwMap, telemetry);
-//        shooter = new Shooter(hwMap, telemetry);
         shooter = new OneWShooter(hwMap, telemetry);
-//        ramp = new Ramp(hwMap, telemetry);
+        ramp = new Ramp(hwMap, telemetry);
         pivot = new Pivot(hwMap, telemetry);
-//        finger = new Finger(hwMap, telemetry, this);
         limelight = new Limelight(hwMap, telemetry, this);
 
 
@@ -75,7 +74,7 @@ public class BrainSTEMRobot {
         subsystems.add(shooter);
 //        subsystems.add(finger);
 //        subsystems.add(shooterOne);
-//        subsystems.add(ramp);
+        subsystems.add(ramp);
         subsystems.add(pivot);
 
         // Defining the Motors
@@ -94,11 +93,11 @@ public class BrainSTEMRobot {
         }
 
         // GIVE SPIND STATE TO BALL SENSOR
-        boolean isMotorBusy = spindexer.spindexerMotor.isBusy();
-        ballSensor.setIfIndexerIsMoving(isMotorBusy);
+        isSpindStopped = (Math.abs(spindexer.spindexerPid.getTarget() - spindexer.spindexerMotor.getCurrentPosition())) < 150; // change val
+        ballSensor.setIfIndexerIsMoving(!isSpindStopped);
 
         // DETECT BALL IF SPIND IS NOT MOVING
-        if (!isMotorBusy && !goodToMove) {
+        if (isSpindStopped && !goodToMove) {
             String newBall = ballSensor.scanForNewBall();
             if (newBall != null && !newBall.equals("EMPTY")) {
                 detectedColor = BallTrackerNew.BallColor.valueOf(newBall);
@@ -107,11 +106,11 @@ public class BrainSTEMRobot {
             }
         }
 
-        // ADD BALL TO BALL TRACK + MOVE SPINDEXER (THIS CAN BE REMOVED)
+        // ADD BALL TO BALL TRACK + MOVE SPINDEXER (CAN BE REMOVED)
         // TODO: fine tune settle time
         if (goodToMove && ballDetectTimer.milliseconds() > 50) {
             limelight.ballTrackerNew.addBall(detectedColor);
-            spindexer.setSpindexerTargetAdjustment(Constants.spindexerConstants.TICKS_120);
+//            spindexer.setTargetAdj(Constants.spindexerConstants.TICKS_120);
             goodToMove = false;
             detectedColor = null;
         }
@@ -123,6 +122,8 @@ public class BrainSTEMRobot {
 
         if (spindexer.justFinishedMoving) {
             checkingColorAfterMovingSpind = true;
+
+            spindexer.justFinishedMoving = false;
         }
 
         // CHECK COLOR AFTER MOVEMENT!!! ======================================================== AhHHHh
@@ -162,7 +163,7 @@ public class BrainSTEMRobot {
         telemetry.addData("Feducial ID", Limelight.feducialResult);
 
         telemetry.addLine("--- SENSOR STATE ---");
-        telemetry.addData("Is indexing?", spindexer.spindexerMotor.isBusy());
+        telemetry.addData("Is indexing?", !isSpindStopped);
         telemetry.addData("good to move?", goodToMove);
 
         telemetry.addLine("\n=== DRIVE ===");

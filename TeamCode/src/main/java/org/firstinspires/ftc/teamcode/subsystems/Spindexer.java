@@ -9,7 +9,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
 import org.firstinspires.ftc.teamcode.utils.Component;
 import org.firstinspires.ftc.teamcode.utils.PIDController;
@@ -18,6 +17,7 @@ import org.firstinspires.ftc.teamcode.Constants;
 
 @Config
 public class Spindexer implements Component {
+    public static double maxPowerErrorThreshold = 1000, maxPower = -0.99;
 
     public int SPINDEXER_TIME = 0;
 
@@ -57,7 +57,6 @@ public class Spindexer implements Component {
         spindexerMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         spindexerMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         spindexerMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        spindexerMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
         spindexerPid = new PIDController(
@@ -76,23 +75,32 @@ public class Spindexer implements Component {
         return spindexerMotor.getCurrentPosition();
     }
     public double updateIndexerPosition() {
-        double power = spindexerPid.update(spindexerMotor.getCurrentPosition());
-
-
+        int curPos = spindexerMotor.getCurrentPosition();
+        double power = spindexerPid.update(curPos);
+        double error = Math.abs(curPos - spindexerPid.getTarget());
+        if (error > maxPowerErrorThreshold) {
+            spindexerMotor.setPower(maxPower * Math.signum(power));
+        } else {
             power += Math.signum(power) * Constants.spindexerConstants.INDEXER_KF;
 
-        power = Range.clip(power, -Constants.spindexerConstants.MAX_POWER, Constants.spindexerConstants.MAX_POWER);
+            power = Range.clip(power, -Constants.spindexerConstants.MAX_POWER, Constants.spindexerConstants.MAX_POWER);
 
-        if (isStatic()) {
-            spindexerMotor.setPower(0);
-        } else {
-            spindexerMotor.setPower(-power);
+            if (isStatic()) {
+                spindexerMotor.setPower(0);
+            } else {
+                spindexerMotor.setPower(-power);
+            }
         }
+
+
+
+
+
 
         return power;
     }
 
-    public void setSpindexerTargetAdjustment(int adjust) {
+    public void setTargetAdj(int adjust) {
 
         spindexerPid.setTarget(spindexerPid.getTarget() + adjust);
     }

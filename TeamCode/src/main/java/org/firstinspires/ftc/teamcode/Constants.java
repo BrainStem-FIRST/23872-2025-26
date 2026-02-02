@@ -3,31 +3,35 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Vector2d;
 
+import org.firstinspires.ftc.teamcode.subsystems.Ramp;
+
 @Config
 public class Constants {
         public static class ShooterConstants {
 
             // PID Constants
             // TODO: Tune for built in PID
-            public static double kP_ONE = 0.001;
-            public static  double kP_TWO = 0.001;
-            public static double kI = 0.0;
-            public static double kD = 0.000;
-            public static double kF = 0.0;
-            public static double kV1 = 0.00049;
-            public static double kV2 = 0.00044;
+            public  double kP_ONE = 0.0003;
+            public   double kP_TWO = 0.0003;
+            public  double kI = 0.0;
+            public  double kD = 0.0001;
+            public  double kF = 0.0;
+            public  double kV1 = 0.000115;
+            public  double kV2 = 0.000115;
 
             // Vel Targets (ticks per second)
-            public static double AUTO_VEL = 300;
-            public static double FAR_SHOOT_VEL = 1500;
-            public static double CLOSE_SHOOT_VEL = 1000;
+            public  double AUTO_VEL = 300;
+            public  double FAR_SHOOT_VEL = 1000;
+            public  double CLOSE_SHOOT_VEL = 1000;
 
             // Limits
-            public static final double MAX_TICKS_PER_SEC = 2300;
-            public static final double IDLE_POWER = 0.2;
-            public static final double MAX_POWER = 0.99;
+            public  double MAX_TICKS_PER_SEC = 2300;
+            public   double IDLE_POWER = 0.2;
+            public   double MAX_POWER = 0.99;
 
         }
+        
+        public static ShooterConstants shooterConstants = new ShooterConstants();
 
 
 
@@ -35,7 +39,7 @@ public class Constants {
             // TODO: Update ticks for new encoder
 
             // PID Constants
-            public double INDEXER_KP = 0.00055; //0.00018
+            public double INDEXER_KP = 0.0011; //0.00055
             public double INDEXER_KI = 0.0;
             public double INDEXER_KD = 0.00002;
             public double INDEXER_KF = 0.12;
@@ -57,7 +61,7 @@ public class Constants {
 
         public static class CollectorConstants {
             // Power Constants
-            public static double INTAKE_POWER = 0.95;
+            public static double INTAKE_POWER = 0.99;
             public static double EXTAKE_POWER = -0.8;
             public static double AUTO_POWER = 0.77;
             public static final double OFF_POWER = 0.0;
@@ -81,19 +85,20 @@ public class Constants {
          public static final class RampConstants {
 
         // Servo PWM Range
-        public static final int DOWN_PWM = 837; // change
-        public static final int UP_PWM = 1258; // change
+        public int DOWN_PWM = 100;
+        public int UP_PWM = 2550;
 
         // Servo Position
-        public static final double DOWN_POSITION = 0.07; // change
-        public static final double UP_POSITION = 0.99; // change
+        public double DOWN_POSITION = 0.99; // change
+        public double UP_POSITION = 0.9; // change
     }
+
+    public static RampConstants rampConstants = new RampConstants();
 
     public static final class PivotConstants {
 
         // Servo Position
 
-        public static double DUAL_OFFSET = 0.02;
 
         // On Control hub
         public static final int LEFT_DOWN_POS = 400; // change

@@ -43,6 +43,7 @@ public class OneWShooter implements Component {
 
     public double error1;
     public double error2;
+    
 
 
     public enum ShooterState {
@@ -61,27 +62,30 @@ public class OneWShooter implements Component {
         shooterMotorOne = hardwareMap.get(DcMotorEx.class, "shooterMotorOne");
         shooterMotorTwo = hardwareMap.get(DcMotorEx.class, "shooterMotorTwo");
 
+
+
         shooterMotorOne.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         shooterMotorTwo.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
 
-        shooterMotorOne.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        shooterMotorOne.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         shooterMotorTwo.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
-        shooterMotorTwo.setDirection(DcMotorSimple.Direction.FORWARD); // change
-        shooterMotorOne.setDirection(DcMotorSimple.Direction.FORWARD); // change
+        shooterMotorTwo.setDirection(DcMotorSimple.Direction.FORWARD);
+        shooterMotorOne.setDirection(DcMotorSimple.Direction.FORWARD);
 
         shooterMotorOne.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
         shooterMotorTwo.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
+
 //
-        shooterPID = new PIDController(Constants.ShooterConstants.kP_ONE, Constants.ShooterConstants.kI, Constants.ShooterConstants.kD);
-        shooterPID.setInputBounds(0, Constants.ShooterConstants.MAX_TICKS_PER_SEC);
+        shooterPID = new PIDController(Constants.shooterConstants.kP_ONE, Constants.shooterConstants.kI, Constants.shooterConstants.kD);
+        shooterPID.setInputBounds(0, Constants.shooterConstants.MAX_TICKS_PER_SEC);
         shooterPID.setOutputBounds(0,1);
 
 //        PIDFCoefficients newPIDF = new PIDFCoefficients(
-//                Constants.ShooterConstants.kP_ONE,
-//                Constants.ShooterConstants.kI,
-//                Constants.ShooterConstants.kD,
-//                Constants.ShooterConstants.kF
+//                Constants.shooterConstants.kP_ONE,
+//                Constants.shooterConstants.kI,
+//                Constants.shooterConstants.kD,
+//                Constants.shooterConstants.kF
 //        );
 //        shooterMotorOne.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, newPIDF);
 //        shooterMotorTwo.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, newPIDF);
@@ -108,26 +112,26 @@ public class OneWShooter implements Component {
                 targetVel = 0;
                 break;
             case SHOOT_FAR:
-                setBothMotorVelocities(Constants.ShooterConstants.FAR_SHOOT_VEL);
-                targetVel = Constants.ShooterConstants.FAR_SHOOT_VEL;
+                setBothMotorVelocities(Constants.shooterConstants.FAR_SHOOT_VEL);
+                targetVel = Constants.shooterConstants.FAR_SHOOT_VEL;
 
                 break;
             case SHOOT_CLOSE:
-                setBothMotorVelocities(Constants.ShooterConstants.CLOSE_SHOOT_VEL);
-                targetVel = Constants.ShooterConstants.CLOSE_SHOOT_VEL;
+                setBothMotorVelocities(Constants.shooterConstants.CLOSE_SHOOT_VEL);
+                targetVel = Constants.shooterConstants.CLOSE_SHOOT_VEL;
                 break;
             case IDLE:
-                shooterMotorOne.setPower(Constants.ShooterConstants.IDLE_POWER);
-                shooterMotorTwo.setPower(Constants.ShooterConstants.IDLE_POWER);
+                shooterMotorOne.setPower(Constants.shooterConstants.IDLE_POWER);
+                shooterMotorTwo.setPower(Constants.shooterConstants.IDLE_POWER);
 
                 targetVel = 0;
 
                 break;
             case AUTO:
-                setBothMotorVelocities(Constants.ShooterConstants.CLOSE_SHOOT_VEL);
-                targetVel = Constants.ShooterConstants.CLOSE_SHOOT_VEL;
+                setBothMotorVelocities(Constants.shooterConstants.CLOSE_SHOOT_VEL);
+                targetVel = Constants.shooterConstants.CLOSE_SHOOT_VEL;
 
-                targetVel = Constants.ShooterConstants.AUTO_VEL;
+                targetVel = Constants.shooterConstants.AUTO_VEL;
                 break;
 
         }
@@ -153,9 +157,9 @@ public class OneWShooter implements Component {
 
         double pidOutput = shooterPID.updateWithError(error);
 
-        double shooterPower = pidOutput + Constants.ShooterConstants.kV1 * targetVelocity;
+        double shooterPower = pidOutput + Constants.shooterConstants.kV1 * targetVelocity;
 
-        shooterPower = Range.clip(shooterPower, 0, Constants.ShooterConstants.MAX_POWER);
+        shooterPower = Range.clip(shooterPower, 0, Constants.shooterConstants.MAX_POWER);
 
         if (powerMotors) {
             shooterMotorOne.setPower(shooterPower);

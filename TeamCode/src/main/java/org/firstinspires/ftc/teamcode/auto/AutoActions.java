@@ -119,7 +119,7 @@ public class AutoActions {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                 if (first) {
-                    robot.spindexer.setSpindexerTargetAdjustment(ticks);
+                    robot.spindexer.setTargetAdj(ticks);
                     timer.reset();
                     first = false;
                 }
@@ -232,7 +232,7 @@ public class AutoActions {
                         return false;
                     }
 
-                    robot.spindexer.setSpindexerTargetAdjustment(rotationAmount);
+                    robot.spindexer.setTargetAdj(rotationAmount);
                     timer.reset();
                     frist = false;
 
@@ -254,7 +254,7 @@ public class AutoActions {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 if (!triggered && Math.abs(robot.drive.localizer.getPose().position.y - targetY) < 2.0) {
-                    robot.spindexer.setSpindexerTargetAdjustment(96);
+                    robot.spindexer.setTargetAdj(96);
 //                    robot.limelight.ballTrackerNew.rotated60();
                     triggered = true;
                 }

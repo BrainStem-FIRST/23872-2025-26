@@ -7,14 +7,36 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.subsystems.Collector;
 import org.firstinspires.ftc.teamcode.utils.GamepadTracker;
 import org.firstinspires.ftc.teamcode.utils.PIDController;
 
 /*
+What to do:
 
 
+
+detect color when empty is purple - copy brob code NEED TO TUNE VALUES - DONE
+
+detected color doesn't update when ball is take out - problem
+
+
+Fix logic for optimization to use closest one, and go from there
+check color sensor after every spindexer trun, in case ball didnt shoot
+
+when u take a ball out and skip from it, the ball sensors doesnt read the color
+
+ Fix spindexer logic : good to move is always fox, is indexing allways true, not assigning values
+
+ good to move is always false
+
+ Fixed:
+ spindexer spin repeatedly, doesnt stop - FIXED Problem: wrong encoder wire
+ spindexer has no resistence when turning -- not keeping target pos - fixed
+ fix detect color so that it doesnt try to turn 120 when it sees the bad edges of spindles
+shooter doesnt work FIXXXX - maybe motors are fighting each other - wrong run mode
+
+// TODO: Tune color sensor vals
 
 
 TELEOP CONTROLS
@@ -50,7 +72,7 @@ Motors:
 Servos:
 0: leftPark
 1:
-2:
+2: Ramp
 3:
 4:
 5: leftHood
@@ -174,7 +196,7 @@ public class PotentialTele extends LinearOpMode {
 
         if (gp1.isFirstLeftBumper()) {
 
-            robot.spindexer.setSpindexerTargetAdjustment(Constants.spindexerConstants.TICKS_120);
+            robot.spindexer.setTargetAdj(Constants.spindexerConstants.TICKS_120);
 //            robot.limelight.ballTrackerNew.rotated60();
         } else if (gp1.isFirstLeftTrigger()) {
 
@@ -185,7 +207,7 @@ public class PotentialTele extends LinearOpMode {
     private void updateDriver2() {
 
         if (gamepad2.yWasPressed()) {
-            robot.shooter.shooterMotorOne.setPower(0.5);
+            robot.shooter.setShooterShootFar();
         } else if (gp2.isFirstA()) {
             robot.shooter.setShooterShootClose();
         } else if (gp2.isFirstB()) {
@@ -202,12 +224,18 @@ public class PotentialTele extends LinearOpMode {
             robot.pivot.setPivotShootFar();
         }
 
+        if (gp2.isFirstDpadRight()) {
+            robot.ramp.setRampUp();
+        } else if (gp2.isFirstDpadLeft()) {
+            robot.ramp.setRampDown();
+        }
+
         if (gp2.isFirstRightBumper()) {
-            robot.spindexer.setSpindexerTargetAdjustment((robot.limelight.ballTrackerNew.getBestRotation()/Constants.spindexerConstants.TICKS_360) * 8192);
+//            robot.spindexer.setTargetAdj((robot.limelight.ballTrackerNew.getBestRotation()/Constants.spindexerConstants.TICKS_360) * 8192);
         }
 
         if (gp2.isFirstDpadUp()) {
-            robot.spindexer.setSpindexerTargetAdjustment(100);
+            robot.spindexer.setTargetAdj(100);
         }
 
     }

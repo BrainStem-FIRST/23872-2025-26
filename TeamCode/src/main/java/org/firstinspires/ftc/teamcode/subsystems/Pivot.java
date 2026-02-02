@@ -50,14 +50,7 @@ public class Pivot implements Component {
 
     }
 
-    public void setPosition(double targetL, double targetR) {
-        double goodTarR = Range.clip(targetR, Constants.PivotConstants.RIGHT_DOWN_POS, Constants.PivotConstants.RIGHT_UP_POS);
-        double goodTarL = Range.clip(targetL, Constants.PivotConstants.LEFT_DOWN_POS, Constants.PivotConstants.LefT_UP_POS);
 
-
-        leftServo.setPosition(goodTarL);
-        rightServo.setPosition(goodTarR);
-    }
     public double getLeftPos() {
         return leftServo.getPosition();
     }

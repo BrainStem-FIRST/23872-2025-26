@@ -168,11 +168,11 @@ public class MasterTele extends LinearOpMode {
         // d2 controls
         if (gamepad2.rightBumperWasPressed() || gamepad1.rightBumperWasPressed()) {
             robot.spindexer.SPINDEXER_TIME = 500;
-            robot.spindexer.setSpindexerTargetAdjustment(48);
+            robot.spindexer.setTargetAdj(48);
 //            robot.limelight.ballTrackerNew.rotated60();
         } else if (gamepad2.leftBumperWasPressed() || gamepad1.leftBumperWasPressed()) {
             robot.spindexer.SPINDEXER_TIME = 500;
-            robot.spindexer.setSpindexerTargetAdjustment(-48);
+            robot.spindexer.setTargetAdj(-48);
 //            robot.limelight.ballTrackerNew.rotatedNeg60();
         }
 
@@ -218,10 +218,10 @@ public class MasterTele extends LinearOpMode {
         }
         if (gp2.isFirstLeftTrigger()){
             robot.spindexer.SPINDEXER_TIME = 0;
-            robot.spindexer.setSpindexerTargetAdjustment(3);
+            robot.spindexer.setTargetAdj(3);
         } else if (gp2.isFirstRightTrigger()){
             robot.spindexer.SPINDEXER_TIME = 0;
-            robot.spindexer.setSpindexerTargetAdjustment(-3);
+            robot.spindexer.setTargetAdj(-3);
         }
 
         if (gamepad2.dpadUpWasPressed()) {

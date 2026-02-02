@@ -6,14 +6,9 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
 import org.firstinspires.ftc.teamcode.Constants;
-import org.firstinspires.ftc.teamcode.utils.GamepadTracker;
-import org.firstinspires.ftc.teamcode.utils.PIDController;
 
 @TeleOp(name = "Spind Test")
 
@@ -30,7 +25,7 @@ public class SpindexerTest extends OpMode {
     public void runOpMode() throws InterruptedException {
         if (gamepad1.a) {
             robot.spindexer.SPINDEXER_TIME = 0;
-            robot.spindexer.setSpindexerTargetAdjustment(Constants.spindexerConstants.TICKS_120);
+            robot.spindexer.setTargetAdj(Constants.spindexerConstants.TICKS_120);
         }
 
     }
