@@ -67,7 +67,7 @@ public class OneWShooter implements Component {
         shooterMotorOne.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         shooterMotorTwo.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
 
-        shooterMotorOne.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        shooterMotorOne.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         shooterMotorTwo.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
         shooterMotorTwo.setDirection(DcMotorSimple.Direction.FORWARD);

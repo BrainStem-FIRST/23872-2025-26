@@ -93,13 +93,13 @@ public class BrainSTEMRobot {
         }
 
         // GIVE SPIND STATE TO BALL SENSOR
-        isSpindStopped = (Math.abs(spindexer.spindexerPid.getTarget() - spindexer.spindexerMotor.getCurrentPosition())) < 150; // change val
+        isSpindStopped = (Math.abs(spindexer.spindexerPid.getTarget() - spindexer.spindexerMotor.getCurrentPosition())) < 150 && spindexer.spindexerMotor.getVelocity() == 0 && spindexer.spindexerMotor.getPower() == 0; // change val
         ballSensor.setIfIndexerIsMoving(!isSpindStopped);
 
         // DETECT BALL IF SPIND IS NOT MOVING
         if (isSpindStopped && !goodToMove) {
             String newBall = ballSensor.scanForNewBall();
-            if (newBall != null && !newBall.equals("EMPTY")) {
+            if (newBall != null ) {
                 detectedColor = BallTrackerNew.BallColor.valueOf(newBall);
                 goodToMove = true;
                 ballDetectTimer.reset();
@@ -108,9 +108,9 @@ public class BrainSTEMRobot {
 
         // ADD BALL TO BALL TRACK + MOVE SPINDEXER (CAN BE REMOVED)
         // TODO: fine tune settle time
-        if (goodToMove && ballDetectTimer.milliseconds() > 50) {
+        if (goodToMove && ballDetectTimer.milliseconds() > 0) {
             limelight.ballTrackerNew.addBall(detectedColor);
-//            spindexer.setTargetAdj(Constants.spindexerConstants.TICKS_120);
+            spindexer.setTargetAdj(Constants.spindexerConstants.TICKS_120);
             goodToMove = false;
             detectedColor = null;
         }
@@ -126,7 +126,7 @@ public class BrainSTEMRobot {
             spindexer.justFinishedMoving = false;
         }
 
-        // CHECK COLOR AFTER MOVEMENT!!! ======================================================== AhHHHh
+        // CHECK COLOR AFTER MOVEMENT!!! ======================================================== AhHHHh PROBLEM FIX
         if (checkingColorAfterMovingSpind) {
             String colorAfterMovingSpind = ballSensor.checkColorAfterMovement();
 
@@ -181,7 +181,7 @@ public class BrainSTEMRobot {
         telemetry.addData("Target", spindexer.spindexerPid.getTarget());
         telemetry.addData("Current (mA)", spindexer.spindexerMotor.getCurrent(CurrentUnit.MILLIAMPS));
         telemetry.addData("AntiJam Timer", spindexer.antijamTimer);
-        telemetry.addData("Power giving - PID", spindexer.updateIndexerPosition());
+        telemetry.addData("velocity", spindexer.spindexerMotor.getVelocity());
         telemetry.addData("Power giving - MOTOR", spindexer.spindexerMotor.getPower());
 
         telemetry.addData("PIVOT left pos", pivot.getLeftPos());
@@ -197,6 +197,7 @@ public class BrainSTEMRobot {
         telemetry.addData("B", ballSensor.bPercent);
 
         telemetry.addData("Detected Color", ballSensor.detectColor());
+        telemetry.addData("Is spind stopped", isSpindStopped);
 
 
 

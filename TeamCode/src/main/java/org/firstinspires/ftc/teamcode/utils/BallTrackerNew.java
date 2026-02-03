@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.utils;
 
 
+import com.acmerobotics.dashboard.config.Config;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystems.Spindexer;
 
@@ -8,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+
+@Config
 
 public class BallTrackerNew {
 
@@ -78,8 +82,8 @@ public class BallTrackerNew {
     }
 
     public Slot getSlotAtCollectPos() {
-        if (slotA.currentAbsPos < 100 || slotA.currentAbsPos > 8092) return slotA;
-        if (slotB.currentAbsPos < 100 || slotB.currentAbsPos > 8092) return slotB;
+        if (slotA.currentAbsPos < 400 || slotA.currentAbsPos > 7792) return slotA;
+        if (slotB.currentAbsPos < 400 || slotB.currentAbsPos > 7792) return slotB;
         return slotC;
     }
 

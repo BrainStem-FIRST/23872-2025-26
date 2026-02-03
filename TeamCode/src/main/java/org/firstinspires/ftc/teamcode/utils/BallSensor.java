@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.utils;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -7,6 +8,8 @@ import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+
+@Config
 public class BallSensor {
 
 
@@ -16,7 +19,8 @@ public class BallSensor {
 
     private ElapsedTime timer = new ElapsedTime();
     private boolean isWaitingForColor = false;
-    private double delayTimeMs = 150; // CHANGE
+
+    public static double delayTimeMs = 10;
 
 
     private boolean isIndexing = false;
@@ -33,7 +37,7 @@ public class BallSensor {
 
     private ElapsedTime settleTimer = new ElapsedTime();
     private boolean waitingForSettle = false;
-    private double settleDelayMs = 100; // wait this long to read color after spindexer
+    public static double settleDelayMs = 50; // wait this long to read color after spindexer
 
 
 
@@ -52,11 +56,14 @@ public class BallSensor {
 
     public String scanForNewBall() {
 
+        boolean currentBeamState = !beamBreak.getState(); // note false is broken
+
         if (isIndexing) {
+            lastBeamState = currentBeamState;
             return null;
         }
 
-        boolean currentBeamState = beamBreak.getState(); // note false is broken
+
 
         if (lastBeamState && !currentBeamState) {
             isWaitingForColor = true;

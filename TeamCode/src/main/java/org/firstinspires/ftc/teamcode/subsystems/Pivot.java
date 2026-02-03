@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.utils.Component;
 
 @Config
 public class Pivot implements Component {
-    public static boolean activateLeft = true, activateRight = false;
+    public static boolean activateLeft = true, activateRight = true;
     private Servo leftServo;
     private Servo rightServo;
     public static int leftLower = 2367, leftHigher = 483, rightLower = 533, rightHigher = 2450;

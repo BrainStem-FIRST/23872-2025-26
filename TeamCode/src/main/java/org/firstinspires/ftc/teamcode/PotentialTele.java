@@ -14,27 +14,34 @@ import org.firstinspires.ftc.teamcode.utils.PIDController;
 /*
 What to do:
 
-
-
-detect color when empty is purple - copy brob code NEED TO TUNE VALUES - DONE
-
-detected color doesn't update when ball is take out - problem
-
-
+detected color doesn't update when ball is take out - problem // when u take a ball out and skip from it, the ball sensors doesnt read the color
 Fix logic for optimization to use closest one, and go from there
-check color sensor after every spindexer trun, in case ball didnt shoot
+check color sensor after every spindexer trun, in case ball didnt shoot - doesnt work
+Indexer not assigning colors to slot properly
 
-when u take a ball out and skip from it, the ball sensors doesnt read the color
+ TUNE DELAY AND SETTLE TIMES
 
- Fix spindexer logic : good to move is always fox, is indexing allways true, not assigning values
+ MAKE DEFINATIVE ROCK SPINDEXER POS THAT ARENT ADDING OFF OF PREV TRARGET POSITIOJ
+ D2 BE ABLE TO OVERRIDE THIS
+ SMALL ADJUSTMENT TO WHAT U BELIEVE IS IN THE RIGHT DIRECTION
 
- good to move is always false
+ MAKE DELAY TIMES SO THAT SPIND SPINS AS SOON AS IT CAN
+
+SPINDEXER PID NEEDS FIXING
+ make it so that it so theres a color unknown - you spin
+
+ TO TEST:
+ BALL BUMP UP OTHER BALL TO SHOOTER
 
  Fixed:
  spindexer spin repeatedly, doesnt stop - FIXED Problem: wrong encoder wire
  spindexer has no resistence when turning -- not keeping target pos - fixed
  fix detect color so that it doesnt try to turn 120 when it sees the bad edges of spindles
 shooter doesnt work FIXXXX - maybe motors are fighting each other - wrong run mode
+
+
+
+
 
 // TODO: Tune color sensor vals
 

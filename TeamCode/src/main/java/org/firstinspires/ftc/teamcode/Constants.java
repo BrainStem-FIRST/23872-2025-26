@@ -45,7 +45,7 @@ public class Constants {
             public double INDEXER_KF = 0.12;
 
             // Position Constants (ticks)
-            public int TICKS_120 = 96 * (8192/288);
+            public int TICKS_120 = 2730;
             public int TICKS_60 = 48* (8192/288);
             public int TICKS_360 = 288 * (8192/288);
             public double ERROR_THRESHOLD = 5*(8192/288);
