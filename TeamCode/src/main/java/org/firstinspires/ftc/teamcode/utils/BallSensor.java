@@ -20,13 +20,13 @@ public class BallSensor {
     private ElapsedTime timer = new ElapsedTime();
     private boolean isWaitingForColor = false;
 
-    public static double delayTimeMs = 10;
+    public static double delayTimeMs = 0;
 
 
     private boolean isIndexing = false;
 
-    public static double greenBallMinG = 0.425, greenBallMaxG = 0.6, greenBallMinB = 0.34, greenBallMaxB = 0.38, greenBallMinR = 0.1275, greenBallMaxR = 0.19;
-    public static double purpleBallMinG = 0.25, purpleBallMaxG = 0.415, purpleBallMinB = 0.38, purpleBallMaxB = 0.5, purpleBallMinR = 0.215, purpleBallMaxR =0.275;
+    public static double greenBallMinG = 0.425, greenBallMaxG = 0.6, greenBallMinB = 0.33, greenBallMaxB = 0.38, greenBallMinR = 0.1200, greenBallMaxR = 0.25;
+    public static double purpleBallMinG = 0.25, purpleBallMaxG = 0.415, purpleBallMinB = 0.36, purpleBallMaxB = 0.5, purpleBallMinR = 0.215, purpleBallMaxR =0.275;
 
         // CHANGE
 
@@ -37,7 +37,7 @@ public class BallSensor {
 
     private ElapsedTime settleTimer = new ElapsedTime();
     private boolean waitingForSettle = false;
-    public static double settleDelayMs = 50; // wait this long to read color after spindexer
+    public static double settleDelayMs = 0; // wait this long to read color after spindexer
 
 
 

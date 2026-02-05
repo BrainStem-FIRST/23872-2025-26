@@ -51,13 +51,13 @@ public class Collector implements Component {
                 collectorMotor.setPower(Constants.CollectorConstants.OFF_POWER);
                 break;
             case INTAKE:
-                collectorMotor.setPower(Constants.CollectorConstants.INTAKE_POWER);
+                collectorMotor.setVelocity(Constants.CollectorConstants.INTAKE_VELOCITY);
                 break;
             case EXTAKE:
-                collectorMotor.setPower(Constants.CollectorConstants.EXTAKE_POWER);
+                collectorMotor.setVelocity(Constants.CollectorConstants.EXTAKE_VELOCITY);
                 break;
             case AUTO:
-                collectorMotor.setPower(Constants.CollectorConstants.AUTO_POWER);
+                collectorMotor.setVelocity(Constants.CollectorConstants.AUTO_VELOCITY);
         }
     }
     @Override

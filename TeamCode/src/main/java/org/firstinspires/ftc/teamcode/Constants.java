@@ -1,9 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.Vector2d;
-
-import org.firstinspires.ftc.teamcode.subsystems.Ramp;
 
 @Config
 public class Constants {
@@ -39,10 +36,10 @@ public class Constants {
             // TODO: Update ticks for new encoder
 
             // PID Constants
-            public double INDEXER_KP = 0.0011; //0.00055
+            public double INDEXER_KP = 0.0006; //0.00055
             public double INDEXER_KI = 0.0;
-            public double INDEXER_KD = 0.00002;
-            public double INDEXER_KF = 0.12;
+            public double INDEXER_KD = 0.00001;
+            public double INDEXER_KF = 0.14;
 
             // Position Constants (ticks)
             public int TICKS_120 = 2730;
@@ -61,9 +58,9 @@ public class Constants {
 
         public static class CollectorConstants {
             // Power Constants
-            public static double INTAKE_POWER = 0.99;
-            public static double EXTAKE_POWER = -0.8;
-            public static double AUTO_POWER = 0.77;
+            public static double INTAKE_VELOCITY = -2500;
+            public static double EXTAKE_VELOCITY = 800;
+            public static double AUTO_VELOCITY = -1000; // ).77
             public static final double OFF_POWER = 0.0;
         }
 

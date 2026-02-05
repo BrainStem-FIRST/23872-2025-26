@@ -27,6 +27,9 @@ Indexer not assigning colors to slot properly
 
  MAKE DELAY TIMES SO THAT SPIND SPINS AS SOON AS IT CAN
 
+ USE COLOR SENSRO TO DETECT WHEN ITS SOLIDLY IN THX KEERTHANA
+ set velocity, spindexer turn and amp spike then power off for a sec
+
 SPINDEXER PID NEEDS FIXING
  make it so that it so theres a color unknown - you spin
 
@@ -178,11 +181,16 @@ public class PotentialTele extends LinearOpMode {
         double rx = gamepad1.right_stick_x * 0.75;
 
         if (gamepad1.y) {
-            double targetAngle = Math.atan2(goal.y, goal.x);
-            double currentHeading = robot.drive.localizer.getPose().heading.toDouble();
+            double dx = goal.x - robot.drive.localizer.getPose().position.x;
+            double dy = goal.y - robot.drive.localizer.getPose().position.x;
 
-            alignmentPID.setTarget(targetAngle);
-            rx = alignmentPID.update(currentHeading);
+            double targetAngle = Math.atan2(dy, dx);
+            double currentHeading = robot.drive.localizer.getPose().heading.toDouble();
+            double angleError = targetAngle - currentHeading;
+
+            while (angleError > Math.PI) angleError -= 2 * Math.PI;
+            while (angleError < -Math.PI) angleError += 2 * Math.PI;
+            rx = alignmentPID.update(angleError);
         }
 
         robot.drive.setMotorPowers(
@@ -194,9 +202,9 @@ public class PotentialTele extends LinearOpMode {
 
         // SUBSYSTEM CONTROLS =====================================================
         if (gamepad1.right_trigger > 0.1 ) {
-            robot.collector.collectorState = Collector.CollectorState.INTAKE;
-        } else if (gamepad1.right_bumper) {
             robot.collector.collectorState = Collector.CollectorState.EXTAKE;
+        } else if (gamepad1.right_bumper) {
+            robot.collector.collectorState = Collector.CollectorState.INTAKE;
         } else {
             robot.collector.collectorState = Collector.CollectorState.OFF;
         }

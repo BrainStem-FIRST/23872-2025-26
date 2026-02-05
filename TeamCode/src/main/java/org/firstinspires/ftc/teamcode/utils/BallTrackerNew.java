@@ -24,6 +24,7 @@ public class BallTrackerNew {
     private Telemetry telemetry;
     private int spindTick; // spind ticks from encoder
     private int spindAbsTicks;
+    public Slot thisBall;
     public enum BallColor {
         PURPLE,
         GREEN,
@@ -93,6 +94,25 @@ public class BallTrackerNew {
         return slotC;
 
         // CHANGE
+
+    }
+
+    public boolean isNextSlotEmpty() {
+         thisBall = getSlotAtCollectPos();
+
+         if (Objects.equals(thisBall.name, "Slot A")) {
+             return slotB.color.equals(BallColor.EMPTY);
+         }
+
+        if (Objects.equals(thisBall.name, "Slot B")) {
+            return slotC.color.equals(BallColor.EMPTY);
+        }
+        if (Objects.equals(thisBall.name, "Slot Clk")) {
+            return slotA.color.equals(BallColor.EMPTY);
+        }
+
+        return false;
+
     }
 
 
