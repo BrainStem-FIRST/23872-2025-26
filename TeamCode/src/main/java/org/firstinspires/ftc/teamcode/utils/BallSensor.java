@@ -20,19 +20,21 @@ public class BallSensor {
     private ElapsedTime timer = new ElapsedTime();
     private boolean isWaitingForColor = false;
 
-    public static double delayTimeMs = 0;
+    public static double delayTimeMs = 100;
 
 
     private boolean isIndexing = false;
 
-    public static double greenBallMinG = 0.425, greenBallMaxG = 0.6, greenBallMinB = 0.33, greenBallMaxB = 0.38, greenBallMinR = 0.1200, greenBallMaxR = 0.25;
-    public static double purpleBallMinG = 0.25, purpleBallMaxG = 0.415, purpleBallMinB = 0.36, purpleBallMaxB = 0.5, purpleBallMinR = 0.215, purpleBallMaxR =0.275;
+    public static double greenBallMinG = 0.39, greenBallMaxG = 0.53, greenBallMinB = 0.20, greenBallMaxB = 0.38, greenBallMinR = 0.10, greenBallMaxR = 0.25;
+    public static double purpleBallMinG = 0.25, purpleBallMaxG = 0.4, purpleBallMinB = 0.25, purpleBallMaxB = 0.6, purpleBallMinR = 0.24, purpleBallMaxR = 0.32;
 
         // CHANGE
 
     public double rPercent;
     public double bPercent;
     public double gPercent;
+
+    public double alpha;
 
 
     private ElapsedTime settleTimer = new ElapsedTime();
@@ -55,29 +57,22 @@ public class BallSensor {
 
 
     public String scanForNewBall() {
-
-        boolean currentBeamState = !beamBreak.getState(); // note false is broken
+        boolean currentBeamState = !beamBreak.getState();
 
         if (isIndexing) {
             lastBeamState = currentBeamState;
             return null;
         }
 
-
-
         if (lastBeamState && !currentBeamState) {
-            isWaitingForColor = true;
-            timer.reset();
-        }
-        lastBeamState = currentBeamState;
-
-        if (isWaitingForColor) {
+            lastBeamState = currentBeamState;
             if (timer.milliseconds() > delayTimeMs) {
                 isWaitingForColor = false;
                 return detectColor();
             }
         }
 
+        lastBeamState = currentBeamState;
         return null;
     }
 
@@ -86,6 +81,7 @@ public class BallSensor {
         double red = colors.red;
         double green = colors.green;
         double blue = colors.blue;
+        alpha = colors.alpha;
 
         double sum = red + green + blue;
 
@@ -104,6 +100,7 @@ public class BallSensor {
         }
 
         return "EMPTY";
+
     }
 
     public String checkColorAfterMovement() {

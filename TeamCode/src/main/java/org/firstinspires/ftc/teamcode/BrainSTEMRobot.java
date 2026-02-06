@@ -92,28 +92,22 @@ public class BrainSTEMRobot {
         if (limelight != null) {
             limelight.update();
         }
-
-        // GIVE SPIND STATE TO BALL SENSOR
-        isSpindStopped = (Math.abs(spindexer.spindexerPid.getTarget() - spindexer.spindexerMotor.getCurrentPosition())) < 200 && spindexer.spindexerMotor.getVelocity() < 10 && spindexer.spindexerMotor.getPower() < 0.5; // change val
+        isSpindStopped = (Math.abs(spindexer.spindexerPid.getTarget() - spindexer.spindexerMotor.getCurrentPosition())) < 400 ;
         ballSensor.setIfIndexerIsMoving(!isSpindStopped);
-
-        String newBall = ballSensor.scanForNewBall();
 
         // DETECT BALL IF SPIND IS NOT MOVING
         if (isSpindStopped ) {
+            String newBall = ballSensor.scanForNewBall();
 
-            // on top && !goodToMove
-
-            if (newBall != null && !newBall.equals("EMPTY")) {
-                detectedColor = BallTrackerNew.BallColor.valueOf(newBall);
+            if (newBall != null) {
+                BallTrackerNew.BallColor color = BallTrackerNew.BallColor.valueOf(newBall);
 
                 BallTrackerNew.Slot collectSlot = limelight.ballTrackerNew.getSlotAtCollectPos();
-                collectSlot.color = detectedColor;
-                if (isNextEmpty) {spindexer.setTargetAdj(Constants.spindexerConstants.TICKS_120);}
-//                goodToMove = false;
-                detectedColor = null;
-//                goodToMove = true;
-//                ballDetectTimer.reset();
+                collectSlot.color = color;
+
+                if (limelight.ballTrackerNew.isNextSlotEmpty()) {
+                    spindexer.setTargetAdj(Constants.spindexerConstants.TICKS_120);
+                }
             }
         }
 
@@ -197,6 +191,7 @@ public class BrainSTEMRobot {
         telemetry.addData("R", ballSensor.rPercent);
         telemetry.addData("G", ballSensor.gPercent);
         telemetry.addData("B", ballSensor.bPercent);
+        telemetry.addData("Alpha", ballSensor.alpha);
 
         telemetry.addLine("\n=== LOCATION ===");
         telemetry.addData("Pose", drive.localizer.getPose().toString());

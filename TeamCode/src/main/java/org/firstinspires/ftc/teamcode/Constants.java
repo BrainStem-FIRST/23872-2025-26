@@ -36,7 +36,7 @@ public class Constants {
             // TODO: Update ticks for new encoder
 
             // PID Constants
-            public double INDEXER_KP = 0.0006; //0.00055
+            public double INDEXER_KP = 0.000575; //0.00055
             public double INDEXER_KI = 0.0;
             public double INDEXER_KD = 0.00001;
             public double INDEXER_KF = 0.14;
@@ -45,7 +45,7 @@ public class Constants {
             public int TICKS_120 = 2730;
             public int TICKS_60 = 48* (8192/288);
             public int TICKS_360 = 288 * (8192/288);
-            public double ERROR_THRESHOLD = 5*(8192/288);
+            public double ERROR_THRESHOLD = 135;
 
             // Limits
             public double MAX_POWER = 0.5;
@@ -58,7 +58,7 @@ public class Constants {
 
         public static class CollectorConstants {
             // Power Constants
-            public static double INTAKE_VELOCITY = -2500;
+            public static double INTAKE_VELOCITY = -2750;
             public static double EXTAKE_VELOCITY = 800;
             public static double AUTO_VELOCITY = -1000; // ).77
             public static final double OFF_POWER = 0.0;

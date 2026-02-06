@@ -19,7 +19,6 @@ Fix logic for optimization to use closest one, and go from there
 check color sensor after every spindexer trun, in case ball didnt shoot - doesnt work
 Indexer not assigning colors to slot properly
 
- TUNE DELAY AND SETTLE TIMES
 
  MAKE DEFINATIVE ROCK SPINDEXER POS THAT ARENT ADDING OFF OF PREV TRARGET POSITIOJ
  D2 BE ABLE TO OVERRIDE THIS
@@ -212,7 +211,6 @@ public class PotentialTele extends LinearOpMode {
         if (gp1.isFirstLeftBumper()) {
 
             robot.spindexer.setTargetAdj(Constants.spindexerConstants.TICKS_120);
-//            robot.limelight.ballTrackerNew.rotated60();
         } else if (gp1.isFirstLeftTrigger()) {
 
         }
@@ -246,7 +244,7 @@ public class PotentialTele extends LinearOpMode {
         }
 
         if (gp2.isFirstRightBumper()) {
-//            robot.spindexer.setTargetAdj((robot.limelight.ballTrackerNew.getBestRotation()/Constants.spindexerConstants.TICKS_360) * 8192);
+            robot.spindexer.setTargetAdj(robot.limelight.ballTrackerNew.getBestRotation());
         }
 
         if (gp2.isFirstDpadUp()) {

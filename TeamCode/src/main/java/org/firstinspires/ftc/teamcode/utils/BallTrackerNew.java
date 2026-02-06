@@ -48,16 +48,16 @@ public class BallTrackerNew {
         public BallColor color;
         public int pos; // 0 - whatever ------- actual enc positon
         public int currentAbsPos; // 0 -8192
-        public Slot(String name, int pos) {
+        public Slot(String name, int pos, int currentAbsPos) {
             this.name = name;
             this.pos = pos;
             this.color = BallColor.EMPTY;
             this.currentAbsPos = 0;
         }
     }
-    public Slot slotA = new Slot("Slot A", 0);
-    public Slot slotC = new Slot("Slot C", 2730);
-    public Slot slotB = new Slot("Slot B", 5460);
+    public Slot slotA = new Slot("Slot A", 0, 0);
+    public Slot slotC = new Slot("Slot C", 2730, 2730);
+    public Slot slotB = new Slot("Slot B", 5460, 5460);
 
     public void update() {
         spindTick = spindexer.spindexerMotor.getCurrentPosition();
@@ -77,8 +77,8 @@ public class BallTrackerNew {
         slot.color = color;
     }
     public Slot getSlotAtShootingPos() {
-        if (slotA.currentAbsPos < 2830 && slotA.currentAbsPos > 2630) return slotA;
-        if (slotB.currentAbsPos < 2830 && slotB.currentAbsPos > 2630) return slotB;
+        if (slotA.currentAbsPos < 3000 && slotA.currentAbsPos > 2400) return slotA;
+        if (slotB.currentAbsPos < 3000 && slotB.currentAbsPos > 2400) return slotB;
         return slotC;
     }
 
@@ -87,15 +87,13 @@ public class BallTrackerNew {
         if (slotB.currentAbsPos < 400 || slotB.currentAbsPos > 7792) return slotB;
         return slotC;
     }
-
-    public Slot getSlotAtEndPost() {
-        if (slotA.currentAbsPos < 100 || slotA.currentAbsPos > 8092) return slotA;
-        if (slotB.currentAbsPos < 100 || slotB.currentAbsPos > 8092) return slotB;
+    public Slot getSlotAtOtherPos() {
+        if (slotA.currentAbsPos < 5061 || slotA.currentAbsPos > 5861) return slotA;
+        if (slotB.currentAbsPos < 5061 || slotB.currentAbsPos > 5861) return slotB;
         return slotC;
-
-        // CHANGE
-
     }
+
+
 
     public boolean isNextSlotEmpty() {
          thisBall = getSlotAtCollectPos();
@@ -107,7 +105,7 @@ public class BallTrackerNew {
         if (Objects.equals(thisBall.name, "Slot B")) {
             return slotC.color.equals(BallColor.EMPTY);
         }
-        if (Objects.equals(thisBall.name, "Slot Clk")) {
+        if (Objects.equals(thisBall.name, "Slot C")) {
             return slotA.color.equals(BallColor.EMPTY);
         }
 
@@ -118,24 +116,70 @@ public class BallTrackerNew {
 
 
     public int getBestRotation() {
+        List<BallColor> stateA = Arrays.asList(slotA.color, slotB.color, slotC.color);
 
-        List<BallColor> seqA = Arrays.asList(slotC.color, slotA.color, slotB.color); // dont move
+        List<BallColor> stateB = Arrays.asList(slotB.color, slotC.color, slotA.color);
 
-        List<BallColor> seqB = Arrays.asList(slotA.color, slotB.color,slotC.color); // 60 deg
+        List<BallColor> stateC = Arrays.asList(slotC.color, slotA.color, slotB.color);
 
-        List<BallColor> seqC = Arrays.asList(slotB.color, slotC.color, slotA.color); // 120 deg
-        // get scores
-        int scoreA = calculateScore(seqA);
-        int scoreB = calculateScore(seqB);
-        int scoreC = calculateScore(seqC);
-        // find best one
+        int scoreA = calculateScore(stateA);
+        int scoreB = calculateScore(stateB);
+        int scoreC = calculateScore(stateC);
+
+        int targetShooterTick = 2730;
+        int bestDelta = 0;
+
         if (scoreA >= scoreB && scoreA >= scoreC) {
-            return (2730 - slotC.currentAbsPos + 8192) % 8192;
+            bestDelta = (targetShooterTick - slotA.currentAbsPos + 8192) % 8192;
         } else if (scoreB >= scoreC) {
-            return (2730 - slotA.currentAbsPos + 8192) % 8192;
+            bestDelta = (targetShooterTick - slotB.currentAbsPos + 8192) % 8192;
         } else {
-            return (2730 - slotB.currentAbsPos + 8192) % 8192;
+            bestDelta = (targetShooterTick - slotC.currentAbsPos + 8192) % 8192;
         }
+
+        return bestDelta;
+
+//        Slot imgA = getSlotAtShootingPos();
+//        Slot imgB = getSlotAtCollectPos();
+//        Slot imgC = getSlotAtOtherPos();
+//
+//
+//        List<BallColor> seqA = Arrays.asList(imgA.color, imgB.color, imgC.color); // dont move
+//
+//        List<BallColor> seqB = Arrays.asList(imgB.color, imgC.color,imgA.color); // 60 deg
+//
+//        List<BallColor> seqC = Arrays.asList(imgC.color, imgA.color, imgB.color); // 120 deg
+//        // get scores
+//        int scoreA = calculateScore(seqA);
+//        int scoreB = calculateScore(seqB);
+//        int scoreC = calculateScore(seqC);
+//        // find best one
+//        if (scoreA >= scoreB && scoreA >= scoreC) {
+//            return (2731 - imgA.currentAbsPos + 8192) % 8192;
+//        } else if (scoreB >= scoreC) {
+//            return (2731 - imgB.currentAbsPos + 8192) % 8192;
+//        } else {
+//            return (2731 - imgC.currentAbsPos + 8192) % 8192;
+//        }
+
+//        List<BallColor> seqA = Arrays.asList(slotC.color, slotB.color, slotA.color); // dont move
+//
+//        List<BallColor> seqB = Arrays.asList(slotA.color, slotB.color, slotC.color); // 60 deg
+//
+//        List<BallColor> seqC = Arrays.asList(slotB.color, slotC.color, slotA.color); // 120 deg
+//        // get scores
+//        int scoreA = calculateScore(seqA);
+//        int scoreB = calculateScore(seqB);
+//        int scoreC = calculateScore(seqC);
+//        // find best one
+//        if (scoreA >= scoreB && scoreA >= scoreC) {
+//            return (2731 - slotC.currentAbsPos + 8192) % 8192;
+//        } else if (scoreB >= scoreC && scoreB >= scoreA) {
+//            return (2731 - slotA.currentAbsPos + 8192) % 8192;
+//        } else if (scoreC >= scoreB && scoreC >= scoreA) {
+//            return (2731 - slotB.currentAbsPos + 8192) % 8192;
+//        }
+
     }
 
     private int calculateScore(List<BallColor> slotSeq) {
