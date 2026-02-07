@@ -109,7 +109,7 @@ public class MasterTele extends LinearOpMode {
 
 
             telemetry.addLine("\n=== SPINDEXER ===");
-            telemetry.addData("State", robot.spindexer.spindexerState);
+
             telemetry.addData("Position", robot.spindexer.getCurrentPosition());
             telemetry.addData("Target", robot.spindexer.spindexerPid.getTarget());
             telemetry.addData("Current (mA)", robot.spindexer.spindexerMotor.getCurrent(CurrentUnit.MILLIAMPS));

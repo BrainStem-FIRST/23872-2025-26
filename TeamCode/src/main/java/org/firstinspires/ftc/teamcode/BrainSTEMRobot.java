@@ -10,6 +10,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import java.util.ArrayList;
 
 import org.firstinspires.ftc.teamcode.rr.MecanumDrive;
+import org.firstinspires.ftc.teamcode.srs.SRSHub;
 import org.firstinspires.ftc.teamcode.subsystems.Collector;
 import org.firstinspires.ftc.teamcode.subsystems.OneWShooter;
 import org.firstinspires.ftc.teamcode.subsystems.Pivot;
@@ -80,6 +81,7 @@ public class BrainSTEMRobot {
 
         // Defining the Motors
         drive = new MecanumDrive(hwMap,startPose);
+
     }
 
 
@@ -87,19 +89,29 @@ public class BrainSTEMRobot {
         for (Component c : subsystems) {
             c.update();
         }
+
+
         drive.localizer.update();
+
+
+//        if (shooter.shooterState == OneWShooter.ShooterState.SHOOT_CLOSE || shooter.shooterState == OneWShooter.ShooterState.SHOOT_FAR) {
+//            pivot.updateCompensatedPosition(shooter.shotsFired);
+//        } else {
+//            shooter.resetShotCounter();
+//        }
 
         if (limelight != null) {
             limelight.update();
         }
-        isSpindStopped = (Math.abs(spindexer.spindexerPid.getTarget() - spindexer.spindexerMotor.getCurrentPosition())) < 400 ;
+        isSpindStopped = (Math.abs(spindexer.spindexerPid.getTarget() - spindexer.getCurrentPosition())) < 400 ;
         ballSensor.setIfIndexerIsMoving(!isSpindStopped);
 
         // DETECT BALL IF SPIND IS NOT MOVING
         if (isSpindStopped ) {
             String newBall = ballSensor.scanForNewBall();
 
-            if (newBall != null) {
+            if (newBall != null ) {
+
                 BallTrackerNew.BallColor color = BallTrackerNew.BallColor.valueOf(newBall);
 
                 BallTrackerNew.Slot collectSlot = limelight.ballTrackerNew.getSlotAtCollectPos();
@@ -203,10 +215,8 @@ public class BrainSTEMRobot {
         telemetry.addData("Giving power", shooter.shooterMotorOne.getPower());
 
         telemetry.addLine("\n=== SPINDEXER ===");
-        telemetry.addData("State", spindexer.spindexerState);
         telemetry.addData("Position", spindexer.getCurrentPosition());
         telemetry.addData("Target", spindexer.spindexerPid.getTarget());
-        telemetry.addData("velocity", spindexer.spindexerMotor.getVelocity());
         telemetry.addData("Power giving:", spindexer.spindexerMotor.getPower());
 
         telemetry.addLine("\n=== HOOD ===");

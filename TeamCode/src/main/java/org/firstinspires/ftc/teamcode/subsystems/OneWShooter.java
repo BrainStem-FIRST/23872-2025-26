@@ -43,6 +43,9 @@ public class OneWShooter implements Component {
 
     public double error1;
     public double error2;
+
+    public int shotsFired = 0;
+    private boolean wasAtSpeed = false;
     
 
 
@@ -136,8 +139,18 @@ public class OneWShooter implements Component {
 
         }
 
-        telemetry.addData("shooter motor state", shooterState);
+        double currentVel = shooterMotorOne.getVelocity();
+        boolean isAtSpeed = Math.abs(currentVel - targetVel) < 50;
 
+
+        if (wasAtSpeed && currentVel < (targetVel - 200)) {
+            shotsFired++;
+        }
+
+        wasAtSpeed = isAtSpeed;
+
+        telemetry.addData("shooter motor state", shooterState);
+//
 
 
         currentVel1 = Math.abs(shooterMotorOne.getVelocity());
@@ -146,10 +159,16 @@ public class OneWShooter implements Component {
         error1 = Math.abs(currentVel1 - targetVel);
         error2 = Math.abs(currentVel2 - targetVel);
 
+        telemetry.addData("Shots fired", shotsFired);
+
         telemetry.addData("Shooter Target", targetVel);
         telemetry.addData("Shooter Current", shooterMotorOne.getVelocity());
 
 
+    }
+
+    public void resetShotCounter() {
+        shotsFired = 0;
     }
     public void setBothMotorVelocities(double targetVelocity) {
         shooterPID.setTarget(targetVelocity);

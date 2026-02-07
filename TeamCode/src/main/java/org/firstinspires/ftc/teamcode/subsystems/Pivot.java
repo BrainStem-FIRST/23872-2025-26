@@ -50,7 +50,16 @@ public class Pivot implements Component {
 
     }
 
+    public static double HOOD_ADJ_SHOT = 0.05; // Adjust based on testing
 
+
+    public void updateCompensatedPosition(int shotCount) {
+        double basePos = 0.75;
+        double newPos = basePos + (shotCount * HOOD_ADJ_SHOT);
+
+        leftServo.setPosition(newPos);
+        rightServo.setPosition(newPos);
+    }
     public double getLeftPos() {
         return leftServo.getPosition();
     }

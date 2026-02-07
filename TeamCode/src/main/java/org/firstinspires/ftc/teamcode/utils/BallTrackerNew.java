@@ -18,7 +18,7 @@ public class BallTrackerNew {
 
 
 
-    private static final int TICKS_PER_REV = 8192;
+    private static final int TICKS_PER_REV = 1024;
     private static final int TICKS_PER_SLOT = 2730;
     private Spindexer spindexer;
     private Telemetry telemetry;
@@ -47,7 +47,7 @@ public class BallTrackerNew {
         public String name;
         public BallColor color;
         public int pos; // 0 - whatever ------- actual enc positon
-        public int currentAbsPos; // 0 -8192
+        public int currentAbsPos; // 0 - 1024
         public Slot(String name, int pos, int currentAbsPos) {
             this.name = name;
             this.pos = pos;
@@ -56,12 +56,14 @@ public class BallTrackerNew {
         }
     }
     public Slot slotA = new Slot("Slot A", 0, 0);
-    public Slot slotC = new Slot("Slot C", 2730, 2730);
-    public Slot slotB = new Slot("Slot B", 5460, 5460);
+    public Slot slotC = new Slot("Slot C", 341, 341);
+    public Slot slotB = new Slot("Slot B", 682, 682);
 
     public void update() {
-        spindTick = spindexer.spindexerMotor.getCurrentPosition();
+        spindTick = spindexer.getCurrentPosition();
         spindAbsTicks = calcAbsPos(spindTick);
+
+//        spindAbsTicks = spindexer.getAdjustedPosition();
         updateSlotTicks(slotA);
         updateSlotTicks(slotB);
         updateSlotTicks(slotC);
@@ -77,19 +79,19 @@ public class BallTrackerNew {
         slot.color = color;
     }
     public Slot getSlotAtShootingPos() {
-        if (slotA.currentAbsPos < 3000 && slotA.currentAbsPos > 2400) return slotA;
-        if (slotB.currentAbsPos < 3000 && slotB.currentAbsPos > 2400) return slotB;
+        if (slotA.pos < 351 && slotA.pos > 331) return slotA;
+        if (slotB.pos < 351 && slotB.pos > 331) return slotB;
         return slotC;
     }
 
     public Slot getSlotAtCollectPos() {
-        if (slotA.currentAbsPos < 400 || slotA.currentAbsPos > 7792) return slotA;
-        if (slotB.currentAbsPos < 400 || slotB.currentAbsPos > 7792) return slotB;
+        if (slotA.pos < 100 || slotA.pos > 924) return slotA;
+        if (slotB.pos < 100 || slotB.pos > 924) return slotB;
         return slotC;
     }
     public Slot getSlotAtOtherPos() {
-        if (slotA.currentAbsPos < 5061 || slotA.currentAbsPos > 5861) return slotA;
-        if (slotB.currentAbsPos < 5061 || slotB.currentAbsPos > 5861) return slotB;
+        if (slotA.pos < 692 && slotA.pos > 672) return slotA;
+        if (slotB.pos < 692 && slotB.pos > 572) return slotB;
         return slotC;
     }
 

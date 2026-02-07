@@ -3,13 +3,14 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
+import org.firstinspires.ftc.teamcode.srs.SRSHub;
 import org.firstinspires.ftc.teamcode.utils.Component;
 import org.firstinspires.ftc.teamcode.utils.PIDController;
 import org.firstinspires.ftc.teamcode.Constants;
@@ -17,12 +18,12 @@ import org.firstinspires.ftc.teamcode.Constants;
 
 @Config
 public class Spindexer implements Component {
-    public static double maxPowerErrorThreshold = 1000, maxPower = -0.99;
+    public static double maxPowerErrorThreshold = 200, maxPower = 0.99;
 
-    public int SPINDEXER_TIME = 0;
+    public int SPINDEXER_TIME;
 
-    private double previousVelocity = 0;
-    private int lastGoodPosition = 0;
+    private double previousVelocity;
+    private int lastGoodPosition;
     public boolean isUnjamming = false;
     public ElapsedTime spindexerTimer;
     public ElapsedTime antijamTimer;
@@ -30,19 +31,17 @@ public class Spindexer implements Component {
     private boolean wasMoving = false;
     public boolean justFinishedMoving = false;
 
-    public enum SpindexerState {
-        COLLECT,
-        MOVING,
-        NOT_MOVING,
-    }
-    public SpindexerState spindexerState;
-
     public PIDController spindexerPid;
     public DcMotorEx spindexerMotor;
     private int curPos;
     private HardwareMap map;
     private Telemetry telemetry;
 
+    private int rawEncoder, wrappedEncoder;
+
+    private int offset, wrapAroundOffset;
+
+    private SRSHub hub;
 
     public boolean indexerCued;
     private BrainSTEMRobot robot;
@@ -53,10 +52,17 @@ public class Spindexer implements Component {
 
 
 
+
+
+
         spindexerMotor = map.get(DcMotorEx.class, "spindexerMotor");
         spindexerMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         spindexerMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         spindexerMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
+
+
+
 
 
         spindexerPid = new PIDController(
@@ -64,21 +70,60 @@ public class Spindexer implements Component {
                 0,
                 Constants.spindexerConstants.INDEXER_KD
         );
-        spindexerState = SpindexerState.NOT_MOVING;
         spindexerTimer = new ElapsedTime();
         antijamTimer = new ElapsedTime();
         spindexerTimer.startTime();
 
         spindexerPid.setTarget(0);
+
+
+
+
+
+        SRSHub.Config config = new SRSHub.Config();
+
+        config.setEncoder(
+                6,
+                SRSHub.Encoder.PWM
+        );
+
+
+
+        RobotLog.clearGlobalWarningMsg();
+
+        hub = hardwareMap.get(
+                SRSHub.class,
+                "SRSHub"
+        );
+
+
+
+        hub.init(config);
+        while(!hub.ready());
+
+
+        this.offset = -907;
+
     }
     public int getCurrentPosition() {
-        return spindexerMotor.getCurrentPosition();
+        return wrappedEncoder;
     }
-    public double updateIndexerPosition() {
-        int curPos = spindexerMotor.getCurrentPosition();
-        double power = spindexerPid.update(curPos);
-        double error = Math.abs(curPos - spindexerPid.getTarget());
-        if (error > maxPowerErrorThreshold) {
+
+//    public int getAdjustedPosition() {
+/// /        int reversedRaw = 1024 - encoder;
+/// /        int adjusted = (reversedRaw - offset) % 1024;
+/// /        if (adjusted < 0) {
+/// /            adjusted += 1024;
+/// /        }
+/// /
+/// /        return adjusted;
+//
+//    }
+    public void updateIndexerPosition() {
+        double error = (spindexerPid.getTarget() - getCurrentPosition());
+
+        double power = spindexerPid.update(getCurrentPosition());
+        if (Math.abs(error) > maxPowerErrorThreshold) {
             spindexerMotor.setPower(maxPower * Math.signum(power));
         } else {
             power += Math.signum(power) * Constants.spindexerConstants.INDEXER_KF;
@@ -88,20 +133,14 @@ public class Spindexer implements Component {
             if (isStatic()) {
                 spindexerMotor.setPower(0);
             } else {
-                spindexerMotor.setPower(-power);
+                spindexerMotor.setPower(power);
             }
         }
 
 
-
-
-
-
-        return power;
     }
 
     public void setTargetAdj(int adjust) {
-
         spindexerPid.setTarget(spindexerPid.getTarget() + adjust);
     }
 
@@ -112,6 +151,15 @@ public class Spindexer implements Component {
 
     @Override
     public void update() {
+        hub.update();
+        double prevEncoder = rawEncoder;
+        rawEncoder = 1024 - (hub.readEncoder(6).position + offset);
+        double dif = rawEncoder - prevEncoder;
+        if(Math.abs(dif) > 500) {
+            wrapAroundOffset -= (int)(1024* Math.signum(dif) );
+        }
+        wrappedEncoder = rawEncoder + wrapAroundOffset;
+
         double error = spindexerMotor.getCurrentPosition() - spindexerPid.getTarget();
 
         if ((Math.abs(spindexerMotor.getVelocity()) < Constants.spindexerConstants.MIN_VEL_TO_START_CHECKING) && (Math.abs(error) > Constants.spindexerConstants.MIN_ERROR_TO_START_CHECKING)){
@@ -129,13 +177,6 @@ public class Spindexer implements Component {
         boolean isCurrentlyMoving = !isStatic();
         justFinishedMoving = wasMoving && !isCurrentlyMoving;
         wasMoving = isCurrentlyMoving;
-
-
-        if (isStatic()) {
-            spindexerState = SpindexerState.NOT_MOVING;
-        } else {
-            spindexerState = SpindexerState.MOVING;
-        }
     }
 
     public double getError() {

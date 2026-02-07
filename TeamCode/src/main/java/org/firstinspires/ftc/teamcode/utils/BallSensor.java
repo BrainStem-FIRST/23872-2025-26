@@ -20,13 +20,13 @@ public class BallSensor {
     private ElapsedTime timer = new ElapsedTime();
     private boolean isWaitingForColor = false;
 
-    public static double delayTimeMs = 100;
+    public static double delayTimeMs = 75;
 
 
     private boolean isIndexing = false;
 
-    public static double greenBallMinG = 0.39, greenBallMaxG = 0.53, greenBallMinB = 0.20, greenBallMaxB = 0.38, greenBallMinR = 0.10, greenBallMaxR = 0.25;
-    public static double purpleBallMinG = 0.25, purpleBallMaxG = 0.4, purpleBallMinB = 0.25, purpleBallMaxB = 0.6, purpleBallMinR = 0.24, purpleBallMaxR = 0.32;
+    public static double greenBallMinG = 0.40, greenBallMaxG = 0.53, greenBallMinB = 0.20, greenBallMaxB = 0.38, greenBallMinR = 0.10, greenBallMaxR = 0.25;
+    public static double purpleBallMinG = 0.25, purpleBallMaxG = 0.40, purpleBallMinB = 0.2, purpleBallMaxB = 0.6, purpleBallMinR = 0.24, purpleBallMaxR = 0.32;
 
         // CHANGE
 
