@@ -11,7 +11,7 @@ public class BallSensorTest extends LinearOpMode {
     public void runOpMode() {
         BallSensor ballSensor = new BallSensor(hardwareMap);
 
-        telemetry.addLine("ready to scan");
+        telemetry.addLine("Ready! Place a ball in front of the sensor.");
         telemetry.update();
 
         waitForStart();
@@ -20,7 +20,7 @@ public class BallSensorTest extends LinearOpMode {
             // beam break state
             boolean ballPresent = !ballSensor.beamBreak.getState();
 
-            // run detection logic
+            // run the color detection logic
             String detected = ballSensor.detectColor();
 
             // telemetry output
