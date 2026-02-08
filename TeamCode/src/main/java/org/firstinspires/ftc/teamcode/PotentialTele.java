@@ -14,36 +14,13 @@ import org.firstinspires.ftc.teamcode.utils.PIDController;
 /*
 What to do:
 
-detected color doesn't update when ball is take out - problem // when u take a ball out and skip from it, the ball sensors doesnt read the color
-Fix logic for optimization to use closest one, and go from there
-check color sensor after every spindexer trun, in case ball didnt shoot - doesnt work
-Indexer not assigning colors to slot properly
+RETUNE COLOR SENSOR
 
+AUTO ADJUSTING BUTTON THAT ADJUSTS IN THE RIGHT DIRECTION, WHEN CLOSE ENOUGH GP RUMBLEs
 
- MAKE DEFINATIVE ROCK SPINDEXER POS THAT ARENT ADDING OFF OF PREV TRARGET POSITIOJ
- D2 BE ABLE TO OVERRIDE THIS
- SMALL ADJUSTMENT TO WHAT U BELIEVE IS IN THE RIGHT DIRECTION
+ ADD SMTH THAT COUNTS BALLS SO DONT HAVE TO RELY ON BALL TRACKER
 
- ADD SMTH THAt OUNTS BALL SO U DONT HAVE TO RELY ON ABLL TRACKER
- GREEnS DONT DERECR WONDERFULLY
-
- MAKE DELAY TIMES SO THAT SPIND SPINS AS SOON AS IT CAN
-
- USE COLOR SENSRO TO DETECT WHEN ITS SOLIDLY IN THX KEERTHANA
- set velocity, spindexer turn and amp spike then power off for a sec
-
-SPINDEXER PID NEEDS FIXING
- make it so that it so theres a color unknown - you spin
-
- TO TEST:
- BALL BUMP UP OTHER BALL TO SHOOTER
-
- Fixed:
- spindexer spin repeatedly, doesnt stop - FIXED Problem: wrong encoder wire
- spindexer has no resistence when turning -- not keeping target pos - fixed
- fix detect color so that it doesnt try to turn 120 when it sees the bad edges of spindles
-shooter doesnt work FIXXXX - maybe motors are fighting each other - wrong run mode
-
+INTAKE SLOWS WHEN A BALL IS TRYING TO BE TURNED
 
 
 
@@ -126,7 +103,7 @@ public class PotentialTele extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);
 
-        robot = new BrainSTEMRobot(hardwareMap, this.telemetry, this, new Pose2d(BrainSTEMRobot.autoX, BrainSTEMRobot.autoY, BrainSTEMRobot.autoH));
+        robot = new BrainSTEMRobot(hardwareMap, this.telemetry, this, new Pose2d(0, 0, 0));
 
         gp1 = new GamepadTracker(gamepad1);
         gp2 = new GamepadTracker(gamepad2);
@@ -153,6 +130,9 @@ public class PotentialTele extends LinearOpMode {
         } else {
             telemetry.addLine("Color is Blue");
         }
+
+        telemetry.addLine("Robot is Ready!");
+//        telemetry.update();
 
         waitForStart();
 
@@ -184,15 +164,14 @@ public class PotentialTele extends LinearOpMode {
 
         if (gamepad1.y) {
             double dx = goal.x - robot.drive.localizer.getPose().position.x;
-            double dy = goal.y - robot.drive.localizer.getPose().position.x;
+            double dy = goal.y - robot.drive.localizer.getPose().position.y;
 
             double targetAngle = Math.atan2(dy, dx);
             double currentHeading = robot.drive.localizer.getPose().heading.toDouble();
-            double angleError = targetAngle - currentHeading;
 
-            while (angleError > Math.PI) angleError -= 2 * Math.PI;
-            while (angleError < -Math.PI) angleError += 2 * Math.PI;
-            rx = alignmentPID.update(angleError);
+
+            alignmentPID.setTarget(targetAngle);
+            rx = alignmentPID.update(currentHeading);
         }
 
         robot.drive.setMotorPowers(
@@ -212,11 +191,9 @@ public class PotentialTele extends LinearOpMode {
         }
 
         if (gp1.isFirstLeftBumper()) {
-
             robot.spindexer.setTargetAdj(Constants.spindexerConstants.TICKS_120);
-        } else if (gp1.isFirstLeftTrigger()) {
-
         }
+
 
     }
 
@@ -232,10 +209,10 @@ public class PotentialTele extends LinearOpMode {
             robot.shooter.setShooterOff();
         }
 
-        if (gp2.isFirstLeftBumper()) {
 
+
+        if (gp2.isFirstLeftBumper()) {
             robot.pivot.setPivotShootClose();
-//            robot.ramp.setRampUp();
         } else if (gp2.isFirstLeftTrigger()) {
             robot.pivot.setPivotShootFar();
         }
@@ -246,13 +223,17 @@ public class PotentialTele extends LinearOpMode {
             robot.ramp.setRampDown();
         }
 
-        if (gp2.isFirstRightBumper()) {
-            robot.spindexer.setTargetAdj(robot.limelight.ballTrackerNew.getBestRotation());
+        if (gp2.isFirstDpadUp()) {
+            robot.spindexer.setTargetAdj(341);
         }
 
-        if (gp2.isFirstDpadUp()) {
-            robot.spindexer.setTargetAdj(100);
+        if (gp2.isFirstRightBumper()) {
+            robot.spindexer.setTargetAdj(1024);
         }
+
+//        if (gp2.isFirstDpadUp()) {
+//            robot.spindexer.setTargetAdj(100);
+//        }
 
     }
 }

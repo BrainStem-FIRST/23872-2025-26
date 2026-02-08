@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.utils.pidDrive.Waypoint;
 
 @Autonomous(name="untested Blue Close")
 @Config
-public class HippoBlueClose extends LinearOpMode {
+public class ProdAuto extends LinearOpMode {
     public static double[] start = new double[] { -62.5, -41, 0 };
 
     // 1st Spike
@@ -50,27 +50,10 @@ public class HippoBlueClose extends LinearOpMode {
     BrainSTEMRobot robot;
 
     private static class PARAMS{
-
-        // Max power for collecting artifacts
         private double COLLECT_DRIVE_MAX_POWER = 0.3;
     }
-    public static HippoBlueClose.PARAMS PARAMS = new HippoBlueClose.PARAMS();
+    public static ProdAuto.PARAMS PARAMS = new ProdAuto.PARAMS();
 
-
-    public Action triggerSpindexerAtPos(double targetY) {
-        return new Action() {
-            private boolean triggered = false;
-            @Override
-            public boolean run(@NonNull TelemetryPacket packet) {
-                if (!triggered && Math.abs(robot.drive.localizer.getPose().position.y - targetY) < 1.0) {
-                    robot.spindexer.setTargetAdj(Constants.spindexerConstants.TICKS_120);
-//                    robot.limelight.ballTrackerNew.rotated120();
-                    triggered = true;
-                }
-                return !triggered;
-            }
-        };
-    }
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -82,6 +65,8 @@ public class HippoBlueClose extends LinearOpMode {
 
 
         // WAYPOINTS ===============================================================================
+
+
         DrivePath driveToPreloadShoot = new DrivePath(robot.drive, telemetry,
                 new Waypoint(createPose(close1Shooting)).setMaxLinearPower(1)
         );
@@ -106,14 +91,11 @@ public class HippoBlueClose extends LinearOpMode {
                 new Waypoint(createPose(collect2Pre)).setSlowDownPercent(0.2),
                 new Waypoint(createPose(collect9)).setMaxLinearPower(PARAMS.COLLECT_DRIVE_MAX_POWER).setMaxTime(3)
         );
-        // Drive off line -------
 
+        // Drive off line -------
         DrivePath driveOffLine = new DrivePath(robot.drive, telemetry,
                 new Waypoint(createPose(strafePos))
         );
-
-
-        telemetry.addLine("Robot is Ready!");
 
         waitForStart();
 

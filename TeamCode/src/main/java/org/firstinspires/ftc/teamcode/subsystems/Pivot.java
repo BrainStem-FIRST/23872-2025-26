@@ -18,7 +18,15 @@ public class Pivot implements Component {
     public static boolean activateLeft = true, activateRight = true;
     private Servo leftServo;
     private Servo rightServo;
+    public double position;
     public static int leftLower = 2367, leftHigher = 483, rightLower = 533, rightHigher = 2450;
+
+    public enum PivotState{
+        CLOSE,
+        FAR,
+        ADJUSTING
+    }
+    public PivotState pivotState;
 
     public Pivot(HardwareMap hardwareMap, Telemetry telemetry){
 
@@ -34,31 +42,38 @@ public class Pivot implements Component {
         leftServoEx.setPwmRange(axonRange);
         rightServoEx.setPwmRange(new PwmControl.PwmRange(rightLower, rightHigher));
 
+        pivotState = PivotState.CLOSE;
+
 
 
     }
 
     public void setDualServoPosition(double position) {
 
-//        leftServo.setPosition(Range.clip(position + Constants.PivotConstants.DUAL_OFFSET, 0, 1));
         if(activateLeft)
             leftServo.setPosition(position);
         if(activateRight)
             rightServo.setPosition(position);
 
-//        rightServo.setPosition(1.0 - position);
 
     }
 
-    public static double HOOD_ADJ_SHOT = 0.05; // Adjust based on testing
+    public static double HOOD_ADJ_SHOT = 0.1; // Adjust based on testing
 
 
     public void updateCompensatedPosition(int shotCount) {
-        double basePos = 0.75;
-        double newPos = basePos + (shotCount * HOOD_ADJ_SHOT);
 
-        leftServo.setPosition(newPos);
-        rightServo.setPosition(newPos);
+        pivotState = PivotState.ADJUSTING;
+        double basePos = position;
+        if (pivotState == PivotState.CLOSE) {
+            basePos = 0.25;
+        } else if  (pivotState == PivotState.FAR) {
+            basePos = 0.75;
+        }
+
+        double newPos = basePos - (shotCount * HOOD_ADJ_SHOT);
+
+//        setDualServoPosition(newPos);
     }
     public double getLeftPos() {
         return leftServo.getPosition();
@@ -67,11 +82,11 @@ public class Pivot implements Component {
         return rightServo.getPosition();
     }
     public void setPivotShootClose(){
-        setDualServoPosition(0.25);
+        pivotState = PivotState.CLOSE;
     }
     public void setPivotShootFar() {
-        setDualServoPosition(0.75);
-    } // change
+        pivotState = PivotState.FAR;
+    }
 
     @Override
     public void reset() {
@@ -80,7 +95,18 @@ public class Pivot implements Component {
 
     @Override
     public void update() {
+        switch (pivotState) {
+            case CLOSE:
+                setDualServoPosition(0.25);
+                position = 0.25;
+                break;
+            case FAR:
+                setDualServoPosition(0.4);
+                position = 0.4;
+            case ADJUSTING:
 
+
+        }
     }
 
     @Override

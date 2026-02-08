@@ -8,18 +8,15 @@ public class Constants {
 
             // PID Constants
             // TODO: Tune for built in PID
-            public  double kP_ONE = 0.0003;
-            public   double kP_TWO = 0.0003;
+            public  double kP_ONE = 0.0034;
             public  double kI = 0.0;
-            public  double kD = 0.0001;
-            public  double kF = 0.0;
-            public  double kV1 = 0.000115;
-            public  double kV2 = 0.000115;
+            public  double kD = 0;
+            public  double kV1 = 0.00053;
 
             // Vel Targets (ticks per second)
             public  double AUTO_VEL = 300;
-            public  double FAR_SHOOT_VEL = 1000;
-            public  double CLOSE_SHOOT_VEL = 1000;
+            public  double FAR_SHOOT_VEL = 1860;
+            public  double CLOSE_SHOOT_VEL = 1400;
 
             // Limits
             public  double MAX_TICKS_PER_SEC = 2300;
@@ -36,7 +33,7 @@ public class Constants {
             // TODO: Update ticks for new encoder
 
             // PID Constants
-            public double INDEXER_KP = -0.0006; //0.00055
+            public double INDEXER_KP = -0.00055; //0.00055
             public double INDEXER_KI = 0.0;
             public double INDEXER_KD = 0.000005;
             public double INDEXER_KF = 0.12;
@@ -45,7 +42,7 @@ public class Constants {
             public int TICKS_120 = 341;
             public int TICKS_60 = 48* (1024/288);
             public int TICKS_360 = 1024;
-            public double ERROR_THRESHOLD = 30;
+            public double ERROR_THRESHOLD = 25;
 
             // Limits
             public double MAX_POWER = 0.5;
@@ -87,7 +84,7 @@ public class Constants {
 
         // Servo Position
         public double DOWN_POSITION = 0.99; // change
-        public double UP_POSITION = 0.9; // change
+        public double UP_POSITION = 0.6; // change
     }
 
     public static RampConstants rampConstants = new RampConstants();
@@ -111,8 +108,8 @@ public class Constants {
 
     public static class DriveConstants {
 
-            public static double ALIGNMENT_KP = 1.1;
-            public static double ALIGNMENT_KI = 0.13;
+            public static double ALIGNMENT_KP = 1.3;
+            public static double ALIGNMENT_KI = 0;
             public static double ALIGNMENT_KD = 0.0;
 
         }

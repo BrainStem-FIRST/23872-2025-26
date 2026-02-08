@@ -263,29 +263,7 @@ public class AutoActions {
         };
     }
 
-    // TODO: Fix wait for Accurate Shooter Vel
-//    public static Action waitForAccurateShooterVelocity() {
-//        return new Action() {
-//            final ElapsedTime timer = new ElapsedTime();
-//            boolean first = true;
-//            @Override
-//            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-//                if (first) {
-//                    first = false;
-//                    timer.reset();
-//                }
-//
-//                if (timer.seconds() >= 2)
-//                    return false;
-//
-//                double error1 = Math.abs(Math.abs(robot.shooter.shooterMotorOne.getVelocity()) - robot.shooter.shooterPID1.getTarget()); // change
-//                double error2 = Math.abs(Math.abs(robot.shooter.shooterMotorTwo.getVelocity()) - robot.shooter.shooterPID2.getTarget()); // change
-//
-//                double threshold = 30;
-//                return (error1 > threshold || error2 > threshold);
-//            }
-//        };
-//    }
+
 
     public static Action waitForAccurateShooterVelocity() {
         return new Action() {

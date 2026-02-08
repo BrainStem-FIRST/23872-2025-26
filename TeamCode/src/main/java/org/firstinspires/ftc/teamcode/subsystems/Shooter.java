@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.utils.Component;
 import org.firstinspires.ftc.teamcode.utils.PIDController;
 import org.firstinspires.ftc.teamcode.Constants;
 
-
+/*
 @Disabled
 public class Shooter implements Component {
 
@@ -169,3 +169,5 @@ public class Shooter implements Component {
         return null;
     }
 }
+
+ */

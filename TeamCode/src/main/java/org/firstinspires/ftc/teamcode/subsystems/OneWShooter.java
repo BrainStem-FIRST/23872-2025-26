@@ -74,7 +74,7 @@ public class OneWShooter implements Component {
         shooterMotorTwo.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
         shooterMotorTwo.setDirection(DcMotorSimple.Direction.FORWARD);
-        shooterMotorOne.setDirection(DcMotorSimple.Direction.FORWARD);
+        shooterMotorOne.setDirection(DcMotorSimple.Direction.REVERSE);
 
         shooterMotorOne.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
         shooterMotorTwo.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
@@ -83,6 +83,10 @@ public class OneWShooter implements Component {
         shooterPID = new PIDController(Constants.shooterConstants.kP_ONE, Constants.shooterConstants.kI, Constants.shooterConstants.kD);
         shooterPID.setInputBounds(0, Constants.shooterConstants.MAX_TICKS_PER_SEC);
         shooterPID.setOutputBounds(0,1);
+
+
+
+        shotsFired = 0;
 
 //        PIDFCoefficients newPIDF = new PIDFCoefficients(
 //                Constants.shooterConstants.kP_ONE,
@@ -132,25 +136,27 @@ public class OneWShooter implements Component {
                 break;
             case AUTO:
                 setBothMotorVelocities(Constants.shooterConstants.CLOSE_SHOOT_VEL);
-                targetVel = Constants.shooterConstants.CLOSE_SHOOT_VEL;
 
                 targetVel = Constants.shooterConstants.AUTO_VEL;
                 break;
 
         }
 
+        // PIVOT CHANGING LOGIC
         double currentVel = shooterMotorOne.getVelocity();
         boolean isAtSpeed = Math.abs(currentVel - targetVel) < 50;
 
 
-        if (wasAtSpeed && currentVel < (targetVel - 200)) {
+        if (wasAtSpeed && currentVel < (targetVel - 100)) {
             shotsFired++;
         }
 
         wasAtSpeed = isAtSpeed;
 
-        telemetry.addData("shooter motor state", shooterState);
-//
+        if (shotsFired == 3) {
+            shotsFired = 0;
+        }
+
 
 
         currentVel1 = Math.abs(shooterMotorOne.getVelocity());
@@ -158,13 +164,6 @@ public class OneWShooter implements Component {
 
         error1 = Math.abs(currentVel1 - targetVel);
         error2 = Math.abs(currentVel2 - targetVel);
-
-        telemetry.addData("Shots fired", shotsFired);
-
-        telemetry.addData("Shooter Target", targetVel);
-        telemetry.addData("Shooter Current", shooterMotorOne.getVelocity());
-
-
     }
 
     public void resetShotCounter() {
@@ -206,20 +205,20 @@ public class OneWShooter implements Component {
     }
     public void setShooterShootFar() {
         shooterState = ShooterState.SHOOT_FAR;
-//        shooterPID.reset();
+        shooterPID.reset();
     }
     public void setShooterShootClose() {
         shooterState = ShooterState.SHOOT_CLOSE;
-//        shooterPID.reset();
+        shooterPID.reset();
     }
     public void setShooterOff() {
         shooterState = ShooterState.OFF;
-//        shooterPID.reset();
+        shooterPID.reset();
     }
 
     public void setShooterIdle(){
         shooterState = ShooterState.IDLE;
-//        shooterPID.reset();
+        shooterPID.reset();
     }
 
     @Override

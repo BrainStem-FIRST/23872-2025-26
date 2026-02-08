@@ -63,7 +63,6 @@ public class BallTrackerNew {
         spindTick = spindexer.getCurrentPosition();
         spindAbsTicks = calcAbsPos(spindTick);
 
-//        spindAbsTicks = spindexer.getAdjustedPosition();
         updateSlotTicks(slotA);
         updateSlotTicks(slotB);
         updateSlotTicks(slotC);
@@ -128,15 +127,15 @@ public class BallTrackerNew {
         int scoreB = calculateScore(stateB);
         int scoreC = calculateScore(stateC);
 
-        int targetShooterTick = 2730;
+        int targetShooterTick = 1024/3;
         int bestDelta = 0;
 
         if (scoreA >= scoreB && scoreA >= scoreC) {
-            bestDelta = (targetShooterTick - slotA.currentAbsPos + 8192) % 8192;
+            bestDelta = (targetShooterTick - slotA.currentAbsPos + 1024) % 1024;
         } else if (scoreB >= scoreC) {
-            bestDelta = (targetShooterTick - slotB.currentAbsPos + 8192) % 8192;
+            bestDelta = (targetShooterTick - slotB.currentAbsPos + 1024) % 1024;
         } else {
-            bestDelta = (targetShooterTick - slotC.currentAbsPos + 8192) % 8192;
+            bestDelta = (targetShooterTick - slotC.currentAbsPos + 1024) % 1024;
         }
 
         return bestDelta;
@@ -196,6 +195,12 @@ public class BallTrackerNew {
             }
         }
         return score;
+    }
+    public void removeAll() {
+        slotA.color = BallColor.valueOf("EMPTY");
+        slotB.color = BallColor.valueOf("EMPTY");
+        slotC.color = BallColor.valueOf("EMPTY");
+
     }
 
     public void addBall(BallColor color) {

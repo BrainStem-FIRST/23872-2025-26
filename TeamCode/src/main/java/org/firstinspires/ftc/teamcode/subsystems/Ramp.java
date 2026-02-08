@@ -65,6 +65,11 @@ public class Ramp implements Component {
     public void setRampUp() { rampState = RampState.UP;}
     public void setRampDown() { rampState = RampState.DOWN;};
 
+    public RampState checkRampState() {
+        return rampState;
+    }
+
+
 
     @Override
     public String test() {

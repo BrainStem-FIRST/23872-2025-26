@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -9,6 +10,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.util.ArrayList;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.rr.MecanumDrive;
 import org.firstinspires.ftc.teamcode.srs.SRSHub;
 import org.firstinspires.ftc.teamcode.subsystems.Collector;
@@ -41,7 +43,7 @@ public class BrainSTEMRobot {
     public Pivot pivot;
     public Ramp ramp;
     public OneWShooter shooter;
-
+    public BallTrackerNew ballTracker;
     private boolean goodToMove = false;
     private BallTrackerNew.BallColor detectedColor;
     private ElapsedTime ballDetectTimer = new ElapsedTime();
@@ -68,6 +70,8 @@ public class BrainSTEMRobot {
         pivot = new Pivot(hwMap, telemetry);
         limelight = new Limelight(hwMap, telemetry, this);
 
+        ballTracker = new BallTrackerNew(spindexer);
+
 
         subsystems.add(limelight);
 
@@ -86,6 +90,7 @@ public class BrainSTEMRobot {
 
 
     public void update() {
+        String newBall;
         for (Component c : subsystems) {
             c.update();
         }
@@ -93,12 +98,14 @@ public class BrainSTEMRobot {
 
         drive.localizer.update();
 
+//
+        if (shooter.shooterState == OneWShooter.ShooterState.SHOOT_CLOSE || shooter.shooterState == OneWShooter.ShooterState.SHOOT_FAR) {
 
-//        if (shooter.shooterState == OneWShooter.ShooterState.SHOOT_CLOSE || shooter.shooterState == OneWShooter.ShooterState.SHOOT_FAR) {
-//            pivot.updateCompensatedPosition(shooter.shotsFired);
-//        } else {
-//            shooter.resetShotCounter();
-//        }
+            pivot.updateCompensatedPosition(shooter.shotsFired);
+            telemetry.addLine("OKKKKKKKKKk");
+        } else {
+            shooter.resetShotCounter();
+        }
 
         if (limelight != null) {
             limelight.update();
@@ -108,7 +115,7 @@ public class BrainSTEMRobot {
 
         // DETECT BALL IF SPIND IS NOT MOVING
         if (isSpindStopped ) {
-            String newBall = ballSensor.scanForNewBall();
+            newBall = ballSensor.scanForNewBall();
 
             if (newBall != null ) {
 
@@ -118,12 +125,25 @@ public class BrainSTEMRobot {
                 collectSlot.color = color;
 
                 if (limelight.ballTrackerNew.isNextSlotEmpty()) {
-                    spindexer.setTargetAdj(Constants.spindexerConstants.TICKS_120);
+//                    spindexer.setTargetAdj(j.spindexerConstants.TICKS_120);
                 }
             }
+            telemetry.addData("Distance (cm)", "%.3f", ((DistanceSensor) ballSensor.colorSensor).getDistance(DistanceUnit.CM));
         }
 
         isNextEmpty = limelight.ballTrackerNew.isNextSlotEmpty();
+
+        // ANTIJAMMM
+
+//        if (ballSensor.isDistanceGreaterThanSeven() && spindexer.isJammed()) {
+//
+//        }
+
+
+        // clearing ball tracking
+        if (shooter.shotsFired == 3) {
+            ballTracker.removeAll();
+        }
 
         // ADD BALL TO BALL TRACK + MOVE SPINDEXER (CAN BE REMOVED)
         // TODO: fine tune settle time
@@ -207,12 +227,17 @@ public class BrainSTEMRobot {
 
         telemetry.addLine("\n=== LOCATION ===");
         telemetry.addData("Pose", drive.localizer.getPose().toString());
+        telemetry.addData("x", drive.localizer.getPose().position.x);
+        telemetry.addData("y", drive.localizer.getPose().position.y);
+        telemetry.addData("heading", drive.localizer.getPose().heading.toDouble());
 
         telemetry.addLine("\n=== SHOOTER ===");
         telemetry.addData("State", shooter.shooterState);
-        telemetry.addData("Vel", shooter.shooterMotorOne.getVelocity());
+        telemetry.addData("Shooter Vel", shooter.shooterMotorOne.getVelocity());
+        telemetry.addData("Shooter Target", shooter.shooterPID.getTarget());
         telemetry.addData("At Speed", Math.abs(shooter.shooterMotorOne.getVelocity() - shooter.targetVel) < 50);
         telemetry.addData("Giving power", shooter.shooterMotorOne.getPower());
+        telemetry.addData("Shots Fired", shooter.shotsFired);
 
         telemetry.addLine("\n=== SPINDEXER ===");
         telemetry.addData("Position", spindexer.getCurrentPosition());
@@ -222,6 +247,7 @@ public class BrainSTEMRobot {
         telemetry.addLine("\n=== HOOD ===");
         telemetry.addData("Pivot left pos", pivot.getLeftPos());
         telemetry.addData("Pivot right pos", pivot.getRightPos());
+        telemetry.addData("Pivot state", pivot.pivotState);
 
 
         telemetry.addLine("\n=== INTAKE + RAMP ===");

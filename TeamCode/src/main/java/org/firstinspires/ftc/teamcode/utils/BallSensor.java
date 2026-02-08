@@ -3,12 +3,15 @@ package org.firstinspires.ftc.teamcode.utils;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.PwmControl; // added for led
 import com.qualcomm.robotcore.hardware.ServoImplEx; // added for led
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @Config
 public class BallSensor {
@@ -21,7 +24,9 @@ public class BallSensor {
     private ElapsedTime timer = new ElapsedTime();
     private boolean isWaitingForColor = false;
 
-    public static double delayTimeMs = 75;
+    public static double delayTimeMs = 200;
+    public static double ballDistance = 4;
+    public static double ballMinDistance = 0.75;
     private boolean isIndexing = false;
 
     public static double greenBallMinG = 0.40, greenBallMaxG = 0.53, greenBallMinB = 0.20, greenBallMaxB = 0.38, greenBallMinR = 0.10, greenBallMaxR = 0.25;
@@ -62,7 +67,9 @@ public class BallSensor {
 
         if (lastBeamState && !currentBeamState) {
             lastBeamState = currentBeamState;
-            if (timer.milliseconds() > delayTimeMs) {
+            if (timer.milliseconds() > delayTimeMs ||
+                    (((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM) < ballDistance) &&
+                            (((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM) > ballMinDistance))      {
                 isWaitingForColor = false;
                 return detectColor();
             }
@@ -71,6 +78,13 @@ public class BallSensor {
         lastBeamState = currentBeamState;
         return null;
     }
+
+
+    public boolean isDistanceGreaterThanSeven() {
+        return (((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM) > 7);
+    }
+
+
 
     public String detectColor() {
         NormalizedRGBA colors = colorSensor.getNormalizedColors();

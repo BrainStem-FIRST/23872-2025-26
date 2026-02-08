@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.Constants;
 
 @Config
 public class Spindexer implements Component {
-    public static double maxPowerErrorThreshold = 200, maxPower = 0.99;
+    public static double maxPowerErrorThreshold = 150, maxPower = 0.99;
 
     public int SPINDEXER_TIME;
 
@@ -42,6 +42,7 @@ public class Spindexer implements Component {
     private int offset, wrapAroundOffset;
 
     private SRSHub hub;
+    private double error;
 
     public boolean indexerCued;
     private BrainSTEMRobot robot;
@@ -74,7 +75,6 @@ public class Spindexer implements Component {
         antijamTimer = new ElapsedTime();
         spindexerTimer.startTime();
 
-        spindexerPid.setTarget(0);
 
 
 
@@ -96,6 +96,7 @@ public class Spindexer implements Component {
                 "SRSHub"
         );
 
+        spindexerPid.setTarget(rawEncoder); // TODO: check if it fixes
 
 
         hub.init(config);
@@ -122,6 +123,10 @@ public class Spindexer implements Component {
     public void updateIndexerPosition() {
         double error = (spindexerPid.getTarget() - getCurrentPosition());
 
+//        if (error<0) {
+//            error += 1024;
+//        }
+
         double power = spindexerPid.update(getCurrentPosition());
         if (Math.abs(error) > maxPowerErrorThreshold) {
             spindexerMotor.setPower(maxPower * Math.signum(power));
@@ -140,7 +145,10 @@ public class Spindexer implements Component {
 
     }
 
+//    int target;
     public void setTargetAdj(int adjust) {
+//        target += adjust;
+//        target %= 1024;
         spindexerPid.setTarget(spindexerPid.getTarget() + adjust);
     }
 
@@ -160,16 +168,16 @@ public class Spindexer implements Component {
         }
         wrappedEncoder = rawEncoder + wrapAroundOffset;
 
-        double error = spindexerMotor.getCurrentPosition() - spindexerPid.getTarget();
+        error = spindexerMotor.getCurrentPosition() - spindexerPid.getTarget();
 
-        if ((Math.abs(spindexerMotor.getVelocity()) < Constants.spindexerConstants.MIN_VEL_TO_START_CHECKING) && (Math.abs(error) > Constants.spindexerConstants.MIN_ERROR_TO_START_CHECKING)){
-            isUnjamming = true;
-        }
-        else
-            isUnjamming = false;
-
-        if(!isUnjamming)
-            antijamTimer.reset();
+//        if ((Math.abs(spindexerMotor.getVelocity()) < Constants.spindexerConstants.MIN_VEL_TO_START_CHECKING) && (Math.abs(error) > Constants.spindexerConstants.MIN_ERROR_TO_START_CHECKING)){
+//            isUnjamming = true;
+//        }
+//        else
+//            isUnjamming = false;
+//
+//        if(!isUnjamming)
+//            antijamTimer.reset();
 
         updateIndexerPosition();
 
@@ -177,6 +185,14 @@ public class Spindexer implements Component {
         boolean isCurrentlyMoving = !isStatic();
         justFinishedMoving = wasMoving && !isCurrentlyMoving;
         wasMoving = isCurrentlyMoving;
+    }
+
+    public boolean isJammed() {
+        if ((Math.abs(error) > 30) && Math.abs(spindexerMotor.getVelocity()) < 5 ) {
+            return true;
+        }
+
+        return false;
     }
 
     public double getError() {

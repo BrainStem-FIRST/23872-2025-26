@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Collector;
 import org.firstinspires.ftc.teamcode.utils.GamepadTracker;
 import org.firstinspires.ftc.teamcode.utils.PIDController;
 
-
+/*
 @TeleOp(name = "Competition Tele")
 public class MasterTele extends LinearOpMode {
     private GamepadTracker gp1;
@@ -239,3 +239,5 @@ public class MasterTele extends LinearOpMode {
         return angle;
     }
 }
+
+ */
