@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.graphics.Color;
+
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -89,16 +91,15 @@ public class BrainSTEMRobot {
     }
 
 
+
+
     public void update() {
-        String newBall;
         for (Component c : subsystems) {
             c.update();
         }
 
 
         drive.localizer.update();
-
-//
         if (shooter.shooterState == OneWShooter.ShooterState.SHOOT_CLOSE || shooter.shooterState == OneWShooter.ShooterState.SHOOT_FAR) {
 
             pivot.updateCompensatedPosition(shooter.shotsFired);
@@ -110,12 +111,16 @@ public class BrainSTEMRobot {
         if (limelight != null) {
             limelight.update();
         }
-        isSpindStopped = (Math.abs(spindexer.spindexerPid.getTarget() - spindexer.getCurrentPosition())) < 400 ;
+        isSpindStopped = (Math.abs(spindexer.spindexerPid.getTarget() - spindexer.getCurrentPosition())) < 50 || spindexer.spindexerMotor.getVelocity()<15;
         ballSensor.setIfIndexerIsMoving(!isSpindStopped);
 
         // DETECT BALL IF SPIND IS NOT MOVING
         if (isSpindStopped ) {
+            String newBall = "EMPTY";
             newBall = ballSensor.scanForNewBall();
+
+            telemetry.addData("NEW BALL", newBall);
+
 
             if (newBall != null ) {
 
@@ -124,8 +129,11 @@ public class BrainSTEMRobot {
                 BallTrackerNew.Slot collectSlot = limelight.ballTrackerNew.getSlotAtCollectPos();
                 collectSlot.color = color;
 
+
+                telemetry.addLine("NOT NULL BALL");
+
                 if (limelight.ballTrackerNew.isNextSlotEmpty()) {
-//                    spindexer.setTargetAdj(j.spindexerConstants.TICKS_120);
+//                    spindexer.setTargetAdj(341);
                 }
             }
             telemetry.addData("Distance (cm)", "%.3f", ((DistanceSensor) ballSensor.colorSensor).getDistance(DistanceUnit.CM));
@@ -136,7 +144,10 @@ public class BrainSTEMRobot {
         // ANTIJAMMM
 
 //        if (ballSensor.isDistanceGreaterThanSeven() && spindexer.isJammed()) {
-//
+//            spindexer.spindexerMotor.setPower(0);
+//            telemetry.addLine("JAMMED");
+//        } else {
+//            telemetry.addLine("NOTJAMMED");
 //        }
 
 
@@ -196,6 +207,12 @@ public class BrainSTEMRobot {
 
     private void allTelemetry() {
 
+        telemetry.addLine("\n=== BALL SENSOR DEBUG ===");
+        telemetry.addData("Beam State", !ballSensor.beamBreak.getState());
+        telemetry.addData("Timer (ms)", ballSensor.timer);
+        telemetry.addData("Delay Required ", BallSensor.delayTimeMs);
+        telemetry.addData("R/G/B %", String.format("%.2f / %.2f / %.2f", ballSensor.rPercent, ballSensor.gPercent, ballSensor.bPercent));
+
         telemetry.addLine("=== SPINDEXER SLOTS ===");
         telemetry.addData("Slot A", String.format("%s @ %d ticks", limelight.ballTrackerNew.slotA.color, limelight.ballTrackerNew.slotA.currentAbsPos));
         telemetry.addData("Slot B", String.format("%s @ %d ticks", limelight.ballTrackerNew.slotB.color, limelight.ballTrackerNew.slotB.currentAbsPos));
@@ -207,6 +224,8 @@ public class BrainSTEMRobot {
 
         telemetry.addLine("\n=== DETECTION STATES");
         telemetry.addData("Spind Stopped?", isSpindStopped);
+
+        telemetry.addData("Is Indexing?", ballSensor.isIndexing);
         telemetry.addData("Good To Move?", goodToMove);
         telemetry.addData("Detected Color", detectedColor);
         telemetry.addData("Collect color - ball tracking", limelight.ballTrackerNew.thisBall);

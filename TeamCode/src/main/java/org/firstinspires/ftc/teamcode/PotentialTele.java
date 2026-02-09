@@ -22,71 +22,16 @@ AUTO ADJUSTING BUTTON THAT ADJUSTS IN THE RIGHT DIRECTION, WHEN CLOSE ENOUGH GP 
 
 INTAKE SLOWS WHEN A BALL IS TRYING TO BE TURNED
 
+ADD ELApSED TIMER AFTER DETECTING BALL AND BEOFRE SHOOTING
+
+
+AUTO PIVOTING CODE
 
 
 
-// TODO: Tune color sensor vals
-
-
-TELEOP CONTROLS
-
-D1 – DRIVE / ACQUIRE
-LS                : Drive
-RS                : Turn
-RB (hold)         : Intake ON
-RT (hold)         : Intake REV
-LB                : Spindexer +60
-LT                : Spindexer -60
-Y (hold)          : Auto-align
-
-D2 – SHOOT
-Y                 : Shooter HIGH (tap)
-A                 : Shooter LOW (tap)
-B                 : Shooter IDLE (tap)
-X                 : Shooter OFF (tap)
-LB                : Ramp UP (tap)
-LT                : Ramp DOWN (tap)
-RB                : FIRE (tap)
-D-Pad U / D        : Spindexer fine + / - (tap)
-
-WIRING ========================================
-Control:
-
-Motors:
-0: FL
-1: BL
-2: shooterMotorOne + encoder
-3: spindexerMotor + external encoder
-
-Servos:
-0: leftPark
-1:
-2: Ramp
-3:
-4:
-5: leftHood
-
-
-
-
-Expansion:
-0: FR
-1: BR
-2: shooterMotorTwo + encoder
-3: collectorMotor
-
-Servos:
-
-0: rightHood
-1:
-2:
-3:
-4:
-5: rightPark
-
-
-
-
+P1: auto pivoting code for far shooting & anti jamming
+P2: optimizing uato indexinga
+P3: auto
  */
 @TeleOp(name = "Potential Tele Yay")
 public class PotentialTele extends LinearOpMode {

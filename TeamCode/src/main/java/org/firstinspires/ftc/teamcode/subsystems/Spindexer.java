@@ -68,7 +68,7 @@ public class Spindexer implements Component {
 
         spindexerPid = new PIDController(
                 Constants.spindexerConstants.INDEXER_KP,
-                0,
+                Constants.spindexerConstants.INDEXER_KI,
                 Constants.spindexerConstants.INDEXER_KD
         );
         spindexerTimer = new ElapsedTime();

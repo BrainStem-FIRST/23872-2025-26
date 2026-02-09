@@ -21,18 +21,22 @@ public class BallSensor {
     public ServoImplEx ledLight; // added for led
 
     private boolean lastBeamState = true;
-    private ElapsedTime timer = new ElapsedTime();
+    public ElapsedTime timer = new ElapsedTime();
     private boolean isWaitingForColor = false;
 
-    public static double delayTimeMs = 200;
-    public static double ballDistance = 4;
-    public static double ballMinDistance = 0.75;
-    private boolean isIndexing = false;
+    public static double delayTimeMs = 500;
+    public static double ballDistance = 5.8;
+    public static double ballMinDistance = 0.5;
+    public boolean isIndexing = false;
 
-    public static double greenBallMinG = 0.40, greenBallMaxG = 0.53, greenBallMinB = 0.20, greenBallMaxB = 0.38, greenBallMinR = 0.10, greenBallMaxR = 0.25;
-    public static double purpleBallMinG = 0.25, purpleBallMaxG = 0.40, purpleBallMinB = 0.2, purpleBallMaxB = 0.6, purpleBallMinR = 0.24, purpleBallMaxR = 0.32;
+//    public static double greenBallMinG = 0.40, greenBallMaxG = 0.53, greenBallMinB = 0.20, greenBallMaxB = 0.38, greenBallMinR = 0.10, greenBallMaxR = 0.25;
+//    public static double purpleBallMinG = 0.25, purpleBallMaxG = 0.40, purpleBallMinB = 0.2, purpleBallMaxB = 0.6, purpleBallMinR = 0.24, purpleBallMaxR = 0.32;
+//
 
-    // calculated for range 1102-2522
+    public static double greenBallMinG = 0, greenBallMaxG = 0, greenBallMinB = 0, greenBallMaxB = 0, greenBallMinR = 0, greenBallMaxR = 0;
+    public static double purpleBallMinG = 0, purpleBallMaxG = 0, purpleBallMinB = 0, purpleBallMaxB = 0, purpleBallMinR = 0, purpleBallMaxR = 0;
+
+
     public static double POS_GREEN = 0.285;  // added (target 1507)
     public static double POS_PURPLE = 0.555; // added (target 1890)
     public static double POS_WHITE = 0.703;  // added (target 2100)
@@ -58,19 +62,18 @@ public class BallSensor {
     }
 
     public String scanForNewBall() {
-        boolean currentBeamState = !beamBreak.getState();
+        boolean currentBeamState = !beamBreak.getState();  // false = broken, true = not broken
 
         if (isIndexing) {
             lastBeamState = currentBeamState;
+            timer.reset();
             return null;
         }
-
         if (lastBeamState && !currentBeamState) {
             lastBeamState = currentBeamState;
             if (timer.milliseconds() > delayTimeMs ||
                     (((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM) < ballDistance) &&
-                            (((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM) > ballMinDistance))      {
-                isWaitingForColor = false;
+                            (((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM) > ballMinDistance)) {
                 return detectColor();
             }
         }
@@ -80,14 +83,15 @@ public class BallSensor {
     }
 
 
+
     public boolean isDistanceGreaterThanSeven() {
-        return (((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM) > 7);
+        return (((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM) > 4);
     }
 
 
 
     public String detectColor() {
-        NormalizedRGBA colors = colorSensor.getNormalizedColors();
+        NormalizedRGBA colors = ((NormalizedColorSensor)colorSensor).getNormalizedColors();
         double red = colors.red;
         double green = colors.green;
         double blue = colors.blue;

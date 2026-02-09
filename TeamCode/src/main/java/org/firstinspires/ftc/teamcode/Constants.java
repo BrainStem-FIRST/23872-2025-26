@@ -33,19 +33,19 @@ public class Constants {
             // TODO: Update ticks for new encoder
 
             // PID Constants
-            public double INDEXER_KP = -0.00055; //0.00055
-            public double INDEXER_KI = 0.0;
+            public double INDEXER_KP = -0.00045;
+            public double INDEXER_KI = 0;
             public double INDEXER_KD = 0.000005;
-            public double INDEXER_KF = 0.12;
+            public double INDEXER_KF = 0.14;
 
             // Position Constants (ticks)
-            public int TICKS_120 = 341;
+            public int TICKS_120 = 1024/3;
             public int TICKS_60 = 48* (1024/288);
             public int TICKS_360 = 1024;
             public double ERROR_THRESHOLD = 25;
 
             // Limits
-            public double MAX_POWER = 0.5;
+            public double MAX_POWER = 0.7;
 
             // Anti-Jam Detection Constants
             public double MIN_VEL_TO_START_CHECKING = 5;

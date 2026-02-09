@@ -28,7 +28,8 @@ public class BallTrackerNew {
     public enum BallColor {
         PURPLE,
         GREEN,
-        EMPTY
+        EMPTY,
+        SHOULDBENULL
     }
 
 

@@ -43,7 +43,7 @@ public class Collector implements Component {
                 12,
                 0.1,
                 0,
-                12.5
+                14
         );
     }
 
