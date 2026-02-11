@@ -61,30 +61,30 @@ public class Constants {
             public static final double OFF_POWER = 0.0;
         }
 
-        public static class FingerConstants {
-
-            // Servo PWM Range
-            public static final int DOWN_PWM = 837;
-            public static final int UP_PWM = 1258;
-
-            // Servo Position
-            public static final double DOWN_POSITION = 0.07;
-            public static final double UP_POSITION = 0.99;
-
-            // Timing Constants (seconds)
-            public static final double UP_TIME = 0.3;
-            public static final double DOWN_TIME = 0.3;
-        }
+//        public static class FingerConstants {
+//
+//            // Servo PWM Range
+//            public static final int DOWN_PWM = 837;
+//            public static final int UP_PWM = 1258;
+//
+//            // Servo Position
+//            public static final double DOWN_POSITION = 0.07;
+//            public static final double UP_POSITION = 0.99;
+//
+//            // Timing Constants (seconds)
+//            public static final double UP_TIME = 0.3;
+//            public static final double DOWN_TIME = 0.3;
+//        }
 
          public static final class RampConstants {
 
         // Servo PWM Range
-        public int DOWN_PWM = 100;
-        public int UP_PWM = 2550;
+        public int DOWN_PWM = 700;
+        public int UP_PWM = 980;
 
         // Servo Position
         public double DOWN_POSITION = 0.99; // change
-        public double UP_POSITION = 0.6; // change
+        public double UP_POSITION = 0; // change
     }
 
     public static RampConstants rampConstants = new RampConstants();

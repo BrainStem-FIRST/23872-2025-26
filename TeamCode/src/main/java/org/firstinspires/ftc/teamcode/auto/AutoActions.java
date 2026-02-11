@@ -137,32 +137,32 @@ public class AutoActions {
         };
     }
 
-    // OLD FINGER
-    public static Action fingerServoU() {
-        return new SequentialAction (
-                telemetryPacket -> {
-//                    robot.finger.fingerState = Finger.FingerState.UP;
-//                    robot.finger.flickerTimer.reset();
-                    TelemetryPacket packet = new TelemetryPacket();
-                    packet.addLine("finger servo up");
-                    FtcDashboard.getInstance().sendTelemetryPacket(packet);
-                    return false;
-                },
-                new SleepAction(Constants.FingerConstants.UP_TIME)
-        );
-    }
+//    // OLD FINGER
+//    public static Action fingerServoU() {
+//        return new SequentialAction (
+//                telemetryPacket -> {
+////                    robot.finger.fingerState = Finger.FingerState.UP;
+////                    robot.finger.flickerTimer.reset();
+//                    TelemetryPacket packet = new TelemetryPacket();
+//                    packet.addLine("finger servo up");
+//                    FtcDashboard.getInstance().sendTelemetryPacket(packet);
+//                    return false;
+//                },
+//                new SleepAction(Constants.FingerConstants.UP_TIME)
+//        );
+//    }
+//
 
-
-    public static Action fingerServoD() {
-        return new SequentialAction (
-                telemetryPacket -> {
-//                    robot.finger.fingerState = Finger.FingerState.DOWN;
-                    telemetryPacket.addLine("finger Down");
-                    return false;
-                },
-                new SleepAction(Constants.FingerConstants.DOWN_TIME)
-        );
-    }
+//    public static Action fingerServoD() {
+//        return new SequentialAction (
+//                telemetryPacket -> {
+////                    robot.finger.fingerState = Finger.FingerState.DOWN;
+//                    telemetryPacket.addLine("finger Down");
+//                    return false;
+//                },
+//                new SleepAction(Constants.FingerConstants.DOWN_TIME)
+//        );
+//    }
 
     // RAMP
     public static Action rampUp() {
