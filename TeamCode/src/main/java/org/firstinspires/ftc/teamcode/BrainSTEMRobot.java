@@ -276,7 +276,7 @@ public class BrainSTEMRobot {
         telemetry.addData("Pivot left pos", pivot.getLeftPos());
         telemetry.addData("Pivot right pos", pivot.getRightPos());
         telemetry.addData("Pivot state", pivot.pivotState);
-
+        telemetry.addData("Pivot adjusted Pos", pivot.newPos);
 
         telemetry.addLine("\n=== INTAKE + RAMP ===");
         telemetry.addData("Collector", collector.collectorMotor.getVelocity());
