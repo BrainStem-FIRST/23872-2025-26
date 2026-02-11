@@ -19,6 +19,8 @@ public class Pivot implements Component {
     private Servo leftServo;
     private Servo rightServo;
     public double position;
+
+    public double newPos;
     public static int leftLower = 2367, leftHigher = 483, rightLower = 533, rightHigher = 2450;
 
     public enum PivotState{
@@ -57,23 +59,21 @@ public class Pivot implements Component {
 
 
     }
-
-    public static double HOOD_ADJ_SHOT = 0.1; // Adjust based on testing
+    // ADJUST THIS IF HOOD MOVEMENT IS TOO LARGE
+    public static double HOOD_ADJ_SHOT = 0.05; // Adjust based on testing
 
 
     public void updateCompensatedPosition(int shotCount) {
 
-        pivotState = PivotState.ADJUSTING;
+        if (shotCount == 0) {return;}
+
         double basePos = position;
-        if (pivotState == PivotState.CLOSE) {
-            basePos = 0.25;
-        } else if  (pivotState == PivotState.FAR) {
-            basePos = 0.75;
-        }
 
-        double newPos = basePos - (shotCount * HOOD_ADJ_SHOT);
+        newPos = basePos - (shotCount * HOOD_ADJ_SHOT);
 
-//        setDualServoPosition(newPos);
+        pivotState = PivotState.ADJUSTING;
+
+
     }
     public double getLeftPos() {
         return leftServo.getPosition();
@@ -103,8 +103,10 @@ public class Pivot implements Component {
             case FAR:
                 setDualServoPosition(0.4);
                 position = 0.4;
+                break;
             case ADJUSTING:
-
+                setDualServoPosition(newPos);
+                break;
 
         }
     }

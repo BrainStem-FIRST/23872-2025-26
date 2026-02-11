@@ -40,8 +40,6 @@ public class AutoActions {
     public static Action robotUpdate(Telemetry telemetry) {
         return telemetryPacket -> {
             robot.update();
-//            telemetry.addData("Finger state", robot.finger.fingerState);
-//            telemetry.addData("Finger flicker time", robot.finger.flickerTimer);
             Pose2d robotPose = robot.drive.localizer.getPose();
             BrainSTEMRobot.autoX = robotPose.position.x;
             BrainSTEMRobot.autoY = robotPose.position.y;
@@ -91,24 +89,17 @@ public class AutoActions {
     // SPINDEXER
 
     public static Action moveSpindexer120() {
-//        robot.limelight.ballTrackerNew.rotated120();
         return moveSpindexer(Constants.spindexerConstants.TICKS_120);
     }
 
 
     public static Action moveSpindexer60() {
-//        robot.limelight.ballTrackerNew.rotated60();
         return moveSpindexer(Constants.spindexerConstants.TICKS_60);
     }
 
 
     public static Action moveSpindexer360() {
-//        robot.limelight.ballTrackerNew.rotated60();
         return moveSpindexer(Constants.spindexerConstants.TICKS_360);
-    }
-
-    public static Action moveSpindexerALittle() {
-        return moveSpindexer(8);
     }
 
     private static Action moveSpindexer(int ticks) {
@@ -137,38 +128,11 @@ public class AutoActions {
         };
     }
 
-//    // OLD FINGER
-//    public static Action fingerServoU() {
-//        return new SequentialAction (
-//                telemetryPacket -> {
-////                    robot.finger.fingerState = Finger.FingerState.UP;
-////                    robot.finger.flickerTimer.reset();
-//                    TelemetryPacket packet = new TelemetryPacket();
-//                    packet.addLine("finger servo up");
-//                    FtcDashboard.getInstance().sendTelemetryPacket(packet);
-//                    return false;
-//                },
-//                new SleepAction(Constants.FingerConstants.UP_TIME)
-//        );
-//    }
-//
-
-//    public static Action fingerServoD() {
-//        return new SequentialAction (
-//                telemetryPacket -> {
-////                    robot.finger.fingerState = Finger.FingerState.DOWN;
-//                    telemetryPacket.addLine("finger Down");
-//                    return false;
-//                },
-//                new SleepAction(Constants.FingerConstants.DOWN_TIME)
-//        );
-//    }
-
     // RAMP
     public static Action rampUp() {
         return new SequentialAction (
                 telemetryPacket -> {
-//                    robot.ramp.setRampUp();
+                    robot.ramp.setRampUp();
                     return false;
                 }
         );
@@ -176,7 +140,7 @@ public class AutoActions {
     public static Action rampDown() {
         return new SequentialAction (
                 telemetryPacket -> {
-//                    robot.ramp.setRampDown();
+                    robot.ramp.setRampDown();
                     return false;
                 }
         );
@@ -187,7 +151,7 @@ public class AutoActions {
     public static Action pivotClose() {
         return new SequentialAction (
                 telemetryPacket -> {
-//                    robot.pivot.sePivotShootClose();
+                    robot.pivot.setPivotShootClose();
                     return false;
                 }
         );
@@ -255,7 +219,6 @@ public class AutoActions {
             public boolean run(@NonNull TelemetryPacket packet) {
                 if (!triggered && Math.abs(robot.drive.localizer.getPose().position.y - targetY) < 2.0) {
                     robot.spindexer.setTargetAdj(96);
-//                    robot.limelight.ballTrackerNew.rotated60();
                     triggered = true;
                 }
                 return !triggered;

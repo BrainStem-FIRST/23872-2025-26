@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -46,6 +47,7 @@ public class OneWShooter implements Component {
 
     public int shotsFired = 0;
     private boolean wasAtSpeed = false;
+    public ElapsedTime lastShotTime;
     
 
 
@@ -61,6 +63,7 @@ public class OneWShooter implements Component {
     public OneWShooter(HardwareMap hardwareMap, Telemetry telemetry) {
         this.map = hardwareMap;
         this.telemetry = telemetry;
+        lastShotTime = new ElapsedTime();
 
         shooterMotorOne = hardwareMap.get(DcMotorEx.class, "shooterMotorOne");
         shooterMotorTwo = hardwareMap.get(DcMotorEx.class, "shooterMotorTwo");
@@ -142,33 +145,30 @@ public class OneWShooter implements Component {
 
         }
 
-        // PIVOT CHANGING LOGIC
+        currentVel1 = Math.abs(shooterMotorOne.getVelocity());
+        currentVel2 = Math.abs(shooterMotorTwo.getVelocity());
+
+        error1 = Math.abs(currentVel1 - targetVel);
+        error2 = Math.abs(currentVel2 - targetVel);
+
+        // PIVOT
         double currentVel = shooterMotorOne.getVelocity();
         boolean isAtSpeed = Math.abs(currentVel - targetVel) < 50;
 
 
         if (wasAtSpeed && currentVel < (targetVel - 100)) {
             shotsFired++;
+            lastShotTime.reset();
         }
-
         wasAtSpeed = isAtSpeed;
 
-        if (shotsFired == 3) {
+        if ((shotsFired == 3 && lastShotTime.milliseconds() > 500) || lastShotTime.milliseconds() > 2000) {
             shotsFired = 0;
+
         }
-
-
-
-        currentVel1 = Math.abs(shooterMotorOne.getVelocity());
-        currentVel2 = Math.abs(shooterMotorTwo.getVelocity());
-
-        error1 = Math.abs(currentVel1 - targetVel);
-        error2 = Math.abs(currentVel2 - targetVel);
     }
 
-    public void resetShotCounter() {
-        shotsFired = 0;
-    }
+
     public void setBothMotorVelocities(double targetVelocity) {
         shooterPID.setTarget(targetVelocity);
         double error = targetVelocity - Math.abs(shooterMotorOne.getVelocity());
@@ -199,6 +199,11 @@ public class OneWShooter implements Component {
 
     }
 
+
+
+    public void resetShotCounter() {
+        shotsFired = 0;
+    }
     public void setBoth(double power) {
         shooterMotorTwo.setVelocity(power);
         shooterMotorOne.setVelocity(power);

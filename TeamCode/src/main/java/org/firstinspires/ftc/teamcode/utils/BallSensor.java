@@ -24,7 +24,7 @@ public class BallSensor {
     public ElapsedTime timer = new ElapsedTime();
     private boolean isWaitingForColor = false;
 
-    public static double delayTimeMs = 500;
+    public static double delayTimeMs = 200;
     public static double ballDistance = 5.8;
     public static double ballMinDistance = 0.5;
     public boolean isIndexing = false;
@@ -62,25 +62,43 @@ public class BallSensor {
     }
 
     public String scanForNewBall() {
-        boolean currentBeamState = !beamBreak.getState();  // false = broken, true = not broken
+        boolean currentBeamState = !beamBreak.getState(); // false = broken, true = not broken
+        String result = null;
 
-        if (isIndexing) {
-            lastBeamState = currentBeamState;
-            timer.reset();
-            return null;
-        }
-        if (lastBeamState && !currentBeamState) {
-            lastBeamState = currentBeamState;
-            if (timer.milliseconds() > delayTimeMs ||
-                    (((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM) < ballDistance) &&
-                            (((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM) > ballMinDistance)) {
-                return detectColor();
+        if (!isIndexing && !isWaitingForColor) {
+            if (lastBeamState && !currentBeamState) {
+                isWaitingForColor = true;
+                timer.reset();
+
             }
         }
 
+
+
+
+        if (isWaitingForColor && timer.milliseconds() > delayTimeMs) {
+            isWaitingForColor = false;
+            result = detectColor();
+        }
         lastBeamState = currentBeamState;
-        return null;
+        return result;
     }
+
+//        timer.reset();
+//        if (lastBeamState && !currentBeamState) {
+//
+//            lastBeamState = currentBeamState;
+//            if (timer.milliseconds() > delayTimeMs) {
+////                 ||
+////                (((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM) < ballDistance) &&
+////                        (((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM) > ballMinDistance)
+//                return detectColor();
+//            }
+//        }
+//
+//        lastBeamState = currentBeamState;
+//        return null;
+
 
 
 

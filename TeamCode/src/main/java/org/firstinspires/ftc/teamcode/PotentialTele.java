@@ -8,8 +8,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystems.Collector;
+import org.firstinspires.ftc.teamcode.utils.Angle;
 import org.firstinspires.ftc.teamcode.utils.GamepadTracker;
 import org.firstinspires.ftc.teamcode.utils.PIDController;
+import org.firstinspires.ftc.teamcode.utils.math.HeadingCorrect;
 
 /*
 What to do:
@@ -113,9 +115,12 @@ public class PotentialTele extends LinearOpMode {
 
             double targetAngle = Math.atan2(dy, dx);
             double currentHeading = robot.drive.localizer.getPose().heading.toDouble();
-
+            double error = Angle.normDelta(targetAngle - currentHeading);
+//            double error = HeadingCorrect.correctHeadingErrorRad(targetAngle - currentHeading); TODO: IS THIS CORRECT???
 
             alignmentPID.setTarget(targetAngle);
+
+//            rx = alignmentPID.updateWithError(error); // TODO: TEST THIS
             rx = alignmentPID.update(currentHeading);
         }
 

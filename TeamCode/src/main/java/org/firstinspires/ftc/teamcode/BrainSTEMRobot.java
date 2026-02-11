@@ -94,19 +94,27 @@ public class BrainSTEMRobot {
 
 
     public void update() {
-        for (Component c : subsystems) {
-            c.update();
-        }
 
-
-        drive.localizer.update();
-        if (shooter.shooterState == OneWShooter.ShooterState.SHOOT_CLOSE || shooter.shooterState == OneWShooter.ShooterState.SHOOT_FAR) {
+        // COMMENT THIS OUT IF PIVOT NOT WORKING ------
+        if (shooter.shooterState == OneWShooter.ShooterState.SHOOT_FAR) {
 
             pivot.updateCompensatedPosition(shooter.shotsFired);
             telemetry.addLine("OKKKKKKKKKk");
         } else {
             shooter.resetShotCounter();
         }
+        // END OF COMMENT PORTION-------
+
+
+
+        for (Component c : subsystems) {
+            c.update();
+        }
+
+
+        drive.localizer.update();
+
+
 
         if (limelight != null) {
             limelight.update();
@@ -133,6 +141,7 @@ public class BrainSTEMRobot {
                 telemetry.addLine("NOT NULL BALL");
 
                 if (limelight.ballTrackerNew.isNextSlotEmpty()) {
+                    // YOU CAN UNCOMMENT THIS IF NEEDED -------------
 //                    spindexer.setTargetAdj(341);
                 }
             }
