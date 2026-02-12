@@ -47,7 +47,6 @@ public class OneWShooter implements Component {
 
     public int shotsFired = 0;
     private boolean wasAtSpeed = false;
-    public ElapsedTime lastShotTime;
     
 
 
@@ -63,7 +62,6 @@ public class OneWShooter implements Component {
     public OneWShooter(HardwareMap hardwareMap, Telemetry telemetry) {
         this.map = hardwareMap;
         this.telemetry = telemetry;
-        lastShotTime = new ElapsedTime();
 
         shooterMotorOne = hardwareMap.get(DcMotorEx.class, "shooterMotorOne");
         shooterMotorTwo = hardwareMap.get(DcMotorEx.class, "shooterMotorTwo");
@@ -156,16 +154,6 @@ public class OneWShooter implements Component {
         boolean isAtSpeed = Math.abs(currentVel - targetVel) < 50;
 
 
-        if (wasAtSpeed && currentVel < (targetVel - 100)) {
-            shotsFired++;
-            lastShotTime.reset();
-        }
-        wasAtSpeed = isAtSpeed;
-
-        if ((shotsFired == 3 && lastShotTime.milliseconds() > 500) || lastShotTime.milliseconds() > 2000) {
-            shotsFired = 0;
-
-        }
     }
 
 
@@ -215,6 +203,13 @@ public class OneWShooter implements Component {
     public void setShooterShootClose() {
         shooterState = ShooterState.SHOOT_CLOSE;
         shooterPID.reset();
+    }
+
+    public boolean   isShootFar() {
+        if (shooterState == ShooterState.SHOOT_FAR) {
+            return true;
+        }
+        return false;
     }
     public void setShooterOff() {
         shooterState = ShooterState.OFF;

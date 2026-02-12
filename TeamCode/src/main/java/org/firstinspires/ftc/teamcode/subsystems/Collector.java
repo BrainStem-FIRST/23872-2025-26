@@ -36,7 +36,6 @@ public class Collector implements Component {
 
         collectorMotor = map.get(DcMotorEx.class, "collectorMotor");
 
-        collectorMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         collectorMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         collectorMotor.setVelocityPIDFCoefficients(

@@ -3,11 +3,14 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.util.RobotLog;
+import com.sun.tools.javac.code.Attribute;
 
+import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
 import org.firstinspires.ftc.teamcode.srs.SRSHub;
@@ -37,7 +40,7 @@ public class Spindexer implements Component {
     private HardwareMap map;
     private Telemetry telemetry;
 
-    private int rawEncoder, wrappedEncoder;
+    public int rawEncoder, wrappedEncoder, rawerRawEncoder;
 
     private int offset, wrapAroundOffset;
 
@@ -46,6 +49,9 @@ public class Spindexer implements Component {
 
     public boolean indexerCued;
     private BrainSTEMRobot robot;
+
+    public int shotsFired = 0;
+
     public Spindexer(HardwareMap hardwareMap, Telemetry telemetry, BrainSTEMRobot robot) {
         this.map = hardwareMap;
         this.telemetry = telemetry;
@@ -96,36 +102,24 @@ public class Spindexer implements Component {
                 "SRSHub"
         );
 
-        spindexerPid.setTarget(rawEncoder); // TODO: check if it fixes
 
+
+        spindexerPid.setTarget(rawEncoder); // TODO: check if it fixes
 
         hub.init(config);
         while(!hub.ready());
 
 
+
+
         this.offset = -907;
 
-    }
-    public int getCurrentPosition() {
-        return wrappedEncoder;
+
     }
 
-//    public int getAdjustedPosition() {
-/// /        int reversedRaw = 1024 - encoder;
-/// /        int adjusted = (reversedRaw - offset) % 1024;
-/// /        if (adjusted < 0) {
-/// /            adjusted += 1024;
-/// /        }
-/// /
-/// /        return adjusted;
-//
-//    }
     public void updateIndexerPosition() {
         double error = (spindexerPid.getTarget() - getCurrentPosition());
 
-//        if (error<0) {
-//            error += 1024;
-//        }
 
         double power = spindexerPid.update(getCurrentPosition());
         if (Math.abs(error) > maxPowerErrorThreshold) {
@@ -135,7 +129,8 @@ public class Spindexer implements Component {
 
             power = Range.clip(power, -Constants.spindexerConstants.MAX_POWER, Constants.spindexerConstants.MAX_POWER);
 
-            if (isStatic()) {
+
+            if (isStatic() || Math.abs(error) < Constants.spindexerConstants.ERROR_THRESHOLD ){
                 spindexerMotor.setPower(0);
             } else {
                 spindexerMotor.setPower(power);
@@ -145,10 +140,7 @@ public class Spindexer implements Component {
 
     }
 
-//    int target;
     public void setTargetAdj(int adjust) {
-//        target += adjust;
-//        target %= 1024;
         spindexerPid.setTarget(spindexerPid.getTarget() + adjust);
     }
 
@@ -160,6 +152,8 @@ public class Spindexer implements Component {
     @Override
     public void update() {
         hub.update();
+
+        rawerRawEncoder = hub.readEncoder(6).position;
         double prevEncoder = rawEncoder;
         rawEncoder = 1024 - (hub.readEncoder(6).position + offset);
         double dif = rawEncoder - prevEncoder;
@@ -185,7 +179,31 @@ public class Spindexer implements Component {
         boolean isCurrentlyMoving = !isStatic();
         justFinishedMoving = wasMoving && !isCurrentlyMoving;
         wasMoving = isCurrentlyMoving;
+
+
+
+//        if (wasAtSpeed && currentVel < (targetVel - 100)) {
+//            shotsFired++;
+//            lastShotTime.reset();
+//        }
+//        wasAtSpeed = isAtSpeed;
+//
+//        if ((shotsFired == 3 && lastShotTime.milliseconds() > 500) || lastShotTime.milliseconds() > 2000) {
+//            shotsFired = 0;
+//
+//        }
+
+
     }
+
+    public int getCurrentPosition() {
+        return wrappedEncoder;
+    }
+
+    public int getRawPosition() {
+        return hub.readEncoder(6).position;
+    }
+
 
     public boolean isJammed() {
         if ((Math.abs(error) > 30) && Math.abs(spindexerMotor.getVelocity()) < 5 ) {

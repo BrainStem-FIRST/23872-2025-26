@@ -79,7 +79,7 @@ public class PotentialTele extends LinearOpMode {
         }
 
         telemetry.addLine("Robot is Ready!");
-//        telemetry.update();
+        telemetry.update();
 
         waitForStart();
 

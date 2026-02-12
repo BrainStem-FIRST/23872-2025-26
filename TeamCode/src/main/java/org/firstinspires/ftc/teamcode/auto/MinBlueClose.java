@@ -61,15 +61,12 @@ public class MinBlueClose extends LinearOpMode {
 
     public SequentialAction ShootingSequence() {
         return new SequentialAction(
-                AutoActions.fingerServoU(),
                 new SleepAction(0.4),
                 AutoActions.moveSpindexer120(),
                 new SleepAction(0.3),
-                AutoActions.fingerServoU(),
                 new SleepAction(0.4),
                 AutoActions.moveSpindexer120(),
                 new SleepAction(0.3),
-                AutoActions.fingerServoU(),
                 new SleepAction(0.4),
                 AutoActions.moveSpindexer60(),
                 AutoActions.turnShooterOnIdle()

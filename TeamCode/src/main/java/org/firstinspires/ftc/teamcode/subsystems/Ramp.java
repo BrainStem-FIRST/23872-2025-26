@@ -68,6 +68,9 @@ public class Ramp implements Component {
     public RampState checkRampState() {
         return rampState;
     }
+    public boolean isRampUp() {
+        return rampState == RampState.UP;
+    }
 
 
 
