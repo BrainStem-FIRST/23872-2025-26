@@ -241,6 +241,13 @@ public class BrainSTEMRobot {
         telemetry.addData("Delay Required ", BallSensor.delayTimeMs);
         telemetry.addData("R/G/B %", String.format("%.2f / %.2f / %.2f", ballSensor.rPercent, ballSensor.gPercent, ballSensor.bPercent));
 
+        telemetry.addLine("\n=== DRIVE ===");
+        telemetry.addData("FL", drive.FL.getPower());
+        telemetry.addData("BL", drive.BL.getPower());
+        telemetry.addData("FR", drive.FR.getPower());
+        telemetry.addData("BR", drive.BR.getPower());
+
+
         telemetry.addLine("=== SPINDEXER SLOTS ===");
         telemetry.addData("Slot A", String.format("%s @ %d ticks", limelight.ballTrackerNew.slotA.color, limelight.ballTrackerNew.slotA.currentAbsPos));
         telemetry.addData("Slot B", String.format("%s @ %d ticks", limelight.ballTrackerNew.slotB.color, limelight.ballTrackerNew.slotB.currentAbsPos));
