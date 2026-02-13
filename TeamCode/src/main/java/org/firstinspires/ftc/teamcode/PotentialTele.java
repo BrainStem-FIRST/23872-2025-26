@@ -109,20 +109,20 @@ public class PotentialTele extends LinearOpMode {
         double x = gamepad1.left_stick_x * 0.99;
         double rx = gamepad1.right_stick_x * 0.75;
 
-        if (gamepad1.y) {
-            double dx = goal.x - robot.drive.localizer.getPose().position.x;
-            double dy = goal.y - robot.drive.localizer.getPose().position.y;
-
-            double targetAngle = Math.atan2(dy, dx);
-            double currentHeading = robot.drive.localizer.getPose().heading.toDouble();
-            double error = Angle.normDelta(targetAngle - currentHeading);
-//            double error = HeadingCorrect.correctHeadingErrorRad(targetAngle - currentHeading); TODO: IS THIS CORRECT???
-
-            alignmentPID.setTarget(targetAngle);
-
-//            rx = alignmentPID.updateWithError(error); // TODO: TEST THIS
-            rx = alignmentPID.update(currentHeading);
-        }
+//        if (gamepad1.y) {
+//            double dx = goal.x - robot.drive.localizer.getPose().position.x;
+//            double dy = goal.y - robot.drive.localizer.getPose().position.y;
+//
+//            double targetAngle = Math.atan2(dy, dx);
+//            double currentHeading = robot.drive.localizer.getPose().heading.toDouble();
+//            double error = Angle.normDelta(targetAngle - currentHeading);
+////            double error = HeadingCorrect.correctHeadingErrorRad(targetAngle - currentHeading); TODO: IS THIS CORRECT???
+//
+//            alignmentPID.setTarget(targetAngle);
+//
+////            rx = alignmentPID.updateWithError(error); // TODO: TEST THIS
+//            rx = alignmentPID.update(currentHeading);
+//        }
 
         robot.drive.setMotorPowers(
                 y + x + rx,
