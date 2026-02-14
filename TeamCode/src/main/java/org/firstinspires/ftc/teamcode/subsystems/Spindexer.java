@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.Constants;
 
 @Config
 public class Spindexer implements Component {
-    public static double maxPowerErrorThreshold = 150, maxPower = 0.99;
+    public static double maxPowerErrorThreshold = 100, maxPower = 0.99;
 
     public int SPINDEXER_TIME;
 
@@ -41,7 +41,7 @@ public class Spindexer implements Component {
     private Telemetry telemetry;
 
     public int rawEncoder, wrappedEncoder, rawerRawEncoder;
-
+    public int startShootingEncoder;
     private int offset, wrapAroundOffset;
 
     private SRSHub hub;
@@ -181,17 +181,6 @@ public class Spindexer implements Component {
         wasMoving = isCurrentlyMoving;
 
 
-
-//        if (wasAtSpeed && currentVel < (targetVel - 100)) {
-//            shotsFired++;
-//            lastShotTime.reset();
-//        }
-//        wasAtSpeed = isAtSpeed;
-//
-//        if ((shotsFired == 3 && lastShotTime.milliseconds() > 500) || lastShotTime.milliseconds() > 2000) {
-//            shotsFired = 0;
-//
-//        }
 
 
     }

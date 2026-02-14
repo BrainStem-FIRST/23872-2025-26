@@ -120,11 +120,13 @@ public class OneWShooter implements Component {
                 targetVel = 0;
                 break;
             case SHOOT_FAR:
+                shooterPID.setPIDValues(Constants.shooterConstants.kP_TWO, Constants.shooterConstants.kI, Constants.shooterConstants.kD);
                 setBothMotorVelocities(Constants.shooterConstants.FAR_SHOOT_VEL);
                 targetVel = Constants.shooterConstants.FAR_SHOOT_VEL;
 
                 break;
             case SHOOT_CLOSE:
+                shooterPID.setPIDValues(Constants.shooterConstants.kP_ONE, Constants.shooterConstants.kI, Constants.shooterConstants.kD);
                 setBothMotorVelocities(Constants.shooterConstants.CLOSE_SHOOT_VEL);
                 targetVel = Constants.shooterConstants.CLOSE_SHOOT_VEL;
                 break;

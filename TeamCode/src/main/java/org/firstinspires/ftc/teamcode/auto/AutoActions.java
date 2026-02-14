@@ -14,9 +14,18 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Collector;
+import org.firstinspires.ftc.teamcode.subsystems.sensors.Limelight;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 
 public class AutoActions {
+
+
+
 
 
     private static BrainSTEMRobot robot = null;
@@ -97,6 +106,9 @@ public class AutoActions {
         return moveSpindexer(Constants.spindexerConstants.TICKS_60);
     }
 
+    public static Action moveSpindexer(double x) {
+        return moveSpindexer(x);
+    }
 
     public static Action moveSpindexer360() {
         return moveSpindexer(Constants.spindexerConstants.TICKS_360);
@@ -259,6 +271,9 @@ public class AutoActions {
             }
         };
     }
+
+
+
 
 
 

@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystems.Collector;
+import org.firstinspires.ftc.teamcode.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.utils.Angle;
 import org.firstinspires.ftc.teamcode.utils.GamepadTracker;
 import org.firstinspires.ftc.teamcode.utils.PIDController;
@@ -109,20 +110,20 @@ public class PotentialTele extends LinearOpMode {
         double x = gamepad1.left_stick_x * 0.99;
         double rx = gamepad1.right_stick_x * 0.75;
 
-//        if (gamepad1.y) {
-//            double dx = goal.x - robot.drive.localizer.getPose().position.x;
-//            double dy = goal.y - robot.drive.localizer.getPose().position.y;
-//
-//            double targetAngle = Math.atan2(dy, dx);
-//            double currentHeading = robot.drive.localizer.getPose().heading.toDouble();
-//            double error = Angle.normDelta(targetAngle - currentHeading);
-////            double error = HeadingCorrect.correctHeadingErrorRad(targetAngle - currentHeading); TODO: IS THIS CORRECT???
-//
-//            alignmentPID.setTarget(targetAngle);
-//
-////            rx = alignmentPID.updateWithError(error); // TODO: TEST THIS
-//            rx = alignmentPID.update(currentHeading);
-//        }
+        if (gamepad1.y) {
+            double dx = goal.x - robot.drive.localizer.getPose().position.x;
+            double dy = goal.y - robot.drive.localizer.getPose().position.y;
+
+            double targetAngle = Math.atan2(dy, dx);
+            double currentHeading = robot.drive.localizer.getPose().heading.toDouble();
+            double error = Angle.normDelta(targetAngle - currentHeading);
+//            double error = HeadingCorrect.correctHeadingErrorRad(targetAngle - currentHeading); TODO: IS THIS CORRECT???
+
+            alignmentPID.setTarget(Angle.normDelta(targetAngle));
+
+//            rx = alignmentPID.updateWithError(error); // TODO: TEST THIS
+            rx = alignmentPID.update(currentHeading);
+        }
 
         robot.drive.setMotorPowers(
                 y + x + rx,
@@ -151,8 +152,13 @@ public class PotentialTele extends LinearOpMode {
 
         if (gamepad2.yWasPressed()) {
             robot.shooter.setShooterShootFar();
-        } else if (gp2.isFirstA()) {
+            robot.pivot.setPivotShootFar();
+            robot.spindexer.startShootingEncoder = robot.spindexer.wrappedEncoder;
+        }
+
+        if (gp2.isFirstA()) {
             robot.shooter.setShooterShootClose();
+            robot.pivot.setPivotShootClose();
         } else if (gp2.isFirstB()) {
             robot.shooter.setShooterIdle();
         } else if (gp2.isFirstX()) {
@@ -178,6 +184,8 @@ public class PotentialTele extends LinearOpMode {
         }
 
         if (gp2.isFirstRightBumper()) {
+            robot.spindexer.startShootingEncoder = robot.spindexer.wrappedEncoder;
+
             robot.spindexer.setTargetAdj(1024);
         }
 

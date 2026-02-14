@@ -9,13 +9,14 @@ public class Constants {
             // PID Constants
             // TODO: Tune for built in PID
             public  double kP_ONE = 0.0034;
+            public double kP_TWO = 0.0038;
             public  double kI = 0.0;
             public  double kD = 0;
             public  double kV1 = 0.00053;
 
             // Vel Targets (ticks per second)
             public  double AUTO_VEL = 300;
-            public  double FAR_SHOOT_VEL = 1860;
+            public  double FAR_SHOOT_VEL = 1885;
             public  double CLOSE_SHOOT_VEL = 1400;
 
             // Limits
@@ -33,10 +34,10 @@ public class Constants {
             // TODO: Update ticks for new encoder
 
             // PID Constants
-            public double INDEXER_KP = -0.0006;
+            public double INDEXER_KP = -0.003;
             public double INDEXER_KI = 0.0;
             public double INDEXER_KD = 0.0;
-            public double INDEXER_KF = 0.1;
+            public double INDEXER_KF = 0;
 
             // Position Constants (ticks)
             public int TICKS_120 = 1024/3;
@@ -45,7 +46,7 @@ public class Constants {
             public double ERROR_THRESHOLD = 5;
 
             // Limits
-            public double MAX_POWER = 0.7;
+            public double MAX_POWER = 0.99;
 
             // Anti-Jam Detection Constants
             public double MIN_VEL_TO_START_CHECKING = 5;
@@ -57,7 +58,7 @@ public class Constants {
             // Power Constants
             public static double INTAKE_VELOCITY = -3000;
             public static double EXTAKE_VELOCITY = 800;
-            public static double AUTO_VELOCITY = -3000; // ).77
+            public static double AUTO_VELOCITY = -2700; // ).77
             public static final double OFF_POWER = 0.0;
         }
 
@@ -108,7 +109,7 @@ public class Constants {
 
     public static class DriveConstants {
 
-            public static double ALIGNMENT_KP = 1.3;
+            public static double ALIGNMENT_KP = 1;
             public static double ALIGNMENT_KI = 0;
             public static double ALIGNMENT_KD = 0.0;
 

@@ -21,6 +21,7 @@ public class Pivot implements Component {
     public double position;
 
     public double newPos;
+    private OneWShooter shooter;
     public static int leftLower = 2367, leftHigher = 483, rightLower = 533, rightHigher = 2450;
 
     public enum PivotState{
@@ -30,7 +31,7 @@ public class Pivot implements Component {
     }
     public PivotState pivotState;
 
-    public Pivot(HardwareMap hardwareMap, Telemetry telemetry){
+    public Pivot(HardwareMap hardwareMap, Telemetry telemetry, OneWShooter shooter){
 
 
         leftServo = hardwareMap.get(Servo.class, "leftHood");
@@ -46,6 +47,9 @@ public class Pivot implements Component {
 
         pivotState = PivotState.CLOSE;
 
+        this.shooter = shooter;
+
+
 
 
     }
@@ -60,7 +64,7 @@ public class Pivot implements Component {
 
     }
     // ADJUST THIS IF HOOD MOVEMENT IS TOO LARGE
-    public static double HOOD_ADJ_SHOT = 0.05; // Adjust based on testing
+    public static double HOOD_ADJ_SHOT = -0.02; // Adjust based on testing
 
 
     public void updateCompensatedPosition(int shotCount) {
@@ -97,12 +101,12 @@ public class Pivot implements Component {
     public void update() {
         switch (pivotState) {
             case CLOSE:
-                setDualServoPosition(0.25);
                 position = 0.25;
+                setDualServoPosition(0.25);
                 break;
             case FAR:
-                setDualServoPosition(0.4);
                 position = 0.4;
+                setDualServoPosition(0.4);
                 break;
             case ADJUSTING:
                 setDualServoPosition(newPos);

@@ -29,17 +29,19 @@ public class BallSensor {
     public static double ballMinDistance = 0.5;
     public boolean isIndexing = false;
 
-//    public static double greenBallMinG = 0.40, greenBallMaxG = 0.53, greenBallMinB = 0.20, greenBallMaxB = 0.38, greenBallMinR = 0.10, greenBallMaxR = 0.25;
-//    public static double purpleBallMinG = 0.25, purpleBallMaxG = 0.40, purpleBallMinB = 0.2, purpleBallMaxB = 0.6, purpleBallMinR = 0.24, purpleBallMaxR = 0.32;
+    public static double greenBallMinG = 0.40, greenBallMaxG = 0.53, greenBallMinB = 0.20, greenBallMaxB = 0.38, greenBallMinR = 0.10, greenBallMaxR = 0.25;
+    public static double purpleBallMinG = 0.25, purpleBallMaxG = 0.40, purpleBallMinB = 0.2, purpleBallMaxB = 0.6, purpleBallMinR = 0.24, purpleBallMaxR = 0.32;
 //
 
-    public static double greenBallMinG = 0, greenBallMaxG = 0, greenBallMinB = 0, greenBallMaxB = 0, greenBallMinR = 0, greenBallMaxR = 0;
-    public static double purpleBallMinG = 0, purpleBallMaxG = 0, purpleBallMinB = 0, purpleBallMaxB = 0, purpleBallMinR = 0, purpleBallMaxR = 0;
+//    public static double greenBallMinG = 0, greenBallMaxG = 0, greenBallMinB = 0, greenBallMaxB = 0, greenBallMinR = 0, greenBallMaxR = 0;
+//    public static double purpleBallMinG = 0, purpleBallMaxG = 0, purpleBallMinB = 0, purpleBallMaxB = 0, purpleBallMinR = 0, purpleBallMaxR = 0;
 
 
     public static double POS_GREEN = 0.285;  // added (target 1507)
     public static double POS_PURPLE = 0.555; // added (target 1890)
     public static double POS_WHITE = 0.703;  // added (target 2100)
+
+
 
     public double rPercent;
     public double bPercent;
@@ -73,8 +75,10 @@ public class BallSensor {
             }
         }
 
-
         if (isWaitingForColor && timer.milliseconds() > delayTimeMs) {
+
+//               || (((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM) < ballDistance) &&
+//                        (((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM) > ballMinDistance)
             isWaitingForColor = false;
             result = detectColor();
         }

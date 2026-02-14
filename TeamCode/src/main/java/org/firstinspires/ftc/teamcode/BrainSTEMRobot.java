@@ -59,6 +59,8 @@ public class BrainSTEMRobot {
     private ElapsedTime lastShotTime;
 
 
+
+
     private boolean checkingColorAfterMovingSpind = false;
 
     public BrainSTEMRobot(HardwareMap hwMap, Telemetry telemetry, OpMode opMode, Pose2d startPose) {
@@ -73,7 +75,7 @@ public class BrainSTEMRobot {
         collector = new Collector(hwMap, telemetry);
         shooter = new OneWShooter(hwMap, telemetry);
         ramp = new Ramp(hwMap, telemetry);
-        pivot = new Pivot(hwMap, telemetry);
+        pivot = new Pivot(hwMap, telemetry, shooter);
         limelight = new Limelight(hwMap, telemetry, this);
 
         ballTracker = new BallTrackerNew(spindexer);
@@ -102,13 +104,7 @@ public class BrainSTEMRobot {
     public void update() {
 
         // COMMENT THIS OUT IF PIVOT NOT WORKING ------
-//        if (shooter.shooterState == OneWShooter.ShooterState.SHOOT_FAR) {
-//
-//            pivot.updateCompensatedPosition(ballsShot);
-//            telemetry.addLine("OKKKKKKKKKk");
-//        } else {
-//            ballsShot = 0;
-//        }
+        pivot.updateCompensatedPosition(ballsShot);
         // END OF COMMENT PORTION-------
 
 
@@ -156,16 +152,20 @@ public class BrainSTEMRobot {
 
         isNextEmpty = limelight.ballTrackerNew.isNextSlotEmpty();
 
-
-
-        if (hasShot()) {
-            ballsShot++;
-            lastShotTime.reset();
+        if (shooter.isShootFar() && ramp.isRampUp()) {
+            ballsShot = getBallsShot();
         }
-
-        if ((ballsShot == 3 && lastShotTime.milliseconds() > 500) || ( lastShotTime.milliseconds() > 2000 )) {
+        else {
             ballsShot = 0;
         }
+
+
+
+
+
+//        if ((ballsShot == 3 && lastShotTime.milliseconds() > 500) || ( lastShotTime.milliseconds() > 2000 )) {
+//            ballsShot = 0;
+//        }
 
         // ANTIJAMMM
 
@@ -175,9 +175,6 @@ public class BrainSTEMRobot {
 //        } else {
 //            telemetry.addLine("NOTJAMMED");
 //        }
-
-
-
         // ADD BALL TO BALL TRACK + MOVE SPINDEXER (CAN BE REMOVED)
         // TODO: fine tune settle time
 //        if (goodToMove && ballDetectTimer.milliseconds() > 0) {
@@ -188,11 +185,6 @@ public class BrainSTEMRobot {
 //            goodToMove = false;
 //            detectedColor = null;
 //        }
-
-
-
-
-
 
         // CHECK IF SPINDEXER JUST FINISHED MOVING!!! ========================================================
 
@@ -220,9 +212,11 @@ public class BrainSTEMRobot {
 //            }
 //        }
 
-
-
-
+        if (shooter.isShootFar()) {
+            Spindexer.maxPower = 0.4;}
+        else {
+            Spindexer.maxPower = 0.99;
+        }
 
         // TELEMETRY ===============================================================================
         allTelemetry();
@@ -235,17 +229,17 @@ public class BrainSTEMRobot {
 
         telemetry.addData("Balls Shot", ballsShot);
 
-        telemetry.addLine("\n=== BALL SENSOR DEBUG ===");
-        telemetry.addData("Beam State", !ballSensor.beamBreak.getState());
-        telemetry.addData("Timer (ms)", ballSensor.timer);
-        telemetry.addData("Delay Required ", BallSensor.delayTimeMs);
-        telemetry.addData("R/G/B %", String.format("%.2f / %.2f / %.2f", ballSensor.rPercent, ballSensor.gPercent, ballSensor.bPercent));
-
-        telemetry.addLine("\n=== DRIVE ===");
-        telemetry.addData("FL", drive.FL.getPower());
-        telemetry.addData("BL", drive.BL.getPower());
-        telemetry.addData("FR", drive.FR.getPower());
-        telemetry.addData("BR", drive.BR.getPower());
+//        telemetry.addLine("\n=== BALL SENSOR DEBUG ===");
+//        telemetry.addData("Beam State", !ballSensor.beamBreak.getState());
+//        telemetry.addData("Timer (ms)", ballSensor.timer);
+//        telemetry.addData("Delay Required ", BallSensor.delayTimeMs);
+//        telemetry.addData("R/G/B %", String.format("%.2f / %.2f / %.2f", ballSensor.rPercent, ballSensor.gPercent, ballSensor.bPercent));
+//
+//        telemetry.addLine("\n=== DRIVE ===");
+//        telemetry.addData("FL", drive.FL.getPower());
+//        telemetry.addData("BL", drive.BL.getPower());
+//        telemetry.addData("FR", drive.FR.getPower());
+//        telemetry.addData("BR", drive.BR.getPower());
 
 
         telemetry.addLine("=== SPINDEXER SLOTS ===");
@@ -260,24 +254,24 @@ public class BrainSTEMRobot {
         telemetry.addLine("\n=== DETECTION STATES");
         telemetry.addData("Spind Stopped?", isSpindStopped);
 
-        telemetry.addData("Is Indexing?", ballSensor.isIndexing);
-        telemetry.addData("Good To Move?", goodToMove);
-        telemetry.addData("Detected Color", detectedColor);
-        telemetry.addData("Collect color - ball tracking", limelight.ballTrackerNew.thisBall);
-        telemetry.addData("Is next empty", isNextEmpty);
-        telemetry.addData("Color delay time", BallSensor.delayTimeMs);
-        telemetry.addData("from delay settle time", BallSensor.settleDelayMs);
-
-        telemetry.addLine("\n === PATTERN MATCHING ===");
-        telemetry.addData("Target Motif", limelight.ballTrackerNew.targetMotif);
-        telemetry.addData("Fiducial ID", Limelight.feducialResult);
-
-
-        telemetry.addLine("\n=== COLOR SENSOR ===");
-        telemetry.addData("R", ballSensor.rPercent);
-        telemetry.addData("G", ballSensor.gPercent);
-        telemetry.addData("B", ballSensor.bPercent);
-        telemetry.addData("Alpha", ballSensor.alpha);
+//        telemetry.addData("Is Indexing?", ballSensor.isIndexing);
+//        telemetry.addData("Good To Move?", goodToMove);
+//        telemetry.addData("Detected Color", detectedColor);
+//        telemetry.addData("Collect color - ball tracking", limelight.ballTrackerNew.thisBall);
+//        telemetry.addData("Is next empty", isNextEmpty);
+//        telemetry.addData("Color delay time", BallSensor.delayTimeMs);
+//        telemetry.addData("from delay settle time", BallSensor.settleDelayMs);
+//
+//        telemetry.addLine("\n === PATTERN MATCHING ===");
+//        telemetry.addData("Target Motif", limelight.ballTrackerNew.targetMotif);
+//        telemetry.addData("Fiducial ID", Limelight.feducialResult);
+//
+//
+//        telemetry.addLine("\n=== COLOR SENSOR ===");
+//        telemetry.addData("R", ballSensor.rPercent);
+//        telemetry.addData("G", ballSensor.gPercent);
+//        telemetry.addData("B", ballSensor.bPercent);
+//        telemetry.addData("Alpha", ballSensor.alpha);
 
         telemetry.addLine("\n=== LOCATION ===");
         telemetry.addData("Pose", drive.localizer.getPose().toString());
@@ -308,17 +302,19 @@ public class BrainSTEMRobot {
         telemetry.addData("Collector", collector.collectorMotor.getVelocity());
         telemetry.addData("Ramp", ramp.rampState);
 
-
-
-
-
-
-
     }
+    private int getBallsShot() {
+        double diff = (spindexer.wrappedEncoder - spindexer.startShootingEncoder) / 1024. * 360;
 
-    private boolean hasShot() {
-        int position = spindexer.wrappedEncoder%1024;
-        return ramp.isRampUp() && shooter.isShootFar() && (position == 511);
+        if ( diff >= 300) {
+            return 3;
+        } else if ( diff >= 180) {
+            return 2;
+        } else if (diff >= 60) {
+            return 1;
+        }
+        return 0;
+//        return ramp.isRampUp() && shooter.isShootFar() && (Math.abs(position - 200) < 15) && spindexer.spindexerMotor.getVelocity() > 10;
     }
 
 }

@@ -28,25 +28,25 @@ public class BrobAuto extends LinearOpMode {
     // 1st Spike
     public static double[] close1Shooting = new double[] {-24, -24, -135};
     public static double[] collect1Pre = new double[] { -13, -30, -90 };
-    public static double[] collect1Mid = new double[] { -13, -22, -90 };
-    public static double[] collect1 = new double[] { -13, -39, -90 };
-    public static double[] collect2 = new double[] { -13, -44, -90 };
+//    public static double[] collect1Mid = new double[] { -13, -22, -90 };
+//    public static double[] collect1 = new double[] { -13, -39, -90 };
+//    public static double[] collect2 = new double[] { -13, -44, -90 };
     public static double[] collect3 = new double[] { -13, -49, -90 };
     public static double[] strafePos = new double[] { -36, -17, -90 };
 
     // 2nd spike
     public static double[] collect2Pre = new double[] { 11, -30, -90 };
-    public static double[] collect4 = new double[] { 11, -39, -90 };
-    public static double[] collect5 = new double[] { 11, -44, -90 };
+//    public static double[] collect4 = new double[] { 11, -39, -90 };
+//    public static double[] collect5 = new double[] { 11, -44, -90 };
     public static double[] collect6 = new double[] { 11, -49, -90 };
 
     // 3rd spike
-    public static double[] collect3Pre = new double[] { 36, -30, -90 };
-    public static double[] collect3Mid = new double[] { 36, -21, -90 };
-    public static double[] collect7 = new double[] { 36, -39, -90 };
-    public static double[] collect8 = new double[] { 36, -44, -90 };
+//    public static double[] collect3Pre = new double[] { 36, -30, -90 };
+//    public static double[] collect3Mid = new double[] { 36, -21, -90 };
+//    public static double[] collect7 = new double[] { 36, -39, -90 };
+//    public static double[] collect8 = new double[] { 36, -44, -90 };
     public static double[] collect9 = new double[] { 36, -49, -90 };
-    public static double collectMaxPower = 0.3;
+//    public static double collectMaxPower = 0.3;
     BrainSTEMRobot robot;
 
     private static class PARAMS{
