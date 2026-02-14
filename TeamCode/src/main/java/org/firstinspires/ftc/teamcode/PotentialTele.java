@@ -73,11 +73,14 @@ public class PotentialTele extends LinearOpMode {
             red = true;
         }
 
+
+
         if (red){
             telemetry.addLine("Color is Red");
         } else {
             telemetry.addLine("Color is Blue");
         }
+
 
         telemetry.addLine("Robot is Ready!");
         telemetry.update();

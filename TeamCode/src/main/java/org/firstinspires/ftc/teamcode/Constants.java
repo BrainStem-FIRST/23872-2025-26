@@ -17,7 +17,7 @@ public class Constants {
             // Vel Targets (ticks per second)
             public  double AUTO_VEL = 300;
             public  double FAR_SHOOT_VEL = 1885;
-            public  double CLOSE_SHOOT_VEL = 1400;
+            public  double CLOSE_SHOOT_VEL = 1860;
 
             // Limits
             public  double MAX_TICKS_PER_SEC = 2300;

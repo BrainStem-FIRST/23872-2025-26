@@ -5,7 +5,6 @@ import static org.firstinspires.ftc.teamcode.utils.pidDrive.UtilFunctions.create
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
@@ -25,20 +24,20 @@ import java.util.List;
 
 @Autonomous(name="Nine Ball")
 @Config
-public class NineBallAuto extends LinearOpMode {
+public class NoPatterNine extends LinearOpMode {
 
     public List<String> order1 = new ArrayList<>(Arrays.asList("P", "P", "G"));
 
     public List<String> targetOrder = order1; // default
 
-    public static double[] start = new double[] { -68, -48, 0};
+    public static double[] start = new double[] { -65, -41.75, 0};
 
     //Obelisk look
     public static double[] lookAtOb = new double[] {-22, -24, -214};
 
 
     //1st Spike!!
-    public static double[] close1Shooting = new double[] {-36, -36, -135};
+    public static double[] close1Shooting = new double[] {-24, -24, -135};
     public static double[] collect1Pre = new double[] { -12, -30, -90 };
     public static double[] collect1Mid = new double[] { -12, -22, -90 };
 //    public static double[] collect1 = new double[] { -12, -39, -90 };
@@ -62,7 +61,7 @@ public class NineBallAuto extends LinearOpMode {
     private static class PARAMS{
         private double COLLECT_DRIVE_MAX_POWER = 0.15;
     }
-    public static NineBallAuto.PARAMS PARAMS = new NineBallAuto.PARAMS();
+    public static NoPatterNine.PARAMS PARAMS = new NoPatterNine.PARAMS();
 
     public SequentialAction ShootingSequence() {
         return new SequentialAction(
@@ -83,7 +82,7 @@ public class NineBallAuto extends LinearOpMode {
         );
 
         DrivePath driveToPreloadShoot = new DrivePath(robot.drive, telemetry,
-                new Waypoint(createPose(close1Shooting)).setMaxLinearPower(1)
+                new Waypoint(createPose(close1Shooting)).setMaxLinearPower(0.2)
         );
 
         //1st Spike ===================================================================
@@ -126,27 +125,19 @@ public class NineBallAuto extends LinearOpMode {
 
         waitForStart();
 
-        Actions.runBlocking(
-                new SequentialAction(
-                        new ParallelAction(
-                                AutoActions.shooterTurnOnClose(),
-                                driveToOb
-                        )
-                )
-        );
-        updateTargetMotif();
+
         Actions.runBlocking(
                 new ParallelAction(
                         new SequentialAction(
 
-
                                 new ParallelAction(
-                                        driveToPreloadShoot,
-                                        AutoActions.moveSpindexer(motifRotation(0))
+                                        AutoActions.shooterTurnOnClose(),
+
+                                        driveToPreloadShoot
                                 ),
 
 
-                                AutoActions.waitForAccurateShooterVelocity(),
+
                                 ShootingSequence(),
 
 
@@ -166,8 +157,7 @@ public class NineBallAuto extends LinearOpMode {
                                 ),
 
                                 new ParallelAction(
-                                        driveToPreloadShoot,
-                                        AutoActions.moveSpindexer(motifRotation(1))
+                                        driveToPreloadShoot
                                 ),
 
                                 AutoActions.waitForAccurateShooterVelocity(),
@@ -184,8 +174,7 @@ public class NineBallAuto extends LinearOpMode {
                                 new SleepAction(0.3),
 
                                new ParallelAction(
-                                       driveToPreloadShoot,
-                                       AutoActions.moveSpindexer(motifRotation(2))
+                                       driveToPreloadShoot
                                ),
 
 

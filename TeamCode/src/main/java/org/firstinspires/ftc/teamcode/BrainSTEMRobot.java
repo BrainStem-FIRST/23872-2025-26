@@ -103,9 +103,8 @@ public class BrainSTEMRobot {
 
     public void update() {
 
-        // COMMENT THIS OUT IF PIVOT NOT WORKING ------
         pivot.updateCompensatedPosition(ballsShot);
-        // END OF COMMENT PORTION-------
+
 
 
 
@@ -143,7 +142,6 @@ public class BrainSTEMRobot {
                 telemetry.addLine("NOT NULL BALL");
 
                 if (limelight.ballTrackerNew.isNextSlotEmpty()) {
-                    // YOU CAN UNCOMMENT THIS IF NEEDED -------------
                     spindexer.setTargetAdj(341);
                 }
             }
@@ -213,7 +211,7 @@ public class BrainSTEMRobot {
 //        }
 
         if (shooter.isShootFar()) {
-            Spindexer.maxPower = 0.4;}
+            Spindexer.maxPower = 0.5;}
         else {
             Spindexer.maxPower = 0.99;
         }
@@ -306,11 +304,11 @@ public class BrainSTEMRobot {
     private int getBallsShot() {
         double diff = (spindexer.wrappedEncoder - spindexer.startShootingEncoder) / 1024. * 360;
 
-        if ( diff >= 300) {
+        if ( diff >= 290) {
             return 3;
-        } else if ( diff >= 180) {
+        } else if ( diff >= 170) {
             return 2;
-        } else if (diff >= 60) {
+        } else if (diff >= 50) {
             return 1;
         }
         return 0;

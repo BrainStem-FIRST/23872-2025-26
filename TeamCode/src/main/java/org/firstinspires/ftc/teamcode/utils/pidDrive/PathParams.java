@@ -16,11 +16,11 @@ public class PathParams {
     private static final double noMaxTime = -1;
 
     public static class DefaultParams {
-        public double bigSpeedKp = 0.03, smallSpeedKp = 0.03, bigSpeedKd = 0, smallSpeedKd = 0.01;
-        public double speedKi = 0, speedKf = 0.075;
+        public double bigSpeedKp = 0.03, smallSpeedKp = 0.02, bigSpeedKd = 0, smallSpeedKd = 0.01;
+        public double speedKi = 0, speedKf = 0.09;
         public double applyCloseSpeedPIDError = 5;
-        public double closeHeadingKp = 0, closeHeadingKi = 0, closeHeadingKd = 0, headingKf = 0.1;
-        public double farHeadingKp = 0.01, farHeadingKi = 0, farHeadingKd = 0;
+        public double closeHeadingKp = 0, closeHeadingKi = 0, closeHeadingKd = 0, headingKf = 0.09;
+        public double farHeadingKp = 0.009, farHeadingKi = 0, farHeadingKd = 0;
         public double applyCloseHeadingPIDErrorDeg = 0;
         public double lateralWeight = 1.5, axialWeight = 1; // weight the drive powers to correct for differences in driving
         public double minSpeed = 0, maxSpeed = 1;

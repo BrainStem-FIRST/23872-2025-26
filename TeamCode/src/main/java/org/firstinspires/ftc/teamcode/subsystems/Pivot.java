@@ -64,7 +64,7 @@ public class Pivot implements Component {
 
     }
     // ADJUST THIS IF HOOD MOVEMENT IS TOO LARGE
-    public static double HOOD_ADJ_SHOT = -0.02; // Adjust based on testing
+    public static double HOOD_ADJ_SHOT = -0.04; // Adjust based on testing
 
 
     public void updateCompensatedPosition(int shotCount) {
