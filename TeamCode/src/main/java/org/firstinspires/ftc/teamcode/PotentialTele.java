@@ -148,6 +148,11 @@ public class PotentialTele extends LinearOpMode {
             robot.spindexer.setTargetAdj(Constants.spindexerConstants.TICKS_120);
         }
 
+        if (gp1.isFirstX()) {
+
+            robot.spindexer.setTargetAdj(robot.limelight.ballTrackerNew.getBestRotation());
+        }
+
 
     }
 

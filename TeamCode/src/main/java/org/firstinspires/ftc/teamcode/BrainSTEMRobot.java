@@ -12,6 +12,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.util.ArrayList;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.rr.MecanumDrive;
 import org.firstinspires.ftc.teamcode.srs.SRSHub;
@@ -289,6 +290,7 @@ public class BrainSTEMRobot {
         telemetry.addData("Position", spindexer.getCurrentPosition());
         telemetry.addData("Target", spindexer.spindexerPid.getTarget());
         telemetry.addData("Power giving:", spindexer.spindexerMotor.getPower());
+        telemetry.addData("Spindexer Current", spindexer.spindexerMotor.getCurrent(CurrentUnit.MILLIAMPS));
 
         telemetry.addLine("\n=== HOOD ===");
         telemetry.addData("Pivot left pos", pivot.getLeftPos());

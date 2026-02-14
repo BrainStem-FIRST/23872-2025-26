@@ -12,6 +12,7 @@ import com.sun.tools.javac.code.Attribute;
 
 import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
 import org.firstinspires.ftc.teamcode.srs.SRSHub;
 import org.firstinspires.ftc.teamcode.utils.Component;
@@ -21,7 +22,7 @@ import org.firstinspires.ftc.teamcode.Constants;
 
 @Config
 public class Spindexer implements Component {
-    public static double maxPowerErrorThreshold = 100, maxPower = 0.99;
+    public static double maxPowerErrorThreshold = 175, maxPower = 0.99;
 
     public int SPINDEXER_TIME;
 
@@ -122,20 +123,36 @@ public class Spindexer implements Component {
 
 
         double power = spindexerPid.update(getCurrentPosition());
+
+        if (isStatic() || (isUnjamming)) {
+            spindexerMotor.setPower(0);
+            return;
+        }
+
         if (Math.abs(error) > maxPowerErrorThreshold) {
             spindexerMotor.setPower(maxPower * Math.signum(power));
-        } else {
-            power += Math.signum(power) * Constants.spindexerConstants.INDEXER_KF;
-
-            power = Range.clip(power, -Constants.spindexerConstants.MAX_POWER, Constants.spindexerConstants.MAX_POWER);
-
-
-            if (isStatic() || Math.abs(error) < Constants.spindexerConstants.ERROR_THRESHOLD ){
-                spindexerMotor.setPower(0);
-            } else {
-                spindexerMotor.setPower(power);
-            }
         }
+        else {
+            power += Math.signum(power) * Constants.spindexerConstants.INDEXER_KF;
+            power = Range.clip(power, -Constants.spindexerConstants.MAX_POWER, Constants.spindexerConstants.MAX_POWER);
+            spindexerMotor.setPower(power);
+        }
+
+//        if (Math.abs(error) > maxPowerErrorThreshold) {
+//            spindexerMotor.setPower(maxPower * Math.signum(power));
+//        } else {
+//
+//
+//
+//            if (isStatic()  || (isUnjamming && antijamTimer.milliseconds()<500)){
+//                spindexerMotor.setPower(0);
+//            } else {
+//                power += Math.signum(power) * Constants.spindexerConstants.INDEXER_KF;
+//
+//                power = Range.clip(power, -Constants.spindexerConstants.MAX_POWER, Constants.spindexerConstants.MAX_POWER);
+//                spindexerMotor.setPower(power);
+//            }
+//        }
 
 
     }
@@ -164,16 +181,22 @@ public class Spindexer implements Component {
 
         error = spindexerMotor.getCurrentPosition() - spindexerPid.getTarget();
 
-//        if ((Math.abs(spindexerMotor.getVelocity()) < Constants.spindexerConstants.MIN_VEL_TO_START_CHECKING) && (Math.abs(error) > Constants.spindexerConstants.MIN_ERROR_TO_START_CHECKING)){
-//            isUnjamming = true;
-//        }
-//        else
-//            isUnjamming = false;
-//
-//        if(!isUnjamming)
-//            antijamTimer.reset();
+
+        double currentAmps = spindexerMotor.getCurrent(CurrentUnit.MILLIAMPS);
+
+        if (currentAmps > 7000 && spindexerMotor.getPower() > 0.98 && !isUnjamming) {
+            telemetry.addLine("JAM DETECTED - STARTING COOLDOWN");
+            isUnjamming = true;
+            antijamTimer.reset();
+        }
+
+        if (isUnjamming && antijamTimer.milliseconds() > 500) {
+            isUnjamming = false;
+        }
 
         updateIndexerPosition();
+
+
 
 
         boolean isCurrentlyMoving = !isStatic();
@@ -194,13 +217,7 @@ public class Spindexer implements Component {
     }
 
 
-    public boolean isJammed() {
-        if ((Math.abs(error) > 30) && Math.abs(spindexerMotor.getVelocity()) < 5 ) {
-            return true;
-        }
 
-        return false;
-    }
 
     public double getError() {
         return Math.abs(spindexerMotor.getCurrentPosition() - spindexerPid.getTarget());

@@ -34,10 +34,10 @@ public class Constants {
             // TODO: Update ticks for new encoder
 
             // PID Constants
-            public double INDEXER_KP = -0.003;
+            public double INDEXER_KP = -0.004;
             public double INDEXER_KI = 0.0;
             public double INDEXER_KD = 0.0;
-            public double INDEXER_KF = 0;
+            public double INDEXER_KF = 0.05;
 
             // Position Constants (ticks)
             public int TICKS_120 = 1024/3;
