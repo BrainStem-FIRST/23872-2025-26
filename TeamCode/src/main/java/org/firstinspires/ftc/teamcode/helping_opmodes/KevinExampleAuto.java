@@ -1,12 +1,15 @@
 package org.firstinspires.ftc.teamcode.helping_opmodes;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
+import org.firstinspires.ftc.teamcode.rr.Drawing;
 import org.firstinspires.ftc.teamcode.utils.pidDrive.DrivePath;
 import org.firstinspires.ftc.teamcode.utils.pidDrive.Waypoint;
 
@@ -23,10 +26,12 @@ public class KevinExampleAuto extends LinearOpMode {
         Pose2d p1 = new Pose2d(x, y, h);
         Pose2d p2 = new Pose2d(x2, y2, h2);
 
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+        telemetry.setMsTransmissionInterval(20);
+
         BrainSTEMRobot robot = new BrainSTEMRobot(hardwareMap, telemetry, this, start);
-        DrivePath path = new DrivePath(robot.drive,
-                new Waypoint(p1),
-                new Waypoint(p2)
+        DrivePath path = new DrivePath(robot.drive, telemetry,
+                new Waypoint(p1)
         );
         // READ THIS INFO VERY CAREFULLY
         // the robot starts at "start" and will drive to "end" and then drive back to "start"
@@ -47,5 +52,11 @@ public class KevinExampleAuto extends LinearOpMode {
         // how do you know when you're done tuning? idk you decide, when the robot is not oscillating at each waypoint anymore
         waitForStart();
         Actions.runBlocking(path);
+//        Actions.runBlocking(packet -> {
+//            robot.drive.updatePoseEstimate();
+//            Pose2d robotPose = robot.drive.localizer.getPose();
+//            Drawing.drawRobot(packet.fieldOverlay(), robotPose);
+//            return true;
+//        });
     }
 }

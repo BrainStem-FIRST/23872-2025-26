@@ -3,7 +3,12 @@ package org.firstinspires.ftc.teamcode.utils.pidDrive;
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Vector2d;
 
+import org.firstinspires.ftc.teamcode.utils.math.Vec;
+
+import java.util.Vector;
 import java.util.function.BooleanSupplier;
 
 @Config
@@ -13,23 +18,29 @@ public class PathParams {
         TANGENT,
         REVERSE_TANGENT
     }
+    protected enum PathType {
+        NORMAL,
+        CURVED
+    }
     private static final double noMaxTime = -1;
 
     public static class DefaultParams {
-        public double bigSpeedKp = 0.03, smallSpeedKp = 0.02, bigSpeedKd = 0, smallSpeedKd = 0.01;
-        public double speedKi = 0, speedKf = 0.09;
+        public double bigSpeedKp = 0.02, smallSpeedKp = 0.013, bigSpeedKd = 0, smallSpeedKd = 0.0001;
+        public double speedKi = 0, speedKf = 0.075;
         public double applyCloseSpeedPIDError = 5;
-        public double closeHeadingKp = 0, closeHeadingKi = 0, closeHeadingKd = 0, headingKf = 0.09;
-        public double farHeadingKp = 0.009, farHeadingKi = 0, farHeadingKd = 0;
-        public double applyCloseHeadingPIDErrorDeg = 0;
-        public double lateralWeight = 1.5, axialWeight = 1; // weight the drive powers to correct for differences in driving
+        public double closeHeadingKp = 0.01, closeHeadingKi = 0, closeHeadingKd = 0.001, headingKf = 0.1;
+        public double farHeadingKp = 0.012, farHeadingKi = 0, farHeadingKd = 0;
+        public double applyCloseHeadingPIDErrorDeg = 15;
+        public double lateralWeight = 1.9, axialWeight = 1; // weight the drive powers to correct for differences in driving
         public double minSpeed = 0, maxSpeed = 1;
         public double minHeadingSpeed = 0, maxHeadingSpeed = 1;
         public double maxTime = 100;
         public HeadingLerpType headingLerpType = HeadingLerpType.LINEAR;
+        public PathType pathType = PathType.NORMAL;
+        public double tValueMaxOutTime = 1;
         public double tangentHeadingActivateThreshold = 23;
         public boolean prioritizeHeadingInBeginning = false;
-        public double prioritizeHeadingThresholdDeg = 5, maxLinearPowerWhilePrioritizingHeading = 0.5;
+        public double prioritizeHeadingThresholdDeg = 5, maxLinearPowerWhilePrioritizingHeading = 0.3;
     }
     public static DefaultParams defaultParams = new DefaultParams();
     protected double lateralWeight, axialWeight;
@@ -49,7 +60,10 @@ public class PathParams {
     protected double closeHeadingKp, closeHeadingKi, closeHeadingKd, farHeadingKp, farHeadingKi, farHeadingKd, headingKf;
     protected double applyCloseSpeedPIDError;
     protected HeadingLerpType headingLerpType;
-    protected double tangentHeadingActivateThreshold, applyCloseHeadingPIDErrorDeg;
+    protected PathType pathType;
+    protected Pose2d controlPoint;
+    protected double tValueStartTime, tValueMaxOutTime;
+    protected double tangentHeadingDeactivateThreshold, applyCloseHeadingPIDErrorDeg;
     protected boolean prioritizeHeadingInBeginning;
     public PathParams() {
         this(defaultParams.bigSpeedKp, defaultParams.smallSpeedKp, defaultParams.speedKi, defaultParams.bigSpeedKd, defaultParams.smallSpeedKd, defaultParams.speedKf, defaultParams.closeHeadingKp, defaultParams.closeHeadingKi, defaultParams.closeHeadingKd, defaultParams.farHeadingKp, defaultParams.farHeadingKi, defaultParams.farHeadingKd, defaultParams.headingKf);
@@ -82,33 +96,15 @@ public class PathParams {
         passPosition = false;
         applyCloseSpeedPIDError = defaultParams.applyCloseSpeedPIDError;
         headingLerpType = defaultParams.headingLerpType;
-        tangentHeadingActivateThreshold = defaultParams.tangentHeadingActivateThreshold;
+        pathType = defaultParams.pathType;
+        tValueMaxOutTime = defaultParams.tValueMaxOutTime;
+        tangentHeadingDeactivateThreshold = defaultParams.tangentHeadingActivateThreshold;
         applyCloseHeadingPIDErrorDeg = defaultParams.applyCloseHeadingPIDErrorDeg;
         slowDownPercent = 1;
         prioritizeHeadingInBeginning = defaultParams.prioritizeHeadingInBeginning;
+        controlPoint = new Pose2d(0, 0, 0);
     }
     public boolean hasMaxTime() {
         return maxTime != noMaxTime;
-    }
-
-    @NonNull
-    @Override
-    public PathParams clone() {
-        PathParams newParams = new PathParams(bigSpeedKp, smallSpeedKp, speedKi, bigSpeedKd, smallSpeedKd, speedKf, closeHeadingKp, closeHeadingKi, closeHeadingKd, farHeadingKp, farHeadingKi, farHeadingKd, headingKf);
-        newParams.maxTime = maxTime;
-        newParams.minLinearPower = minLinearPower;
-        newParams.maxLinearPower = maxLinearPower;
-        newParams.minHeadingPower = minHeadingPower;
-        newParams.maxHeadingPower = maxHeadingPower;
-        newParams.lateralWeight = lateralWeight;
-        newParams.axialWeight = axialWeight;
-        newParams.passPosition = passPosition;
-        newParams.customEndCondition = customEndCondition;
-        newParams.applyCloseSpeedPIDError = applyCloseSpeedPIDError;
-        newParams.headingLerpType = headingLerpType;
-        newParams.tangentHeadingActivateThreshold = tangentHeadingActivateThreshold;
-        newParams.applyCloseHeadingPIDErrorDeg = applyCloseHeadingPIDErrorDeg;
-        newParams.prioritizeHeadingInBeginning = prioritizeHeadingInBeginning;
-        return newParams;
     }
 }

@@ -22,7 +22,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-@Autonomous(name="Nine Ball")
+@Autonomous(name="No Pattern Nine Ball")
 @Config
 public class NoPatterNine extends LinearOpMode {
 
@@ -130,7 +130,7 @@ public class NoPatterNine extends LinearOpMode {
                         new SequentialAction(
 
                                 new ParallelAction(
-                                        AutoActions.shooterTurnOnClose(),
+//                                        AutoActions.shooterTurnOnClose(),
 
                                         driveToPreloadShoot
                                 ),

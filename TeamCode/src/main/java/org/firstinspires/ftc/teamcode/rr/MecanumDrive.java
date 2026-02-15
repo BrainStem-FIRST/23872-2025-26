@@ -225,9 +225,6 @@ public final class MecanumDrive {
         BR.setMode(mode);
     }
 
-    public PinpointLocalizer pinpoint() {
-        return (PinpointLocalizer) localizer;
-    }
     public MecanumDrive(HardwareMap hardwareMap, Pose2d pose) {
         LynxFirmware.throwIfModulesAreOutdated(hardwareMap);
 
