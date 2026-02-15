@@ -184,7 +184,7 @@ public class AutoActions {
     public static Action shootAll() {
         return new SequentialAction (
                 telemetryPacket -> {
-                    toStartOfPatternShoot();
+//                    toStartOfPatternShoot();
                     rampUp();
                     moveSpindexer360();
                     new SleepAction(0.5);

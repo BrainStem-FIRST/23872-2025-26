@@ -24,20 +24,20 @@ import java.util.List;
 
 @Autonomous(name="Nine Ball")
 @Config
-public class NoPatterNine extends LinearOpMode {
+public class BrobAutoClose extends LinearOpMode {
 
     public List<String> order1 = new ArrayList<>(Arrays.asList("P", "P", "G"));
 
     public List<String> targetOrder = order1; // default
 
-    public static double[] start = new double[] { -65, -41.75, 0};
+    public static double[] start = new double[] { -68, -48, 0};
 
     //Obelisk look
     public static double[] lookAtOb = new double[] {-22, -24, -214};
 
 
     //1st Spike!!
-    public static double[] close1Shooting = new double[] {-24, -24, -135};
+    public static double[] close1Shooting = new double[] {-36, -36, -135};
     public static double[] collect1Pre = new double[] { -12, -30, -90 };
     public static double[] collect1Mid = new double[] { -12, -22, -90 };
 //    public static double[] collect1 = new double[] { -12, -39, -90 };
@@ -48,7 +48,7 @@ public class NoPatterNine extends LinearOpMode {
     public static double[] strafePos = new double[] { -36, -17, -90 };
 
     //2nd spike!!
-    public static double[] collect2Pre = new double[] { 12, -28, -90 };
+    public static double[] collect2Pre = new double[] { 10, -28, -90 };
 
 //    public static double[] collect4 = new double[] { 10, -40, -90 };
 //    public static double[] collect5 = new double[] { 10, -45, -90 };
@@ -61,11 +61,12 @@ public class NoPatterNine extends LinearOpMode {
     private static class PARAMS{
         private double COLLECT_DRIVE_MAX_POWER = 0.15;
     }
-    public static NoPatterNine.PARAMS PARAMS = new NoPatterNine.PARAMS();
+    public static BrobAutoClose.PARAMS PARAMS = new BrobAutoClose.PARAMS();
 
     public SequentialAction ShootingSequence() {
         return new SequentialAction(
-               AutoActions.shootAll()
+               AutoActions.shootAll(),
+                AutoActions.turnShooterOnIdle()
         );
     }
     @Override
@@ -81,30 +82,21 @@ public class NoPatterNine extends LinearOpMode {
         );
 
         DrivePath driveToPreloadShoot = new DrivePath(robot.drive, telemetry,
-                new Waypoint(createPose(close1Shooting)).setMaxLinearPower(0.2)
-        );
-
-        //1st Spike ===================================================================
-
-//        DrivePath driveToCollectFirstSpike = new DrivePath(robot.drive, telemetry,
-//                new Waypoint(createPose(collect1Mid)).setSlowDownPercent(0.5),
-//                new Waypoint(createPose(collect1Pre)).setSlowDownPercent(0.1),
-//                new Waypoint(createPose(collect1)).setMaxLinearPower(0.1).setMaxTime(3)
-//        );
-        DrivePath driveToCollectFirstSpikeEnd = new DrivePath(robot.drive, telemetry,
-                new Waypoint(createPose(collect1Mid)).setSlowDownPercent(0.5),
-                new Waypoint(createPose(collect1Pre)).setSlowDownPercent(0.3),
-                new Waypoint(createPose(firstSpikeEnd)).setMaxLinearPower(PARAMS.COLLECT_DRIVE_MAX_POWER)
+                new Waypoint(createPose(close1Shooting)).setMaxLinearPower(1)
         );
 
         DrivePath driveOffLine = new DrivePath(robot.drive, telemetry,
                 new Waypoint(createPose(strafePos)).setMaxLinearPower(0.5)
         );
 
+        //1st Spike ===================================================================
+        DrivePath driveToCollectFirstSpikeEnd = new DrivePath(robot.drive, telemetry,
+                new Waypoint(createPose(collect1Mid)).setSlowDownPercent(0.5),
+                new Waypoint(createPose(collect1Pre)).setSlowDownPercent(0.3),
+                new Waypoint(createPose(firstSpikeEnd)).setMaxLinearPower(PARAMS.COLLECT_DRIVE_MAX_POWER)
+        );
+
         //2nd Spike!! ===================================================================
-//        DrivePath driveToCollect2Pre = new DrivePath(robot.drive, telemetry,
-//                new Waypoint(createPose(collect2Pre)).setSlowDownPercent(0.1)
-//        );
         DrivePath driveToCollectSecondSpikeEnd = new DrivePath(robot.drive, telemetry,
                 new Waypoint(createPose(collect2Pre)).setSlowDownPercent(0.3),
                 new Waypoint(createPose(secondSpikeEnd)).setMaxLinearPower(PARAMS.COLLECT_DRIVE_MAX_POWER)
@@ -124,19 +116,27 @@ public class NoPatterNine extends LinearOpMode {
 
         waitForStart();
 
-
+        Actions.runBlocking(
+                new SequentialAction(
+                        new ParallelAction(
+                                AutoActions.shooterTurnOnClose(),
+                                driveToOb
+                        )
+                )
+        );
+        updateTargetMotif();
         Actions.runBlocking(
                 new ParallelAction(
                         new SequentialAction(
 
-                                new ParallelAction(
-                                        AutoActions.shooterTurnOnClose(),
 
-                                        driveToPreloadShoot
+                                new ParallelAction(
+                                        driveToPreloadShoot,
+                                        AutoActions.moveSpindexer(motifRotation(0))
                                 ),
 
 
-
+                                AutoActions.waitForAccurateShooterVelocity(),
                                 ShootingSequence(),
 
 
@@ -156,7 +156,8 @@ public class NoPatterNine extends LinearOpMode {
                                 ),
 
                                 new ParallelAction(
-                                        driveToPreloadShoot
+                                        driveToPreloadShoot,
+                                        AutoActions.moveSpindexer(motifRotation(1))
                                 ),
 
                                 AutoActions.waitForAccurateShooterVelocity(),
@@ -173,7 +174,8 @@ public class NoPatterNine extends LinearOpMode {
                                 new SleepAction(0.3),
 
                                new ParallelAction(
-                                       driveToPreloadShoot
+                                       driveToPreloadShoot,
+                                       AutoActions.moveSpindexer(motifRotation(2))
                                ),
 
 
