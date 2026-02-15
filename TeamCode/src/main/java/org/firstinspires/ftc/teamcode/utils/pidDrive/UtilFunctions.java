@@ -8,6 +8,6 @@ public class UtilFunctions {
     }
 
     public static Pose2d createPose(double[] pose) {
-        return new Pose2d(pose[0], pose[1], pose[2]);
+        return new Pose2d(pose[0], pose[1], Math.toRadians(pose[2]));
     }
 }

@@ -81,7 +81,7 @@ public class NoPatterNine extends LinearOpMode {
         );
 
         DrivePath driveToPreloadShoot = new DrivePath(robot.drive, telemetry,
-                new Waypoint(createPose(close1Shooting)).setMaxLinearPower(0.2)
+                new Waypoint(createPose(close1Shooting))
         );
 
         //1st Spike ===================================================================
@@ -92,13 +92,12 @@ public class NoPatterNine extends LinearOpMode {
 //                new Waypoint(createPose(collect1)).setMaxLinearPower(0.1).setMaxTime(3)
 //        );
         DrivePath driveToCollectFirstSpikeEnd = new DrivePath(robot.drive, telemetry,
-                new Waypoint(createPose(collect1Mid)).setSlowDownPercent(0.5),
-                new Waypoint(createPose(collect1Pre)).setSlowDownPercent(0.3),
+                new Waypoint(createPose(collect1Pre)),
                 new Waypoint(createPose(firstSpikeEnd)).setMaxLinearPower(PARAMS.COLLECT_DRIVE_MAX_POWER)
         );
 
         DrivePath driveOffLine = new DrivePath(robot.drive, telemetry,
-                new Waypoint(createPose(strafePos)).setMaxLinearPower(0.5)
+                new Waypoint(createPose(strafePos))
         );
 
         //2nd Spike!! ===================================================================
@@ -106,7 +105,7 @@ public class NoPatterNine extends LinearOpMode {
 //                new Waypoint(createPose(collect2Pre)).setSlowDownPercent(0.1)
 //        );
         DrivePath driveToCollectSecondSpikeEnd = new DrivePath(robot.drive, telemetry,
-                new Waypoint(createPose(collect2Pre)).setSlowDownPercent(0.3),
+                new Waypoint(createPose(collect2Pre)),
                 new Waypoint(createPose(secondSpikeEnd)).setMaxLinearPower(PARAMS.COLLECT_DRIVE_MAX_POWER)
         );
 
@@ -122,6 +121,8 @@ public class NoPatterNine extends LinearOpMode {
 //                new Waypoint(createPose(collect6)).setMaxLinearPower(PARAMS.COLLECT_DRIVE_MAX_POWER).setMaxTime(3)
 //        );
 
+        telemetry.addLine("AUTO IS DONE COMPILING");
+        telemetry.update();
         waitForStart();
 
 
@@ -130,7 +131,7 @@ public class NoPatterNine extends LinearOpMode {
                         new SequentialAction(
 
                                 new ParallelAction(
-//                                        AutoActions.shooterTurnOnClose(),
+                                        AutoActions.shooterTurnOnClose(),
 
                                         driveToPreloadShoot
                                 ),

@@ -25,13 +25,12 @@ public class PathParams {
     private static final double noMaxTime = -1;
 
     public static class DefaultParams {
-        public double bigSpeedKp = 0.02, smallSpeedKp = 0.013, bigSpeedKd = 0, smallSpeedKd = 0.0001;
-        public double speedKi = 0, speedKf = 0.075;
-        public double applyCloseSpeedPIDError = 5;
-        public double closeHeadingKp = 0.01, closeHeadingKi = 0, closeHeadingKd = 0.001, headingKf = 0.1;
-        public double farHeadingKp = 0.012, farHeadingKi = 0, farHeadingKd = 0;
-        public double applyCloseHeadingPIDErrorDeg = 15;
-        public double lateralWeight = 1.9, axialWeight = 1; // weight the drive powers to correct for differences in driving
+        public double bigSpeedKp = 0.02, smallSpeedKp = 0, bigSpeedKd = 0.01, smallSpeedKd = 0;
+        public double speedKi = 0, speedKf = 0.09;
+        public double closeHeadingKp = 0.0, closeHeadingKi = 0, closeHeadingKd = 0, headingKf = 0.13;
+        public double farHeadingKp = 0.004, farHeadingKi = 0, farHeadingKd = 0.0005;
+        public double applyCloseHeadingPIDErrorDeg = 0;
+        public double lateralWeight = 1.5, axialWeight = 1; // weight the drive powers to correct for differences in driving
         public double minSpeed = 0, maxSpeed = 1;
         public double minHeadingSpeed = 0, maxHeadingSpeed = 1;
         public double maxTime = 100;
@@ -58,7 +57,6 @@ public class PathParams {
     protected double bigSpeedKp, smallSpeedKp, bigSpeedKd, smallSpeedKd;
     protected double speedKi, speedKf;
     protected double closeHeadingKp, closeHeadingKi, closeHeadingKd, farHeadingKp, farHeadingKi, farHeadingKd, headingKf;
-    protected double applyCloseSpeedPIDError;
     protected HeadingLerpType headingLerpType;
     protected PathType pathType;
     protected Pose2d controlPoint;
@@ -94,7 +92,6 @@ public class PathParams {
         lateralWeight = defaultParams.lateralWeight;
         axialWeight = defaultParams.axialWeight;
         passPosition = false;
-        applyCloseSpeedPIDError = defaultParams.applyCloseSpeedPIDError;
         headingLerpType = defaultParams.headingLerpType;
         pathType = defaultParams.pathType;
         tValueMaxOutTime = defaultParams.tValueMaxOutTime;

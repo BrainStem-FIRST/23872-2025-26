@@ -185,10 +185,11 @@ public class AutoActions {
         return new SequentialAction (
                 telemetryPacket -> {
 //                    toStartOfPatternShoot();
-                    rampUp();
-                    moveSpindexer360();
+                    robot.ramp.setRampUp();
+                    new SleepAction(0.2);
+                    robot.spindexer.setTargetAdj(1024);
                     new SleepAction(0.5);
-                    turnShooterOnIdle();
+                    robot.shooter.setShooterIdle();
                     return false;
                 }
         );

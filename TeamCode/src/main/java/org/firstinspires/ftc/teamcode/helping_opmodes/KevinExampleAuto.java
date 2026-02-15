@@ -51,6 +51,7 @@ public class KevinExampleAuto extends LinearOpMode {
 
         // how do you know when you're done tuning? idk you decide, when the robot is not oscillating at each waypoint anymore
         waitForStart();
+//        Actions.runBlocking(robot.drive.actionBuilder(start).strafeToLinearHeading(p1.position, p1.heading.toDouble()).build());
         Actions.runBlocking(path);
 //        Actions.runBlocking(packet -> {
 //            robot.drive.updatePoseEstimate();

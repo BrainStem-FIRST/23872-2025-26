@@ -108,7 +108,7 @@ public class Spindexer implements Component {
         spindexerPid.setTarget(rawEncoder); // TODO: check if it fixes
 
         hub.init(config);
-        while(!hub.ready());
+//        while(!hub.ready());
 
 
 
