@@ -28,8 +28,7 @@ public class BallTrackerNew {
     public enum BallColor {
         PURPLE,
         GREEN,
-        EMPTY,
-        SHOULDBENULL
+        EMPTY
     }
 
 
@@ -124,9 +123,9 @@ public class BallTrackerNew {
 
         List<BallColor> stateC = Arrays.asList(slotC.color, slotA.color, slotB.color);
 
-        int scoreA = calculateScore(stateA);
-        int scoreB = calculateScore(stateB);
-        int scoreC = calculateScore(stateC);
+        int scoreA = calculateScore(stateA, targetMotif);
+        int scoreB = calculateScore(stateB, targetMotif);
+        int scoreC = calculateScore(stateC, targetMotif);
 
         int targetShooterTick = 1024/3;
         int bestDelta = 0;
@@ -141,54 +140,94 @@ public class BallTrackerNew {
 
         return bestDelta;
 
-//        Slot imgA = getSlotAtShootingPos();
-//        Slot imgB = getSlotAtCollectPos();
-//        Slot imgC = getSlotAtOtherPos();
-//
-//
-//        List<BallColor> seqA = Arrays.asList(imgA.color, imgB.color, imgC.color); // dont move
-//
-//        List<BallColor> seqB = Arrays.asList(imgB.color, imgC.color,imgA.color); // 60 deg
-//
-//        List<BallColor> seqC = Arrays.asList(imgC.color, imgA.color, imgB.color); // 120 deg
-//        // get scores
-//        int scoreA = calculateScore(seqA);
-//        int scoreB = calculateScore(seqB);
-//        int scoreC = calculateScore(seqC);
-//        // find best one
-//        if (scoreA >= scoreB && scoreA >= scoreC) {
-//            return (2731 - imgA.currentAbsPos + 8192) % 8192;
-//        } else if (scoreB >= scoreC) {
-//            return (2731 - imgB.currentAbsPos + 8192) % 8192;
-//        } else {
-//            return (2731 - imgC.currentAbsPos + 8192) % 8192;
-//        }
-
-//        List<BallColor> seqA = Arrays.asList(slotC.color, slotB.color, slotA.color); // dont move
-//
-//        List<BallColor> seqB = Arrays.asList(slotA.color, slotB.color, slotC.color); // 60 deg
-//
-//        List<BallColor> seqC = Arrays.asList(slotB.color, slotC.color, slotA.color); // 120 deg
-//        // get scores
-//        int scoreA = calculateScore(seqA);
-//        int scoreB = calculateScore(seqB);
-//        int scoreC = calculateScore(seqC);
-//        // find best one
-//        if (scoreA >= scoreB && scoreA >= scoreC) {
-//            return (2731 - slotC.currentAbsPos + 8192) % 8192;
-//        } else if (scoreB >= scoreC && scoreB >= scoreA) {
-//            return (2731 - slotA.currentAbsPos + 8192) % 8192;
-//        } else if (scoreC >= scoreB && scoreC >= scoreA) {
-//            return (2731 - slotB.currentAbsPos + 8192) % 8192;
-//        }
 
     }
 
-    private int calculateScore(List<BallColor> slotSeq) {
+    public int getPPGRotation() {
+        List<BallColor> stateA = Arrays.asList(slotA.color, slotB.color, slotC.color);
+
+        List<BallColor> stateB = Arrays.asList(slotB.color, slotC.color, slotA.color);
+
+        List<BallColor> stateC = Arrays.asList(slotC.color, slotA.color, slotB.color);
+
+        int scoreA = calculateScore(stateA, motif1);
+        int scoreB = calculateScore(stateB, motif1);
+        int scoreC = calculateScore(stateC, motif2);
+
+        int targetShooterTick = 1024/3;
+        int bestDelta = 0;
+
+        if (scoreA >= scoreB && scoreA >= scoreC) {
+            bestDelta = (targetShooterTick - slotA.currentAbsPos + 1024) % 1024;
+        } else if (scoreB >= scoreC) {
+            bestDelta = (targetShooterTick - slotB.currentAbsPos + 1024) % 1024;
+        } else {
+            bestDelta = (targetShooterTick - slotC.currentAbsPos + 1024) % 1024;
+        }
+
+        return bestDelta;
+
+
+    }
+    public int getBestPGPRotation() {
+        List<BallColor> stateA = Arrays.asList(slotA.color, slotB.color, slotC.color);
+
+        List<BallColor> stateB = Arrays.asList(slotB.color, slotC.color, slotA.color);
+
+        List<BallColor> stateC = Arrays.asList(slotC.color, slotA.color, slotB.color);
+
+        int scoreA = calculateScore(stateA, motif2);
+        int scoreB = calculateScore(stateB, motif2);
+        int scoreC = calculateScore(stateC, motif2);
+
+        int targetShooterTick = 1024/3;
+        int bestDelta = 0;
+
+        if (scoreA >= scoreB && scoreA >= scoreC) {
+            bestDelta = (targetShooterTick - slotA.currentAbsPos + 1024) % 1024;
+        } else if (scoreB >= scoreC) {
+            bestDelta = (targetShooterTick - slotB.currentAbsPos + 1024) % 1024;
+        } else {
+            bestDelta = (targetShooterTick - slotC.currentAbsPos + 1024) % 1024;
+        }
+
+        return bestDelta;
+
+
+    }
+    public int getBestGPPRotation() {
+        List<BallColor> stateA = Arrays.asList(slotA.color, slotB.color, slotC.color);
+
+        List<BallColor> stateB = Arrays.asList(slotB.color, slotC.color, slotA.color);
+
+        List<BallColor> stateC = Arrays.asList(slotC.color, slotA.color, slotB.color);
+
+        int scoreA = calculateScore(stateA, motif3);
+        int scoreB = calculateScore(stateB, motif3);
+        int scoreC = calculateScore(stateC, motif3);
+
+        int targetShooterTick = 1024/3;
+        int bestDelta = 0;
+
+        if (scoreA >= scoreB && scoreA >= scoreC) {
+            bestDelta = (targetShooterTick - slotA.currentAbsPos + 1024) % 1024;
+        } else if (scoreB >= scoreC) {
+            bestDelta = (targetShooterTick - slotB.currentAbsPos + 1024) % 1024;
+        } else {
+            bestDelta = (targetShooterTick - slotC.currentAbsPos + 1024) % 1024;
+        }
+
+        return bestDelta;
+
+
+    }
+
+
+    private int calculateScore(List<BallColor> slotSeq, List<BallColor> target) {
         int score = 0;
         for (int i = 0; i < 3; i++) {
             BallColor ball = slotSeq.get(i);
-            BallColor goal = targetMotif.get(i);
+            BallColor goal = target.get(i);
 
 
             if (ball != BallColor.EMPTY && ball == goal) {

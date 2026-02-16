@@ -37,7 +37,6 @@ public class Spindexer implements Component {
 
     public PIDController spindexerPid;
     public DcMotorEx spindexerMotor;
-    private int curPos;
     private HardwareMap map;
     private Telemetry telemetry;
 
@@ -154,13 +153,17 @@ public class Spindexer implements Component {
 //            }
 //        }
 
-
     }
 
     public void setTargetAdj(int adjust) {
         spindexerPid.setTarget(spindexerPid.getTarget() + adjust);
     }
 
+
+    public void fineAdjInDir() {
+        double error = wrappedEncoder - spindexerPid.getTarget();
+        if (!robot.ramp.isRampUp()) setTargetAdj((int) (-Math.signum(error)*error)); // TODO: Make sure right direction
+    }
     @Override
     public void reset() {
 

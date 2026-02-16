@@ -21,28 +21,29 @@ RETUNE COLOR SENSOR
 
 AUTO ADJUSTING BUTTON THAT ADJUSTS IN THE RIGHT DIRECTION, WHEN CLOSE ENOUGH GP RUMBLEs
 
- ADD SMTH THAT COUNTS BALLS SO DONT HAVE TO RELY ON BALL TRACKER
-
 INTAKE SLOWS WHEN A BALL IS TRYING TO BE TURNED
 
 ADD ELApSED TIMER AFTER DETECTING BALL AND BEOFRE SHOOTING
+
+ADD DIFF BUTTONS TO SHOOT ALL MOTIFS
 
 
 AUTO PIVOTING CODE
 
 
 
-P1: auto pivoting code for far shooting & anti jamming
-P2: optimizing uato indexinga
-P3: auto
+P1: auto align - according to dante spins in one direction for eternity && auto
+    wrap issue? try update with error
  */
 @TeleOp(name = "Potential Tele Yay")
 public class PotentialTele extends LinearOpMode {
     private GamepadTracker gp1;
     private GamepadTracker gp2;
     private BrainSTEMRobot robot;
-
     private PIDController alignmentPID;
+
+    private boolean shooterOn;
+    private boolean collectorOn = false;
 
     Vector2d goal = new Vector2d(-72, 72); //default: red
     private boolean red = true;
@@ -97,7 +98,9 @@ public class PotentialTele extends LinearOpMode {
             gp1.update();
             gp2.update();
 
-            updateDriver1();
+            updateD1Drive();
+            updateD1Buttons();
+
             updateDriver2();
 
 
@@ -106,7 +109,7 @@ public class PotentialTele extends LinearOpMode {
     }
 
 
-    private void updateDriver1() {
+    private void updateD1Drive() {
 
         // DRIVING ==========================================
         double y = -gamepad1.left_stick_y * 0.99;
@@ -134,14 +137,29 @@ public class PotentialTele extends LinearOpMode {
                 y - x + rx,
                 y + x - rx
         );
+    }
 
-        // SUBSYSTEM CONTROLS =====================================================
-        if (gamepad1.right_trigger > 0.1 ) {
-            robot.collector.collectorState = Collector.CollectorState.EXTAKE;
-        } else if (gamepad1.right_bumper) {
-            robot.collector.collectorState = Collector.CollectorState.INTAKE;
-        } else {
-            robot.collector.collectorState = Collector.CollectorState.OFF;
+
+    // D1 SUBSYSTEM CONTROLS =====================================================
+    private void updateD1Buttons() {
+
+        if (gp1.isFirstRightBumper()) {
+            if (collectorOn && robot.collector.collectorState == Collector.CollectorState.INTAKE) {
+                robot.collector.collectorState = Collector.CollectorState.OFF;
+                collectorOn = false;
+            } else {
+                robot.collector.collectorState = Collector.CollectorState.INTAKE;
+                collectorOn = true;
+            }
+        }
+        if (gp1.isFirstRightTrigger()) {
+            if (collectorOn && robot.collector.collectorState == Collector.CollectorState.EXTAKE) {
+                robot.collector.collectorState = Collector.CollectorState.OFF;
+                collectorOn = false;
+            } else {
+                robot.collector.collectorState = Collector.CollectorState.EXTAKE;
+                collectorOn = true;
+            }
         }
 
         if (gp1.isFirstLeftBumper()) {
@@ -149,7 +167,6 @@ public class PotentialTele extends LinearOpMode {
         }
 
         if (gp1.isFirstX()) {
-
             robot.spindexer.setTargetAdj(robot.limelight.ballTrackerNew.getBestRotation());
         }
 
@@ -158,27 +175,32 @@ public class PotentialTele extends LinearOpMode {
 
     private void updateDriver2() {
 
-        if (gamepad2.yWasPressed()) {
+        // makes any shooter button pressed after turned on, turn it off
+
+        if ((gp2.isFirstY() || gp2.isFirstX() || gp2.isFirstA() || gp2.isFirstB()) && shooterOn) {
+            robot.shooter.setShooterIdle();
+
+            shooterOn = false;
+        } else if (gp2.isFirstY()) {
+
             robot.shooter.setShooterShootFar();
             robot.pivot.setPivotShootFar();
             robot.spindexer.startShootingEncoder = robot.spindexer.wrappedEncoder;
-        }
 
-        if (gp2.isFirstA()) {
+            shooterOn = true;
+        } else if (gp2.isFirstA()) {
             robot.shooter.setShooterShootClose();
             robot.pivot.setPivotShootClose();
+
+            shooterOn = true;
         } else if (gp2.isFirstB()) {
             robot.shooter.setShooterIdle();
+
+            shooterOn = false;
         } else if (gp2.isFirstX()) {
             robot.shooter.setShooterOff();
-        }
 
-
-
-        if (gp2.isFirstLeftBumper()) {
-            robot.pivot.setPivotShootClose();
-        } else if (gp2.isFirstLeftTrigger()) {
-            robot.pivot.setPivotShootFar();
+            shooterOn = false;
         }
 
         if (gp2.isFirstDpadRight()) {
@@ -188,18 +210,18 @@ public class PotentialTele extends LinearOpMode {
         }
 
         if (gp2.isFirstDpadUp()) {
-            robot.spindexer.setTargetAdj(341);
+            robot.spindexer.setTargetAdj(Constants.spindexerConstants.TICKS_120);
         }
 
         if (gp2.isFirstRightBumper()) {
+            robot.ramp.setRampUp(); // TODO: Test if works
             robot.spindexer.startShootingEncoder = robot.spindexer.wrappedEncoder;
-
-            robot.spindexer.setTargetAdj(1024);
+            robot.spindexer.setTargetAdj(Constants.spindexerConstants.TICKS_360);
         }
 
-//        if (gp2.isFirstDpadUp()) {
-//            robot.spindexer.setTargetAdj(100);
-//        }
+        if (gp2.isFirstDpadDown()) {
+            robot.spindexer.fineAdjInDir();
+        }
 
     }
 }
