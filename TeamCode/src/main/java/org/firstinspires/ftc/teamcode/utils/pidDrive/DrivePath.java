@@ -235,9 +235,9 @@ public class DrivePath implements Action {
             telemetry.addData("power hypot", powerMag);
             TelemetryPacket packet = new TelemetryPacket();
             Canvas fieldOverlay = packet.fieldOverlay();
-            Pose2d prevWaypointPose = curWaypointIndex == 0 ? startPose : getWaypoint(curWaypointIndex - 1).pose;
+//            Pose2d prevWaypointPose = curWaypointIndex == 0 ? startPose : getWaypoint(curWaypointIndex - 1).pose;
             fieldOverlay.setStroke("black");
-            Drawing.drawRobot(fieldOverlay, prevWaypointPose);
+//            Drawing.drawRobot(fieldOverlay, prevWaypointPose);
             fieldOverlay.setStroke("green");
             Drawing.drawRobot(fieldOverlay, pose);
             fieldOverlay.setStroke("black");

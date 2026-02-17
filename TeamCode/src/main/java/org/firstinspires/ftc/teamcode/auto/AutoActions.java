@@ -100,6 +100,10 @@ public class AutoActions {
     public static Action moveSpindexer120() {
         return moveSpindexer(Constants.spindexerConstants.TICKS_120);
     }
+    public static Action moveSpindexer360() {
+        return moveSpindexer(1024+341);
+    }
+
 
 
     public static Action moveSpindexer60() {
@@ -110,9 +114,7 @@ public class AutoActions {
         return moveSpindexer(x);
     }
 
-    public static Action moveSpindexer360() {
-        return moveSpindexer(Constants.spindexerConstants.TICKS_360);
-    }
+
 
     private static Action moveSpindexer(int ticks) {
         return new Action() {
@@ -186,9 +188,11 @@ public class AutoActions {
                 telemetryPacket -> {
 //                    toStartOfPatternShoot();
                     robot.ramp.setRampUp();
-                    new SleepAction(0.2);
+//                    new SleepAction(0.2);
+                    new SleepAction(2.0);
                     robot.spindexer.setTargetAdj(1024);
-                    new SleepAction(0.5);
+//                    new SleepAction(0.5);
+                    new SleepAction(2.0);
                     robot.shooter.setShooterIdle();
                     return false;
                 }

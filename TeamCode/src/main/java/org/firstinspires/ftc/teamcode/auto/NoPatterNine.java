@@ -63,11 +63,7 @@ public class NoPatterNine extends LinearOpMode {
     }
     public static NoPatterNine.PARAMS PARAMS = new NoPatterNine.PARAMS();
 
-    public SequentialAction ShootingSequence() {
-        return new SequentialAction(
-               AutoActions.shootAll()
-        );
-    }
+
     @Override
     public void runOpMode() throws InterruptedException {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
@@ -81,6 +77,14 @@ public class NoPatterNine extends LinearOpMode {
         );
 
         DrivePath driveToPreloadShoot = new DrivePath(robot.drive, telemetry,
+                new Waypoint(createPose(close1Shooting))
+        );
+
+        DrivePath driveToShootOne = new DrivePath(robot.drive, telemetry,
+                new Waypoint(createPose(close1Shooting))
+        );
+
+        DrivePath driveToShootTwo = new DrivePath(robot.drive, telemetry,
                 new Waypoint(createPose(close1Shooting))
         );
 
@@ -132,13 +136,26 @@ public class NoPatterNine extends LinearOpMode {
 
                                 new ParallelAction(
                                         AutoActions.shooterTurnOnClose(),
+                                        AutoActions.pivotClose(),
 
                                         driveToPreloadShoot
                                 ),
 
 
 
-                                ShootingSequence(),
+//                                AutoActions.shootAll(),
+
+                                AutoActions.rampUp(),
+//                            new SleepAction(0.2),
+                                  new SleepAction(0.2),
+                               AutoActions.moveSpindexer360(),
+//                             new SleepAction(0.5),
+                                new SleepAction(0.4),
+
+                                AutoActions.rampDown(),
+                                new SleepAction(0.4),
+                                AutoActions.turnShooterOnIdle(),
+                                new SleepAction(0.5),
 
 
                                 //1st Spike Does Work ==========================
@@ -153,16 +170,24 @@ public class NoPatterNine extends LinearOpMode {
 
                                 new ParallelAction(
                                         AutoActions.setCollectorOff(),
+                                        AutoActions.pivotClose(),
                                         AutoActions.shooterTurnOnClose()
                                 ),
 
-                                new ParallelAction(
-                                        driveToPreloadShoot
-                                ),
 
-                                AutoActions.waitForAccurateShooterVelocity(),
-                                ShootingSequence(),
-                                new SleepAction(0.3),
+                                driveToShootOne,
+
+                                AutoActions.rampUp(),
+//                            new SleepAction(0.2),
+                                new SleepAction(0.2),
+                                AutoActions.moveSpindexer360(),
+//                             new SleepAction(0.5),
+                                new SleepAction(0.5),
+
+                                AutoActions.rampDown(),
+                                new SleepAction(0.4),
+                                AutoActions.turnShooterOnIdle(),
+                                new SleepAction(0.4),
 
                                 //2nd Spike ==========================
 
@@ -174,13 +199,24 @@ public class NoPatterNine extends LinearOpMode {
                                 new SleepAction(0.3),
 
                                new ParallelAction(
-                                       driveToPreloadShoot
+                                       AutoActions.shooterTurnOnClose()
+                                       , AutoActions.pivotClose()
+                                       , driveToShootTwo
                                ),
 
 
-                                AutoActions.waitForAccurateShooterVelocity(),
+                                AutoActions.rampUp(),
+//                            new SleepAction(0.2),
+                                new SleepAction(0.2),
+                                AutoActions.moveSpindexer360(),
+//                             new SleepAction(0.5),
+                                new SleepAction(0.4),
 
-                                ShootingSequence(),
+                                AutoActions.rampDown(),
+                                new SleepAction(0.4),
+                                AutoActions.turnShooterOnIdle(),
+                                new SleepAction(.4),
+
                                 driveOffLine
 
 

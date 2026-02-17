@@ -30,6 +30,8 @@ ADD DIFF BUTTONS TO SHOOT ALL MOTIFS
 
 AUTO PIVOTING CODE
 
+FIX ANTIJAM
+
 
 
 P1: auto align - according to dante spins in one direction for eternity && auto
@@ -153,13 +155,8 @@ public class PotentialTele extends LinearOpMode {
             }
         }
         if (gp1.isFirstRightTrigger()) {
-            if (collectorOn && robot.collector.collectorState == Collector.CollectorState.EXTAKE) {
-                robot.collector.collectorState = Collector.CollectorState.OFF;
-                collectorOn = false;
-            } else {
-                robot.collector.collectorState = Collector.CollectorState.EXTAKE;
-                collectorOn = true;
-            }
+            robot.collector.collectorState = Collector.CollectorState.EXTAKE;
+            collectorOn = false;
         }
 
         if (gp1.isFirstLeftBumper()) {
@@ -178,7 +175,7 @@ public class PotentialTele extends LinearOpMode {
         // makes any shooter button pressed after turned on, turn it off
 
         if ((gp2.isFirstY() || gp2.isFirstX() || gp2.isFirstA() || gp2.isFirstB()) && shooterOn) {
-            robot.shooter.setShooterIdle();
+            robot.shooter.setShooterOff();
 
             shooterOn = false;
         } else if (gp2.isFirstY()) {

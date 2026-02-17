@@ -25,9 +25,9 @@ public class PathParams {
     private static final double noMaxTime = -1;
 
     public static class DefaultParams {
-        public double bigSpeedKp = 0.02, smallSpeedKp = 0, bigSpeedKd = 0.01, smallSpeedKd = 0;
+        public double bigSpeedKp = 0.019, smallSpeedKp = 0, bigSpeedKd = 0.01, smallSpeedKd = 0;
         public double speedKi = 0, speedKf = 0.09;
-        public double closeHeadingKp = 0.0, closeHeadingKi = 0, closeHeadingKd = 0, headingKf = 0.13;
+        public double closeHeadingKp = 0.0, closeHeadingKi = 0, closeHeadingKd = 0, headingKf = 0.12;
         public double farHeadingKp = 0.004, farHeadingKi = 0, farHeadingKd = 0.0005;
         public double applyCloseHeadingPIDErrorDeg = 0;
         public double lateralWeight = 1.5, axialWeight = 1; // weight the drive powers to correct for differences in driving

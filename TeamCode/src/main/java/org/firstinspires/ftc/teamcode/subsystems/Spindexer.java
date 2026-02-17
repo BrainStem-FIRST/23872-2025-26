@@ -123,7 +123,10 @@ public class Spindexer implements Component {
 
         double power = spindexerPid.update(getCurrentPosition());
 
-        if (isStatic() || (isUnjamming)) {
+        if (isStatic() ) {
+
+            // (isUnjamming
+
             spindexerMotor.setPower(0);
             return;
         }
@@ -193,7 +196,7 @@ public class Spindexer implements Component {
             antijamTimer.reset();
         }
 
-        if (isUnjamming && antijamTimer.milliseconds() > 500) {
+        if (isUnjamming && antijamTimer.milliseconds() > 200) {
             isUnjamming = false;
         }
 

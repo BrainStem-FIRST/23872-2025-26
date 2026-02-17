@@ -70,12 +70,13 @@ public class BallSensor {
         if (!isIndexing && !isWaitingForColor) {
             if (lastBeamState && !currentBeamState) {
                 isWaitingForColor = true;
-                timer.reset();
+//                timer.reset();
 
             }
         }
 
-        if (isWaitingForColor && timer.milliseconds() > delayTimeMs) {
+        if (isWaitingForColor ) {
+            //&& timer.milliseconds() > delayTimeMs
 
 //               || (((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM) < ballDistance) &&
 //                        (((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM) > ballMinDistance)

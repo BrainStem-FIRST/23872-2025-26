@@ -124,10 +124,13 @@ public class BrainSTEMRobot {
         isSpindStopped = (Math.abs(spindexer.spindexerPid.getTarget() - spindexer.getCurrentPosition())) < 50 || spindexer.spindexerMotor.getVelocity()<15;
         ballSensor.setIfIndexerIsMoving(!isSpindStopped);
 
+
+
+        String newBall = "EMPTY";
+        newBall = ballSensor.scanForNewBall();
+
         // DETECT BALL IF SPIND IS NOT MOVING
         if (isSpindStopped ) {
-            String newBall = "EMPTY";
-            newBall = ballSensor.scanForNewBall();
 
             telemetry.addData("NEW BALL", newBall);
 
