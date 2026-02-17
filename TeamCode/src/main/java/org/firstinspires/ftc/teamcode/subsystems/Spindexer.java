@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.Constants;
 
 @Config
 public class Spindexer implements Component {
-    public static double maxPowerErrorThreshold = 175, maxPower = 0.99;
+    public static double maxPowerErrorThreshold = 165, maxPower = 0.99;
 
     public int SPINDEXER_TIME;
 
@@ -123,9 +123,7 @@ public class Spindexer implements Component {
 
         double power = spindexerPid.update(getCurrentPosition());
 
-        if (isStatic() ) {
-
-            // (isUnjamming
+        if (isStatic() || (isUnjamming)) {
 
             spindexerMotor.setPower(0);
             return;
@@ -138,6 +136,7 @@ public class Spindexer implements Component {
             power += Math.signum(power) * Constants.spindexerConstants.INDEXER_KF;
             power = Range.clip(power, -Constants.spindexerConstants.MAX_POWER, Constants.spindexerConstants.MAX_POWER);
             spindexerMotor.setPower(power);
+
         }
 
 //        if (Math.abs(error) > maxPowerErrorThreshold) {

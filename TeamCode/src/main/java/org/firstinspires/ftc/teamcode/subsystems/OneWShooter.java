@@ -55,6 +55,7 @@ public class OneWShooter implements Component {
         IDLE,
         SHOOT_FAR,
         SHOOT_CLOSE,
+        CLOSEISH,
         AUTO
     }
 
@@ -137,6 +138,14 @@ public class OneWShooter implements Component {
                 targetVel = 0;
 
                 break;
+
+            case CLOSEISH:
+
+                shooterPID.setPIDValues(Constants.shooterConstants.kP_ONE, Constants.shooterConstants.kI, Constants.shooterConstants.kD);
+                setBothMotorVelocities(1390);
+                targetVel = Constants.shooterConstants.CLOSE_SHOOT_VEL;
+                break;
+
             case AUTO:
                 setBothMotorVelocities(Constants.shooterConstants.CLOSE_SHOOT_VEL);
 
@@ -207,8 +216,19 @@ public class OneWShooter implements Component {
         shooterPID.reset();
     }
 
+    public void setShooterShootCloseish() {
+        shooterState = ShooterState.CLOSEISH;
+        shooterPID.reset();
+    }
+
     public boolean   isShootFar() {
         if (shooterState == ShooterState.SHOOT_FAR) {
+            return true;
+        }
+        return false;
+    }
+    public boolean   isShootClose() {
+        if (shooterState == ShooterState.SHOOT_CLOSE) {
             return true;
         }
         return false;

@@ -8,16 +8,16 @@ public class Constants {
 
             // PID Constants
             // TODO: Tune for built in PID
-            public  double kP_ONE = 0.0034;
+            public  double kP_ONE = 0.0033;
             public double kP_TWO = 0.0038;
             public  double kI = 0.0;
-            public  double kD = 0;
+            public  double kD = 0.0000001;
             public  double kV1 = 0.00053;
 
             // Vel Targets (ticks per second)
             public  double AUTO_VEL = 300;
             public  double FAR_SHOOT_VEL = 1885;
-            public  double CLOSE_SHOOT_VEL = 1400;
+            public  double CLOSE_SHOOT_VEL = 1380;
 
             // Limits
             public  double MAX_TICKS_PER_SEC = 2300;
@@ -80,12 +80,12 @@ public class Constants {
          public static final class RampConstants {
 
         // Servo PWM Range
-        public int DOWN_PWM = 700;
+        public int DOWN_PWM = 600;
         public int UP_PWM = 980;
 
         // Servo Position
         public double DOWN_POSITION = 0.99; // change
-        public double UP_POSITION = 0; // change
+        public double UP_POSITION = 0.05; // change
     }
 
     public static RampConstants rampConstants = new RampConstants();
@@ -109,9 +109,9 @@ public class Constants {
 
     public static class DriveConstants {
 
-            public static double ALIGNMENT_KP = 1;
+            public static double ALIGNMENT_KP = 0.9;
             public static double ALIGNMENT_KI = 0;
-            public static double ALIGNMENT_KD = 0.0;
+            public static double ALIGNMENT_KD = 0.0001;
 
         }
 }

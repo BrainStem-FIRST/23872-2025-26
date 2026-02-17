@@ -77,6 +77,13 @@ public class AutoActions {
             return false;
         };
     }
+    public static Action shooterTurnOnCloseish() {
+        return telemetryPacket -> {
+            robot.shooter.setShooterShootCloseish();
+            telemetryPacket.addLine("Shooter On");
+            return false;
+        };
+    }
 
 
     public static Action turnShooterOnIdle() {
@@ -101,7 +108,7 @@ public class AutoActions {
         return moveSpindexer(Constants.spindexerConstants.TICKS_120);
     }
     public static Action moveSpindexer360() {
-        return moveSpindexer(1024+341);
+        return moveSpindexer(1024+341+341);
     }
 
 

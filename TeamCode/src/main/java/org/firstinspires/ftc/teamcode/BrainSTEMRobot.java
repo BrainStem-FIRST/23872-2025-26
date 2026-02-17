@@ -114,6 +114,8 @@ public class BrainSTEMRobot {
         }
 
 
+
+
         drive.localizer.update();
 
 
@@ -216,7 +218,9 @@ public class BrainSTEMRobot {
 
         if (shooter.isShootFar()) {
             Spindexer.maxPower = 0.5;}
-        else {
+        else if (shooter.isShootClose()){
+            Spindexer.maxPower = 0.85;
+        } else{
             Spindexer.maxPower = 0.99;
         }
 

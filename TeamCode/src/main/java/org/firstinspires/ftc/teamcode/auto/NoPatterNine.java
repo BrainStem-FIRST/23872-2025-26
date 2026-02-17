@@ -37,9 +37,9 @@ public class NoPatterNine extends LinearOpMode {
 
 
     //1st Spike!!
-    public static double[] close1Shooting = new double[] {-24, -24, -135};
-    public static double[] collect1Pre = new double[] { -12, -30, -90 };
-    public static double[] collect1Mid = new double[] { -12, -22, -90 };
+    public static double[] close1Shooting = new double[] {-26, -26, -135};
+    public static double[] collect1Pre = new double[] { -13, -30, -90 };
+    public static double[] collect1Mid = new double[] { -13, -22, -90 };
 //    public static double[] collect1 = new double[] { -12, -39, -90 };
 //    public static double[] collect2 = new double[] { -12, -44, -90 };
 //    public static double[] collect3 = new double[] { -2, -49, -90 };
@@ -48,13 +48,13 @@ public class NoPatterNine extends LinearOpMode {
     public static double[] strafePos = new double[] { -36, -17, -90 };
 
     //2nd spike!!
-    public static double[] collect2Pre = new double[] { 12, -28, -90 };
+    public static double[] collect2Pre = new double[] { 11, -28, -90 };
 
 //    public static double[] collect4 = new double[] { 10, -40, -90 };
 //    public static double[] collect5 = new double[] { 10, -45, -90 };
 //    public static double[] collect6 = new double[] { 10, -50, -90 };
 
-    public static double[] secondSpikeEnd = new double[] { 12, -52, -90 };
+    public static double[] secondSpikeEnd = new double[] { 11, -52, -90 };
     public static double collectMaxPower = 0.3;
     BrainSTEMRobot robot;
 
@@ -141,7 +141,7 @@ public class NoPatterNine extends LinearOpMode {
                                         driveToPreloadShoot
                                 ),
 
-
+                                new SleepAction(1.5),
 
 //                                AutoActions.shootAll(),
 
@@ -150,12 +150,12 @@ public class NoPatterNine extends LinearOpMode {
                                   new SleepAction(0.2),
                                AutoActions.moveSpindexer360(),
 //                             new SleepAction(0.5),
-                                new SleepAction(0.4),
+                                new SleepAction(0.2),
 
                                 AutoActions.rampDown(),
-                                new SleepAction(0.4),
+                                new SleepAction(0.2),
                                 AutoActions.turnShooterOnIdle(),
-                                new SleepAction(0.5),
+                                new SleepAction(0.3),
 
 
                                 //1st Spike Does Work ==========================
@@ -164,9 +164,6 @@ public class NoPatterNine extends LinearOpMode {
                                         driveToCollectFirstSpikeEnd
                                 ),
 
-
-
-                                new SleepAction(0.2),
 
                                 new ParallelAction(
                                         AutoActions.setCollectorOff(),
@@ -177,17 +174,19 @@ public class NoPatterNine extends LinearOpMode {
 
                                 driveToShootOne,
 
+                                new SleepAction(0.5),
+
                                 AutoActions.rampUp(),
 //                            new SleepAction(0.2),
                                 new SleepAction(0.2),
                                 AutoActions.moveSpindexer360(),
 //                             new SleepAction(0.5),
-                                new SleepAction(0.5),
+                                new SleepAction(0.2),
 
                                 AutoActions.rampDown(),
-                                new SleepAction(0.4),
+                                new SleepAction(0.2),
                                 AutoActions.turnShooterOnIdle(),
-                                new SleepAction(0.4),
+                                new SleepAction(0.3),
 
                                 //2nd Spike ==========================
 
@@ -199,10 +198,14 @@ public class NoPatterNine extends LinearOpMode {
                                 new SleepAction(0.3),
 
                                new ParallelAction(
+                                       AutoActions.setCollectorOff(),
                                        AutoActions.shooterTurnOnClose()
                                        , AutoActions.pivotClose()
                                        , driveToShootTwo
                                ),
+
+
+                                new SleepAction(0.75),
 
 
                                 AutoActions.rampUp(),
@@ -210,12 +213,12 @@ public class NoPatterNine extends LinearOpMode {
                                 new SleepAction(0.2),
                                 AutoActions.moveSpindexer360(),
 //                             new SleepAction(0.5),
-                                new SleepAction(0.4),
+                                new SleepAction(0.2),
 
                                 AutoActions.rampDown(),
-                                new SleepAction(0.4),
+                                new SleepAction(0.2),
                                 AutoActions.turnShooterOnIdle(),
-                                new SleepAction(.4),
+                                new SleepAction(.2),
 
                                 driveOffLine
 

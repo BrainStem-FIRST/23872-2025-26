@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -10,6 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.subsystems.Collector;
 import org.firstinspires.ftc.teamcode.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.utils.Angle;
+import org.firstinspires.ftc.teamcode.utils.Drawing;
 import org.firstinspires.ftc.teamcode.utils.GamepadTracker;
 import org.firstinspires.ftc.teamcode.utils.PIDController;
 import org.firstinspires.ftc.teamcode.utils.math.HeadingCorrect;
@@ -96,6 +98,12 @@ public class PotentialTele extends LinearOpMode {
 
         while (opModeIsActive() && !isStopRequested()) {
             telemetry.update();
+
+            TelemetryPacket packet = new TelemetryPacket();
+            packet.fieldOverlay().setStroke("#3F51B5");
+            Drawing.drawRobot(packet.fieldOverlay(), robot.drive.localizer.getPose());
+            FtcDashboard.getInstance().sendTelemetryPacket(packet);
+
             robot.update();
             gp1.update();
             gp2.update();
@@ -145,7 +153,13 @@ public class PotentialTele extends LinearOpMode {
     // D1 SUBSYSTEM CONTROLS =====================================================
     private void updateD1Buttons() {
 
-        if (gp1.isFirstRightBumper()) {
+
+        if (gamepad1.left_trigger > 0.1) {
+            robot.collector.collectorState = Collector.CollectorState.EXTAKE;
+            collectorOn = true;
+        }
+
+        else if (gp1.isFirstRightBumper()) {
             if (collectorOn && robot.collector.collectorState == Collector.CollectorState.INTAKE) {
                 robot.collector.collectorState = Collector.CollectorState.OFF;
                 collectorOn = false;
@@ -153,10 +167,6 @@ public class PotentialTele extends LinearOpMode {
                 robot.collector.collectorState = Collector.CollectorState.INTAKE;
                 collectorOn = true;
             }
-        }
-        if (gp1.isFirstRightTrigger()) {
-            robot.collector.collectorState = Collector.CollectorState.EXTAKE;
-            collectorOn = false;
         }
 
         if (gp1.isFirstLeftBumper()) {
