@@ -158,16 +158,15 @@ public class PotentialTele extends LinearOpMode {
             robot.collector.collectorState = Collector.CollectorState.EXTAKE;
             collectorOn = true;
         }
-
-        else if (gp1.isFirstRightBumper()) {
-            if (collectorOn && robot.collector.collectorState == Collector.CollectorState.INTAKE) {
-                robot.collector.collectorState = Collector.CollectorState.OFF;
-                collectorOn = false;
-            } else {
-                robot.collector.collectorState = Collector.CollectorState.INTAKE;
-                collectorOn = true;
-            }
+        else if (gamepad1.right_trigger > 0.1) {
+            robot.collector.collectorState = Collector.CollectorState.INTAKE;
+            collectorOn = true;
         }
+        else {
+            robot.collector.collectorState = Collector.CollectorState.OFF;
+            collectorOn = false;
+        }
+
 
         if (gp1.isFirstLeftBumper()) {
             robot.spindexer.setTargetAdj(Constants.spindexerConstants.TICKS_120);
