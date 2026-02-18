@@ -104,6 +104,8 @@ public class BrainSTEMRobot {
 
     public void update() {
 
+
+
         pivot.updateCompensatedPosition(ballsShot);
 
 
@@ -120,21 +122,25 @@ public class BrainSTEMRobot {
 
 
 
-        if (limelight != null) {
-            limelight.update();
-        }
+//        if (limelight != null) {
+//            limelight.update();
+//            limelight.updateObeliskColors();
+//            telemetry.addData("Limelight fedu res", Limelight.feducialResult);
+//        }
         isSpindStopped = (Math.abs(spindexer.spindexerPid.getTarget() - spindexer.getCurrentPosition())) < 50 || spindexer.spindexerMotor.getVelocity()<15;
         ballSensor.setIfIndexerIsMoving(!isSpindStopped);
 
 
 
-        String newBall = "EMPTY";
-        newBall = ballSensor.scanForNewBall();
+
 
         // DETECT BALL IF SPIND IS NOT MOVING
         if (isSpindStopped ) {
 
-            telemetry.addData("NEW BALL", newBall);
+            String newBall = "EMPTY";
+            newBall = ballSensor.scanForNewBall();
+
+//            telemetry.addData("NEW BALL", newBall);
 
 
             if (newBall != null ) {
@@ -145,13 +151,13 @@ public class BrainSTEMRobot {
                 collectSlot.color = color;
 
 
-                telemetry.addLine("NOT NULL BALL");
+//                telemetry.addLine("NOT NULL BALL");
 
                 if (limelight.ballTrackerNew.isNextSlotEmpty()) {
                     spindexer.setTargetAdj(341);
                 }
             }
-            telemetry.addData("Distance (cm)", "%.3f", ((DistanceSensor) ballSensor.colorSensor).getDistance(DistanceUnit.CM));
+//            telemetry.addData("Distance (cm)", "%.3f", ((DistanceSensor) ballSensor.colorSensor).getDistance(DistanceUnit.CM));
         }
 
         isNextEmpty = limelight.ballTrackerNew.isNextSlotEmpty();
@@ -219,7 +225,7 @@ public class BrainSTEMRobot {
         if (shooter.isShootFar()) {
             Spindexer.maxPower = 0.5;}
         else if (shooter.isShootClose()){
-            Spindexer.maxPower = 0.85;
+            Spindexer.maxPower = 0.75;
         } else{
             Spindexer.maxPower = 0.99;
         }
@@ -232,6 +238,8 @@ public class BrainSTEMRobot {
 
 
     private void allTelemetry() {
+
+        telemetry.addData("Limelight reading", String.valueOf(limelight.targetOrder));
 
         telemetry.addData("Balls Shot", ballsShot);
 
@@ -246,6 +254,8 @@ public class BrainSTEMRobot {
 //        telemetry.addData("BL", drive.BL.getPower());
 //        telemetry.addData("FR", drive.FR.getPower());
 //        telemetry.addData("BR", drive.BR.getPower());
+
+        telemetry.addData("TargetMotf", limelight.targetOrder);
 
 
         telemetry.addLine("=== SPINDEXER SLOTS ===");

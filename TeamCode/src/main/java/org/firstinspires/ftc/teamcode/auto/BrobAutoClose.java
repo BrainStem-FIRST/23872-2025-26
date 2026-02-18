@@ -47,6 +47,8 @@ public class BrobAutoClose extends LinearOpMode {
     public static double[] firstSpikeEnd = new double[] { -12, -52, -90 };
     public static double[] strafePos = new double[] { -36, -17, -90 };
 
+    public static double[] openGate = new double[] {0, 47, -90};
+
     //2nd spike!!
     public static double[] collect2Pre = new double[] { 10, -28, -90 };
 
@@ -101,6 +103,10 @@ public class BrobAutoClose extends LinearOpMode {
                 new Waypoint(createPose(secondSpikeEnd)).setMaxLinearPower(PARAMS.COLLECT_DRIVE_MAX_POWER)
         );
 
+        DrivePath driveToOpenGate = new DrivePath(robot.drive, telemetry,
+                new Waypoint(createPose(openGate))
+        );
+
         /*
         look at motif
 
@@ -151,11 +157,51 @@ public class BrobAutoClose extends LinearOpMode {
 
                                 new ParallelAction(
                                         driveToPreloadShoot,
-                                        AutoActions.moveSpindexer(motifRotation(0))
+                                        AutoActions.moveSpindexerMot(0)
                                 ),
 
 
                                 AutoActions.waitForAccurateShooterVelocity(),
+                                ShootingSequence(),
+                                // new SleepAction(1.5),
+                                //
+                                ////                                AutoActions.shootAll(),
+                                //
+                                //                                AutoActions.rampUp(),
+                                ////                            new SleepAction(0.2),
+                                //                                  new SleepAction(0.2),
+                                //                               AutoActions.moveSpindexer360(),
+                                ////                             new SleepAction(0.5),
+                                //                                new SleepAction(0.2),
+                                //
+                                //                                AutoActions.rampDown(),
+                                //                                new SleepAction(0.2),
+                                //                                AutoActions.turnShooterOnIdle(),
+                                //                                new SleepAction(0.3),
+
+                                //2nd Spike ==========================
+
+                                new ParallelAction(
+                                        AutoActions.setCollectorOn(),
+                                        driveToCollectSecondSpikeEnd
+                                ),
+
+
+
+                                driveToOpenGate,
+
+                                // shot 9
+
+                                new SleepAction(3),
+
+                                new ParallelAction(
+                                        driveToPreloadShoot,
+                                        AutoActions.moveSpindexerMot(2)
+                                ),
+
+
+                                AutoActions.waitForAccurateShooterVelocity(),
+
                                 ShootingSequence(),
 
 
@@ -176,31 +222,14 @@ public class BrobAutoClose extends LinearOpMode {
 
                                 new ParallelAction(
                                         driveToPreloadShoot,
-                                        AutoActions.moveSpindexer(motifRotation(1))
+                                        AutoActions.moveSpindexerMot(1)
                                 ),
 
                                 AutoActions.waitForAccurateShooterVelocity(),
                                 ShootingSequence(),
                                 new SleepAction(0.3),
 
-                                //2nd Spike ==========================
 
-                                new ParallelAction(
-                                        AutoActions.setCollectorOn(),
-                                        driveToCollectSecondSpikeEnd
-                                ),
-
-                                new SleepAction(0.3),
-
-                               new ParallelAction(
-                                       driveToPreloadShoot,
-                                       AutoActions.moveSpindexer(motifRotation(2))
-                               ),
-
-
-                                AutoActions.waitForAccurateShooterVelocity(),
-
-                                ShootingSequence(),
                                 driveOffLine
 
 

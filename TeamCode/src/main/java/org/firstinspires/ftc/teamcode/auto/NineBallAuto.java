@@ -11,6 +11,7 @@ import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
@@ -23,7 +24,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-@Autonomous(name="Nine Ball Pattern")
+@Disabled
+@Autonomous(name="Nine Ball Pattern - Disabled")
 @Config
 public class NineBallAuto extends LinearOpMode {
 
@@ -83,7 +85,15 @@ public class NineBallAuto extends LinearOpMode {
         );
 
         DrivePath driveToPreloadShoot = new DrivePath(robot.drive, telemetry,
-                new Waypoint(createPose(close1Shooting)).setMaxLinearPower(1)
+                new Waypoint(createPose(close1Shooting))
+        );
+
+        DrivePath driveToShootOne = new DrivePath(robot.drive, telemetry,
+                new Waypoint(createPose(close1Shooting))
+        );
+
+        DrivePath driveToShootTwo = new DrivePath(robot.drive, telemetry,
+                new Waypoint(createPose(close1Shooting))
         );
 
         //1st Spike ===================================================================
@@ -124,30 +134,43 @@ public class NineBallAuto extends LinearOpMode {
 //                new Waypoint(createPose(collect6)).setMaxLinearPower(PARAMS.COLLECT_DRIVE_MAX_POWER).setMaxTime(3)
 //        );
 
+        telemetry.addLine("AUTO IS DONE COMPILING");
+        telemetry.update();
         waitForStart();
 
-        Actions.runBlocking(
-                new SequentialAction(
-                        new ParallelAction(
-                                AutoActions.shooterTurnOnClose(),
-                                driveToOb
-                        )
-                )
-        );
-        updateTargetMotif();
+
         Actions.runBlocking(
                 new ParallelAction(
                         new SequentialAction(
 
+                                new ParallelAction(
+
+                                        AutoActions.shooterTurnOnClose(),
+                                        driveToOb
+                                ),
+
+                                AutoActions.waitForLimelightAuto(),
+
 
                                 new ParallelAction(
                                         driveToPreloadShoot,
-                                        AutoActions.moveSpindexer(motifRotation(0))
+                                        AutoActions.moveSpindexerMot(0)
                                 ),
 
 
-                                AutoActions.waitForAccurateShooterVelocity(),
-                                ShootingSequence(),
+                                new SleepAction(1.5),
+
+                                AutoActions.rampUp(),
+//                            new SleepAction(0.2),
+                                new SleepAction(0.2),
+                                AutoActions.moveSpindexer360(),
+//                             new SleepAction(0.5),
+                                new SleepAction(0.2),
+
+                                AutoActions.rampDown(),
+                                new SleepAction(0.2),
+                                AutoActions.turnShooterOnIdle(),
+                                new SleepAction(0.3),
 
 
                                 //1st Spike Does Work ==========================
@@ -166,12 +189,23 @@ public class NineBallAuto extends LinearOpMode {
                                 ),
 
                                 new ParallelAction(
-                                        driveToPreloadShoot,
-                                        AutoActions.moveSpindexer(motifRotation(1))
+                                        driveToShootOne,
+                                        AutoActions.moveSpindexerMot(1)
                                 ),
 
-                                AutoActions.waitForAccurateShooterVelocity(),
-                                ShootingSequence(),
+                                new SleepAction(1.5),
+
+                                AutoActions.rampUp(),
+//                            new SleepAction(0.2),
+                                new SleepAction(0.2),
+                                AutoActions.moveSpindexer360(),
+//                             new SleepAction(0.5),
+                                new SleepAction(0.2),
+
+                                AutoActions.rampDown(),
+                                new SleepAction(0.2),
+                                AutoActions.turnShooterOnIdle(),
+                                new SleepAction(0.3),
                                 new SleepAction(0.3),
 
                                 //2nd Spike ==========================
@@ -184,17 +218,27 @@ public class NineBallAuto extends LinearOpMode {
                                 new SleepAction(0.3),
 
                                new ParallelAction(
-                                       driveToPreloadShoot,
-                                       AutoActions.moveSpindexer(motifRotation(2))
+                                       driveToShootTwo,
+                                       AutoActions.moveSpindexerMot(2)
                                ),
 
 
-                                AutoActions.waitForAccurateShooterVelocity(),
 
-                                ShootingSequence(),
+                                new SleepAction(1.5),
+
+                                AutoActions.rampUp(),
+//                            new SleepAction(0.2),
+                                new SleepAction(0.2),
+                                AutoActions.moveSpindexer360(),
+//                             new SleepAction(0.5),
+                                new SleepAction(0.2),
+
+                                AutoActions.rampDown(),
+                                new SleepAction(0.2),
+                                AutoActions.turnShooterOnIdle(),
+                                new SleepAction(0.3),
+
                                 driveOffLine
-
-
                         ),
                         AutoActions.robotUpdate(telemetry)
                 ));
@@ -219,7 +263,7 @@ public class NineBallAuto extends LinearOpMode {
             B2 = "P";
             B3 = "P";
         }
-        List<String> order1 = new ArrayList<>(Arrays.asList(B3, B1, B2)); // TODO: CHECK
+        List<String> order1 = new ArrayList<>(Arrays.asList(B2, B1, B3)); // TODO: CHECK
 
 
         List<String> order2 = new ArrayList<>(order1);
@@ -228,11 +272,11 @@ public class NineBallAuto extends LinearOpMode {
         List<String> order3 = new ArrayList<>(order2);
         Collections.rotate(order3, 1);
 
-        if (order1.equals(targetOrder)) {
+        if (order1.equals(robot.limelight.targetOrder)) {
             return 0;
-        } else if (order2.equals(targetOrder)) {
+        } else if (order2.equals(robot.limelight.targetOrder)) {
             return (double) 1024 /3;
-        } else if  (order3.equals(targetOrder)){
+        } else if  (order3.equals(robot.limelight.targetOrder)){
             return (double) (2 * 1024) /3;
         }
 
@@ -240,6 +284,7 @@ public class NineBallAuto extends LinearOpMode {
     }
 
     public boolean updateTargetMotif() {
+
         int tagId = Limelight.feducialResult;
 
         switch (tagId) {

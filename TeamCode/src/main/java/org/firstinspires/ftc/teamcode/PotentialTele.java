@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystems.Collector;
 import org.firstinspires.ftc.teamcode.subsystems.Spindexer;
+import org.firstinspires.ftc.teamcode.subsystems.sensors.Limelight;
 import org.firstinspires.ftc.teamcode.utils.Angle;
 import org.firstinspires.ftc.teamcode.utils.Drawing;
 import org.firstinspires.ftc.teamcode.utils.GamepadTracker;
@@ -88,6 +89,8 @@ public class PotentialTele extends LinearOpMode {
 
 
         telemetry.addLine("Robot is Ready!");
+
+        telemetry.addData("Limelight connectivty", robot.limelight.limelight.isConnected());
         telemetry.update();
 
         waitForStart();

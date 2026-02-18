@@ -104,7 +104,7 @@ public class Spindexer implements Component {
 
 
 
-        spindexerPid.setTarget(rawEncoder); // TODO: check if it fixes
+//        spindexerPid.setTarget(906); // TODO: check if it fixes
 
         hub.init(config);
 //        while(!hub.ready());
@@ -225,7 +225,7 @@ public class Spindexer implements Component {
 
 
     public double getError() {
-        return Math.abs(spindexerMotor.getCurrentPosition() - spindexerPid.getTarget());
+        return Math.abs(error);
     }
     public boolean isStatic() {
         return getError() < Constants.spindexerConstants.ERROR_THRESHOLD;

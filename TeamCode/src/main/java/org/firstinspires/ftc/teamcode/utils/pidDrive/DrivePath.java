@@ -26,6 +26,7 @@ import java.util.Arrays;
 
 @Config
 public class DrivePath implements Action {
+    public static boolean printTelemetry = false;
     public static double moveLeftSign = 1, moveForwardSign = 1, turnLeftSign = 1;
     private final MecanumDrive drivetrain;
     private final Telemetry telemetry;
@@ -216,23 +217,28 @@ public class DrivePath implements Action {
         drivetrain.setDrivePowers(new PoseVelocity2d(new Vector2d(axialPower, lateralPower), headingPower));
 
         if (telemetry != null) {
-            telemetry.addData("total dist away", totalDistanceAway);
-            telemetry.addData("t", getCurParams().slowDownPercent);
-            telemetry.addData("current position", MathUtils.format3(rx) + " ," + MathUtils.format3(ry) + ", " + MathUtils.format3(rHeadingDeg));
-            telemetry.addData("target position", MathUtils.format3(getCurWaypoint().x()) + " ," + MathUtils.format3(getCurWaypoint().y()) + ", " + MathUtils.format3(getCurWaypoint().headingDeg()));
-            telemetry.addData("target dir", MathUtils.format3(targetDir.x) + ", " + MathUtils.format3(targetDir.y));
-            telemetry.addData("waypoint errors", MathUtils.format3(xWaypointError) + ", " + MathUtils.format3(yWaypointError) + ", " + MathUtils.format3(headingDegWaypointError));
-            telemetry.addData("in position tolerance", inPositionTolerance);
-            telemetry.addData("in heading tolerance", inHeadingTolerance);
-            telemetry.addData("waypoint dist PID proportional", waypointDistancePID.getProportional());
-            telemetry.addData("waypoint dist PID derivative", waypointDistancePID.getDerivative());
-            telemetry.addLine();
-            telemetry.addData("speed", MathUtils.format3(speed));
+            if (printTelemetry) {
+                telemetry.addData("total dist away", totalDistanceAway);
+                telemetry.addData("t", getCurParams().slowDownPercent);
+                telemetry.addData("current position", MathUtils.format3(rx) + " ," + MathUtils.format3(ry) + ", " + MathUtils.format3(rHeadingDeg));
+                telemetry.addData("target position", MathUtils.format3(getCurWaypoint().x()) + " ," + MathUtils.format3(getCurWaypoint().y()) + ", " + MathUtils.format3(getCurWaypoint().headingDeg()));
+                telemetry.addData("target dir", MathUtils.format3(targetDir.x) + ", " + MathUtils.format3(targetDir.y));
+                telemetry.addData("waypoint errors", MathUtils.format3(xWaypointError) + ", " + MathUtils.format3(yWaypointError) + ", " + MathUtils.format3(headingDegWaypointError));
+                telemetry.addData("in position tolerance", inPositionTolerance);
+                telemetry.addData("in heading tolerance", inHeadingTolerance);
+                telemetry.addData("waypoint dist PID proportional", waypointDistancePID.getProportional());
+                telemetry.addData("waypoint dist PID derivative", waypointDistancePID.getDerivative());
+                telemetry.addLine();
+                telemetry.addData("speed", MathUtils.format3(speed));
 //            telemetry.addData("powers (lat, ax, heading)", MathUtils.format3(lateralPower) + ", " + MathUtils.format3(axialPower) + ", " + MathUtils.format2(headingPower));
-            telemetry.addData("lat pow", MathUtils.format3(lateralPower));
-            telemetry.addData("ax pow", MathUtils.format3(axialPower));
-            telemetry.addData("heading pow", MathUtils.format3(headingPower));
-            telemetry.addData("power hypot", powerMag);
+                telemetry.addData("lat pow", MathUtils.format3(lateralPower));
+                telemetry.addData("ax pow", MathUtils.format3(axialPower));
+                telemetry.addData("heading pow", MathUtils.format3(headingPower));
+                telemetry.addData("power hypot", powerMag);
+
+                telemetry.update();
+            }
+
             TelemetryPacket packet = new TelemetryPacket();
             Canvas fieldOverlay = packet.fieldOverlay();
 //            Pose2d prevWaypointPose = curWaypointIndex == 0 ? startPose : getWaypoint(curWaypointIndex - 1).pose;
@@ -243,7 +249,6 @@ public class DrivePath implements Action {
             fieldOverlay.setStroke("black");
             Drawing.drawRobot(fieldOverlay, getCurWaypoint().pose);
 
-            telemetry.update();
             FtcDashboard.getInstance().sendTelemetryPacket(packet);
         }
         return true;

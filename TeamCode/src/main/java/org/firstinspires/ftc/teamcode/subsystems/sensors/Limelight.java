@@ -12,19 +12,30 @@ import org.firstinspires.ftc.teamcode.utils.Component;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.limelightvision.LLResult;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 @Config
 public class Limelight implements Component {
     public int pipeline = 0;
-    private Limelight3A limelight;
+    public Limelight3A limelight;
 
     public BallTrackerNew ballTrackerNew;
 
+    public List<String> targetOrder;
 
 
+    BrainSTEMRobot robot;
     public static int feducialResult = -1;
+
+    private Telemetry telemetry;
 
     public Limelight(HardwareMap hardwareMap, Telemetry telemetry, BrainSTEMRobot robot) {
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
+        this.telemetry = telemetry;
+        this.robot = robot;
 
         limelight.pipelineSwitch(pipeline);
         limelight.start();
@@ -38,7 +49,6 @@ public class Limelight implements Component {
     @Override
     public void update() {
         ballTrackerNew.update();
-        updateObeliskColors();
 
     }
 
@@ -71,6 +81,75 @@ public class Limelight implements Component {
                 ballTrackerNew.targetMotif = ballTrackerNew.motif1;
                 break;
         }
+    }
+
+    public void  updateTargetMotif() {
+
+        int tagId = Limelight.feducialResult;
+
+        switch (tagId) {
+            case 21:
+                targetOrder = new ArrayList<>(Arrays.asList("G", "P", "P"));
+                break;
+            case 22:
+                targetOrder = new ArrayList<>(Arrays.asList("P", "G", "P"));
+                break;
+            case 23:
+                targetOrder = new ArrayList<>(Arrays.asList("P", "P", "G"));
+                break;
+            default:
+                break;
+        }
+
+        telemetry.addData("Limelight result", limelight.getLatestResult());
+        telemetry.addData("Limelight Tag ID", tagId);
+    }
+
+    public int motifRotation(int num) {
+
+        /*
+        coutner clockwin, B1 is collector spot
+         */
+
+        String B1 = "";
+        String B2 = "";
+        String B3 = "";
+
+        if (num == 1 || num == 0) {
+            B1 = "P";
+            B2 = "P";
+            B3 = "G";
+        } else if ( num == 2 ){
+            B1 = "P";
+            B2 = "G";
+            B3 = "P";
+        }else if ( num == 3 ){
+            B1 = "G";
+            B2 = "P";
+            B3 = "P";
+        }
+        List<String> order1 = new ArrayList<>(Arrays.asList(B3, B1, B2)); // TODO: CHECK
+        // G, P, P
+
+//        List<String> order2 = new ArrayList<>(order1);
+//        Collections.rotate(order2, 1);
+        List<String> order2 = new ArrayList<>(Arrays.asList(B1, B2, B3));
+        // P, P, G
+
+//        List<String> order3 = new ArrayList<>(order2);
+//        Collections.rotate(order3, 1);
+        List<String> order3 = new ArrayList<>(Arrays.asList(B2, B3, B1));
+        // P, G, P
+//        throw new RuntimeException("target order: " + Arrays.toString(robot.limelight.targetOrder.toArray()) + ", order1: " + Arrays.toString(order1.toArray()) + ", order2: " + Arrays.toString(order2.toArray()) + ", order3: " + Arrays.toString(order3.toArray()));
+
+        if (order1.equals(robot.limelight.targetOrder)) {
+            return 0;
+        } else if (order2.equals(robot.limelight.targetOrder)) {
+            return 1024 /3;
+        } else if  (order3.equals(robot.limelight.targetOrder)){
+            return (2 * 1024) /3;
+        }
+        return 1024;
     }
 
     @Override

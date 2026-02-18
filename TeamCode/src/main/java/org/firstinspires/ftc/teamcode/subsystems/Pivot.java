@@ -101,8 +101,8 @@ public class Pivot implements Component {
     public void update() {
         switch (pivotState) {
             case CLOSE:
-                position = 0.25;
-                setDualServoPosition(0.25);
+                position = 0.23;
+                setDualServoPosition(0.23);
                 break;
             case FAR:
                 position = 0.4;

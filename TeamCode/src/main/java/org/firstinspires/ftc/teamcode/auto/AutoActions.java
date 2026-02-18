@@ -117,12 +117,6 @@ public class AutoActions {
         return moveSpindexer(Constants.spindexerConstants.TICKS_60);
     }
 
-    public static Action moveSpindexer(double x) {
-        return moveSpindexer(x);
-    }
-
-
-
     private static Action moveSpindexer(int ticks) {
         return new Action() {
             boolean first = true;
@@ -146,6 +140,91 @@ public class AutoActions {
             }
 
 
+        };
+    }
+
+    public static Action moveSpindexerMot(int num, Telemetry telemetry) {
+        return new Action() {
+            boolean first = true;
+            double maxTime = 2;
+            final ElapsedTime timer = new ElapsedTime();
+            Action rotateIndexer;
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                int ticks;
+                if (first) {
+                    ticks = robot.limelight.motifRotation(num);
+//                    robot.spindexer.setTargetAdj(ticks);
+                    timer.reset();
+                    first = false;
+
+                    TelemetryPacket packet = new TelemetryPacket();
+//                    packet.addLine("move spindexer " + ticks);
+                    FtcDashboard.getInstance().sendTelemetryPacket(packet);
+                    rotateIndexer = AutoActions.moveSpindexer(ticks);
+//                    throw new RuntimeException("pattern: " + Arrays.toString(robot.limelight.targetOrder.toArray()) + ", ticks: " + ticks + ", spidnexer error: " + robot.spindexer.getError());
+                }
+                return rotateIndexer.run(telemetryPacket);
+//
+//                if (timer.seconds() >= maxTime)
+//                    return false;
+//
+//                telemetry.addData("spindexer is static", robot.spindexer.isStatic());
+//                telemetry.addData("spindexer error", robot.spindexer.getError());
+//                telemetry.addData("spindexer power", robot.spindexer.spindexerMotor.getPower());
+//                return !robot.spindexer.isStatic();
+            }
+
+
+        };
+    }
+    public static Action moveSpindexerMot(int num) {
+        return new Action() {
+            boolean first = true;
+            double maxTime = 2;
+            final ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                if (first) {
+                    int ticks = robot.limelight.motifRotation(num);
+                    robot.spindexer.setTargetAdj(ticks);
+                    timer.reset();
+                    first = false;
+
+                    TelemetryPacket packet = new TelemetryPacket();
+//                    packet.addLine("move spindexer " + ticks);
+                    FtcDashboard.getInstance().sendTelemetryPacket(packet);
+//                    throw new RuntimeException("pattern: " + Arrays.toString(robot.limelight.targetOrder.toArray()) + ", ticks: " + ticks + ", spidnexer error: " + robot.spindexer.getError());
+                }
+
+                if (timer.seconds() >= maxTime)
+                    return false;
+                return !robot.spindexer.isStatic();
+            }
+
+
+        };
+    }
+
+    public static Action waitForLimelightAuto() {
+        return new Action() {
+            private ElapsedTime timer;
+            private boolean isFirst = true;
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                if(isFirst) {
+                    timer = new ElapsedTime();
+                    timer.reset();
+                    isFirst = false;
+
+                }
+
+                robot.limelight.updateObeliskColors();
+                robot.limelight.updateTargetMotif();
+
+                boolean ready = Limelight.feducialResult >= 0;
+                return timer.seconds() < 2 && !ready ;
+            }
         };
     }
 
@@ -283,11 +362,4 @@ public class AutoActions {
             }
         };
     }
-
-
-
-
-
-
-
 }
