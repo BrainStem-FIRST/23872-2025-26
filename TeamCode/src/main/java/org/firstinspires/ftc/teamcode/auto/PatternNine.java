@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-@Autonomous(name="Pattern Nine Ball")
+@Autonomous(name="Pattern Nine Ball Blue")
 @Config
 public class PatternNine extends LinearOpMode {
 
@@ -38,7 +38,7 @@ public class PatternNine extends LinearOpMode {
 
 
     //1st Spike!!
-    public static double[] close1Shooting = new double[] {-26, -26, -135};
+    public static double[] close1Shooting = new double[] {-35, -35, -135};
     public static double[] collect1Pre = new double[] { -13, -30, -90 };
     public static double[] collect1Mid = new double[] { -13, -22, -90 };
 //    public static double[] collect1 = new double[] { -12, -39, -90 };
@@ -59,8 +59,8 @@ public class PatternNine extends LinearOpMode {
     public static double collectMaxPower = 0.3;
     BrainSTEMRobot robot;
 
-    private static class PARAMS{
-        private double COLLECT_DRIVE_MAX_POWER = 0.15;
+    public static class PARAMS{
+        public double COLLECT_DRIVE_MAX_POWER = 0.15;
     }
     public static PatternNine.PARAMS PARAMS = new PatternNine.PARAMS();
 

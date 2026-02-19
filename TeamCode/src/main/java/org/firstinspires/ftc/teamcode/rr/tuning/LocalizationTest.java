@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.rr.TankDrive;
 import org.firstinspires.ftc.teamcode.utils.math.MathUtils;
 import org.firstinspires.ftc.teamcode.utils.math.Vec;
 
+@Disabled
 @Config
 @TeleOp(name="Special Localization Test")
 public class LocalizationTest extends LinearOpMode {

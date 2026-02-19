@@ -20,6 +20,7 @@ import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.utils.PIDController;
 
 @Config
+@Disabled
 @TeleOp (name = "Shooter Tuning")
 public class ShooterTuning extends LinearOpMode {
 

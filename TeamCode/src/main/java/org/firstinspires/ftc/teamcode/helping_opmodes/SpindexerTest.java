@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.helping_opmodes;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -11,7 +12,7 @@ import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
 import org.firstinspires.ftc.teamcode.Constants;
 
 @TeleOp(name = "Spind Test")
-
+@Disabled
 public class SpindexerTest extends OpMode {
 
     private BrainSTEMRobot robot;

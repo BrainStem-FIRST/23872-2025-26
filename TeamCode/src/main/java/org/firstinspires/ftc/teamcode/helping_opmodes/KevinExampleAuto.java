@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
@@ -15,6 +16,7 @@ import org.firstinspires.ftc.teamcode.utils.pidDrive.Waypoint;
 
 
 @Config
+@Disabled
 @Autonomous(name="kevin example auto")
 public class KevinExampleAuto extends LinearOpMode {
     public static double x = 48, y = 0, h = 0;

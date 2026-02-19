@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.helping_opmodes;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.utils.BallSensor;
 
+@Disabled
 @TeleOp(name="Ball Sensor Test", group="Test")
 public class BallSensorTest extends LinearOpMode {
 

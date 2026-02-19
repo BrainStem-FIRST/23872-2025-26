@@ -22,47 +22,47 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Autonomous(name="Brob Joint")
+@Autonomous(name="Pattern Nine Ball Red")
 @Config
-
-public class BrobdigNagAuto extends LinearOpMode {
+public class PatternNineRed extends LinearOpMode {
 
     public List<String> order1 = new ArrayList<>(Arrays.asList("P", "P", "G"));
 
     public List<String> targetOrder = order1; // default
 
-    public static double[] start = new double[] { -65, -41.75, 0};
+    public static double[] start = new double[] { -65, 41.75, 0};
 
     //Obelisk look
-    public static double[] lookAtOb = new double[] {-7,-60, 132};
+    public static double[] lookAtOb = new double[] {-23, 23, 195};
 
 
     //1st Spike!!
-    public static double[] close1Shooting = new double[] {-26, -26, -135};
-    public static double[] collect1Pre = new double[] { -13, -30, -90 };
-    public static double[] collect1Mid = new double[] { -13, -22, -90 };
+    public static double[] close1Shooting = new double[] {-35, 35, 135};
+    public static double[] collect1Pre = new double[] { -13, 30, 90 };
+    public static double[] collect1Mid = new double[] { -13, 22, 90 };
+
 //    public static double[] collect1 = new double[] { -12, -39, -90 };
 //    public static double[] collect2 = new double[] { -12, -44, -90 };
 //    public static double[] collect3 = new double[] { -2, -49, -90 };
 
-    public static double[] firstSpikeEnd = new double[] { -12, -52, -90 };
-    public static double[] strafePos = new double[] { -36, -17, -90 };
+    public static double[] firstSpikeEnd = new double[] { -12, 52, 90 };
+    public static double[] strafePos = new double[] { -36, 17, 90 };
 
     //2nd spike!!
-    public static double[] collect2Pre = new double[] { 11, -28, -90 };
+    public static double[] collect2Pre = new double[] { 10.5, 27, 90 };
 
 //    public static double[] collect4 = new double[] { 10, -40, -90 };
 //    public static double[] collect5 = new double[] { 10, -45, -90 };
 //    public static double[] collect6 = new double[] { 10, -50, -90 };
 
-    public static double[] secondSpikeEnd = new double[] { 11, -52, -90 };
+    public static double[] secondSpikeEnd = new double[] { 10, 52, 90 };
     public static double collectMaxPower = 0.3;
     BrainSTEMRobot robot;
 
-    private static class PARAMS{
-        private double COLLECT_DRIVE_MAX_POWER = 0.15;
+    public static class PARAMS{
+        public double COLLECT_DRIVE_MAX_POWER = 0.15;
     }
-    public static BrobdigNagAuto.PARAMS PARAMS = new BrobdigNagAuto.PARAMS();
+    public static PatternNine.PARAMS PARAMS = new PatternNine.PARAMS();
 
 
     @Override
@@ -132,45 +132,42 @@ public class BrobdigNagAuto extends LinearOpMode {
 
         Action autoAction = new ParallelAction(
                 new SequentialAction(
-
-
                         new ParallelAction(
                                 AutoActions.shooterTurnOnClose()
-                                , AutoActions.pivotClose(),
-                                driveToPreloadShoot
+                                , AutoActions.pivotClose()
+                                , driveToOb
                         ),
 
                         new SleepAction(0.2),
 
+                        AutoActions.waitForLimelightAuto(),
+
+                        new SleepAction(0.2),
+
+                        new ParallelAction(
+                                driveToPreloadShoot,
+                                AutoActions.moveSpindexerMot(0, telemetry)
+                        ),
+
+                        new SleepAction(0.7),
+
                         AutoActions.rampUp(),
 //                            new SleepAction(0.2),
-                        new SleepAction(0.2),
+                        new SleepAction(0.5),
                         AutoActions.moveSpindexer360(),
+
 
                         AutoActions.rampDown(),
                         new SleepAction(0.2),
                         AutoActions.turnShooterOnIdle(),
 
-                        // OBB
 
-
-
-                        // GATE
-
+                        //1st Spike Does Work ==========================
                         new ParallelAction(
                                 AutoActions.setCollectorOn(),
                                 driveToCollectFirstSpikeEnd
                         ),
 
-                        new SleepAction(0.2),
-
-                        new ParallelAction(
-                                driveToOb,
-                                AutoActions.setCollectorOff()
-                        )
-,
-                        new SleepAction(0.2),
-                        AutoActions.waitForLimelightAuto(),
 
                         new ParallelAction(
                                 AutoActions.setCollectorOff(),
@@ -178,12 +175,10 @@ public class BrobdigNagAuto extends LinearOpMode {
                                 AutoActions.shooterTurnOnClose()
                         ),
 
-                        new SleepAction(0.75),
 
-                        new ParallelAction(
-                                driveToShootOne,
-                                AutoActions.moveSpindexerMot(1, telemetry)
-                        ),
+                        driveToShootOne,
+
+                        AutoActions.moveSpindexerMot(1, telemetry),
 
                         new SleepAction(0.2),
 
@@ -205,12 +200,12 @@ public class BrobdigNagAuto extends LinearOpMode {
 
                         new SleepAction(0.3),
 
-                       new ParallelAction(
-                               AutoActions.setCollectorOff(),
-                               AutoActions.shooterTurnOnClose()
-                               , AutoActions.pivotClose()
-                               , driveToShootTwo
-                       ),
+                        new ParallelAction(
+                                AutoActions.setCollectorOff(),
+                                AutoActions.shooterTurnOnClose()
+                                , AutoActions.pivotClose()
+                                , driveToShootTwo
+                        ),
 
 
                         AutoActions.moveSpindexerMot(2, telemetry),
@@ -230,7 +225,7 @@ public class BrobdigNagAuto extends LinearOpMode {
 
 
                 ),
-                    AutoActions.robotUpdate(telemetry)
+                AutoActions.robotUpdate(telemetry)
         );
 
         Actions.runBlocking(autoAction);

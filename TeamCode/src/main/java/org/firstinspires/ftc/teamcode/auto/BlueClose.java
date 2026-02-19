@@ -10,6 +10,7 @@ import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
@@ -20,6 +21,7 @@ import org.firstinspires.ftc.teamcode.utils.pidDrive.Waypoint;
 
 @Autonomous(name="Blue Close")
 @Config
+@Disabled
 public class BlueClose extends LinearOpMode {
     public static double[] start = new double[] { -62.5, -41, 0 };
 
