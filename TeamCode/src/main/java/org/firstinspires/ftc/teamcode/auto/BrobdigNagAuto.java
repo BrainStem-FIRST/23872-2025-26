@@ -26,19 +26,22 @@ import java.util.List;
 @Config
 
 public class BrobdigNagAuto extends LinearOpMode {
-
     public List<String> order1 = new ArrayList<>(Arrays.asList("P", "P", "G"));
 
     public List<String> targetOrder = order1; // default
 
+
     public static double[] start = new double[] { -65, -41.75, 0};
 
     //Obelisk look
-    public static double[] lookAtOb = new double[] {-7,-60, 132};
+    public static double[] lookAtOb = new double[] {-23,-23, -195};
+
+    //Open Gate
+    public static double[] openGatePos = new double[] {-7,-60, 132};
 
 
     //1st Spike!!
-    public static double[] close1Shooting = new double[] {-26, -26, -135};
+    public static double[] close1Shooting = new double[] {-38, -37, -135};
     public static double[] collect1Pre = new double[] { -13, -30, -90 };
     public static double[] collect1Mid = new double[] { -13, -22, -90 };
 //    public static double[] collect1 = new double[] { -12, -39, -90 };
@@ -49,7 +52,7 @@ public class BrobdigNagAuto extends LinearOpMode {
     public static double[] strafePos = new double[] { -36, -17, -90 };
 
     //2nd spike!!
-    public static double[] collect2Pre = new double[] { 11, -28, -90 };
+    public static double[] collect2Pre = new double[] { 9, -25, -90 };
 
 //    public static double[] collect4 = new double[] { 10, -40, -90 };
 //    public static double[] collect5 = new double[] { 10, -45, -90 };
@@ -58,7 +61,6 @@ public class BrobdigNagAuto extends LinearOpMode {
     public static double[] secondSpikeEnd = new double[] { 11, -52, -90 };
     public static double collectMaxPower = 0.3;
     BrainSTEMRobot robot;
-
     private static class PARAMS{
         private double COLLECT_DRIVE_MAX_POWER = 0.15;
     }
@@ -76,6 +78,11 @@ public class BrobdigNagAuto extends LinearOpMode {
         DrivePath driveToOb = new DrivePath(robot.drive, telemetry,
                 new Waypoint(createPose(lookAtOb)).setMaxLinearPower(1)
         );
+
+        DrivePath openGate = new DrivePath(robot.drive, telemetry,
+                new Waypoint(createPose(openGatePos)).setMaxLinearPower(1)
+        );
+
 
         DrivePath driveToPreloadShoot = new DrivePath(robot.drive, telemetry,
                 new Waypoint(createPose(close1Shooting))
@@ -132,27 +139,35 @@ public class BrobdigNagAuto extends LinearOpMode {
 
         Action autoAction = new ParallelAction(
                 new SequentialAction(
-
-
                         new ParallelAction(
                                 AutoActions.shooterTurnOnClose()
-                                , AutoActions.pivotClose(),
-                                driveToPreloadShoot
+                                , AutoActions.pivotClose()
+                                , driveToOb
                         ),
 
                         new SleepAction(0.2),
 
+                        AutoActions.waitForLimelightAuto(),
+
+                        new SleepAction(0.2),
+
+                        new ParallelAction(
+                                driveToPreloadShoot,
+                                AutoActions.moveSpindexerMot(0, telemetry)
+                        ),
+
+                        new SleepAction(0.7),
+
                         AutoActions.rampUp(),
 //                            new SleepAction(0.2),
-                        new SleepAction(0.2),
+                        new SleepAction(0.5),
                         AutoActions.moveSpindexer360(),
+                        new SleepAction(1),
+
 
                         AutoActions.rampDown(),
                         new SleepAction(0.2),
                         AutoActions.turnShooterOnIdle(),
-
-                        // OBB
-
 
 
                         // GATE
@@ -165,7 +180,7 @@ public class BrobdigNagAuto extends LinearOpMode {
                         new SleepAction(0.2),
 
                         new ParallelAction(
-                                driveToOb,
+                                openGate,
                                 AutoActions.setCollectorOff()
                         )
 ,

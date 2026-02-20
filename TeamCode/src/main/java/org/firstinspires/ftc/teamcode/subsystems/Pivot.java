@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.utils.Component;
 
 
 @Config
+
 public class Pivot implements Component {
     public static boolean activateLeft = true, activateRight = true;
     private Servo leftServo;
@@ -64,7 +65,7 @@ public class Pivot implements Component {
 
     }
     // ADJUST THIS IF HOOD MOVEMENT IS TOO LARGE
-    public static double HOOD_ADJ_SHOT = -0.04; // Adjust based on testing
+    public static double HOOD_ADJ_SHOT = -0.03; // Adjust based on testing
 
 
     public void updateCompensatedPosition(int shotCount) {
@@ -105,8 +106,8 @@ public class Pivot implements Component {
                 setDualServoPosition(0.23);
                 break;
             case FAR:
-                position = 0.4;
-                setDualServoPosition(0.4);
+                position = 0.45;
+                setDualServoPosition(0.45);
                 break;
             case ADJUSTING:
                 setDualServoPosition(newPos);

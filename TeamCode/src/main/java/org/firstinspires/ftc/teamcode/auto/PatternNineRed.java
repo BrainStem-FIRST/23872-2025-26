@@ -37,7 +37,7 @@ public class PatternNineRed extends LinearOpMode {
 
 
     //1st Spike!!
-    public static double[] close1Shooting = new double[] {-35, 35, 135};
+    public static double[] close1Shooting = new double[] {-38, 37, 135};
     public static double[] collect1Pre = new double[] { -13, 30, 90 };
     public static double[] collect1Mid = new double[] { -13, 22, 90 };
 
@@ -49,7 +49,7 @@ public class PatternNineRed extends LinearOpMode {
     public static double[] strafePos = new double[] { -36, 17, 90 };
 
     //2nd spike!!
-    public static double[] collect2Pre = new double[] { 10.5, 27, 90 };
+    public static double[] collect2Pre = new double[] { 9, 25, 90 };
 
 //    public static double[] collect4 = new double[] { 10, -40, -90 };
 //    public static double[] collect5 = new double[] { 10, -45, -90 };
@@ -155,6 +155,7 @@ public class PatternNineRed extends LinearOpMode {
 //                            new SleepAction(0.2),
                         new SleepAction(0.5),
                         AutoActions.moveSpindexer360(),
+                        new SleepAction(0.7),
 
 
                         AutoActions.rampDown(),
