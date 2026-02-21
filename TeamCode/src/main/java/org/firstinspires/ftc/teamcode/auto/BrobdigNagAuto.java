@@ -39,7 +39,7 @@ public class BrobdigNagAuto extends LinearOpMode {
     public static double[] lookAtOb = new double[] {-23,-23, -195};
 
     //Open Gate
-    public static double[] openGatePos = new double[] {-7,-60, 132};
+    public static double[] openGatePos = new double[] {-7,-61.5, 115};
 
 
 

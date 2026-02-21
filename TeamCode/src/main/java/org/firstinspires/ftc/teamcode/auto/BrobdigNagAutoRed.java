@@ -34,16 +34,16 @@ public class BrobdigNagAutoRed extends LinearOpMode {
     public static double[] start = new double[] { -65, 41.75, 0};
 
     //Obelisk look
-    public static double[] lookAtOb = new double[] {-23,23, 195};
+    public static double[] lookAtOb = new double[] {-22,22, 195};
 
     //Open Gate
-    public static double[] openGatePos = new double[] {-7,60, -132};
+    public static double[] openGatePos = new double[] {-7,60, -115};
 
 
 
     //1st Spike!!
     public static double[] close1Shooting = new double[] {-38, 37, 135};
-    public static double[] collect1Pre = new double[] { -13, 31, 90 };
+    public static double[] collect1Pre = new double[] { -13, 29, 90 };
     public static double[] collect1Mid = new double[] { -13, 22, 90 };
 //    public static double[] collect1 = new double[] { -12, -39, -90 };
 //    public static double[] collect2 = new double[] { -12, -44, -90 };

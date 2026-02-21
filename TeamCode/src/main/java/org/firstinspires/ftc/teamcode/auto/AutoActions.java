@@ -119,8 +119,8 @@ public class AutoActions {
     private static Action moveSpindexer360Hi() {
         return new Action() {
             boolean first = true;
-            double minTime = 0.6;
-            double maxTime = 1.2;
+            double minTime = 0.7;
+            double maxTime = 1.4;
             final ElapsedTime timer = new ElapsedTime();
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
