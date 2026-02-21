@@ -38,7 +38,7 @@ public class PatternNine extends LinearOpMode {
 
 
     //1st Spike!!
-    public static double[] close1Shooting = new double[] {-38, -37, -135};
+    public static double[] close1Shooting = new double[] {-36, -35, -135};
     public static double[] collect1Pre = new double[] { -13, -30, -90 };
     public static double[] collect1Mid = new double[] { -13, -22, -90 };
 //    public static double[] collect1 = new double[] { -12, -39, -90 };

@@ -12,6 +12,7 @@ import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
 import org.firstinspires.ftc.teamcode.subsystems.sensors.Limelight;
@@ -21,6 +22,7 @@ import org.firstinspires.ftc.teamcode.utils.pidDrive.Waypoint;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.firstinspires.ftc.teamcode.auto.AutoActions;
 
 @Autonomous(name="Brob Joint")
 @Config
@@ -40,9 +42,10 @@ public class BrobdigNagAuto extends LinearOpMode {
     public static double[] openGatePos = new double[] {-7,-60, 132};
 
 
+
     //1st Spike!!
     public static double[] close1Shooting = new double[] {-38, -37, -135};
-    public static double[] collect1Pre = new double[] { -13, -30, -90 };
+    public static double[] collect1Pre = new double[] { -13, -31, -90 };
     public static double[] collect1Mid = new double[] { -13, -22, -90 };
 //    public static double[] collect1 = new double[] { -12, -39, -90 };
 //    public static double[] collect2 = new double[] { -12, -44, -90 };
@@ -52,7 +55,7 @@ public class BrobdigNagAuto extends LinearOpMode {
     public static double[] strafePos = new double[] { -36, -17, -90 };
 
     //2nd spike!!
-    public static double[] collect2Pre = new double[] { 9, -25, -90 };
+    public static double[] collect2Pre = new double[] { 9, -29, -90 };
 
 //    public static double[] collect4 = new double[] { 10, -40, -90 };
 //    public static double[] collect5 = new double[] { 10, -45, -90 };
@@ -75,12 +78,14 @@ public class BrobdigNagAuto extends LinearOpMode {
         robot = new BrainSTEMRobot(hardwareMap, telemetry, this, createPose(start));
         AutoActions.setRobot(robot);
 
+
+
         DrivePath driveToOb = new DrivePath(robot.drive, telemetry,
                 new Waypoint(createPose(lookAtOb)).setMaxLinearPower(1)
         );
 
         DrivePath openGate = new DrivePath(robot.drive, telemetry,
-                new Waypoint(createPose(openGatePos)).setMaxLinearPower(1)
+                new Waypoint(createPose(openGatePos)).setMaxLinearPower(1).setMaxTime(1.5)
         );
 
 
@@ -95,6 +100,8 @@ public class BrobdigNagAuto extends LinearOpMode {
         DrivePath driveToShootTwo = new DrivePath(robot.drive, telemetry,
                 new Waypoint(createPose(close1Shooting))
         );
+
+
 
         //1st Spike ===================================================================
 
@@ -141,33 +148,25 @@ public class BrobdigNagAuto extends LinearOpMode {
                 new SequentialAction(
                         new ParallelAction(
                                 AutoActions.shooterTurnOnClose()
-                                , AutoActions.pivotClose()
-                                , driveToOb
+                                , AutoActions.pivotClose(),
+                                driveToPreloadShoot
                         ),
 
-                        new SleepAction(0.2),
+                        // doesnt finish this
 
-                        AutoActions.waitForLimelightAuto(),
-
-                        new SleepAction(0.2),
-
-                        new ParallelAction(
-                                driveToPreloadShoot,
-                                AutoActions.moveSpindexerMot(0, telemetry)
-                        ),
-
-                        new SleepAction(0.7),
+                        new SleepAction(0.3),
 
                         AutoActions.rampUp(),
 //                            new SleepAction(0.2),
-                        new SleepAction(0.5),
-                        AutoActions.moveSpindexer360(),
-                        new SleepAction(1),
-
-
-                        AutoActions.rampDown(),
                         new SleepAction(0.2),
+
+
+                        AutoActions.moveSpindexer360(),
+                        AutoActions.rampDown(),
                         AutoActions.turnShooterOnIdle(),
+
+
+                        // skips to this:
 
 
                         // GATE
@@ -186,22 +185,24 @@ public class BrobdigNagAuto extends LinearOpMode {
                                 AutoActions.shooterTurnOnClose()
                         ),
 
-                        new SleepAction(0.75),
+
+                        AutoActions.waitForLimelightAuto(),
 
 
-                        driveToShootOne,
+                        new ParallelAction(
+                                driveToShootOne,
+                                AutoActions.moveSpindexerMot(1, telemetry)
+                        ),
 
-                        AutoActions.moveSpindexerMot(1, telemetry),
 
                         new SleepAction(0.2),
 
                         AutoActions.rampUp(),
 //                            new SleepAction(0.2),
-                        new SleepAction(0.2),
+                        new SleepAction(0.5),
                         AutoActions.moveSpindexer360(),
 
                         AutoActions.rampDown(),
-                        new SleepAction(0.2),
                         AutoActions.turnShooterOnIdle(),
 
                         //2nd Spike ==========================
@@ -217,21 +218,19 @@ public class BrobdigNagAuto extends LinearOpMode {
                                 AutoActions.setCollectorOff(),
                                 AutoActions.shooterTurnOnClose()
                                 , AutoActions.pivotClose()
-                                , driveToShootTwo
+                                , driveToShootTwo,
+
+                                AutoActions.moveSpindexerMot(2, telemetry)
                         ),
 
 
-                        AutoActions.moveSpindexerMot(2, telemetry),
-
-                        new SleepAction(0.2),
+                        new SleepAction(0.3),
 
                         AutoActions.rampUp(),
 //                            new SleepAction(0.2),
-                        new SleepAction(0.2),
+                        new SleepAction(0.6),
                         AutoActions.moveSpindexer360(),
-
                         AutoActions.rampDown(),
-                        new SleepAction(0.2),
                         AutoActions.turnShooterOnIdle(),
 
                         driveOffLine

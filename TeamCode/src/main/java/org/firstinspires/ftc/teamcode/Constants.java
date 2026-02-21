@@ -8,7 +8,7 @@ public class Constants {
 
             // PID Constants
             // TODO: Tune for built in PID
-            public  double kP_ONE = 0.0033;
+            public  double kP_ONE = 0.0032;
             public double kP_TWO = 0.0038;
             public  double kI = 0.0;
             public  double kD = 0.0000001;
@@ -16,8 +16,8 @@ public class Constants {
 
             // Vel Targets (ticks per second)
             public  double AUTO_VEL = 300;
-            public  double FAR_SHOOT_VEL = 1890;
-            public  double CLOSE_SHOOT_VEL = 1380;
+            public  double FAR_SHOOT_VEL = 1910;
+            public  double CLOSE_SHOOT_VEL = 1340;
 
             // Limits
             public  double MAX_TICKS_PER_SEC = 2300;

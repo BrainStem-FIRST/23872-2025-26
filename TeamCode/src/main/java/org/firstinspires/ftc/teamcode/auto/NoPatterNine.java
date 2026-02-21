@@ -106,6 +106,8 @@ public class NoPatterNine extends LinearOpMode {
                 new Waypoint(createPose(strafePos))
         );
 
+        robot.isAuto = true;
+
         //2nd Spike!! ===================================================================
 //        DrivePath driveToCollect2Pre = new DrivePath(robot.drive, telemetry,
 //                new Waypoint(createPose(collect2Pre)).setSlowDownPercent(0.1)

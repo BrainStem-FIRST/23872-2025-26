@@ -59,6 +59,8 @@ public class BrainSTEMRobot {
 
     private ElapsedTime lastShotTime;
 
+    public boolean isAuto = false;
+
 
 
 
@@ -225,7 +227,7 @@ public class BrainSTEMRobot {
         if (shooter.isShootFar()) {
             Spindexer.maxPower = 0.5;}
         else if (shooter.isShootClose()){
-            Spindexer.maxPower = 0.75;
+            Spindexer.maxPower = 0.87;
         } else{
             Spindexer.maxPower = 0.99;
         }

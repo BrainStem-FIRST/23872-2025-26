@@ -21,8 +21,8 @@ public class Pivot implements Component {
     private ServoImplEx rightServo;
     public double position;
 
-    public static double closePivot = 0.645;
-    public static double farPivot = 0.3;
+    public static double closePivot = 0.59;
+    public static double farPivot = 0.2;
 
 
     public double newPos;

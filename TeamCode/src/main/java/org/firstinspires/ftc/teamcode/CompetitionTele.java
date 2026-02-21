@@ -9,13 +9,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystems.Collector;
-import org.firstinspires.ftc.teamcode.subsystems.Spindexer;
-import org.firstinspires.ftc.teamcode.subsystems.sensors.Limelight;
 import org.firstinspires.ftc.teamcode.utils.Angle;
 import org.firstinspires.ftc.teamcode.utils.Drawing;
 import org.firstinspires.ftc.teamcode.utils.GamepadTracker;
 import org.firstinspires.ftc.teamcode.utils.PIDController;
-import org.firstinspires.ftc.teamcode.utils.math.HeadingCorrect;
 
 /*
 What to do:
@@ -40,8 +37,8 @@ FIX ANTIJAM
 P1: auto align - according to dante spins in one direction for eternity && auto
     wrap issue? try update with error
  */
-@TeleOp(name = "Potential Tele Yay")
-public class PotentialTele extends LinearOpMode {
+@TeleOp(name = "Competition Tele Yay")
+public class CompetitionTele extends LinearOpMode {
     private GamepadTracker gp1;
     private GamepadTracker gp2;
     private BrainSTEMRobot robot;
@@ -57,7 +54,7 @@ public class PotentialTele extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);
 
-        robot = new BrainSTEMRobot(hardwareMap, this.telemetry, this, new Pose2d(0, 0, 0));
+        robot = new BrainSTEMRobot(hardwareMap, this.telemetry, this, new Pose2d(BrainSTEMRobot.autoX, BrainSTEMRobot.autoY, BrainSTEMRobot.autoH));
 
         gp1 = new GamepadTracker(gamepad1);
         gp2 = new GamepadTracker(gamepad2);
@@ -71,21 +68,9 @@ public class PotentialTele extends LinearOpMode {
                 Constants.DriveConstants.ALIGNMENT_KD
         );
 
-        // Switch goal
-        if (gamepad1.x){
-            goal = new Vector2d(-72, -72);
-            red = false;
-        } else if (gamepad1.a){
-            red = true;
-        }
 
 
 
-        if (red){
-            telemetry.addLine("Color is Red");
-        } else {
-            telemetry.addLine("Color is Blue");
-        }
 
 
         telemetry.addLine("Robot is Ready!");
@@ -175,8 +160,11 @@ public class PotentialTele extends LinearOpMode {
             robot.spindexer.setTargetAdj(Constants.spindexerConstants.TICKS_120);
         }
 
-        if (gp1.isFirstX()) {
-            robot.spindexer.setTargetAdj(robot.limelight.ballTrackerNew.getBestRotation());
+        // Switch goal - make so only presses in first 10 sec
+        if (gamepad1.x){
+            telemetry.addLine("Color is Blue");
+            goal = new Vector2d(-72, -68.5); //  change for left hand bias
+            red = false;
         }
 
 

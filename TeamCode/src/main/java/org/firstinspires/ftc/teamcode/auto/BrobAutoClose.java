@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 @Disabled
+@Deprecated
 @Autonomous(name="Nine Ball")
 @Config
 public class BrobAutoClose extends LinearOpMode {

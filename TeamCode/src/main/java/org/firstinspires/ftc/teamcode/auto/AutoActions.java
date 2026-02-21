@@ -24,6 +24,8 @@ import java.util.List;
 
 public class AutoActions {
 
+    public ElapsedTime spindTime = new ElapsedTime();
+
 
 
 
@@ -107,10 +109,40 @@ public class AutoActions {
     public static Action moveSpindexer120() {
         return moveSpindexer(Constants.spindexerConstants.TICKS_120);
     }
+
     public static Action moveSpindexer360() {
-        return moveSpindexer(1024+341+341);
+        return moveSpindexer360Hi();
     }
 
+
+
+    private static Action moveSpindexer360Hi() {
+        return new Action() {
+            boolean first = true;
+            double minTime = 0.6;
+            double maxTime = 1.2;
+            final ElapsedTime timer = new ElapsedTime();
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                if (first) {
+                    robot.spindexer.setTargetAdj(1024+341+341);
+                    timer.reset();
+                    first = false;
+                }
+
+                if (timer.seconds() <= minTime){
+                    return true;}
+                else if (timer.seconds() > maxTime)
+                { return false;}
+
+                TelemetryPacket packet = new TelemetryPacket();
+                FtcDashboard.getInstance().sendTelemetryPacket(packet);
+                return !robot.spindexer.isStatic();
+            }
+
+
+        };
+    }
 
 
     public static Action moveSpindexer60() {
