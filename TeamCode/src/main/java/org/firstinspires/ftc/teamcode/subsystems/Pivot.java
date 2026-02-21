@@ -17,13 +17,17 @@ import org.firstinspires.ftc.teamcode.utils.Component;
 
 public class Pivot implements Component {
     public static boolean activateLeft = true, activateRight = true;
-    private Servo leftServo;
-    private Servo rightServo;
+    private ServoImplEx leftServo;
+    private ServoImplEx rightServo;
     public double position;
+
+    public static double closePivot = 0.645;
+    public static double farPivot = 0.3;
+
 
     public double newPos;
     private OneWShooter shooter;
-    public static int leftLower = 2367, leftHigher = 483, rightLower = 533, rightHigher = 2450;
+    public static int leftLower = 651, leftHigher = 2409, rightLower = 2240, rightHigher = 474; // 2132
 
     public enum PivotState{
         CLOSE,
@@ -35,16 +39,11 @@ public class Pivot implements Component {
     public Pivot(HardwareMap hardwareMap, Telemetry telemetry, OneWShooter shooter){
 
 
-        leftServo = hardwareMap.get(Servo.class, "leftHood");
-        rightServo = hardwareMap.get(Servo.class, "rightHood");
+        leftServo = hardwareMap.get(ServoImplEx.class, "leftHood");
+        rightServo = hardwareMap.get(ServoImplEx.class, "rightHood");
 
-        ServoImplEx leftServoEx = (ServoImplEx) leftServo;
-        ServoImplEx rightServoEx = (ServoImplEx) rightServo;
-
-
-        PwmControl.PwmRange axonRange = new PwmControl.PwmRange(leftLower, leftHigher);
-        leftServoEx.setPwmRange(axonRange);
-        rightServoEx.setPwmRange(new PwmControl.PwmRange(rightLower, rightHigher));
+        leftServo.setPwmRange(new PwmControl.PwmRange(leftLower, leftHigher));
+        rightServo.setPwmRange(new PwmControl.PwmRange(rightLower, rightHigher));
 
         pivotState = PivotState.CLOSE;
 
@@ -65,7 +64,7 @@ public class Pivot implements Component {
 
     }
     // ADJUST THIS IF HOOD MOVEMENT IS TOO LARGE
-    public static double HOOD_ADJ_SHOT = -0.03; // Adjust based on testing
+    public static double HOOD_ADJ_SHOT = -0.04; // Adjust based on testing
 
 
     public void updateCompensatedPosition(int shotCount) {
@@ -100,14 +99,15 @@ public class Pivot implements Component {
 
     @Override
     public void update() {
+
         switch (pivotState) {
             case CLOSE:
-                position = 0.23;
-                setDualServoPosition(0.23);
+                position = closePivot;
+                setDualServoPosition(closePivot);
                 break;
             case FAR:
-                position = 0.45;
-                setDualServoPosition(0.45);
+                position = farPivot;
+                setDualServoPosition(farPivot);
                 break;
             case ADJUSTING:
                 setDualServoPosition(newPos);

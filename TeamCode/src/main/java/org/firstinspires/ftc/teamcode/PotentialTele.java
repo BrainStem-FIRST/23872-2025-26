@@ -199,7 +199,9 @@ public class PotentialTele extends LinearOpMode {
             shooterOn = true;
         } else if (gp2.isFirstA()) {
             robot.shooter.setShooterShootClose();
-            robot.pivot.setPivotShootClose();
+            robot.
+
+                    pivot.setPivotShootClose();
 
             shooterOn = true;
         } else if (gp2.isFirstB()) {
