@@ -180,7 +180,6 @@ public class BrobdigNagAuto extends LinearOpMode {
 
                         new ParallelAction(
                                 openGate,
-                                AutoActions.setCollectorOff(),
                                 AutoActions.pivotClose(),
                                 AutoActions.shooterTurnOnClose()
                         ),
@@ -193,6 +192,8 @@ public class BrobdigNagAuto extends LinearOpMode {
                                 driveToShootOne,
                                 AutoActions.moveSpindexerMot(1, telemetry)
                         ),
+
+                        AutoActions.setCollectorOff(),
 
 
                         new SleepAction(0.2),
@@ -215,13 +216,15 @@ public class BrobdigNagAuto extends LinearOpMode {
                         new SleepAction(0.3),
 
                         new ParallelAction(
-                                AutoActions.setCollectorOff(),
                                 AutoActions.shooterTurnOnClose()
                                 , AutoActions.pivotClose()
                                 , driveToShootTwo,
 
                                 AutoActions.moveSpindexerMot(2, telemetry)
                         ),
+
+
+                        AutoActions.setCollectorOff(),
 
 
                         new SleepAction(0.3),
