@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.utils.pidDrive.DrivePath;
 import org.firstinspires.ftc.teamcode.utils.pidDrive.Waypoint;
 
 @Autonomous(name="Red Close")
+@Deprecated
 @Disabled
 @Config
 public class RedClose extends LinearOpMode {

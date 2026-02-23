@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.utils.pidDrive.DrivePath;
 import org.firstinspires.ftc.teamcode.utils.pidDrive.Waypoint;
 
 @Autonomous(name="Red Far")
+@Deprecated
 @Config
 @Disabled
 public class RedFar extends LinearOpMode {

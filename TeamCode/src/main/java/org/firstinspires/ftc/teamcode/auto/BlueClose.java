@@ -20,6 +20,7 @@ import org.firstinspires.ftc.teamcode.utils.pidDrive.DrivePath;
 import org.firstinspires.ftc.teamcode.utils.pidDrive.Waypoint;
 
 @Autonomous(name="Blue Close")
+@Deprecated
 @Config
 @Disabled
 public class BlueClose extends LinearOpMode {

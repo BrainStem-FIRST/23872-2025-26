@@ -11,7 +11,7 @@ public class Constants {
             public  double kP_ONE = 0.0032;
             public double kP_TWO = 0.0038;
             public  double kI = 0.0;
-            public  double kD = 0.0000001;
+            public  double kD = 0.0000003;
             public  double kV1 = 0.00053;
 
             // Vel Targets (ticks per second)
@@ -56,7 +56,7 @@ public class Constants {
 
         public static class CollectorConstants {
             // Power Constants
-            public static double INTAKE_VELOCITY = -3000;
+            public static double INTAKE_VELOCITY = -3100;
             public static double EXTAKE_VELOCITY = 800;
             public static double AUTO_VELOCITY = -2700; // ).77
             public static final double OFF_POWER = 0.0;

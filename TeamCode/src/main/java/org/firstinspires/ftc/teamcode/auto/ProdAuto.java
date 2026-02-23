@@ -21,6 +21,7 @@ import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.utils.pidDrive.DrivePath;
 import org.firstinspires.ftc.teamcode.utils.pidDrive.Waypoint;
 @Disabled
+@Deprecated
 @Autonomous(name="untested Blue Close")
 @Config
 public class ProdAuto extends LinearOpMode {

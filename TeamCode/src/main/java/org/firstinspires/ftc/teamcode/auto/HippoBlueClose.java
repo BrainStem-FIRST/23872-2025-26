@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.utils.pidDrive.DrivePath;
 import org.firstinspires.ftc.teamcode.utils.pidDrive.Waypoint;
 @Disabled
-
+@Deprecated
 
 public class HippoBlueClose extends LinearOpMode {
     public static double[] start = new double[] { -62.5, -41, 0 };

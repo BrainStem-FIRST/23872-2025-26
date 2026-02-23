@@ -189,13 +189,13 @@ public class Spindexer implements Component {
 
         double currentAmps = spindexerMotor.getCurrent(CurrentUnit.MILLIAMPS);
 
-        if (currentAmps > 7000 && spindexerMotor.getPower() > 0.98 && !isUnjamming) {
+        if (currentAmps > 7000 && spindexerMotor.getPower() > maxPower- 0.05 && !isUnjamming) {
             telemetry.addLine("JAM DETECTED - STARTING COOLDOWN");
             isUnjamming = true;
             antijamTimer.reset();
         }
 
-        if (isUnjamming && antijamTimer.milliseconds() > 200) {
+        if (isUnjamming && antijamTimer.milliseconds() > 1000) {
             isUnjamming = false;
         }
 

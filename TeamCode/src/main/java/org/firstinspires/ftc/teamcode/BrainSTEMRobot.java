@@ -325,11 +325,11 @@ public class BrainSTEMRobot {
     private int getBallsShot() {
         double diff = (spindexer.wrappedEncoder - spindexer.startShootingEncoder) / 1024. * 360;
 
-        if ( diff >= 290) {
+        if ( diff >= 280) {
             return 3;
-        } else if ( diff >= 170) {
+        } else if ( diff >= 160) {
             return 2;
-        } else if (diff >= 50) {
+        } else if (diff >= 40) {
             return 1;
         }
         return 0;

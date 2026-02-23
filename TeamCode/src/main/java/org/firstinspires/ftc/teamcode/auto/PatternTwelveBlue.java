@@ -12,7 +12,6 @@ import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
 import org.firstinspires.ftc.teamcode.subsystems.sensors.Limelight;
@@ -22,12 +21,11 @@ import org.firstinspires.ftc.teamcode.utils.pidDrive.Waypoint;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.firstinspires.ftc.teamcode.auto.AutoActions;
 
-@Autonomous(name="Brob Joint")
+@Autonomous(name="12 Pattern", group = "BLUE")
 @Config
 
-public class BrobdigNagAuto extends LinearOpMode {
+public class PatternTwelveBlue extends LinearOpMode {
     public List<String> order1 = new ArrayList<>(Arrays.asList("P", "P", "G"));
 
     public List<String> targetOrder = order1; // default
@@ -47,27 +45,26 @@ public class BrobdigNagAuto extends LinearOpMode {
     public static double[] close1Shooting = new double[] {-38, -37, -135};
     public static double[] collect1Pre = new double[] { -13, -31, -90 };
     public static double[] collect1Mid = new double[] { -13, -22, -90 };
-//    public static double[] collect1 = new double[] { -12, -39, -90 };
-//    public static double[] collect2 = new double[] { -12, -44, -90 };
-//    public static double[] collect3 = new double[] { -2, -49, -90 };
-
     public static double[] firstSpikeEnd = new double[] { -12, -52, -90 };
     public static double[] strafePos = new double[] { -36, -17, -90 };
 
     //2nd spike!!
-    public static double[] collect2Pre = new double[] { 9, -29, -90 };
+    public static double[] collect2Pre = new double[] { 12, -29, -90 };
 
-//    public static double[] collect4 = new double[] { 10, -40, -90 };
-//    public static double[] collect5 = new double[] { 10, -45, -90 };
-//    public static double[] collect6 = new double[] { 10, -50, -90 };
+    public static double[] secondSpikeEnd = new double[] { 12, -52, -90 };
 
-    public static double[] secondSpikeEnd = new double[] { 11, -52, -90 };
+    // 3rd Spike
+    public static double[] collect3Pre = new double[] { 36, -29, -90 };
+
+
+
+    public static double[] thirdSpikeEnd = new double[] { 36, -58, -90 };
     public static double collectMaxPower = 0.3;
     BrainSTEMRobot robot;
     private static class PARAMS{
-        private double COLLECT_DRIVE_MAX_POWER = 0.15;
+        private double COLLECT_DRIVE_MAX_POWER = 0.26;
     }
-    public static BrobdigNagAuto.PARAMS PARAMS = new BrobdigNagAuto.PARAMS();
+    public static PatternTwelveBlue.PARAMS PARAMS = new PatternTwelveBlue.PARAMS();
 
 
     @Override
@@ -102,6 +99,11 @@ public class BrobdigNagAuto extends LinearOpMode {
         );
 
 
+        DrivePath driveToShootThree = new DrivePath(robot.drive, telemetry,
+                new Waypoint(createPose(close1Shooting))
+        );
+
+
 
         //1st Spike ===================================================================
 
@@ -128,6 +130,12 @@ public class BrobdigNagAuto extends LinearOpMode {
                 new Waypoint(createPose(secondSpikeEnd)).setMaxLinearPower(PARAMS.COLLECT_DRIVE_MAX_POWER)
         );
 
+
+        DrivePath driveToCollectThirdSpikeEnd = new DrivePath(robot.drive, telemetry,
+                new Waypoint(createPose(collect3Pre)),
+                new Waypoint(createPose(thirdSpikeEnd)).setMaxLinearPower(PARAMS.COLLECT_DRIVE_MAX_POWER)
+        );
+
 //
 //        DrivePath driveToCollectFourthSpike = new DrivePath(robot.drive, telemetry,
 //                new Waypoint(createPose(collect4)).setMaxLinearPower(PARAMS.COLLECT_DRIVE_MAX_POWER).setMaxTime(3)
@@ -147,8 +155,7 @@ public class BrobdigNagAuto extends LinearOpMode {
         Action autoAction = new ParallelAction(
                 new SequentialAction(
                         new ParallelAction(
-                                AutoActions.shooterTurnOnClose()
-                                , AutoActions.pivotClose(),
+                                AutoActions.shooterTurnOnClose(),
                                 driveToPreloadShoot
                         ),
 
@@ -221,6 +228,35 @@ public class BrobdigNagAuto extends LinearOpMode {
                                 , driveToShootTwo,
 
                                 AutoActions.moveSpindexerMot(2, telemetry)
+                        ),
+
+
+                        AutoActions.setCollectorOff(),
+
+
+                        new SleepAction(0.3),
+
+                        AutoActions.rampUp(),
+//                            new SleepAction(0.2),
+                        new SleepAction(0.6),
+                        AutoActions.moveSpindexer360(),
+                        AutoActions.rampDown(),
+                        AutoActions.turnShooterOnIdle(),
+
+                        // 3rd
+                        new ParallelAction(
+                                AutoActions.setCollectorOn(),
+                                driveToCollectThirdSpikeEnd
+                        ),
+
+                        new SleepAction(0.3),
+
+                        new ParallelAction(
+                                AutoActions.shooterTurnOnClose()
+                                , AutoActions.pivotClose()
+                                , driveToShootThree,
+
+                                AutoActions.moveSpindexerMot(3, telemetry)
                         ),
 
 

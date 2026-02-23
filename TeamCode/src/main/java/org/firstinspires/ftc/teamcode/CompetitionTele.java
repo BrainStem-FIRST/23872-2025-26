@@ -174,24 +174,18 @@ public class CompetitionTele extends LinearOpMode {
 
         // makes any shooter button pressed after turned on, turn it off
 
-        if ((gp2.isFirstY() || gp2.isFirstX() || gp2.isFirstA() || gp2.isFirstB()) && shooterOn) {
-            robot.shooter.setShooterOff();
-
-            shooterOn = false;
-        } else if (gp2.isFirstY()) {
+        if (gp2.isFirstY()) {
 
             robot.shooter.setShooterShootFar();
             robot.pivot.setPivotShootFar();
             robot.spindexer.startShootingEncoder = robot.spindexer.wrappedEncoder;
 
-            shooterOn = true;
         } else if (gp2.isFirstA()) {
             robot.shooter.setShooterShootClose();
             robot.
 
                     pivot.setPivotShootClose();
 
-            shooterOn = true;
         } else if (gp2.isFirstB()) {
             robot.shooter.setShooterIdle();
 
@@ -199,7 +193,6 @@ public class CompetitionTele extends LinearOpMode {
         } else if (gp2.isFirstX()) {
             robot.shooter.setShooterOff();
 
-            shooterOn = false;
         }
 
         if (gp2.isFirstDpadRight()) {

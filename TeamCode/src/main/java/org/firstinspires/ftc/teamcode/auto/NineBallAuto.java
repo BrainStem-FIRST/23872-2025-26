@@ -27,6 +27,7 @@ import java.util.List;
 @Disabled
 @Autonomous(name="Nine Ball Pattern - Disabled")
 @Config
+@Deprecated
 public class NineBallAuto extends LinearOpMode {
 
     public List<String> order1 = new ArrayList<>(Arrays.asList("P", "P", "G"));

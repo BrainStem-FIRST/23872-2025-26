@@ -22,6 +22,7 @@ import org.firstinspires.ftc.teamcode.utils.pidDrive.Waypoint;
 @Autonomous(name="untested Blue Close")
 @Config
 @Disabled
+@Deprecated
 public class MinBlueClose extends LinearOpMode {
     public static double[] start = new double[] { -62.5, -41, 0 };
 
