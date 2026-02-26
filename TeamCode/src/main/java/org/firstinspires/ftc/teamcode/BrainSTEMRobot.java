@@ -51,6 +51,11 @@ public class BrainSTEMRobot {
     private BallTrackerNew.BallColor detectedColor;
     private ElapsedTime ballDetectTimer = new ElapsedTime();
 
+
+
+
+    public boolean hit = false;
+
     public boolean isSpindStopped;
 
     public boolean isNextEmpty;
@@ -70,6 +75,7 @@ public class BrainSTEMRobot {
 
         this.telemetry = telemetry;
         this.opMode = opMode;
+
 
         ballSensor = new BallSensor(hwMap);
         subsystems = new ArrayList<>();
@@ -124,6 +130,7 @@ public class BrainSTEMRobot {
 
 
 
+
 //        if (limelight != null) {
 //            limelight.update();
 //            limelight.updateObeliskColors();
@@ -175,55 +182,6 @@ public class BrainSTEMRobot {
 
 
 
-//        if ((ballsShot == 3 && lastShotTime.milliseconds() > 500) || ( lastShotTime.milliseconds() > 2000 )) {
-//            ballsShot = 0;
-//        }
-
-        // ANTIJAMMM
-
-//        if (ballSensor.isDistanceGreaterThanSeven() && spindexer.isJammed()) {
-//            spindexer.spindexerMotor.setPower(0);
-//            telemetry.addLine("JAMMED");
-//        } else {
-//            telemetry.addLine("NOTJAMMED");
-//        }
-        // ADD BALL TO BALL TRACK + MOVE SPINDEXER (CAN BE REMOVED)
-        // TODO: fine tune settle time
-//        if (goodToMove && ballDetectTimer.milliseconds() > 0) {
-//
-//            BallTrackerNew.Slot collectSlot = limelight.ballTrackerNew.getSlotAtCollectPos();
-//            collectSlot.color = detectedColor;
-//            if (isNextEmpty) {spindexer.setTargetAdj(Constants.spindexerConstants.TICKS_120);}
-//            goodToMove = false;
-//            detectedColor = null;
-//        }
-
-        // CHECK IF SPINDEXER JUST FINISHED MOVING!!! ========================================================
-
-//        if (spindexer.justFinishedMoving) {
-//            checkingColorAfterMovingSpind = true;
-//
-//            spindexer.justFinishedMoving = false;
-//        }
-//
-//        // CHECK COLOR AFTER MOVEMENT!!! ======================================================== AhHHHh PROBLEM FIX
-//        if (checkingColorAfterMovingSpind) {
-//            String colorAfterMovingSpind = ballSensor.checkColorAfterMovement();
-//
-//            if (colorAfterMovingSpind != null) {
-//                checkingColorAfterMovingSpind = false;
-//
-//                telemetry.addData("after movement clr", colorAfterMovingSpind);
-//                if (colorAfterMovingSpind.equals("EMPTY")) {
-//
-//                    telemetry.addLine("empty");
-//                } else {
-//
-//                    telemetry.addData("not empty!? ball color", colorAfterMovingSpind);
-//                }
-//            }
-//        }
-
         if (shooter.isShootFar()) {
             Spindexer.maxPower = 0.5;}
         else if (shooter.isShootClose()){
@@ -240,6 +198,12 @@ public class BrainSTEMRobot {
 
 
     private void allTelemetry() {
+
+
+        telemetry.addData("is jammed", spindexer.jammed);
+
+        telemetry.addData("button status", hit);
+        telemetry.addData("is shooter up to speed", shooter.isUpToSpeed());
 
         telemetry.addData("Limelight reading", String.valueOf(limelight.targetOrder));
 

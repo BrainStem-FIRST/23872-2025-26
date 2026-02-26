@@ -7,6 +7,8 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.subsystems.Collector;
 import org.firstinspires.ftc.teamcode.utils.Angle;
@@ -47,17 +49,33 @@ public class CompetitionTele extends LinearOpMode {
     private boolean shooterOn;
     private boolean collectorOn = false;
 
+    boolean wasHit = false;
+
+    boolean thisJammed;
+    ElapsedTime thisJamTime;
+
+
+    ElapsedTime pressedTime;
+
+
+
     Vector2d goal = new Vector2d(-72, 72); //default: red
     private boolean red = true;
+
 
     @Override
     public void runOpMode() throws InterruptedException {
         telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);
 
-        robot = new BrainSTEMRobot(hardwareMap, this.telemetry, this, new Pose2d(BrainSTEMRobot.autoX, BrainSTEMRobot.autoY, BrainSTEMRobot.autoH));
+//        robot = new BrainSTEMRobot(hardwareMap, this.telemetry, this, new Pose2d(BrainSTEMRobot.autoX, BrainSTEMRobot.autoY, BrainSTEMRobot.autoH));
+
+        robot = new BrainSTEMRobot(hardwareMap, this.telemetry, this, new Pose2d(0, 0, 0));
 
         gp1 = new GamepadTracker(gamepad1);
         gp2 = new GamepadTracker(gamepad2);
+
+        pressedTime = new ElapsedTime();
+        thisJamTime = new ElapsedTime();
 
 
         robot.shooter.setShooterOff();
@@ -121,13 +139,23 @@ public class CompetitionTele extends LinearOpMode {
             double targetAngle = Math.atan2(dy, dx);
             double currentHeading = robot.drive.localizer.getPose().heading.toDouble();
             double error = Angle.normDelta(targetAngle - currentHeading);
-//            double error = HeadingCorrect.correctHeadingErrorRad(targetAngle - currentHeading); TODO: IS THIS CORRECT???
 
             alignmentPID.setTarget(Angle.normDelta(targetAngle));
 
 //            rx = alignmentPID.updateWithError(error); // TODO: TEST THIS
-            rx = alignmentPID.update(currentHeading);
+
+            double pidOut = alignmentPID.update(currentHeading);
+
+            double power = pidOut + Math.signum(pidOut) * 0.12;
+
+            if (Math.abs(error) < Math.toRadians(1)) {
+                power = 0;
+            }
+
+            power = Range.clip(power, -0.99, 0.99);
+            rx = power;
         }
+
 
         robot.drive.setMotorPowers(
                 y + x + rx,
@@ -144,20 +172,44 @@ public class CompetitionTele extends LinearOpMode {
 
         if (gamepad1.left_trigger > 0.1) {
             robot.collector.collectorState = Collector.CollectorState.EXTAKE;
-            collectorOn = true;
         }
         else if (gamepad1.right_trigger > 0.1) {
             robot.collector.collectorState = Collector.CollectorState.INTAKE;
-            collectorOn = true;
         }
         else {
             robot.collector.collectorState = Collector.CollectorState.OFF;
-            collectorOn = false;
         }
 
 
         if (gp1.isFirstLeftBumper()) {
             robot.spindexer.setTargetAdj(Constants.spindexerConstants.TICKS_120);
+        }
+
+        if (gp1.isFirstRightBumper()) {
+            robot.ramp.setRampUp();
+            pressedTime.reset();
+            // TODO: Test if works
+
+            if (robot.shooter.isUpToSpeed()) {
+                robot.hit = true;
+            } else {
+                robot.hit = false;
+                gamepad1.rumble(500);
+            }
+        }
+
+
+        if (robot.hit && pressedTime.milliseconds() > 500) {
+            robot.spindexer.startShootingEncoder = robot.spindexer.wrappedEncoder;
+            robot.spindexer.setTargetAdj(Constants.spindexerConstants.TICKS_360);
+            robot.hit = false;
+            wasHit = true;
+        }
+
+        if (wasHit && pressedTime.milliseconds() >1500) {
+            robot.ramp.setRampDown();
+            robot.shooter.setShooterIdle();
+            wasHit = false;
         }
 
         // Switch goal - make so only presses in first 10 sec
@@ -167,48 +219,51 @@ public class CompetitionTele extends LinearOpMode {
             red = false;
         }
 
+        if (gp1.isFirstDpadRight()) {
+            robot.ramp.setRampUp();
+        } else if (gp1.isFirstDpadLeft()) {
+            robot.ramp.setRampDown();
+        }
+
+
 
     }
 
     private void updateDriver2() {
 
+
+        // JAMMING
+
+        if (gp2.isFirstRightBumper()) {
+            thisJammed = true;
+            thisJamTime.reset();
+        }
+
+        if (thisJammed) {
+            robot.spindexer.spindexerMotor.setPower(0);
+            if (thisJamTime.milliseconds() > 1000) thisJammed = false;
+        }
+
+
+
+
+
         // makes any shooter button pressed after turned on, turn it off
 
         if (gp2.isFirstY()) {
-
             robot.shooter.setShooterShootFar();
             robot.pivot.setPivotShootFar();
-            robot.spindexer.startShootingEncoder = robot.spindexer.wrappedEncoder;
 
         } else if (gp2.isFirstA()) {
             robot.shooter.setShooterShootClose();
-            robot.
-
-                    pivot.setPivotShootClose();
+            robot.pivot.setPivotShootClose();
 
         } else if (gp2.isFirstB()) {
             robot.shooter.setShooterIdle();
 
-            shooterOn = false;
         } else if (gp2.isFirstX()) {
             robot.shooter.setShooterOff();
 
-        }
-
-        if (gp2.isFirstDpadRight()) {
-            robot.ramp.setRampUp();
-        } else if (gp2.isFirstDpadLeft()) {
-            robot.ramp.setRampDown();
-        }
-
-        if (gp2.isFirstDpadUp()) {
-            robot.spindexer.setTargetAdj(Constants.spindexerConstants.TICKS_120);
-        }
-
-        if (gp2.isFirstRightBumper()) {
-            robot.ramp.setRampUp(); // TODO: Test if works
-            robot.spindexer.startShootingEncoder = robot.spindexer.wrappedEncoder;
-            robot.spindexer.setTargetAdj(Constants.spindexerConstants.TICKS_360);
         }
 
         if (gp2.isFirstDpadDown()) {
@@ -216,4 +271,5 @@ public class CompetitionTele extends LinearOpMode {
         }
 
     }
+
 }

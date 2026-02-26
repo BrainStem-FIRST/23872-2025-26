@@ -167,6 +167,10 @@ public class OneWShooter implements Component {
 
     }
 
+    public boolean isUpToSpeed() {
+        return (Math.abs(shooterMotorOne.getVelocity() - shooterPID.getTarget()) < 50);
+    }
+
 
     public void setBothMotorVelocities(double targetVelocity) {
         shooterPID.setTarget(targetVelocity);
@@ -242,6 +246,9 @@ public class OneWShooter implements Component {
         shooterState = ShooterState.IDLE;
         shooterPID.reset();
     }
+
+
+
 
     @Override
     public String test() {

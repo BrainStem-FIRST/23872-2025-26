@@ -50,6 +50,10 @@ public class Spindexer implements Component {
     public boolean indexerCued;
     private BrainSTEMRobot robot;
 
+    ElapsedTime jamTime;
+
+   public boolean jammed = false;
+
     public int shotsFired = 0;
 
     public Spindexer(HardwareMap hardwareMap, Telemetry telemetry, BrainSTEMRobot robot) {
@@ -69,7 +73,7 @@ public class Spindexer implements Component {
 
 
 
-
+        jamTime = new ElapsedTime();
 
 
         spindexerPid = new PIDController(
@@ -123,7 +127,9 @@ public class Spindexer implements Component {
 
         double power = spindexerPid.update(getCurrentPosition());
 
-        if (isStatic() || (isUnjamming)) {
+        if (isStatic() ) {
+
+            // (isUnjamming)
 
             spindexerMotor.setPower(0);
             return;
@@ -187,19 +193,30 @@ public class Spindexer implements Component {
         error = spindexerMotor.getCurrentPosition() - spindexerPid.getTarget();
 
 
-        double currentAmps = spindexerMotor.getCurrent(CurrentUnit.MILLIAMPS);
+//        double currentAmps = spindexerMotor.getCurrent(CurrentUnit.MILLIAMPS);
+//
+//        if (currentAmps > 7000 && spindexerMotor.getPower() > maxPower- 0.05 && !isUnjamming) {
+//            telemetry.addLine("JAM DETECTED - STARTING COOLDOWN");
+//            isUnjamming = true;
+//            antijamTimer.reset();
+//        }
 
-        if (currentAmps > 7000 && spindexerMotor.getPower() > maxPower- 0.05 && !isUnjamming) {
-            telemetry.addLine("JAM DETECTED - STARTING COOLDOWN");
-            isUnjamming = true;
-            antijamTimer.reset();
+//        if (isUnjamming && antijamTimer.milliseconds() > 1000) {
+//            isUnjamming = false;
+//        }
+
+        if (isJammed()) {
+            jammed = true;
+            jamTime.reset();
         }
 
-        if (isUnjamming && antijamTimer.milliseconds() > 1000) {
-            isUnjamming = false;
+        if (jammed) {
+            spindexerMotor.setPower(0);
+            if (jamTime.milliseconds() > 1000) jammed = false;
+        } else {
+            updateIndexerPosition();
         }
 
-        updateIndexerPosition();
 
 
 
@@ -213,6 +230,12 @@ public class Spindexer implements Component {
 
     }
 
+    public boolean isJammed() {
+
+        return spindexerMotor.getCurrent(CurrentUnit.MILLIAMPS) > 7000 && spindexerMotor.getPower() > maxPower- 0.05;
+
+    }
+
     public int getCurrentPosition() {
         return wrappedEncoder;
     }
@@ -220,6 +243,8 @@ public class Spindexer implements Component {
     public int getRawPosition() {
         return hub.readEncoder(6).position;
     }
+
+
 
 
 
