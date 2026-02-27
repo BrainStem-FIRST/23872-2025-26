@@ -205,14 +205,14 @@ public class Spindexer implements Component {
 //            isUnjamming = false;
 //        }
 
-        if (isJammed()) {
+        if (isJammed() && !jammed) {
             jammed = true;
             jamTime.reset();
         }
 
         if (jammed) {
-            spindexerMotor.setPower(0);
-            if (jamTime.milliseconds() > 1000) jammed = false;
+            spindexerMotor.setPower(-0.3);
+            if (jamTime.milliseconds() > 500) jammed = false;
         } else {
             updateIndexerPosition();
         }

@@ -199,14 +199,14 @@ public class CompetitionTele extends LinearOpMode {
         }
 
 
-        if (robot.hit && pressedTime.milliseconds() > 500) {
+        if (robot.hit && pressedTime.milliseconds() > 2500) {
             robot.spindexer.startShootingEncoder = robot.spindexer.wrappedEncoder;
             robot.spindexer.setTargetAdj(Constants.spindexerConstants.TICKS_360);
             robot.hit = false;
             wasHit = true;
         }
 
-        if (wasHit && pressedTime.milliseconds() >1500) {
+        if (wasHit && pressedTime.milliseconds() >2500) {
             robot.ramp.setRampDown();
             robot.shooter.setShooterIdle();
             wasHit = false;
