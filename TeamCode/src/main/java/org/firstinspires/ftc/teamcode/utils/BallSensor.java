@@ -1,14 +1,13 @@
 package org.firstinspires.ftc.teamcode.utils;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
-import com.qualcomm.robotcore.hardware.PwmControl; // added for led
-import com.qualcomm.robotcore.hardware.ServoImplEx; // added for led
+import com.qualcomm.robotcore.hardware.PwmControl;
+import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -92,9 +91,9 @@ public class BallSensor {
 //
 //            lastBeamState = currentBeamState;
 //            if (timer.milliseconds() > delayTimeMs) {
-////                 ||
-////                (((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM) < ballDistance) &&
-////                        (((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM) > ballMinDistance)
+//                 ||
+//                (((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM) < ballDistance) &&
+//                        (((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM) > ballMinDistance)
 //                return detectColor();
 //            }
 //        }

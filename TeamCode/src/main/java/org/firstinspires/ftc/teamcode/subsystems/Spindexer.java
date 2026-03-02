@@ -3,21 +3,18 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.util.RobotLog;
-import com.sun.tools.javac.code.Attribute;
 
-import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
+import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.srs.SRSHub;
 import org.firstinspires.ftc.teamcode.utils.Component;
 import org.firstinspires.ftc.teamcode.utils.PIDController;
-import org.firstinspires.ftc.teamcode.Constants;
 
 
 @Config
@@ -40,9 +37,9 @@ public class Spindexer implements Component {
     private HardwareMap map;
     private Telemetry telemetry;
 
-    public int rawEncoder, wrappedEncoder, rawerRawEncoder;
+    public int rawEncoder, wrappedEncoder, rawHubEncoderPosition;
     public int startShootingEncoder;
-    private int offset, wrapAroundOffset;
+    private int absoluteEncoderStartingOffset, wrapAroundOffset;
 
     private SRSHub hub;
     private double error;
@@ -61,20 +58,12 @@ public class Spindexer implements Component {
         this.telemetry = telemetry;
         this.robot = robot;
 
-
-
-
-
-
         spindexerMotor = map.get(DcMotorEx.class, "spindexerMotor");
         spindexerMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         spindexerMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         spindexerMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-
-
         jamTime = new ElapsedTime();
-
 
         spindexerPid = new PIDController(
                 Constants.spindexerConstants.INDEXER_KP,
@@ -85,19 +74,12 @@ public class Spindexer implements Component {
         antijamTimer = new ElapsedTime();
         spindexerTimer.startTime();
 
-
-
-
-
-
         SRSHub.Config config = new SRSHub.Config();
 
         config.setEncoder(
                 6,
                 SRSHub.Encoder.PWM
         );
-
-
 
         RobotLog.clearGlobalWarningMsg();
 
@@ -106,25 +88,15 @@ public class Spindexer implements Component {
                 "SRSHub"
         );
 
-
-
-//        spindexerPid.setTarget(906); // TODO: check if it fixes
-
         hub.init(config);
-//        while(!hub.ready());
 
-
-
-
-        this.offset = -907;
+        this.absoluteEncoderStartingOffset = 87+170; // position that the absolute encoder reads when the indexer is centered
 
 
     }
 
     public void updateIndexerPosition() {
         double error = (spindexerPid.getTarget() - getCurrentPosition());
-
-
         double power = spindexerPid.update(getCurrentPosition());
 
         if (isStatic() ) {
@@ -145,24 +117,24 @@ public class Spindexer implements Component {
 
         }
 
-//        if (Math.abs(error) > maxPowerErrorThreshold) {
-//            spindexerMotor.setPower(maxPower * Math.signum(power));
-//        } else {
-//
-//
-//
-//            if (isStatic()  || (isUnjamming && antijamTimer.milliseconds()<500)){
-//                spindexerMotor.setPower(0);
-//            } else {
-//                power += Math.signum(power) * Constants.spindexerConstants.INDEXER_KF;
-//
-//                power = Range.clip(power, -Constants.spindexerConstants.MAX_POWER, Constants.spindexerConstants.MAX_POWER);
-//                spindexerMotor.setPower(power);
-//            }
-//        }
+        if (Math.abs(error) > maxPowerErrorThreshold) {
+            spindexerMotor.setPower(maxPower * Math.signum(power));
+        } else {
+
+
+
+            if (isStatic()  || (isUnjamming && antijamTimer.milliseconds()<500)){
+                spindexerMotor.setPower(0);
+            } else {
+                power += Math.signum(power) * Constants.spindexerConstants.INDEXER_KF;
+
+                power = Range.clip(power, -Constants.spindexerConstants.MAX_POWER, Constants.spindexerConstants.MAX_POWER);
+                spindexerMotor.setPower(power);
+            }
+        }
 
     }
-
+;
     public void setTargetAdj(int adjust) {
         spindexerPid.setTarget(spindexerPid.getTarget() + adjust);
     }
@@ -181,29 +153,31 @@ public class Spindexer implements Component {
     public void update() {
         hub.update();
 
-        rawerRawEncoder = hub.readEncoder(6).position;
+        rawHubEncoderPosition = hub.readEncoder(6).position;
         double prevEncoder = rawEncoder;
-        rawEncoder = 1024 - (hub.readEncoder(6).position + offset);
+        rawEncoder = 1024 - (rawHubEncoderPosition + absoluteEncoderStartingOffset);
+//        telemetry.addData("raw hub indexer encoder", rawHubEncoderPosition);
+
         double dif = rawEncoder - prevEncoder;
         if(Math.abs(dif) > 500) {
             wrapAroundOffset -= (int)(1024* Math.signum(dif) );
         }
         wrappedEncoder = rawEncoder + wrapAroundOffset;
 
-        error = spindexerMotor.getCurrentPosition() - spindexerPid.getTarget();
+        error = getCurrentPosition() - spindexerPid.getTarget();
 
 
-//        double currentAmps = spindexerMotor.getCurrent(CurrentUnit.MILLIAMPS);
-//
-//        if (currentAmps > 7000 && spindexerMotor.getPower() > maxPower- 0.05 && !isUnjamming) {
-//            telemetry.addLine("JAM DETECTED - STARTING COOLDOWN");
-//            isUnjamming = true;
-//            antijamTimer.reset();
-//        }
+        double currentAmps = spindexerMotor.getCurrent(CurrentUnit.MILLIAMPS);
 
-//        if (isUnjamming && antijamTimer.milliseconds() > 1000) {
-//            isUnjamming = false;
-//        }
+        if (currentAmps > 7000 && spindexerMotor.getPower() > maxPower- 0.05 && !isUnjamming) {
+            telemetry.addLine("JAM DETECTED - STARTING COOLDOWN");
+            isUnjamming = true;
+            antijamTimer.reset();
+        }
+
+        if (isUnjamming && antijamTimer.milliseconds() > 1000) {
+            isUnjamming = false;
+        }
 
         if (isJammed() && !jammed) {
             jammed = true;
