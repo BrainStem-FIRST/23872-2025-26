@@ -141,8 +141,8 @@ public class Spindexer implements Component {
 
 
     public void fineAdjInDir() {
-        double error = wrappedEncoder - spindexerPid.getTarget();
-        if (!robot.ramp.isRampUp()) setTargetAdj((int) (-Math.signum(error)*error)); // TODO: Make sure right direction
+        double error = spindexerPid.getTarget()-wrappedEncoder;
+        if (!robot.ramp.isRampUp()) setTargetAdj((int) (-Math.signum(error)* 20)); // TODO: Make sure right direction
     }
     @Override
     public void reset() {

@@ -81,7 +81,7 @@ public class Constants {
 
         // Servo PWM Range
         public int DOWN_PWM = 600;
-        public int UP_PWM = 980;
+        public int UP_PWM = 1000;
 
         // Servo Position
         public double DOWN_POSITION = 0.99; // change

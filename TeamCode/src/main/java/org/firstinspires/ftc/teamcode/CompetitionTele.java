@@ -67,9 +67,9 @@ public class CompetitionTele extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);
 
-//        robot = new BrainSTEMRobot(hardwareMap, this.telemetry, this, new Pose2d(BrainSTEMRobot.autoX, BrainSTEMRobot.autoY, BrainSTEMRobot.autoH));
+        robot = new BrainSTEMRobot(hardwareMap, this.telemetry, this, new Pose2d(BrainSTEMRobot.autoX, BrainSTEMRobot.autoY, BrainSTEMRobot.autoH));
 
-        robot = new BrainSTEMRobot(hardwareMap, this.telemetry, this, new Pose2d(0, 0, 0));
+//        robot = new BrainSTEMRobot(hardwareMap, this.telemetry, this, new Pose2d(0, 0, 0));
 
         gp1 = new GamepadTracker(gamepad1);
         gp2 = new GamepadTracker(gamepad2);
@@ -132,7 +132,7 @@ public class CompetitionTele extends LinearOpMode {
         double x = gamepad1.left_stick_x * 0.99;
         double rx = gamepad1.right_stick_x * 0.75;
 
-        if (gamepad1.y) {
+        if (gamepad2.right_bumper) {
             double dx = goal.x - robot.drive.localizer.getPose().position.x;
             double dy = goal.y - robot.drive.localizer.getPose().position.y;
 
@@ -206,9 +206,9 @@ public class CompetitionTele extends LinearOpMode {
             wasHit = true;
         }
 
-        if (wasHit && pressedTime.milliseconds() > 2500) {
+        if ((wasHit && pressedTime.milliseconds() > 2500 && robot.shooter.isShootFar()) || (wasHit && pressedTime.milliseconds() > 1250 && robot.shooter.isShootClose())) {
             robot.ramp.setRampDown();
-            robot.shooter.setShooterIdle();
+            robot.shooter.setShooterOff();
             wasHit = false;
         }
 
@@ -236,9 +236,6 @@ public class CompetitionTele extends LinearOpMode {
             robot.pivot.setPivotShootClose();
         }
 
-        if (gamepad1.x) {
-            robot.shooter.setShooterOff();
-        }
 
         if (gp1.isFirstDpadLeft()) {
             robot.ramp.setRampDown();
@@ -252,18 +249,6 @@ public class CompetitionTele extends LinearOpMode {
 
     private void updateDriver2() {
 
-
-        // JAMMING
-
-        if (gp2.isFirstRightBumper()) {
-            thisJammed = true;
-            thisJamTime.reset();
-        }
-
-        if (thisJammed) {
-            robot.spindexer.spindexerMotor.setPower(0);
-            if (thisJamTime.milliseconds() > 1000) thisJammed = false;
-        }
 
 
 
@@ -287,7 +272,7 @@ public class CompetitionTele extends LinearOpMode {
 
         }
 
-        if (gp2.isFirstDpadDown()) {
+        if (gp2.isFirstLeftBumper()) {
             robot.spindexer.fineAdjInDir();
         }
 

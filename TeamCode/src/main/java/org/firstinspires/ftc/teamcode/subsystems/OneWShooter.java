@@ -168,7 +168,7 @@ public class OneWShooter implements Component {
     }
 
     public boolean isUpToSpeed() {
-        return (Math.abs(shooterMotorOne.getVelocity() - shooterPID.getTarget()) < 50);
+        return (Math.abs(shooterMotorOne.getVelocity() - shooterPID.getTarget()) < 50) && shooterPID.getTarget()!= 0;
     }
 
 

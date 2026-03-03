@@ -50,7 +50,7 @@ public class JointAutoBlue extends LinearOpMode {
 //    public static double[] collect3 = new double[] { -2, -49, -90 };
 
     public static double[] firstSpikeEnd = new double[] { -12, -52, -90 };
-    public static double[] strafePos = new double[] { -36, -17, -90 };
+    public static double[] strafePos = new double[] { -17, -36, -90 };
 
     //2nd spike!!
     public static double[] collect2Pre = new double[] { 9, -29, -90 };
