@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Autonomous(name="2 Gate Close", group = "BLUE")
+@Autonomous(name="2 Gate Close - Blue", group = "BLUE")
 @Config
 
 public class TwoGBlueClose extends LinearOpMode {
@@ -38,7 +38,7 @@ public class TwoGBlueClose extends LinearOpMode {
 
     //Open Gate
     public static double[] openGatePos = new double[] {-7,-72+6+5.25, 135};
-    public static double[] openGatePos1 = new double[] {-7,-72+6+5.25, 180};
+    public static double[] openGatePos1 = new double[] {-7,-72+6+4.25, 180};
 
     public static double[] passPos = new double[] { 0, -35, -90 };
     public static double[] openGatePos2 = new double[] {-7,-72+6+5.25, 180};
@@ -147,6 +147,8 @@ public class TwoGBlueClose extends LinearOpMode {
                                 AutoActions.shooterTurnOnClose(),
                                 driveToPreloadShoot
                         ),
+
+                        new SleepAction(1),
 
                         AutoActions.rampUp(),
                         new SleepAction(0.2),

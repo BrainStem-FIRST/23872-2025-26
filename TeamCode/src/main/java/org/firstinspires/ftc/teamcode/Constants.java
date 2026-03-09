@@ -2,13 +2,15 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
 
+import org.firstinspires.ftc.teamcode.subsystems.Pivot;
+
 @Config
 public class Constants {
         public static class ShooterConstants {
 
             // PID Constants
             // TODO: Tune for built in PID
-            public  double kP_ONE = 0.0032;
+            public  double kP_ONE = 0.0034;
             public double kP_TWO = 0.0038;
             public  double kI = 0.0;
             public  double kD = 0.0000003;
@@ -56,9 +58,9 @@ public class Constants {
 
         public static class CollectorConstants {
             // Power Constants
-            public static double INTAKE_VELOCITY = -3300;
+            public static double INTAKE_VELOCITY = -3000;
             public static double EXTAKE_VELOCITY = 800;
-            public static double AUTO_VELOCITY = -3300; // ).77
+            public static double AUTO_VELOCITY = -2700; // ).77
             public static final double OFF_POWER = 0.0;
         }
 
@@ -81,14 +83,29 @@ public class Constants {
 
         // Servo PWM Range
         public int DOWN_PWM = 600;
-        public int UP_PWM = 1000;
+        public int UP_PWM = 970;
 
         // Servo Position
         public double DOWN_POSITION = 0.99; // change
         public double UP_POSITION = 0.05; // change
     }
 
+
     public static RampConstants rampConstants = new RampConstants();
+
+    public static final class ParkConstants {
+
+        // Servo PWM Range
+        public int DOWN_PWM = 600;
+        public int UP_PWM = 1100;
+
+        // Servo Position
+        public double DOWN_POSITION = 0.99; // change
+        public double UP_POSITION = 0.05; // change
+    }
+
+    public static ParkConstants parkConstants = new ParkConstants();
+
 
     public static final class PivotConstants {
 

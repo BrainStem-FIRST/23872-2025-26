@@ -39,7 +39,7 @@ public class Collector implements Component {
         collectorMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         collectorMotor.setVelocityPIDFCoefficients(
-                12,
+                16,
                 0.1,
                 0,
                 14

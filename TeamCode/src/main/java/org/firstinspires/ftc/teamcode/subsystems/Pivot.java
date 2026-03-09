@@ -21,7 +21,7 @@ public class Pivot implements Component {
     private ServoImplEx rightServo;
     public double position;
 
-    public static double closePivot = 0.61; // greater means its down more
+    public static double closePivot = 0.62; // greater means its down more
     public static double farPivot = 0.22; // lower means its up more
 
 

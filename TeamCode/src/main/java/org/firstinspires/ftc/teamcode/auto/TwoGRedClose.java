@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Autonomous(name="2 Gate Close", group = "RED")
+@Autonomous(name="2 Gate Close - Red", group = "RED")
 @Config
 
 public class TwoGRedClose extends LinearOpMode {
@@ -146,6 +146,8 @@ public class TwoGRedClose extends LinearOpMode {
                                 AutoActions.shooterTurnOnClose(),
                                 driveToPreloadShoot
                         ),
+
+                        new SleepAction(1),
 
                         AutoActions.rampUp(),
                             new SleepAction(0.2),

@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Autonomous(name="2 Gate Close", group = "BLUE")
+@Autonomous(name="3 Gate Close - Blue", group = "BLUE")
 @Config
 
 public class ThreeGBlueClose extends LinearOpMode {

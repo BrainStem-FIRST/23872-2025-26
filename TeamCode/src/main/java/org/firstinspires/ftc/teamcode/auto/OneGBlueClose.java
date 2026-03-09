@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Autonomous(name="1 Gate Close", group = "BLUE")
+@Autonomous(name="1 Gate Close - Blue", group = "BLUE")
 @Config
 
 public class OneGBlueClose extends LinearOpMode {
@@ -42,7 +42,7 @@ public class OneGBlueClose extends LinearOpMode {
 
 
     //1st Spike!!
-    public static double[] close1Shooting = new double[] {-41, -41, -137};
+    public static double[] close1Shooting = new double[] {-42.5, -42.5, -137};
     public static double[] collect1Pre = new double[] { -12, -31, -90 };
     public static double[] collect1Mid = new double[] { -12, -22, -90 };
 
@@ -51,15 +51,15 @@ public class OneGBlueClose extends LinearOpMode {
 
     //2nd spike!!
 
-    public static double[] collect2Mid = new double[] { 12, -25, -90 };
-    public static double[] collect2Pre = new double[] { 12, -31, -90 };
+    public static double[] collect2Mid = new double[] { 9, -25, -90 };
+    public static double[] collect2Pre = new double[] { 9, -31, -90 };
 
 
-    public static double[] secondSpikeEnd = new double[] { 12, -64, -90 };
+    public static double[] secondSpikeEnd = new double[] { 10, -64, -90 };
     public static double collectMaxPower = 0.3;
     BrainSTEMRobot robot;
     private static class PARAMS{
-        private double COLLECT_DRIVE_MAX_POWER = 0.25;
+        private double COLLECT_DRIVE_MAX_POWER = 0.175;
     }
     public static OneGBlueClose.PARAMS PARAMS = new OneGBlueClose.PARAMS();
 
@@ -92,6 +92,7 @@ public class OneGBlueClose extends LinearOpMode {
         );
 
         DrivePath driveToShootTwo = new DrivePath(robot.drive, telemetry,
+                new Waypoint(createPose(collect2Mid)),
                 new Waypoint(createPose(close1Shooting))
         );
 
@@ -110,6 +111,7 @@ public class OneGBlueClose extends LinearOpMode {
         );
 
         DrivePath driveOffLine = new DrivePath(robot.drive, telemetry,
+
                 new Waypoint(createPose(strafePos))
         );
 
@@ -145,6 +147,10 @@ public class OneGBlueClose extends LinearOpMode {
                                 AutoActions.shooterTurnOnClose(),
                                 driveToPreloadShoot
                         ),
+
+//                        new SleepAction(0.5),
+
+                        new SleepAction(0.7),
 
 
 
@@ -185,12 +191,11 @@ public class OneGBlueClose extends LinearOpMode {
 
                         AutoActions.setCollectorOff(),
 
-
+                        new SleepAction(0.7),
 
                         AutoActions.rampUp(),
                         new SleepAction(0.2),
                         AutoActions.moveSpindexer360(),
-
                         AutoActions.rampDown(),
                         AutoActions.turnShooterOnIdle(),
 
@@ -212,6 +217,8 @@ public class OneGBlueClose extends LinearOpMode {
 
 
                         AutoActions.setCollectorOff(),
+
+                        new SleepAction(0.7),
 
 
 

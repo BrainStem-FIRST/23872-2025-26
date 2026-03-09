@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Autonomous(name="0 Gate Close", group = "RED")
+@Autonomous(name="0 Gate Close - Red", group = "RED")
 @Config
 public class ZeroGRedClose extends LinearOpMode {
 
@@ -30,37 +30,41 @@ public class ZeroGRedClose extends LinearOpMode {
 
     public List<String> targetOrder = order1; // default
 
+
     public static double[] start = new double[] { -65, 41.75, 0};
 
     //Obelisk look
-    public static double[] lookAtOb = new double[] {-23, 23, 195};
+    public static double[] lookAtOb = new double[] {-22,22, 195};
+
+    //Open Gate
+    public static double[] openGatePos = new double[] {-7,60, -115};
+
 
 
     //1st Spike!!
-    public static double[] close1Shooting = new double[] {-31.5, 31.5, 135};
-    public static double[] collect1Pre = new double[] { -13, 30, 90 };
+    public static double[] close1Shooting = new double[] {-41, 41, 135};
+    public static double[] collect1Pre = new double[] { -13, 29, 90 };
     public static double[] collect1Mid = new double[] { -13, 22, 90 };
-
 //    public static double[] collect1 = new double[] { -12, -39, -90 };
 //    public static double[] collect2 = new double[] { -12, -44, -90 };
 //    public static double[] collect3 = new double[] { -2, -49, -90 };
 
-    public static double[] firstSpikeEnd = new double[] { -12, 52, 90 };
+    public static double[] firstSpikeEnd = new double[] { -12, 58, 90 };
     public static double[] strafePos = new double[] { -17, 36, 90 };
 
     //2nd spike!!
-    public static double[] collect2Pre = new double[] { 9, 25, 90 };
+    public static double[] collect2Pre = new double[] { 12, 29, 90 };
 
 //    public static double[] collect4 = new double[] { 10, -40, -90 };
 //    public static double[] collect5 = new double[] { 10, -45, -90 };
 //    public static double[] collect6 = new double[] { 10, -50, -90 };
 
-    public static double[] secondSpikeEnd = new double[] { 10, 52, 90 };
+    public static double[] secondSpikeEnd = new double[] { 12, 64, 90 };
     public static double collectMaxPower = 0.3;
     BrainSTEMRobot robot;
 
     public static class PARAMS{
-        public double COLLECT_DRIVE_MAX_POWER = 0.15;
+        public double COLLECT_DRIVE_MAX_POWER = 0.25;
     }
     public static ZeroGBlueClose.PARAMS PARAMS = new ZeroGBlueClose.PARAMS();
 
@@ -137,28 +141,23 @@ public class ZeroGRedClose extends LinearOpMode {
                                 , driveToOb
                         ),
 
-                        new SleepAction(0.2),
 
                         AutoActions.waitForLimelightAuto(),
 
-                        new SleepAction(0.2),
 
                         new ParallelAction(
                                 driveToPreloadShoot,
                                 AutoActions.moveSpindexerMot(0, telemetry)
                         ),
 
-                        new SleepAction(0.7),
 
                         AutoActions.rampUp(),
 //                            new SleepAction(0.2),
-                        new SleepAction(0.5),
+                        new SleepAction(0.2),
                         AutoActions.moveSpindexer360(),
-                        new SleepAction(0.7),
 
 
                         AutoActions.rampDown(),
-                        new SleepAction(0.2),
                         AutoActions.turnShooterOnIdle(),
 
 
@@ -180,15 +179,12 @@ public class ZeroGRedClose extends LinearOpMode {
 
                         AutoActions.moveSpindexerMot(1, telemetry),
 
-                        new SleepAction(0.2),
-
                         AutoActions.rampUp(),
 //                            new SleepAction(0.2),
                         new SleepAction(0.2),
                         AutoActions.moveSpindexer360(),
 
                         AutoActions.rampDown(),
-                        new SleepAction(0.2),
                         AutoActions.turnShooterOnIdle(),
 
                         //2nd Spike ==========================
@@ -198,7 +194,6 @@ public class ZeroGRedClose extends LinearOpMode {
                                 driveToCollectSecondSpikeEnd
                         ),
 
-                        new SleepAction(0.3),
 
                         new ParallelAction(
                                 AutoActions.setCollectorOff(),
@@ -210,15 +205,11 @@ public class ZeroGRedClose extends LinearOpMode {
 
                         AutoActions.moveSpindexerMot(2, telemetry),
 
-                        new SleepAction(0.2),
-
                         AutoActions.rampUp(),
-//                            new SleepAction(0.2),
                         new SleepAction(0.2),
                         AutoActions.moveSpindexer360(),
 
                         AutoActions.rampDown(),
-                        new SleepAction(0.2),
                         AutoActions.turnShooterOnIdle(),
 
                         driveOffLine

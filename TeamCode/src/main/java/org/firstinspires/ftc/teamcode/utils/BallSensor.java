@@ -23,7 +23,7 @@ public class BallSensor {
     public ElapsedTime timer = new ElapsedTime();
     private boolean isWaitingForColor = false;
 
-    public static double delayTimeMs = 0;
+    public static double delayTimeMs = 25;
     public static double ballDistance = 5.8;
     public static double ballMinDistance = 0.5;
     public boolean isIndexing = false;
@@ -74,8 +74,8 @@ public class BallSensor {
             }
         }
 
-        if (isWaitingForColor ) {
-            //&& timer.milliseconds() > delayTimeMs
+        if (isWaitingForColor) {
+            //  && timer.milliseconds() > delayTimeMs
 
 //               || (((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM) < ballDistance) &&
 //                        (((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM) > ballMinDistance)

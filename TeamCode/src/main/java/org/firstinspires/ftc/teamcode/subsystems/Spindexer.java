@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.utils.PIDController;
 
 @Config
 public class Spindexer implements Component {
-    public static double maxPowerErrorThreshold = 165, maxPower = 0.99;
+    public static double maxPowerErrorThreshold = 200, maxPower = 0.99;
 
     public int SPINDEXER_TIME;
 
@@ -28,6 +28,8 @@ public class Spindexer implements Component {
     public boolean isUnjamming = false;
     public ElapsedTime spindexerTimer;
     public ElapsedTime antijamTimer;
+
+    public double power;
 
     private boolean wasMoving = false;
     public boolean justFinishedMoving = false;
@@ -90,14 +92,17 @@ public class Spindexer implements Component {
 
         hub.init(config);
 
-        this.absoluteEncoderStartingOffset = 87+170; // position that the absolute encoder reads when the indexer is centered
+
+
+
+        this.absoluteEncoderStartingOffset = -60; // position that the absolute encoder reads when the indexer is centered
 
 
     }
 
     public void updateIndexerPosition() {
         double error = (spindexerPid.getTarget() - getCurrentPosition());
-        double power = spindexerPid.update(getCurrentPosition());
+        power = spindexerPid.update(getCurrentPosition());
 
         if (isStatic() ) {
 
@@ -122,8 +127,8 @@ public class Spindexer implements Component {
         } else {
 
 
-
-            if (isStatic()  || (isUnjamming && antijamTimer.milliseconds()<500)){
+            if (isStatic() || (isUnjamming && antijamTimer.milliseconds()<500)  ){
+                //
                 spindexerMotor.setPower(0);
             } else {
                 power += Math.signum(power) * Constants.spindexerConstants.INDEXER_KF;
@@ -183,7 +188,7 @@ public class Spindexer implements Component {
             jammed = true;
             jamTime.reset();
         }
-
+//
         if (jammed) {
             spindexerMotor.setPower(-0.3);
             if (jamTime.milliseconds() > 500) jammed = false;
