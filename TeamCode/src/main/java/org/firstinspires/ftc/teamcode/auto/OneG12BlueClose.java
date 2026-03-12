@@ -65,7 +65,7 @@ public class OneG12BlueClose extends LinearOpMode {
     public static double collectMaxPower = 0.3;
     BrainSTEMRobot robot;
     private static class PARAMS{
-        private double COLLECT_DRIVE_MAX_POWER = 0.2;
+        private double COLLECT_DRIVE_MAX_POWER = 0.15;
     }
     public static OneG12BlueClose.PARAMS PARAMS = new OneG12BlueClose.PARAMS();
 

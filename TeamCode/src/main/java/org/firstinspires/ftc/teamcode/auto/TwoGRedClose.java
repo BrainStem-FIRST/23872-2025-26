@@ -45,7 +45,7 @@ public class TwoGRedClose extends LinearOpMode {
 
 
     //1st Spike!!
-    public static double[] close1Shooting = new double[] {-39, 39, 137};
+    public static double[] close1Shooting = new double[] {-39, 39, 135};
     public static double[] collect1Pre = new double[] { -12, 31, 90 };
     public static double[] collect1Mid = new double[] { -12, 22, 90 };
 

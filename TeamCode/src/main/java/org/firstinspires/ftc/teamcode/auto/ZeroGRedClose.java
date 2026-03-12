@@ -43,8 +43,8 @@ public class ZeroGRedClose extends LinearOpMode {
 
     //1st Spike!!
     public static double[] close1Shooting = new double[] {-41, 41, 135};
-    public static double[] collect1Pre = new double[] { -13, 29, 90 };
-    public static double[] collect1Mid = new double[] { -13, 22, 90 };
+    public static double[] collect1Pre = new double[] { -12, 29, 90 };
+    public static double[] collect1Mid = new double[] { -12, 22, 90 };
 //    public static double[] collect1 = new double[] { -12, -39, -90 };
 //    public static double[] collect2 = new double[] { -12, -44, -90 };
 //    public static double[] collect3 = new double[] { -2, -49, -90 };

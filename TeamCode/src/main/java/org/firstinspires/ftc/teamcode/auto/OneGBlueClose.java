@@ -51,8 +51,8 @@ public class OneGBlueClose extends LinearOpMode {
 
     //2nd spike!!
 
-    public static double[] collect2Mid = new double[] { 9, -25, -90 };
-    public static double[] collect2Pre = new double[] { 9, -31, -90 };
+    public static double[] collect2Mid = new double[] { 12, -25, -90 };
+    public static double[] collect2Pre = new double[] { 12, -31, -90 };
 
 
     public static double[] secondSpikeEnd = new double[] { 10, -64, -90 };

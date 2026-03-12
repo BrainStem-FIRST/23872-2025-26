@@ -49,7 +49,7 @@ public class ThreeGBlueClose extends LinearOpMode {
 
 
     //1st Spike!!
-    public static double[] close1Shooting = new double[] {-41, -41, -137};
+    public static double[] close1Shooting = new double[] {-41, -41, -135};
     public static double[] collect1Pre = new double[] { -12, -31, -90 };
     public static double[] collect1Mid = new double[] { -12, -22, -90 };
 

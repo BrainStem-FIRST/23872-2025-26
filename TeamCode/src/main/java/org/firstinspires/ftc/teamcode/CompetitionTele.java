@@ -182,12 +182,9 @@ public class CompetitionTele extends LinearOpMode {
         else {
             robot.collector.collectorState = Collector.CollectorState.OFF;
         }
-
-
         if (gp1.isFirstLeftBumper()) {
             robot.spindexer.setTargetAdj(Constants.spindexerConstants.TICKS_120);
         }
-
         if (gp1.isFirstRightBumper() && !wasHit) {
             robot.ramp.setRampUp();
             pressedTime.reset();
@@ -200,15 +197,13 @@ public class CompetitionTele extends LinearOpMode {
                 gamepad1.rumble(500);
             }
         }
-
-
         if (robot.hit && pressedTime.milliseconds() > 250) {
             robot.spindexer.startShootingEncoder = robot.spindexer.wrappedEncoder;
             robot.spindexer.setTargetAdj(Constants.spindexerConstants.TICKS_360);
             robot.hit = false;
             wasHit = true;
         }
-
+        //Scarlett likes Manny and Navik
         if ((wasHit && pressedTime.milliseconds() > 2500 && robot.shooter.isShootFar()) || (wasHit && pressedTime.milliseconds() > 2000 && robot.shooter.isShootClose())) {
             robot.ramp.setRampDown();
             wasHit = false;
@@ -217,44 +212,42 @@ public class CompetitionTele extends LinearOpMode {
             isHitting = false;
             hittingTime.reset();
         }
-
         if (isHitting && hittingTime.milliseconds() > 500) {
             robot.shooter.setShooterOff();
             isHitting = false;
         }
-
         // Switch goal - make so only presses in first 10 sec
         if (gamepad1.x){
             telemetry.addLine("Color is Blue");
             goal = new Vector2d(-72, -68.5); //  change for left hand bias
             red = false;
         }
-
         if (gp1.isFirstDpadRight()) {
             robot.ramp.setRampUp();
         } else if (gp1.isFirstDpadLeft()) {
             robot.ramp.setRampDown();
         }
-
         if (gp2.isFirstDpadRight()) {
             robot.ramp.setRampUp();
-        } else if (gp1.isFirstDpadLeft()) {
-            robot.ramp.setRampDown();
         }
-
-        if (gamepad1.a) {
-            robot.shooter.setShooterShootClose();
-            robot.pivot.setPivotShootClose();
-        }
-
 
         if (gp1.isFirstDpadLeft()) {
             robot.ramp.setRampDown();
         }
-
-        if (gp2.isFirstDpadLeft()) {
+        if (gamepad1.a) {
+            robot.shooter.setShooterShootClose();
+            robot.pivot.setPivotShootClose();
+        }
+        if (gp1.isFirstDpadLeft()) {
             robot.ramp.setRampDown();
         }
+
+//        if (gp1.isFirstDpadUp()) {
+//            robot.park.setParkUp();
+//        }
+//        if (gp1.isFirstDpadDown()) {
+//            robot.park.setParkDown();
+//        }
 
     }
 
@@ -283,6 +276,20 @@ public class CompetitionTele extends LinearOpMode {
 
         } else if (gp1.isFirstX()) {
             robot.shooter.setShooterOff();
+        }
+
+        if (gp2.isFirstDpadUp()) {
+            robot.park.setParkUp();
+
+        }
+
+        if (gp2.isFirstDpadDown()) {
+            robot.park.setParkDown();
+
+        }
+
+        if (gp2.isFirstDpadLeft()) {
+            robot.ramp.setRampDown();
         }
 
         if (gp2.isFirstLeftBumper()) {

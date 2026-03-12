@@ -58,9 +58,9 @@ public class Constants {
 
         public static class CollectorConstants {
             // Power Constants
-            public static double INTAKE_VELOCITY = -3000;
-            public static double EXTAKE_VELOCITY = 800;
-            public static double AUTO_VELOCITY = -3300; // ).77
+            public static double INTAKE_VELOCITY = 3300;
+            public static double EXTAKE_VELOCITY = -800;
+            public static double AUTO_VELOCITY = 3300; // ).77
             public static final double OFF_POWER = 0.0;
         }
 
@@ -96,12 +96,12 @@ public class Constants {
     public static final class ParkConstants {
 
         // Servo PWM Range
-        public int DOWN_PWM = 600;
-        public int UP_PWM = 1100;
+        public int DOWN_PWM = 1050;
+        public int UP_PWM = 1950;
 
         // Servo Position
-        public double DOWN_POSITION = 0.99; // change
-        public double UP_POSITION = 0.05; // change
+        public double DOWN_POSITION = 0.01; // change
+        public double UP_POSITION = 0.99; // change
     }
 
     public static ParkConstants parkConstants = new ParkConstants();
