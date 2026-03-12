@@ -125,8 +125,6 @@ public class Spindexer implements Component {
         if (Math.abs(error) > maxPowerErrorThreshold) {
             spindexerMotor.setPower(maxPower * Math.signum(power));
         } else {
-
-
             if (isStatic() || (isUnjamming && antijamTimer.milliseconds()<500)  ){
                 //
                 spindexerMotor.setPower(0);
@@ -174,15 +172,15 @@ public class Spindexer implements Component {
 
         double currentAmps = spindexerMotor.getCurrent(CurrentUnit.MILLIAMPS);
 
-        if (currentAmps > 7000 && spindexerMotor.getPower() > maxPower- 0.05 && !isUnjamming) {
-            telemetry.addLine("JAM DETECTED - STARTING COOLDOWN");
-            isUnjamming = true;
-            antijamTimer.reset();
-        }
+//        if (currentAmps > 7000 && spindexerMotor.getPower() > maxPower- 0.05 && !isUnjamming) {
+//            telemetry.addLine("JAM DETECTED - STARTING COOLDOWN");
+//            isUnjamming = true;
+//            antijamTimer.reset();
+//        }
 
-        if (isUnjamming && antijamTimer.milliseconds() > 1000) {
-            isUnjamming = false;
-        }
+//        if (isUnjamming && antijamTimer.milliseconds() > 1000) {
+//            isUnjamming = false;
+//        }
 
         if (isJammed() && !jammed) {
             jammed = true;
@@ -191,7 +189,7 @@ public class Spindexer implements Component {
 //
         if (jammed) {
             spindexerMotor.setPower(0);
-            if (jamTime.milliseconds() > 200) jammed = false;
+            if (jamTime.milliseconds() > 500) jammed = false;
         } else {
             updateIndexerPosition();
         }
@@ -210,8 +208,7 @@ public class Spindexer implements Component {
     }
 
     public boolean isJammed() {
-
-        return spindexerMotor.getCurrent(CurrentUnit.MILLIAMPS) > 7000 && spindexerMotor.getPower() > maxPower- 0.05;
+        return spindexerMotor.getCurrent(CurrentUnit.MILLIAMPS) > 7000 && Math.abs(spindexerMotor.getPower()) > Math.abs(maxPower- 0.05);
 
     }
 

@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.utils.Component;
 @Config
 public class Parking implements Component {
 
-    public static boolean activateLeft = true, activateRight = false;
+    public static boolean activateLeft = true, activateRight = true;
     private Telemetry telemetry;
     public ServoImplEx parkServo;
     public ServoImplEx parkServo2;
@@ -35,10 +35,10 @@ public class Parking implements Component {
 
 
 
-        parkServo = map.get(ServoImplEx.class, "parkingServo1");
-        parkServo2 = map.get(ServoImplEx.class, "parkingServo2");
-        parkServo.setPwmRange(new PwmControl.PwmRange(Constants.rampConstants.DOWN_PWM, Constants.rampConstants.UP_PWM)); // CHANGE\
-        parkServo2.setPwmRange(new PwmControl.PwmRange(Constants.rampConstants.DOWN_PWM, Constants.rampConstants.UP_PWM)); // CHANGE
+        parkServo = map.get(ServoImplEx.class, "leftPark"); // Control
+        parkServo2 = map.get(ServoImplEx.class, "rightPark"); // Expansion
+        parkServo.setPwmRange(new PwmControl.PwmRange(950, 2100)); // CHANGE\
+        parkServo2.setPwmRange(new PwmControl.PwmRange(950, 2100)); // CHANGE
         targetPosition = Constants.parkConstants.DOWN_POSITION;
     }
     @Override
@@ -57,10 +57,10 @@ public class Parking implements Component {
     public void update() {
         switch (parkState) {
             case DOWN:
-                targetPosition = Constants.rampConstants.DOWN_POSITION;
+                targetPosition = 0.01;
                 break;
             case UP:
-                targetPosition = Constants.rampConstants.UP_POSITION;
+                targetPosition = 0.99;
                 break;
         }
         setTargetPosition();
@@ -69,13 +69,13 @@ public class Parking implements Component {
 
     }
 
-    public void setRampUp() { parkState = ParkState.UP;}
-    public void setRampDown() { parkState = ParkState.DOWN;};
+    public void setParkUp() { parkState = ParkState.UP;}
+    public void setParkDown() { parkState = ParkState.DOWN;};
 
-    public ParkState checkRampState() {
+    public ParkState checkParkState() {
         return parkState;
     }
-    public boolean isRampUp() {
+    public boolean isParkUp() {
         return parkState == ParkState.UP.UP;
     }
 

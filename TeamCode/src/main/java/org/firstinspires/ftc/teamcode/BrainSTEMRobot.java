@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.rr.MecanumDrive;
 import org.firstinspires.ftc.teamcode.srs.SRSHub;
 import org.firstinspires.ftc.teamcode.subsystems.Collector;
 import org.firstinspires.ftc.teamcode.subsystems.OneWShooter;
+import org.firstinspires.ftc.teamcode.subsystems.Parking;
 import org.firstinspires.ftc.teamcode.subsystems.Pivot;
 //import org.firstinspires.ftc.teamcode.subsystems.Ramp;
 import org.firstinspires.ftc.teamcode.subsystems.Ramp;
@@ -46,6 +47,7 @@ public class BrainSTEMRobot {
     public Pivot pivot;
     public Ramp ramp;
     public OneWShooter shooter;
+    public Parking park;
     public BallTrackerNew ballTracker;
     private boolean goodToMove = false;
     private BallTrackerNew.BallColor detectedColor;
@@ -76,6 +78,8 @@ public class BrainSTEMRobot {
         this.telemetry = telemetry;
         this.opMode = opMode;
 
+        park = new Parking(hwMap, telemetry);
+
 
         ballSensor = new BallSensor(hwMap);
         subsystems = new ArrayList<>();
@@ -91,6 +95,7 @@ public class BrainSTEMRobot {
 
 
         subsystems.add(limelight);
+        subsystems.add(park);
 
         subsystems.add(spindexer);
         subsystems.add(collector);
@@ -160,11 +165,10 @@ public class BrainSTEMRobot {
                 collectSlot.color = color;
 
 
-//                telemetry.addLine("NOT NULL BALL");
 
-                if (limelight.ballTrackerNew.isNextSlotEmpty()) {
+
                     spindexer.setTargetAdj(341);
-                }
+
             }
 //            telemetry.addData("Distance (cm)", "%.3f", ((DistanceSensor) ballSensor.colorSensor).getDistance(DistanceUnit.CM));
         }
@@ -183,8 +187,8 @@ public class BrainSTEMRobot {
 
 
         if (shooter.isShootFar()) {
-            Spindexer.maxPower = 0.5;}
-        else if (shooter.isShootClose()){
+            Spindexer.maxPower = 0.5;
+        } else if (shooter.isShootClose()){
             Spindexer.maxPower = 0.99;
         } else{
             Spindexer.maxPower = 0.99;
