@@ -114,7 +114,7 @@ public class OneGRedClose extends LinearOpMode {
 //        );
         DrivePath driveToCollectFirstSpikeEnd = new DrivePath(robot.drive, telemetry,
                 new Waypoint(createPose(collect1Pre)),
-                new Waypoint(createPose(firstSpikeEnd)).setMaxLinearPower(PARAMS.COLLECT_DRIVE_MAX_POWER)
+                new Waypoint(createPose(firstSpikeEnd)).setMaxLinearPower(PARAMS.COLLECT_DRIVE_MAX_POWER).setMaxTime(3)
         );
 
         DrivePath driveOffLine = new DrivePath(robot.drive, telemetry,
@@ -127,7 +127,7 @@ public class OneGRedClose extends LinearOpMode {
 //        );
         DrivePath driveToCollectSecondSpikeEnd = new DrivePath(robot.drive, telemetry,
                 new Waypoint(createPose(collect2Pre)),
-                new Waypoint(createPose(secondSpikeEnd)).setMaxLinearPower(PARAMS.COLLECT_DRIVE_MAX_POWER)
+                new Waypoint(createPose(secondSpikeEnd)).setMaxLinearPower(PARAMS.COLLECT_DRIVE_MAX_POWER).setMaxTime(3)
         );
 
 //

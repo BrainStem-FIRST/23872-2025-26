@@ -22,6 +22,7 @@ public class Pivot implements Component {
     public double position;
 
     public static double closePivot = 0.62; // greater means its down more
+    public static double pointPivot = 0.55;
     public static double farPivot = 0.22; // lower means its up more
 
 
@@ -32,6 +33,7 @@ public class Pivot implements Component {
     public enum PivotState{
         CLOSE,
         FAR,
+        POINT,
         ADJUSTING
     }
     public PivotState pivotState;
@@ -88,6 +90,10 @@ public class Pivot implements Component {
     public void setPivotShootClose(){
         pivotState = PivotState.CLOSE;
     }
+
+    public void setPivotShootPoint(){
+        pivotState = PivotState.POINT;
+    }
     public void setPivotShootFar() {
         pivotState = PivotState.FAR;
     }
@@ -108,6 +114,11 @@ public class Pivot implements Component {
             case FAR:
                 position = farPivot;
                 setDualServoPosition(farPivot);
+                break;
+
+            case POINT:
+                position = pointPivot;
+                setDualServoPosition(pointPivot);
                 break;
             case ADJUSTING:
                 setDualServoPosition(newPos);

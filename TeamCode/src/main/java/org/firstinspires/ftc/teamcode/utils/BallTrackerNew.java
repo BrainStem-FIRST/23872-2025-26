@@ -38,7 +38,7 @@ public class BallTrackerNew {
 
 
 
-    public List<BallColor> targetMotif;
+    public static List<BallColor> targetMotif;
     public BallTrackerNew(Spindexer spindexer) {
         this.spindexer = spindexer;
         this.targetMotif = motif1;
@@ -78,19 +78,19 @@ public class BallTrackerNew {
         slot.color = color;
     }
     public Slot getSlotAtShootingPos() {
-        if (slotA.pos < 351 && slotA.pos > 331) return slotA;
-        if (slotB.pos < 351 && slotB.pos > 331) return slotB;
+        if (slotA.currentAbsPos < 350 && slotA.currentAbsPos > 330) return slotA;
+        if (slotB.currentAbsPos < 350 && slotB.currentAbsPos > 330) return slotB;
         return slotC;
     }
 
     public Slot getSlotAtCollectPos() {
-        if (slotA.pos < 100 || slotA.pos > 924) return slotA;
-        if (slotB.pos < 100 || slotB.pos > 924) return slotB;
+        if (slotA.currentAbsPos < 50 || slotA.currentAbsPos > 970) return slotA;
+        if (slotB.currentAbsPos < 50 || slotB.currentAbsPos > 970) return slotB;
         return slotC;
     }
     public Slot getSlotAtOtherPos() {
-        if (slotA.pos < 692 && slotA.pos > 672) return slotA;
-        if (slotB.pos < 692 && slotB.pos > 572) return slotB;
+        if (slotA.currentAbsPos < 690 && slotA.currentAbsPos > 670) return slotA;
+        if (slotB.currentAbsPos < 690 && slotB.currentAbsPos > 570) return slotB;
         return slotC;
     }
 
@@ -152,7 +152,7 @@ public class BallTrackerNew {
 
         int scoreA = calculateScore(stateA, motif1);
         int scoreB = calculateScore(stateB, motif1);
-        int scoreC = calculateScore(stateC, motif2);
+        int scoreC = calculateScore(stateC, motif1);
 
         int targetShooterTick = 1024/3;
         int bestDelta = 0;

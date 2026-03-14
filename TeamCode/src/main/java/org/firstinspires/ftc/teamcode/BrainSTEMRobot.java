@@ -141,18 +141,20 @@ public class BrainSTEMRobot {
 //            limelight.updateObeliskColors();
 //            telemetry.addData("Limelight fedu res", Limelight.feducialResult);
 //        }
-        isSpindStopped = (Math.abs(spindexer.spindexerPid.getTarget() - spindexer.getCurrentPosition())) < 50 || spindexer.spindexerMotor.getVelocity()<15;
+        isSpindStopped = (Math.abs(spindexer.targetEncoder - spindexer.getCurrentPosition())) < 50 || spindexer.spindexerMotor.getVelocity()<15;
         ballSensor.setIfIndexerIsMoving(!isSpindStopped);
 
 
+
+        String newBall = "EMPTY";
+        newBall = ballSensor.scanForNewBall();
 
 
 
         // DETECT BALL IF SPIND IS NOT MOVING
         if (isSpindStopped ) {
 
-            String newBall = "EMPTY";
-            newBall = ballSensor.scanForNewBall();
+
 
 //            telemetry.addData("NEW BALL", newBall);
 
@@ -164,12 +166,13 @@ public class BrainSTEMRobot {
                 BallTrackerNew.Slot collectSlot = limelight.ballTrackerNew.getSlotAtCollectPos();
                 collectSlot.color = color;
 
-
-
+                telemetry.addData("Ball Color", color);
 
                     spindexer.setTargetAdj(341);
 
             }
+
+
 //            telemetry.addData("Distance (cm)", "%.3f", ((DistanceSensor) ballSensor.colorSensor).getDistance(DistanceUnit.CM));
         }
 
@@ -213,19 +216,27 @@ public class BrainSTEMRobot {
 
         telemetry.addData("Balls Shot", ballsShot);
 
-//        telemetry.addLine("\n=== BALL SENSOR DEBUG ===");
-//        telemetry.addData("Beam State", !ballSensor.beamBreak.getState());
-//        telemetry.addData("Timer (ms)", ballSensor.timer);
-//        telemetry.addData("Delay Required ", BallSensor.delayTimeMs);
-//        telemetry.addData("R/G/B %", String.format("%.2f / %.2f / %.2f", ballSensor.rPercent, ballSensor.gPercent, ballSensor.bPercent));
-//
-//        telemetry.addLine("\n=== DRIVE ===");
-//        telemetry.addData("FL", drive.FL.getPower());
-//        telemetry.addData("BL", drive.BL.getPower());
-//        telemetry.addData("FR", drive.FR.getPower());
-//        telemetry.addData("BR", drive.BR.getPower());
+        telemetry.addLine("\n=== BALL SENSOR DEBUG ===");
+        telemetry.addData("Beam State", !ballSensor.beamBreak.getState());
+        telemetry.addData("Timer (ms)", ballSensor.timer);
+        telemetry.addData("Delay Required ", BallSensor.delayTimeMs);
+        telemetry.addData("R/G/B %", String.format("%.2f / %.2f / %.2f", ballSensor.rPercent, ballSensor.gPercent, ballSensor.bPercent));
 
-        telemetry.addData("TargetMotf", limelight.targetOrder);
+        telemetry.addLine("\n=== DRIVE ===");
+        telemetry.addData("FL", drive.FL.getPower());
+        telemetry.addData("BL", drive.BL.getPower());
+        telemetry.addData("FR", drive.FR.getPower());
+        telemetry.addData("BR", drive.BR.getPower());
+
+
+
+        telemetry.addData("Target Motif", limelight.targetOrder);
+
+        telemetry.addLine("\n=== MOTIF SHOOTING ===");
+        telemetry.addData("Best Rotation",  ballTracker.getBestRotation());
+        telemetry.addData("Best Rotation",  ballTracker.getPPGRotation());
+        telemetry.addData("Target Motif Limelight", limelight.targetOrder);
+        telemetry.addData("Target Motif Ball Tracking", BallTrackerNew.targetMotif);
 
 
         telemetry.addLine("=== SPINDEXER SLOTS ===");
@@ -254,6 +265,7 @@ public class BrainSTEMRobot {
 
 
         telemetry.addLine("\n=== COLOR SENSOR ===");
+
         telemetry.addData("R", ballSensor.rPercent);
         telemetry.addData("G", ballSensor.gPercent);
         telemetry.addData("B", ballSensor.bPercent);
@@ -275,7 +287,7 @@ public class BrainSTEMRobot {
         telemetry.addLine("\n=== SPINDEXER ===");
         telemetry.addData("Raw Encoder", spindexer.getRawPosition());
         telemetry.addData("Position", spindexer.getCurrentPosition());
-        telemetry.addData("Target", spindexer.spindexerPid.getTarget());
+        telemetry.addData("Target", spindexer.targetEncoder);
         telemetry.addData("Power giving motor:", spindexer.spindexerMotor.getPower());
 
         telemetry.addData("Power PID output:", spindexer.power);

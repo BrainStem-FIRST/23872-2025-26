@@ -107,7 +107,7 @@ public class OneGBlueClose extends LinearOpMode {
 //        );
         DrivePath driveToCollectFirstSpikeEnd = new DrivePath(robot.drive, telemetry,
                 new Waypoint(createPose(collect1Pre)),
-                new Waypoint(createPose(firstSpikeEnd)).setMaxLinearPower(PARAMS.COLLECT_DRIVE_MAX_POWER)
+                new Waypoint(createPose(firstSpikeEnd)).setMaxLinearPower(PARAMS.COLLECT_DRIVE_MAX_POWER).setMaxTime(4)
         );
 
         DrivePath driveOffLine = new DrivePath(robot.drive, telemetry,
@@ -122,7 +122,7 @@ public class OneGBlueClose extends LinearOpMode {
         DrivePath driveToCollectSecondSpikeEnd = new DrivePath(robot.drive, telemetry,
                 new Waypoint(createPose(collect2Mid)),
                 new Waypoint(createPose(collect2Pre)).setSlowDownPercent(0.8),
-                new Waypoint(createPose(secondSpikeEnd)).setMaxLinearPower(PARAMS.COLLECT_DRIVE_MAX_POWER)
+                new Waypoint(createPose(secondSpikeEnd)).setMaxLinearPower(PARAMS.COLLECT_DRIVE_MAX_POWER).setMaxTime(4)
         );
 
 //

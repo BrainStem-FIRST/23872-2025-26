@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.utils.PIDController;
 
 @Config
 public class Spindexer implements Component {
-    public static double maxPowerErrorThreshold = 200, maxPower = 0.99;
+    public static double maxPowerErrorThreshold = 10000000, maxPower = 0.99;
 
     public int SPINDEXER_TIME;
 
@@ -34,7 +34,6 @@ public class Spindexer implements Component {
     private boolean wasMoving = false;
     public boolean justFinishedMoving = false;
 
-    public PIDController spindexerPid;
     public DcMotorEx spindexerMotor;
     private HardwareMap map;
     private Telemetry telemetry;
@@ -44,7 +43,8 @@ public class Spindexer implements Component {
     private int absoluteEncoderStartingOffset, wrapAroundOffset;
 
     private SRSHub hub;
-    private double error;
+    private double error, prevError;
+    private final ElapsedTime dtTimer = new ElapsedTime();
 
     public boolean indexerCued;
     private BrainSTEMRobot robot;
@@ -54,6 +54,10 @@ public class Spindexer implements Component {
    public boolean jammed = false;
 
     public int shotsFired = 0;
+
+    private double kP;
+    public double targetEncoder;
+    private boolean firstUpdate = true;
 
     public Spindexer(HardwareMap hardwareMap, Telemetry telemetry, BrainSTEMRobot robot) {
         this.map = hardwareMap;
@@ -66,12 +70,6 @@ public class Spindexer implements Component {
         spindexerMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
         jamTime = new ElapsedTime();
-
-        spindexerPid = new PIDController(
-                Constants.spindexerConstants.INDEXER_KP,
-                Constants.spindexerConstants.INDEXER_KI,
-                Constants.spindexerConstants.INDEXER_KD
-        );
         spindexerTimer = new ElapsedTime();
         antijamTimer = new ElapsedTime();
         spindexerTimer.startTime();
@@ -95,50 +93,47 @@ public class Spindexer implements Component {
         this.absoluteEncoderStartingOffset = -60; // position that the absolute encoder reads when the indexer is centered
     }
 
-    public void updateIndexerPosition() {
-        double error = (spindexerPid.getTarget() - getCurrentPosition());
-        power = spindexerPid.update(getCurrentPosition());
+    public void updateIndexerPosition(double dt) {
+        if (Math.abs(error) < Constants.spindexerConstants.INDEXER_SMALL_KP_THRESHOLD)
+            kP = Constants.spindexerConstants.INDEXER_SMALL_KP;
+        else
+            kP = Constants.spindexerConstants.INDEXER_BIG_KP;
 
         if (isStatic() ) {
-
-            // (isUnjamming)
-
             spindexerMotor.setPower(0);
             return;
         }
 
         if (Math.abs(error) > maxPowerErrorThreshold) {
-            spindexerMotor.setPower(maxPower * Math.signum(power));
-        }
-        else {
-            power += Math.signum(power) * Constants.spindexerConstants.INDEXER_KF;
-            power = Range.clip(power, -Constants.spindexerConstants.MAX_POWER, Constants.spindexerConstants.MAX_POWER);
-            spindexerMotor.setPower(power);
-
-        }
-
-        if (Math.abs(error) > maxPowerErrorThreshold) {
-            spindexerMotor.setPower(maxPower * Math.signum(power));
+            power = maxPower * Math.signum(error);
         } else {
             if (isStatic() || (isUnjamming && antijamTimer.milliseconds()>200 && antijamTimer.milliseconds() <500)  ){
-                //
-                spindexerMotor.setPower(0);
+                power = 0;
             } else {
-                power += Math.signum(power) * Constants.spindexerConstants.INDEXER_KF;
+                double proportionalPower = error * kP;
+                double frictionPower = Math.signum(power) * Constants.spindexerConstants.INDEXER_KF;
+                // custom kD
+                double changeInAbsError = (Math.abs(error) - Math.abs(prevError)) / dt;
+                double derivativePower = 0;
+                if (changeInAbsError < 0)
+                    derivativePower = Constants.spindexerConstants.INDEXER_KD * Math.abs(changeInAbsError) * -Math.signum(kP);
+                telemetry.addData("spindexer friction power", frictionPower);
+                telemetry.addData("spindexer proportional power", proportionalPower);
+                telemetry.addData("spindexer derivative power", derivativePower);
 
+                power = frictionPower + proportionalPower + derivativePower;
                 power = Range.clip(power, -Constants.spindexerConstants.MAX_POWER, Constants.spindexerConstants.MAX_POWER);
-                spindexerMotor.setPower(power);
             }
         }
+        spindexerMotor.setPower(power);
     }
 ;
     public void setTargetAdj(int adjust) {
-        spindexerPid.setTarget(spindexerPid.getTarget() + adjust);
+        targetEncoder += adjust;
     }
 
 
     public void fineAdjInDir() {
-        double error = spindexerPid.getTarget()-wrappedEncoder;
         if (!robot.ramp.isRampUp()) setTargetAdj((int) (-Math.signum(error)* 20)); // TODO: Make sure right direction
     }
     @Override
@@ -148,6 +143,12 @@ public class Spindexer implements Component {
 
     @Override
     public void update() {
+        double dt = dtTimer.seconds();
+        dtTimer.reset();
+        if (firstUpdate) {
+            dt = 0.05;
+            firstUpdate = false;
+        }
         hub.update();
 
         rawHubEncoderPosition = hub.readEncoder(6).position;
@@ -160,11 +161,8 @@ public class Spindexer implements Component {
             wrapAroundOffset -= (int)(1024* Math.signum(dif) );
         }
         wrappedEncoder = rawEncoder + wrapAroundOffset;
-
-        error = getCurrentPosition() - spindexerPid.getTarget();
-
-
-        double currentAmps = spindexerMotor.getCurrent(CurrentUnit.MILLIAMPS);
+        prevError = error;
+        error = targetEncoder - getCurrentPosition();
 
 //        if (currentAmps > 7000 && spindexerMotor.getPower() > maxPower- 0.05 && !isUnjamming) {
 //            telemetry.addLine("JAM DETECTED - STARTING COOLDOWN");
@@ -185,7 +183,7 @@ public class Spindexer implements Component {
             spindexerMotor.setPower(0);
             if (jamTime.milliseconds() > 500) jammed = false;
         } else {
-            updateIndexerPosition();
+            updateIndexerPosition(dt);
         }
 
 

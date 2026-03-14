@@ -188,7 +188,6 @@ public class CompetitionTele extends LinearOpMode {
         if (gp1.isFirstRightBumper() && !wasHit) {
             robot.ramp.setRampUp();
             pressedTime.reset();
-            // TODO: Test if works
 
             if (robot.shooter.isUpToSpeed()) {
                 robot.hit = true;
@@ -197,14 +196,14 @@ public class CompetitionTele extends LinearOpMode {
                 gamepad1.rumble(500);
             }
         }
-        if (robot.hit && pressedTime.milliseconds() > 250) {
+        if (robot.hit && pressedTime.milliseconds() > 250 && robot.shooter.isUpToSpeed()) {
             robot.spindexer.startShootingEncoder = robot.spindexer.wrappedEncoder;
             robot.spindexer.setTargetAdj(Constants.spindexerConstants.TICKS_360);
             robot.hit = false;
             wasHit = true;
         }
         //Scarlett likes Manny and Navik
-        if ((wasHit && pressedTime.milliseconds() > 2500 && robot.shooter.isShootFar()) || (wasHit && pressedTime.milliseconds() > 2000 && robot.shooter.isShootClose())) {
+        if ((wasHit && pressedTime.milliseconds() > 2500 && (robot.shooter.isShootFar())) || (wasHit && pressedTime.milliseconds() > 2000 && (robot.shooter.isShootClose() || robot.shooter.isShootPoint()))) {
             robot.ramp.setRampDown();
             wasHit = false;
             isHitting = true;
@@ -242,12 +241,12 @@ public class CompetitionTele extends LinearOpMode {
             robot.ramp.setRampDown();
         }
 
-//        if (gp1.isFirstDpadUp()) {
-//            robot.park.setParkUp();
-//        }
-//        if (gp1.isFirstDpadDown()) {
-//            robot.park.setParkDown();
-//        }
+        if (gp2.isFirstY()) {
+            robot.shooter.setShooterShootPoint();
+            robot.pivot.setPivotShootPoint();
+
+
+        }
 
     }
 
@@ -261,8 +260,8 @@ public class CompetitionTele extends LinearOpMode {
         // makes any shooter button pressed after turned on, turn it off
 
         if (gp2.isFirstY()) {
-            robot.shooter.setShooterShootFar();
-            robot.pivot.setPivotShootFar();
+            robot.shooter.setShooterShootPoint();
+            robot.pivot.setPivotShootPoint();
 
         } else if (gp2.isFirstA()) {
             robot.shooter.setShooterShootClose();
@@ -278,9 +277,12 @@ public class CompetitionTele extends LinearOpMode {
             robot.shooter.setShooterOff();
         }
 
+        if (gp2.isFirstLeftTrigger()) {
+            robot.spindexer.setTargetAdj(robot.ballTracker.getPPGRotation());
+        }
+
         if (gp2.isFirstDpadUp()) {
             robot.park.setParkUp();
-
         }
 
         if (gp2.isFirstDpadDown()) {

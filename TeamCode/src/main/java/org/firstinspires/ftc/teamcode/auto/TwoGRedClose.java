@@ -118,7 +118,7 @@ public class TwoGRedClose extends LinearOpMode {
 
         DrivePath driveToCollectFirstSpikeEnd = new DrivePath(robot.drive, telemetry,
                 new Waypoint(createPose(collect1Pre)),
-                new Waypoint(createPose(firstSpikeEnd)).setMaxLinearPower(PARAMS.COLLECT_DRIVE_MAX_POWER)
+                new Waypoint(createPose(firstSpikeEnd)).setMaxLinearPower(PARAMS.COLLECT_DRIVE_MAX_POWER).setMaxTime(3)
         );
 
         DrivePath driveOffLine = new DrivePath(robot.drive, telemetry,
@@ -128,7 +128,7 @@ public class TwoGRedClose extends LinearOpMode {
         //2nd Spike!! ===================================================================
         DrivePath driveToCollectSecondSpikeEnd = new DrivePath(robot.drive, telemetry,
                 new Waypoint(createPose(collect2Pre)),
-                new Waypoint(createPose(secondSpikeEnd)).setMaxLinearPower(PARAMS.COLLECT_DRIVE_MAX_POWER)
+                new Waypoint(createPose(secondSpikeEnd)).setMaxLinearPower(PARAMS.COLLECT_DRIVE_MAX_POWER).setMaxTime(3)
         );
 
 

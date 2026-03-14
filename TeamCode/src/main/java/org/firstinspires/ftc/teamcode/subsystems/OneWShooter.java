@@ -55,6 +55,7 @@ public class OneWShooter implements Component {
         IDLE,
         SHOOT_FAR,
         SHOOT_CLOSE,
+        SHOOT_POINT,
         CLOSEISH,
         AUTO
     }
@@ -115,8 +116,8 @@ public class OneWShooter implements Component {
     public void update() {
         switch (shooterState) {
             case OFF:
-                shooterMotorOne.setPower(-0.05);
-                shooterMotorTwo.setPower(-0.05);
+                shooterMotorOne.setPower(0); // -0.07
+                shooterMotorTwo.setPower(0);
 
                 targetVel = 0;
                 break;
@@ -131,11 +132,20 @@ public class OneWShooter implements Component {
                 setBothMotorVelocities(Constants.shooterConstants.CLOSE_SHOOT_VEL);
                 targetVel = Constants.shooterConstants.CLOSE_SHOOT_VEL;
                 break;
+
             case IDLE:
                 shooterMotorOne.setPower(Constants.shooterConstants.IDLE_POWER);
                 shooterMotorTwo.setPower(Constants.shooterConstants.IDLE_POWER);
 
                 targetVel = 0;
+
+                break;
+
+            case SHOOT_POINT:
+
+                shooterPID.setPIDValues(Constants.shooterConstants.kP_ONE, Constants.shooterConstants.kI, Constants.shooterConstants.kD);
+                setBothMotorVelocities(Constants.shooterConstants.POINT_SHOOT_VEL);
+                targetVel = Constants.shooterConstants.POINT_SHOOT_VEL;
 
                 break;
 
@@ -219,6 +229,10 @@ public class OneWShooter implements Component {
         shooterState = ShooterState.SHOOT_CLOSE;
         shooterPID.reset();
     }
+    public void setShooterShootPoint() {
+        shooterState = ShooterState.SHOOT_POINT;
+        shooterPID.reset();
+    }
 
     public void setShooterShootCloseish() {
         shooterState = ShooterState.CLOSEISH;
@@ -227,6 +241,13 @@ public class OneWShooter implements Component {
 
     public boolean   isShootFar() {
         if (shooterState == ShooterState.SHOOT_FAR) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean   isShootPoint() {
+        if (shooterState == ShooterState.SHOOT_POINT) {
             return true;
         }
         return false;

@@ -90,12 +90,15 @@ public class Limelight implements Component {
         switch (tagId) {
             case 21:
                 targetOrder = new ArrayList<>(Arrays.asList("G", "P", "P"));
+                BallTrackerNew.targetMotif = ballTrackerNew.motif3;
                 break;
             case 22:
                 targetOrder = new ArrayList<>(Arrays.asList("P", "G", "P"));
+                BallTrackerNew.targetMotif = ballTrackerNew.motif2;
                 break;
             case 23:
                 targetOrder = new ArrayList<>(Arrays.asList("P", "P", "G"));
+                BallTrackerNew.targetMotif = ballTrackerNew.motif1;
                 break;
             default:
                 break;
