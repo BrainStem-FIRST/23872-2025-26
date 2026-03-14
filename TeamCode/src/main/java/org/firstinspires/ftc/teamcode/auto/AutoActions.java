@@ -74,19 +74,11 @@ public class AutoActions {
 
     public static Action shooterTurnOnClose() {
         return telemetryPacket -> {
-            robot.shooter.setShooterShootClose();
+            robot.shooter.setShooterShootAuto();
             telemetryPacket.addLine("Shooter On");
             return false;
         };
     }
-    public static Action shooterTurnOnCloseish() {
-        return telemetryPacket -> {
-            robot.shooter.setShooterShootCloseish();
-            telemetryPacket.addLine("Shooter On");
-            return false;
-        };
-    }
-
 
     public static Action turnShooterOnIdle() {
         return telemetryPacket -> {
@@ -283,7 +275,7 @@ public class AutoActions {
     public static Action pivotClose() {
         return new SequentialAction (
                 telemetryPacket -> {
-                    robot.pivot.setPivotShootClose();
+                    robot.pivot.setPivotShootAuto();
                     return false;
                 }
         );

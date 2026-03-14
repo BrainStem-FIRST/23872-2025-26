@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -10,6 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.utils.Component;
 import org.firstinspires.ftc.teamcode.utils.PIDController;
@@ -20,11 +23,12 @@ import org.firstinspires.ftc.teamcode.utils.PIDController;
 
 @Config
 public class OneWShooter implements Component {
+    public static double testingSpeed = 1300;
 
     private final Telemetry telemetry;
 
     public static boolean powerMotors = true;
-
+    public double closeTargetSpeed;
 
     // hardware constants
 
@@ -47,21 +51,19 @@ public class OneWShooter implements Component {
 
     public int shotsFired = 0;
     private boolean wasAtSpeed = false;
-    
-
 
     public enum ShooterState {
         OFF,
         IDLE,
         SHOOT_FAR,
         SHOOT_CLOSE,
-        SHOOT_POINT,
-        CLOSEISH,
         AUTO
     }
 
 
-    public OneWShooter(HardwareMap hardwareMap, Telemetry telemetry) {
+    private final BrainSTEMRobot robot;
+    public OneWShooter(HardwareMap hardwareMap, Telemetry telemetry, BrainSTEMRobot robot) {
+        this.robot = robot;
         this.map = hardwareMap;
         this.telemetry = telemetry;
 
@@ -86,8 +88,6 @@ public class OneWShooter implements Component {
         shooterPID = new PIDController(Constants.shooterConstants.kP_ONE, Constants.shooterConstants.kI, Constants.shooterConstants.kD);
         shooterPID.setInputBounds(0, Constants.shooterConstants.MAX_TICKS_PER_SEC);
         shooterPID.setOutputBounds(0,1);
-
-
 
         shotsFired = 0;
 
@@ -129,36 +129,21 @@ public class OneWShooter implements Component {
                 break;
             case SHOOT_CLOSE:
                 shooterPID.setPIDValues(Constants.shooterConstants.kP_ONE, Constants.shooterConstants.kI, Constants.shooterConstants.kD);
-                setBothMotorVelocities(Constants.shooterConstants.CLOSE_SHOOT_VEL);
-                targetVel = Constants.shooterConstants.CLOSE_SHOOT_VEL;
+                targetVel = closeTargetSpeed;
+                setBothMotorVelocities(targetVel);
+//                setBothMotorVelocities(testingSpeed);
+
                 break;
 
             case IDLE:
                 shooterMotorOne.setPower(Constants.shooterConstants.IDLE_POWER);
                 shooterMotorTwo.setPower(Constants.shooterConstants.IDLE_POWER);
-
                 targetVel = 0;
 
                 break;
 
-            case SHOOT_POINT:
-
-                shooterPID.setPIDValues(Constants.shooterConstants.kP_ONE, Constants.shooterConstants.kI, Constants.shooterConstants.kD);
-                setBothMotorVelocities(Constants.shooterConstants.POINT_SHOOT_VEL);
-                targetVel = Constants.shooterConstants.POINT_SHOOT_VEL;
-
-                break;
-
-            case CLOSEISH:
-
-                shooterPID.setPIDValues(Constants.shooterConstants.kP_ONE, Constants.shooterConstants.kI, Constants.shooterConstants.kD);
-                setBothMotorVelocities(1390);
-                targetVel = Constants.shooterConstants.CLOSE_SHOOT_VEL;
-                break;
-
             case AUTO:
                 setBothMotorVelocities(Constants.shooterConstants.CLOSE_SHOOT_VEL);
-
                 targetVel = Constants.shooterConstants.AUTO_VEL;
                 break;
 
@@ -212,8 +197,6 @@ public class OneWShooter implements Component {
 
     }
 
-
-
     public void resetShotCounter() {
         shotsFired = 0;
     }
@@ -225,17 +208,12 @@ public class OneWShooter implements Component {
         shooterState = ShooterState.SHOOT_FAR;
         shooterPID.reset();
     }
+    public void setShooterShootAuto() {
+        shooterState = ShooterState.AUTO;
+        shooterPID.reset();
+    }
     public void setShooterShootClose() {
         shooterState = ShooterState.SHOOT_CLOSE;
-        shooterPID.reset();
-    }
-    public void setShooterShootPoint() {
-        shooterState = ShooterState.SHOOT_POINT;
-        shooterPID.reset();
-    }
-
-    public void setShooterShootCloseish() {
-        shooterState = ShooterState.CLOSEISH;
         shooterPID.reset();
     }
 
@@ -246,12 +224,6 @@ public class OneWShooter implements Component {
         return false;
     }
 
-    public boolean   isShootPoint() {
-        if (shooterState == ShooterState.SHOOT_POINT) {
-            return true;
-        }
-        return false;
-    }
     public boolean   isShootClose() {
         if (shooterState == ShooterState.SHOOT_CLOSE) {
             return true;

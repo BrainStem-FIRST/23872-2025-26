@@ -8,6 +8,9 @@ import org.firstinspires.ftc.teamcode.subsystems.Pivot;
 public class Constants {
     public static class ShooterConstants {
 
+        public double blueGoalX = -69, blueGoalY = -69;
+        public double redGoalX = -69, redGoalY = 69;
+
         // PID Constants
         // TODO: Tune for built in PID
         public  double kP_ONE = 0.0032;

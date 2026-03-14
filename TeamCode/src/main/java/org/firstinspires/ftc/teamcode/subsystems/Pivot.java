@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.utils.Component;
 @Config
 
 public class Pivot implements Component {
+    public static double testingPosition = 0.6;
     public static boolean activateLeft = true, activateRight = true;
     private ServoImplEx leftServo;
     private ServoImplEx rightServo;
@@ -33,10 +34,11 @@ public class Pivot implements Component {
     public enum PivotState{
         CLOSE,
         FAR,
-        POINT,
+        AUTO,
         ADJUSTING
     }
     public PivotState pivotState;
+    public double closeTargetPosition;
 
     public Pivot(HardwareMap hardwareMap, Telemetry telemetry, OneWShooter shooter){
 
@@ -48,12 +50,7 @@ public class Pivot implements Component {
         rightServo.setPwmRange(new PwmControl.PwmRange(rightLower, rightHigher));
 
         pivotState = PivotState.CLOSE;
-
         this.shooter = shooter;
-
-
-
-
     }
 
     public void setDualServoPosition(double position) {
@@ -78,8 +75,6 @@ public class Pivot implements Component {
         newPos = basePos - (shotCount * HOOD_ADJ_SHOT);
 
         pivotState = PivotState.ADJUSTING;
-
-
     }
     public double getLeftPos() {
         return leftServo.getPosition();
@@ -91,9 +86,10 @@ public class Pivot implements Component {
         pivotState = PivotState.CLOSE;
     }
 
-    public void setPivotShootPoint(){
-        pivotState = PivotState.POINT;
+    public void setPivotShootAuto(){
+        pivotState = PivotState.AUTO;
     }
+
     public void setPivotShootFar() {
         pivotState = PivotState.FAR;
     }
@@ -108,20 +104,21 @@ public class Pivot implements Component {
 
         switch (pivotState) {
             case CLOSE:
-                position = closePivot;
-                setDualServoPosition(closePivot);
+                position = closeTargetPosition;
+                setDualServoPosition(position);
+//                setDualServoPosition(testingPosition);
                 break;
             case FAR:
                 position = farPivot;
                 setDualServoPosition(farPivot);
                 break;
-
-            case POINT:
-                position = pointPivot;
-                setDualServoPosition(pointPivot);
-                break;
             case ADJUSTING:
                 setDualServoPosition(newPos);
+                break;
+
+            case AUTO:
+                position = closePivot;
+                setDualServoPosition(position);
                 break;
 
         }

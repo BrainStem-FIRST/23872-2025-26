@@ -39,7 +39,6 @@ FIX ANTIJAM
 P1: auto align - according to dante spins in one direction for eternity && auto
     wrap issue? try update with error
  */
-@TeleOp(name = "Competition Tele Yay")
 public class CompetitionTele extends LinearOpMode {
     private GamepadTracker gp1;
     private GamepadTracker gp2;
@@ -59,10 +58,7 @@ public class CompetitionTele extends LinearOpMode {
     ElapsedTime pressedTime;
     ElapsedTime hittingTime;
 
-
-
-    Vector2d goal = new Vector2d(-72, 72); //default: red
-    private boolean red = true;
+    public boolean red;
 
 
     @Override
@@ -70,7 +66,7 @@ public class CompetitionTele extends LinearOpMode {
         telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);
 
         robot = new BrainSTEMRobot(hardwareMap, this.telemetry, this, new Pose2d(BrainSTEMRobot.autoX, BrainSTEMRobot.autoY, BrainSTEMRobot.autoH));
-
+        robot.red = red;
 //        robot = new BrainSTEMRobot(hardwareMap, this.telemetry, this, new Pose2d(0, 0, 0));
 
         gp1 = new GamepadTracker(gamepad1);
@@ -136,10 +132,13 @@ public class CompetitionTele extends LinearOpMode {
         double rx = gamepad1.right_stick_x * 0.75;
 
         if (gamepad2.right_bumper) {
-            double dx = goal.x - robot.drive.localizer.getPose().position.x;
-            double dy = goal.y - robot.drive.localizer.getPose().position.y;
+            Vector2d goalPosition = red ?
+                    new Vector2d(Constants.shooterConstants.redGoalX, Constants.shooterConstants.redGoalY) :
+                    new Vector2d(Constants.shooterConstants.blueGoalX, Constants.shooterConstants.blueGoalY);
 
-            double targetAngle = Math.atan2(dy, dx);
+            Vector2d robotToGoal = goalPosition.minus(robot.drive.localizer.getPose().position);
+
+            double targetAngle = Math.atan2(robotToGoal.y, robotToGoal.x);
             double currentHeading = robot.drive.localizer.getPose().heading.toDouble();
             double error = Angle.normDelta(targetAngle - currentHeading);
 
@@ -202,8 +201,7 @@ public class CompetitionTele extends LinearOpMode {
             robot.hit = false;
             wasHit = true;
         }
-        //Scarlett likes Manny and Navik
-        if ((wasHit && pressedTime.milliseconds() > 2500 && (robot.shooter.isShootFar())) || (wasHit && pressedTime.milliseconds() > 2000 && (robot.shooter.isShootClose() || robot.shooter.isShootPoint()))) {
+        if ((wasHit && pressedTime.milliseconds() > 2500 && (robot.shooter.isShootFar())) || (wasHit && pressedTime.milliseconds() > 2000 && robot.shooter.isShootClose())) {
             robot.ramp.setRampDown();
             wasHit = false;
             isHitting = true;
@@ -215,12 +213,8 @@ public class CompetitionTele extends LinearOpMode {
             robot.shooter.setShooterOff();
             isHitting = false;
         }
-        // Switch goal - make so only presses in first 10 sec
-        if (gamepad1.x){
-            telemetry.addLine("Color is Blue");
-            goal = new Vector2d(-72, -68.5); //  change for left hand bias
-            red = false;
-        }
+
+
         if (gp1.isFirstDpadRight()) {
             robot.ramp.setRampUp();
         } else if (gp1.isFirstDpadLeft()) {
@@ -240,14 +234,6 @@ public class CompetitionTele extends LinearOpMode {
         if (gp1.isFirstDpadLeft()) {
             robot.ramp.setRampDown();
         }
-
-        if (gp2.isFirstY()) {
-            robot.shooter.setShooterShootPoint();
-            robot.pivot.setPivotShootPoint();
-
-
-        }
-
     }
 
     private void updateDriver2() {
@@ -259,11 +245,7 @@ public class CompetitionTele extends LinearOpMode {
 
         // makes any shooter button pressed after turned on, turn it off
 
-        if (gp2.isFirstY()) {
-            robot.shooter.setShooterShootPoint();
-            robot.pivot.setPivotShootPoint();
-
-        } else if (gp2.isFirstA()) {
+        if (gp2.isFirstA()) {
             robot.shooter.setShooterShootClose();
             robot.pivot.setPivotShootClose();
 

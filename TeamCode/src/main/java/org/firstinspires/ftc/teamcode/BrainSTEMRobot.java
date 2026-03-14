@@ -1,10 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.graphics.Color;
-
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -13,15 +11,14 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import java.util.ArrayList;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.rr.MecanumDrive;
-import org.firstinspires.ftc.teamcode.srs.SRSHub;
 import org.firstinspires.ftc.teamcode.subsystems.Collector;
 import org.firstinspires.ftc.teamcode.subsystems.OneWShooter;
 import org.firstinspires.ftc.teamcode.subsystems.Parking;
 import org.firstinspires.ftc.teamcode.subsystems.Pivot;
 //import org.firstinspires.ftc.teamcode.subsystems.Ramp;
 import org.firstinspires.ftc.teamcode.subsystems.Ramp;
+import org.firstinspires.ftc.teamcode.subsystems.ShooterHoodLookup;
 import org.firstinspires.ftc.teamcode.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.subsystems.sensors.Limelight;
 import org.firstinspires.ftc.teamcode.utils.BallSensor;
@@ -33,7 +30,7 @@ public class BrainSTEMRobot {
     //NEEDS TO CHOOSE ONE
     // TODO: Clean up for new subsystems
 
-    public static double autoX, autoY, autoH;
+    public static double autoX = 0, autoY = 0, autoH = 0;
     // Don't touch these
     public Telemetry telemetry;
     public OpMode opMode;
@@ -68,10 +65,10 @@ public class BrainSTEMRobot {
 
     public boolean isAuto = false;
 
-
-
+    private ShooterHoodLookup shooterHoodLookup;
 
     private boolean checkingColorAfterMovingSpind = false;
+    public boolean red;
 
     public BrainSTEMRobot(HardwareMap hwMap, Telemetry telemetry, OpMode opMode, Pose2d startPose) {
 
@@ -86,7 +83,7 @@ public class BrainSTEMRobot {
 
         spindexer = new Spindexer(hwMap, telemetry, this);
         collector = new Collector(hwMap, telemetry);
-        shooter = new OneWShooter(hwMap, telemetry);
+        shooter = new OneWShooter(hwMap, telemetry, this);
         ramp = new Ramp(hwMap, telemetry);
         pivot = new Pivot(hwMap, telemetry, shooter);
         limelight = new Limelight(hwMap, telemetry, this);
@@ -110,29 +107,28 @@ public class BrainSTEMRobot {
 
         lastShotTime = new ElapsedTime();
 
+        shooterHoodLookup = new ShooterHoodLookup();
     }
 
-
-
-
     public void update() {
+        drive.localizer.update();
 
-
+        Vector2d goalPosition = red ?
+                new Vector2d(Constants.shooterConstants.redGoalX, Constants.shooterConstants.redGoalY) :
+                new Vector2d(Constants.shooterConstants.blueGoalX, Constants.shooterConstants.blueGoalY);
+        Pose2d robotPose = drive.localizer.getPose();
+        Vector2d robotToGoal = goalPosition.minus(robotPose.position);
+        double distFromGoal = Math.hypot(robotToGoal.x, robotToGoal.y);
+        telemetry.addData("DIST FROM GOAL", distFromGoal);
+        telemetry.addData("Goal pose", goalPosition.x + " " + goalPosition.y);
+        shooter.closeTargetSpeed = shooterHoodLookup.getShooterSpeed(distFromGoal);
+        pivot.closeTargetPosition = shooterHoodLookup.getHoodPosition(distFromGoal);
 
         pivot.updateCompensatedPosition(ballsShot);
-
-
-
 
         for (Component c : subsystems) {
             c.update();
         }
-
-
-
-
-        drive.localizer.update();
-
 
 
 
