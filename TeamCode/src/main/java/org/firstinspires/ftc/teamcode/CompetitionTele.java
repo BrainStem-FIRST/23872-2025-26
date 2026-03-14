@@ -40,7 +40,12 @@ P1: auto align - according to dante spins in one direction for eternity && auto
     wrap issue? try update with error
  */
 public class CompetitionTele extends LinearOpMode {
+
+    private Pose2d newPose;
     private GamepadTracker gp1;
+    private Pose2d bluePose = new Pose2d((72-6.25), (72-7), Math.toRadians(-90));
+    private Pose2d redPose = new Pose2d(72-6.25, -(72-7), Math.toRadians(90));
+
     private GamepadTracker gp2;
     private BrainSTEMRobot robot;
     private PIDController alignmentPID;
@@ -97,6 +102,8 @@ public class CompetitionTele extends LinearOpMode {
 
         waitForStart();
 
+
+
         while (!opModeIsActive()) {
             telemetry.update();
         }
@@ -117,6 +124,18 @@ public class CompetitionTele extends LinearOpMode {
             updateD1Buttons();
 
             updateDriver2();
+
+
+
+            if (gamepad2.left_trigger > 0.13) {
+                if (red){
+                    newPose = redPose;
+                } else {
+                    newPose = bluePose;
+                }
+                robot.drive.localizer.setPose(newPose);
+
+            }
 
 
 
@@ -214,14 +233,15 @@ public class CompetitionTele extends LinearOpMode {
             isHitting = false;
         }
 
+        if (gp1.isFirstX()) {
+            robot.shooter.setShooterOff();
+        }
+
 
         if (gp1.isFirstDpadRight()) {
             robot.ramp.setRampUp();
         } else if (gp1.isFirstDpadLeft()) {
             robot.ramp.setRampDown();
-        }
-        if (gp2.isFirstDpadRight()) {
-            robot.ramp.setRampUp();
         }
 
         if (gp1.isFirstDpadLeft()) {
@@ -246,22 +266,34 @@ public class CompetitionTele extends LinearOpMode {
         // makes any shooter button pressed after turned on, turn it off
 
         if (gp2.isFirstA()) {
-            robot.shooter.setShooterShootClose();
-            robot.pivot.setPivotShootClose();
 
-        } else if (gp2.isFirstB()) {
-            robot.shooter.setShooterIdle();
+            if (gamepad2.right_trigger > 0.2) {
+                robot.shooter.setShooterShootAuto();
+                robot.pivot.setPivotShootAuto();
+            } else {
+                robot.shooter.setShooterShootClose();
+                robot.pivot.setPivotShootClose();
+            }
+        }
 
-        } else if (gp2.isFirstX()) {
-            robot.shooter.setShooterOff();
+        if (gp2.isFirstY()) {
 
-        } else if (gp1.isFirstX()) {
+                robot.shooter.setShooterShootPoint();
+                robot.pivot.setPivotShootPoint();
+        }
+
+        if (gp2.isFirstX()) {
             robot.shooter.setShooterOff();
         }
 
-        if (gp2.isFirstLeftTrigger()) {
-            robot.spindexer.setTargetAdj(robot.ballTracker.getPPGRotation());
+
+
+        if (gp2.isFirstDpadRight()) {
+            robot.ramp.setRampUp();
         }
+
+
+
 
         if (gp2.isFirstDpadUp()) {
             robot.park.setParkUp();

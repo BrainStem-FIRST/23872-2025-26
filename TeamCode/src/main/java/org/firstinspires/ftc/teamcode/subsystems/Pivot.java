@@ -35,6 +35,7 @@ public class Pivot implements Component {
         CLOSE,
         FAR,
         AUTO,
+        POINT,
         ADJUSTING
     }
     public PivotState pivotState;
@@ -85,6 +86,9 @@ public class Pivot implements Component {
     public void setPivotShootClose(){
         pivotState = PivotState.CLOSE;
     }
+    public void setPivotShootPoint(){
+        pivotState = PivotState.POINT;
+    }
 
     public void setPivotShootAuto(){
         pivotState = PivotState.AUTO;
@@ -105,6 +109,12 @@ public class Pivot implements Component {
         switch (pivotState) {
             case CLOSE:
                 position = closeTargetPosition;
+                setDualServoPosition(position);
+//                setDualServoPosition(testingPosition);
+                break;
+
+            case POINT:
+                position = pointPivot;
                 setDualServoPosition(position);
 //                setDualServoPosition(testingPosition);
                 break;

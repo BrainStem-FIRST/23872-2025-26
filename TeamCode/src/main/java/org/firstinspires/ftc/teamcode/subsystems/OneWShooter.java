@@ -55,6 +55,7 @@ public class OneWShooter implements Component {
     public enum ShooterState {
         OFF,
         IDLE,
+        POINT,
         SHOOT_FAR,
         SHOOT_CLOSE,
         AUTO
@@ -125,6 +126,13 @@ public class OneWShooter implements Component {
                 shooterPID.setPIDValues(Constants.shooterConstants.kP_TWO, Constants.shooterConstants.kI, Constants.shooterConstants.kD);
                 setBothMotorVelocities(Constants.shooterConstants.FAR_SHOOT_VEL);
                 targetVel = Constants.shooterConstants.FAR_SHOOT_VEL;
+
+                break;
+
+            case POINT:
+                shooterPID.setPIDValues(Constants.shooterConstants.kP_TWO, Constants.shooterConstants.kI, Constants.shooterConstants.kD);
+                setBothMotorVelocities(Constants.shooterConstants.POINT_SHOOT_VEL);
+                targetVel = Constants.shooterConstants.POINT_SHOOT_VEL;
 
                 break;
             case SHOOT_CLOSE:
@@ -214,6 +222,10 @@ public class OneWShooter implements Component {
     }
     public void setShooterShootClose() {
         shooterState = ShooterState.SHOOT_CLOSE;
+        shooterPID.reset();
+    }
+    public void setShooterShootPoint() {
+        shooterState = ShooterState.POINT;
         shooterPID.reset();
     }
 
