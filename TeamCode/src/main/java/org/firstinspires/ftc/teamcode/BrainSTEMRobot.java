@@ -77,6 +77,7 @@ public class BrainSTEMRobot {
 
         park = new Parking(hwMap, telemetry);
 
+
         ballSensor = new BallSensor(hwMap);
         subsystems = new ArrayList<>();
 
@@ -96,9 +97,12 @@ public class BrainSTEMRobot {
         subsystems.add(spindexer);
         subsystems.add(collector);
         subsystems.add(shooter);
+//        subsystems.add(finger);
+//        subsystems.add(shooterOne);
         subsystems.add(ramp);
         subsystems.add(pivot);
 
+        // Defining the Motors
         drive = new MecanumDrive(hwMap,startPose);
 
         lastShotTime = new ElapsedTime();
@@ -126,6 +130,13 @@ public class BrainSTEMRobot {
             c.update();
         }
 
+
+
+//        if (limelight != null) {
+//            limelight.update();
+//            limelight.updateObeliskColors();
+//            telemetry.addData("Limelight fedu res", Limelight.feducialResult);
+//        }
         isSpindStopped = (Math.abs(spindexer.targetEncoder - spindexer.getCurrentPosition())) < 50 || spindexer.spindexerMotor.getVelocity()<15;
         ballSensor.setIfIndexerIsMoving(!isSpindStopped);
 
@@ -138,6 +149,11 @@ public class BrainSTEMRobot {
 
         // DETECT BALL IF SPIND IS NOT MOVING
         if (isSpindStopped ) {
+
+
+
+//            telemetry.addData("NEW BALL", newBall);
+
 
             if (newBall != null ) {
 
@@ -152,6 +168,8 @@ public class BrainSTEMRobot {
 
             }
 
+
+//            telemetry.addData("Distance (cm)", "%.3f", ((DistanceSensor) ballSensor.colorSensor).getDistance(DistanceUnit.CM));
         }
 
         isNextEmpty = limelight.ballTrackerNew.isNextSlotEmpty();
@@ -163,6 +181,10 @@ public class BrainSTEMRobot {
             ballsShot = 0;
         }
 
+
+
+
+
         if (shooter.isShootFar()) {
             Spindexer.maxPower = 0.5;
         } else if (shooter.isShootClose()){
@@ -172,7 +194,7 @@ public class BrainSTEMRobot {
         }
 
         // TELEMETRY ===============================================================================
-//        allTelemetry();
+        allTelemetry();
         telemetry.update();
     }
 
