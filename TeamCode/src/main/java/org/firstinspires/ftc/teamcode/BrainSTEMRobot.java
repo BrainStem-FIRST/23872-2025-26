@@ -13,7 +13,8 @@ import java.util.ArrayList;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.rr.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Collector;
-import org.firstinspires.ftc.teamcode.subsystems.OneWShooter;
+import org.firstinspires.ftc.teamcode.subsystems.LED;
+import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.Parking;
 import org.firstinspires.ftc.teamcode.subsystems.Pivot;
 //import org.firstinspires.ftc.teamcode.subsystems.Ramp;
@@ -41,9 +42,11 @@ public class BrainSTEMRobot {
 
     public Limelight limelight;
     public BallSensor ballSensor;
+
+    public LED led;
     public Pivot pivot;
     public Ramp ramp;
-    public OneWShooter shooter;
+    public Shooter shooter;
     public Parking park;
     public BallTrackerNew ballTracker;
     private boolean goodToMove = false;
@@ -76,6 +79,7 @@ public class BrainSTEMRobot {
         this.opMode = opMode;
 
         park = new Parking(hwMap, telemetry);
+        led = new LED(hwMap, telemetry, this);
 
 
         ballSensor = new BallSensor(hwMap);
@@ -83,7 +87,7 @@ public class BrainSTEMRobot {
 
         spindexer = new Spindexer(hwMap, telemetry, this);
         collector = new Collector(hwMap, telemetry);
-        shooter = new OneWShooter(hwMap, telemetry, this);
+        shooter = new Shooter(hwMap, telemetry, this);
         ramp = new Ramp(hwMap, telemetry);
         pivot = new Pivot(hwMap, telemetry, shooter);
         limelight = new Limelight(hwMap, telemetry, this);
@@ -93,12 +97,10 @@ public class BrainSTEMRobot {
 
         subsystems.add(limelight);
         subsystems.add(park);
-
+        subsystems.add(led);
         subsystems.add(spindexer);
         subsystems.add(collector);
         subsystems.add(shooter);
-//        subsystems.add(finger);
-//        subsystems.add(shooterOne);
         subsystems.add(ramp);
         subsystems.add(pivot);
 
@@ -131,12 +133,6 @@ public class BrainSTEMRobot {
         }
 
 
-
-//        if (limelight != null) {
-//            limelight.update();
-//            limelight.updateObeliskColors();
-//            telemetry.addData("Limelight fedu res", Limelight.feducialResult);
-//        }
         isSpindStopped = (Math.abs(spindexer.targetEncoder - spindexer.getCurrentPosition())) < 50 || spindexer.spindexerMotor.getVelocity()<15;
         ballSensor.setIfIndexerIsMoving(!isSpindStopped);
 
@@ -149,11 +145,6 @@ public class BrainSTEMRobot {
 
         // DETECT BALL IF SPIND IS NOT MOVING
         if (isSpindStopped ) {
-
-
-
-//            telemetry.addData("NEW BALL", newBall);
-
 
             if (newBall != null ) {
 
@@ -168,8 +159,6 @@ public class BrainSTEMRobot {
 
             }
 
-
-//            telemetry.addData("Distance (cm)", "%.3f", ((DistanceSensor) ballSensor.colorSensor).getDistance(DistanceUnit.CM));
         }
 
         isNextEmpty = limelight.ballTrackerNew.isNextSlotEmpty();
@@ -194,7 +183,7 @@ public class BrainSTEMRobot {
         }
 
         // TELEMETRY ===============================================================================
-        allTelemetry();
+        // allTelemetry();
         telemetry.update();
     }
 
