@@ -103,7 +103,7 @@ public class LED implements Component {
         ledState = LedState.PURPLE;
     }
 
-    private void setWhite() {
+    public void setWhite() {
         ledState = LedState.WHITE;
     }
 }

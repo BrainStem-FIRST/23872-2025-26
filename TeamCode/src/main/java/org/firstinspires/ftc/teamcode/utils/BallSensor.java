@@ -36,10 +36,6 @@ public class BallSensor {
     public static double purpleBallMinG = 0, purpleBallMaxG = 0, purpleBallMinB = 0, purpleBallMaxB = 0, purpleBallMinR = 0, purpleBallMaxR = 0;
 
 
-    public static double POS_GREEN = 0.285;  // added (target 1507)
-    public static double POS_PURPLE = 0.555; // added (target 1890)
-    public static double POS_WHITE = 0.703;  // added (target 2100)
-
 
 
     public double rPercent;
@@ -119,8 +115,7 @@ public class BallSensor {
 
         double sum = red + green + blue;
 
-        if (sum < 0.001) { // added
-            ledLight.setPosition(POS_WHITE); // added
+        if (sum < 0.001) {
             return "EMPTY";
         }
 
@@ -131,16 +126,12 @@ public class BallSensor {
         if (rPercent > greenBallMinR && rPercent < greenBallMaxR &&
                 bPercent > greenBallMinB && bPercent < greenBallMaxB &&
                 gPercent > greenBallMinG && gPercent < greenBallMaxG) {
-            ledLight.setPosition(POS_GREEN); // added for led
             return "GREEN";
         } else if (rPercent > purpleBallMinR && rPercent < purpleBallMaxR &&
                 bPercent > purpleBallMinB && bPercent < purpleBallMaxB &&
                 gPercent > purpleBallMinG && gPercent < purpleBallMaxG) {
-            ledLight.setPosition(POS_PURPLE); // added for led
             return "PURPLE";
         }
-
-        ledLight.setPosition(POS_WHITE); // added for led
         return "PURPLE";
     }
 

@@ -27,6 +27,7 @@ Right triger: intake
 DP up: pink
 DP down: blue
 DP right: red
+Dp left: white
 
 GP2:
 Right bumper: park down
@@ -246,6 +247,10 @@ public class OutreachTele extends LinearOpMode {
 
         if (gp1.isFirstDpadRight()) {
             robot.led.setRed();
+        }
+
+        if (gp1.isFirstDpadLeft()) {
+            robot.led.setWhite();
         }
     }
 
