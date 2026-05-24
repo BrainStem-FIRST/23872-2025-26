@@ -11,21 +11,9 @@ import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.utils.Component;
 @Config
 public class LED implements Component {
-    public ServoImplEx led;
-    private Telemetry telemetry;
-    public HardwareMap map;
-
-    public BrainSTEMRobot robot;
-
-
-    public static double GREEN_POS = 0.285;
-    public static double PURPLE_POS = 0.555;
-    public static double WHITE_POS = 0.703;
-    public static double PINK_POS = 0.52;
-    public static double BLUE_POS = 0.4;
-    public static double RED_POS = 0.01;
-
-    public enum LedState {
+    private ServoImplEx led; Telemetry telemetry; HardwareMap map; BrainSTEMRobot robot; LedState ledState;
+    public static double GREEN_POS = 0.285, PURPLE_POS = 0.555, WHITE_POS = 0.703, PINK_POS = 0.52, BLUE_POS = 0.4, RED_POS = 0.01;
+    private enum LedState {
         PINK,
         BLUE,
         GREEN,
@@ -34,26 +22,17 @@ public class LED implements Component {
         RED
     }
 
-    public LedState ledState;
-
-
-
     public LED(HardwareMap hardwareMap, Telemetry telemetry, BrainSTEMRobot robot) {
         this.map = hardwareMap;
         this.telemetry = telemetry;
         this.robot = robot;
-
-        led = map.get(ServoImplEx.class, "ledLight");
-
         this.ledState = LedState.PINK;
 
-
+        led = map.get(ServoImplEx.class, "ledLight");
     }
-
 
     @Override
     public void reset() {
-
     }
 
     @Override
@@ -78,7 +57,6 @@ public class LED implements Component {
                 led.setPosition(RED_POS);
                 break;
         }
-
     }
 
     @Override
@@ -89,21 +67,15 @@ public class LED implements Component {
     private void setGreen() {
        ledState = LedState.GREEN;
     }
-    public void setPink() {
-        ledState = LedState.PINK;;
-    }
+    public void setPink() {ledState = LedState.PINK;;}
     public void setBlue() {
         ledState = LedState.BLUE;
     }
     public void setRed() {
         ledState = LedState.RED;
     }
-
     private void setPurple() {
         ledState = LedState.PURPLE;
     }
-
-    public void setWhite() {
-        ledState = LedState.WHITE;
-    }
+    public void setWhite() { ledState = LedState.WHITE;}
 }

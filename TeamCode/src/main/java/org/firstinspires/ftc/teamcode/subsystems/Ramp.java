@@ -14,15 +14,10 @@ import org.firstinspires.ftc.teamcode.utils.Component;
 
 @Config
 public class Ramp implements Component {
-    private Telemetry telemetry;
-    public ServoImplEx rampServo;
+    private ServoImplEx rampServo; RampState rampState; Telemetry telemetry; HardwareMap map;
+    private double targetPosition;
 
-    public RampState rampState;
-
-    public double targetPosition;
-
-    public HardwareMap map;
-    public enum RampState {
+    private enum RampState {
         DOWN,
         UP
     }
@@ -36,6 +31,7 @@ public class Ramp implements Component {
         rampServo.setPwmRange(new PwmControl.PwmRange(Constants.rampConstants.DOWN_PWM, Constants.rampConstants.UP_PWM));
         targetPosition = Constants.rampConstants.DOWN_POSITION;
     }
+
     @Override
     public void reset() {
 
@@ -43,7 +39,6 @@ public class Ramp implements Component {
 
     public void setTargetPosition() {
         rampServo.setPosition(targetPosition);
-
     }
 
     @Override
@@ -57,14 +52,10 @@ public class Ramp implements Component {
                 break;
         }
         setTargetPosition();
-
-        telemetry.addData("Finger State", rampState);
-
     }
 
     public void setRampUp() { rampState = RampState.UP;}
     public void setRampDown() { rampState = RampState.DOWN;};
-
     public RampState checkRampState() {
         return rampState;
     }

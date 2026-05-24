@@ -191,13 +191,13 @@ public class CompetitionTele extends LinearOpMode {
 
 
         if (gamepad1.left_trigger > 0.1) {
-            robot.collector.collectorState = Collector.CollectorState.EXTAKE;
+            robot.collector.ex();
         }
         else if (gamepad1.right_trigger > 0.1) {
-            robot.collector.collectorState = Collector.CollectorState.INTAKE;
+           robot.collector.in();
         }
         else {
-            robot.collector.collectorState = Collector.CollectorState.OFF;
+            robot.collector.off();
         }
         if (gp1.isFirstLeftBumper()) {
             robot.spindexer.setTargetAdj(Constants.spindexerConstants.TICKS_120);

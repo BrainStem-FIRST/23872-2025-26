@@ -14,12 +14,8 @@ import org.firstinspires.ftc.teamcode.utils.Component;
 @Config
 public class Collector implements Component {
 
-    private HardwareMap map;
-    private Telemetry telemetry;
-    public DcMotorEx collectorMotor;
-    public CollectorState collectorState;
-    public enum CollectorState {
-
+    private HardwareMap map; Telemetry telemetry; DcMotorEx collectorMotor; CollectorState collectorState;
+    private enum CollectorState {
         OFF,
         INTAKE,
         EXTAKE,
@@ -29,15 +25,10 @@ public class Collector implements Component {
     public Collector(HardwareMap hardwareMap, Telemetry telemetry) {
         this.map = hardwareMap;
         this.telemetry = telemetry;
-
         this.collectorState = CollectorState.OFF;
 
-
-
         collectorMotor = map.get(DcMotorEx.class, "collectorMotor");
-
         collectorMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
         collectorMotor.setVelocityPIDFCoefficients(
                 16,
                 0.1,
@@ -49,7 +40,6 @@ public class Collector implements Component {
 
     @Override
     public void reset() {
-
     }
 
     @Override
@@ -68,8 +58,11 @@ public class Collector implements Component {
                 collectorMotor.setVelocity(Constants.CollectorConstants.AUTO_VELOCITY);
         }
     }
+
+    public void in() {collectorState = CollectorState.INTAKE;}
+    public void ex() {collectorState = CollectorState.EXTAKE;}
+    public void off() {collectorState = CollectorState.OFF;}
+    public void auto() {collectorState = CollectorState.AUTO;}
     @Override
     public String test() {return null;}
-
-
 }

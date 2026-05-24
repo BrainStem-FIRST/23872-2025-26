@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
 import org.firstinspires.ftc.teamcode.utils.BallTracker;
-import org.firstinspires.ftc.teamcode.utils.BallTrackerNew;
 import org.firstinspires.ftc.teamcode.utils.Component;
 
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -14,7 +13,6 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @Config
@@ -22,7 +20,7 @@ public class Limelight implements Component {
     public int pipeline = 0;
     public Limelight3A limelight;
 
-    public BallTrackerNew ballTrackerNew;
+    public BallTracker ballTrackerNew;
 
     public List<String> targetOrder;
 
@@ -41,7 +39,7 @@ public class Limelight implements Component {
         limelight.start();
 
 
-       ballTrackerNew = new BallTrackerNew(robot.spindexer);
+       ballTrackerNew = new BallTracker(robot.spindexer);
 
     }
 
@@ -90,15 +88,15 @@ public class Limelight implements Component {
         switch (tagId) {
             case 21:
                 targetOrder = new ArrayList<>(Arrays.asList("G", "P", "P"));
-                BallTrackerNew.targetMotif = ballTrackerNew.motif3;
+                BallTracker.targetMotif = ballTrackerNew.motif3;
                 break;
             case 22:
                 targetOrder = new ArrayList<>(Arrays.asList("P", "G", "P"));
-                BallTrackerNew.targetMotif = ballTrackerNew.motif2;
+                BallTracker.targetMotif = ballTrackerNew.motif2;
                 break;
             case 23:
                 targetOrder = new ArrayList<>(Arrays.asList("P", "P", "G"));
-                BallTrackerNew.targetMotif = ballTrackerNew.motif1;
+                BallTracker.targetMotif = ballTrackerNew.motif1;
                 break;
             default:
                 break;

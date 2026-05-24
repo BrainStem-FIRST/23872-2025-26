@@ -14,16 +14,9 @@ import org.firstinspires.ftc.teamcode.utils.Component;
 public class Parking implements Component {
 
     public static boolean activateLeft = true, activateRight = true;
-    private Telemetry telemetry;
-    public ServoImplEx parkServo;
-    public ServoImplEx parkServo2;
-
-    public ParkState parkState;
-
-    public double targetPosition;
-
-    public HardwareMap map;
-    public enum ParkState {
+    private Telemetry telemetry; ServoImplEx parkServo; ServoImplEx parkServo2; ParkState parkState; HardwareMap map;
+    private double targetPosition;
+    private enum ParkState {
         DOWN,
         UP
     }
@@ -33,8 +26,6 @@ public class Parking implements Component {
         this.telemetry = telemetry;
         this.parkState = ParkState.DOWN;
 
-
-
         parkServo = map.get(ServoImplEx.class, "leftPark"); // Control
         parkServo2 = map.get(ServoImplEx.class, "rightPark"); // Expansion
         parkServo.setPwmRange(new PwmControl.PwmRange(950, 2100)); // CHANGE\
@@ -43,14 +34,11 @@ public class Parking implements Component {
     }
     @Override
     public void reset() {
-
     }
 
     public void setTargetPosition() {
         if (activateLeft) parkServo.setPosition(targetPosition);
-
         if (activateRight) parkServo2.setPosition(targetPosition);
-
     }
 
     @Override
@@ -64,22 +52,16 @@ public class Parking implements Component {
                 break;
         }
         setTargetPosition();
-
-        telemetry.addData("Parking State", parkState);
-
     }
 
     public void setParkUp() { parkState = ParkState.UP;}
     public void setParkDown() { parkState = ParkState.DOWN;};
-
     public ParkState checkParkState() {
         return parkState;
     }
     public boolean isParkUp() {
         return parkState == ParkState.UP.UP;
     }
-
-
 
     @Override
     public String test() {

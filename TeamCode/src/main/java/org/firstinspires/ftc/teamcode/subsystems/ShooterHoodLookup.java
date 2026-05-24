@@ -4,9 +4,8 @@ import com.arcrobotics.ftclib.util.InterpLUT;
 import com.qualcomm.robotcore.util.Range;
 
 public class ShooterHoodLookup {
-    public static double minDist = 45.3, maxDist = 97.5;
-    private InterpLUT shooterLookup;
-    private InterpLUT hoodLookup;
+    private static double minDist = 45.3, maxDist = 97.5;
+    private InterpLUT shooterLookup, hoodLookup;
 
     public ShooterHoodLookup() {
         shooterLookup = new InterpLUT();

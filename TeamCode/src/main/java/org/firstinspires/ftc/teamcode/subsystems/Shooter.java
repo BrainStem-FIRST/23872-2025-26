@@ -18,36 +18,11 @@ import org.firstinspires.ftc.teamcode.utils.PIDController;
 
 @Config
 public class Shooter implements Component {
-    public static double testingSpeed = 1300;
-
-    private final Telemetry telemetry;
-
-    public static boolean powerMotors = true;
-    public double closeTargetSpeed;
-
-    // hardware constants
-
-    private HardwareMap map;
-    public DcMotorEx shooterMotorTwo;
-    public DcMotorEx shooterMotorOne;
-
-
-    public ShooterState shooterState;
-
-    //PID Controllers
-    public PIDController shooterPID;
-
-    public double targetVel;
-    public double currentVel1;
-    public double currentVel2;
-
-    public double error1;
-    public double error2;
-
-    public int shotsFired = 0;
+    private Telemetry telemetry; DcMotorEx shooterMotorTwo, shooterMotorOne; HardwareMap map; ShooterState shooterState; PIDController shooterPID; BrainSTEMRobot robot;
+    private static boolean powerMotors = true;
+    public double targetVel, currentVel1,  currentVel2, closeTargetSpeed, error1, error2;
     private boolean wasAtSpeed = false;
-
-    public enum ShooterState {
+    private enum ShooterState {
         OFF,
         IDLE,
         POINT,
@@ -56,8 +31,6 @@ public class Shooter implements Component {
         AUTO
     }
 
-
-    private final BrainSTEMRobot robot;
     public Shooter(HardwareMap hardwareMap, Telemetry telemetry, BrainSTEMRobot robot) {
         this.robot = robot;
         this.map = hardwareMap;
@@ -65,8 +38,6 @@ public class Shooter implements Component {
 
         shooterMotorOne = hardwareMap.get(DcMotorEx.class, "shooterMotorOne");
         shooterMotorTwo = hardwareMap.get(DcMotorEx.class, "shooterMotorTwo");
-
-
 
         shooterMotorOne.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         shooterMotorTwo.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
@@ -84,19 +55,13 @@ public class Shooter implements Component {
         shooterPID.setInputBounds(0, Constants.shooterConstants.MAX_TICKS_PER_SEC);
         shooterPID.setOutputBounds(0,1);
 
-        shotsFired = 0;
-
-
         this.shooterState = ShooterState.OFF;
     }
-
-
 
     @Override
     public void reset() {
        shooterPID.reset();
     }
-
 
     @Override
     public void update() {
@@ -111,35 +76,27 @@ public class Shooter implements Component {
                 shooterPID.setPIDValues(Constants.shooterConstants.kP_TWO, Constants.shooterConstants.kI, Constants.shooterConstants.kD);
                 setBothMotorVelocities(Constants.shooterConstants.FAR_SHOOT_VEL);
                 targetVel = Constants.shooterConstants.FAR_SHOOT_VEL;
-
                 break;
 
             case POINT:
                 shooterPID.setPIDValues(Constants.shooterConstants.kP_TWO, Constants.shooterConstants.kI, Constants.shooterConstants.kD);
                 setBothMotorVelocities(Constants.shooterConstants.POINT_SHOOT_VEL);
                 targetVel = Constants.shooterConstants.POINT_SHOOT_VEL;
-
                 break;
             case SHOOT_CLOSE:
                 shooterPID.setPIDValues(Constants.shooterConstants.kP_ONE, Constants.shooterConstants.kI, Constants.shooterConstants.kD);
                 targetVel = closeTargetSpeed;
                 setBothMotorVelocities(targetVel);
-//                setBothMotorVelocities(testingSpeed);
-
                 break;
-
             case IDLE:
                 shooterMotorOne.setPower(Constants.shooterConstants.IDLE_POWER);
                 shooterMotorTwo.setPower(Constants.shooterConstants.IDLE_POWER);
                 targetVel = 0;
-
                 break;
-
             case AUTO:
                 setBothMotorVelocities(Constants.shooterConstants.CLOSE_SHOOT_VEL);
                 targetVel = Constants.shooterConstants.AUTO_VEL;
                 break;
-
         }
 
         currentVel1 = Math.abs(shooterMotorOne.getVelocity());
@@ -148,7 +105,6 @@ public class Shooter implements Component {
         error1 = Math.abs(currentVel1 - targetVel);
         error2 = Math.abs(currentVel2 - targetVel);
 
-        // PIVOT
         double currentVel = shooterMotorOne.getVelocity();
         boolean isAtSpeed = Math.abs(currentVel - targetVel) < 50;
 
@@ -175,24 +131,9 @@ public class Shooter implements Component {
             shooterMotorTwo.setPower(shooterPower);
         }
 
-        telemetry.addData("Shooter Target Vel", targetVelocity);
-        telemetry.addData("shooter error 1", error);
-        telemetry.addData("shooter motor one velocity", shooterMotorOne.getVelocity());
-        telemetry.addData("shooter motor two velocity", shooterMotorTwo.getVelocity());
-
-        telemetry.addData("Shooter PID output 1", pidOutput);
-        telemetry.addData("Shooter total output 1", shooterPower);
-
-        telemetry.addData("shooter one Power", shooterMotorOne.getPower());
-        telemetry.addData("shooter two power", shooterMotorTwo.getPower());
-
-
 
     }
 
-    public void resetShotCounter() {
-        shotsFired = 0;
-    }
     public void setBoth(double power) {
         shooterMotorTwo.setVelocity(power);
         shooterMotorOne.setVelocity(power);

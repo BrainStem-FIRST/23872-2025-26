@@ -36,14 +36,14 @@ public class AutoActions {
     }
     public static Action setCollectorOn() {
         return telemetryPacket -> {
-            robot.collector.collectorState = Collector.CollectorState.AUTO;
+            robot.collector.auto();
             return false;
         };
     }
 
     public static Action setCollectorOff() {
         return telemetryPacket -> {
-            robot.collector.collectorState = Collector.CollectorState.OFF;
+            robot.collector.off();
             return false;
         };
     }

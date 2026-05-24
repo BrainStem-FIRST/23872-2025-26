@@ -20,44 +20,14 @@ import org.firstinspires.ftc.teamcode.utils.PIDController;
 @Config
 public class Spindexer implements Component {
     public static double maxPowerErrorThreshold = 10000000, maxPower = 0.99;
+    private boolean isUnjamming = false, wasMoving = false, justFinishedMoving = false, jammed = false, firstUpdate = true;
+    public ElapsedTime spindexerTimer, antijamTimer, jamTime;
 
-    public int SPINDEXER_TIME;
-
-    private double previousVelocity;
-    private int lastGoodPosition;
-    public boolean isUnjamming = false;
-    public ElapsedTime spindexerTimer;
-    public ElapsedTime antijamTimer;
-
-    public double power;
-
-    private boolean wasMoving = false;
-    public boolean justFinishedMoving = false;
-
+    public double power, error, prevError, targetEncoder;
     public DcMotorEx spindexerMotor;
-    private HardwareMap map;
-    private Telemetry telemetry;
-
-    public int rawEncoder, wrappedEncoder, rawHubEncoderPosition;
-    public int startShootingEncoder;
-    private int absoluteEncoderStartingOffset, wrapAroundOffset;
-
-    private SRSHub hub;
-    private double error, prevError;
+    private HardwareMap map; Telemetry telemetry; SRSHub hub; BrainSTEMRobot robot;
+    public int rawEncoder, wrappedEncoder, rawHubEncoderPosition, startShootingEncoder, absoluteEncoderStartingOffset, wrapAroundOffset;
     private final ElapsedTime dtTimer = new ElapsedTime();
-
-    public boolean indexerCued;
-    private BrainSTEMRobot robot;
-
-    ElapsedTime jamTime;
-
-   public boolean jammed = false;
-
-    public int shotsFired = 0;
-
-    private double kP;
-    public double targetEncoder;
-    private boolean firstUpdate = true;
 
     public Spindexer(HardwareMap hardwareMap, Telemetry telemetry, BrainSTEMRobot robot) {
         this.map = hardwareMap;
@@ -94,6 +64,7 @@ public class Spindexer implements Component {
     }
 
     public void updateIndexerPosition(double dt) {
+        double kP;
         if (Math.abs(error) < Constants.spindexerConstants.INDEXER_SMALL_KP_THRESHOLD)
             kP = Constants.spindexerConstants.INDEXER_SMALL_KP;
         else
@@ -154,7 +125,6 @@ public class Spindexer implements Component {
         rawHubEncoderPosition = hub.readEncoder(6).position;
         double prevEncoder = rawEncoder;
         rawEncoder = 1024 - (rawHubEncoderPosition + absoluteEncoderStartingOffset);
-//        telemetry.addData("raw hub indexer encoder", rawHubEncoderPosition);
 
         double dif = rawEncoder - prevEncoder;
         if(Math.abs(dif) > 500) {
@@ -164,15 +134,6 @@ public class Spindexer implements Component {
         prevError = error;
         error = targetEncoder - getCurrentPosition();
 
-//        if (currentAmps > 7000 && spindexerMotor.getPower() > maxPower- 0.05 && !isUnjamming) {
-//            telemetry.addLine("JAM DETECTED - STARTING COOLDOWN");
-//            isUnjamming = true;
-//            antijamTimer.reset();
-//        }
-
-//        if (isUnjamming && antijamTimer.milliseconds() > 1000) {
-//            isUnjamming = false;
-//        }
 
         if (isJammed() && !jammed) {
             jammed = true;
