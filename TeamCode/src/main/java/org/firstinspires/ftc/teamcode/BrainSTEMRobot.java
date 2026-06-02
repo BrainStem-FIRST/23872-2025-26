@@ -28,7 +28,7 @@ import org.firstinspires.ftc.teamcode.utils.Component;
 public class BrainSTEMRobot {
     public static double autoX = 0, autoY = 0, autoH = 0;
     private final ArrayList<Component> subsystems;
-    public OpMode opMode; Telemetry telemetry; Spindexer spindexer;  Collector collector; MecanumDrive drive; Limelight limelight; BallSensor ballSensor; LED led; Pivot pivot; Ramp ramp; Shooter shooter; Parking park; BallTracker ballTracker;
+    public OpMode opMode; Telemetry telemetry; public Spindexer spindexer;  public Collector collector; public MecanumDrive drive; public Limelight limelight; BallSensor ballSensor; LED led; public Pivot pivot; public Ramp ramp; public Shooter shooter; Parking park; BallTracker ballTracker;
 
     public boolean hit = false, isSpindStopped,  isNextEmpty,  isAuto = false;
     public int ballsShot = 0;
