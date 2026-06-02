@@ -116,6 +116,11 @@ public class BrainSTEMRobot {
         else { Spindexer.maxPower = 0.99;}
 
         telemetry.update();
+        telemetry.addData("distance to goal", distFromGoal);
+        telemetry.addData("target shooter vel", shooter.targetVel);
+        telemetry.addData("current shooter vel", shooter.currentVel1);
+        telemetry.addData("hood set left", pivot.getLeftPos());
+        telemetry.addData("hood set right", pivot.getRightPos());
     }
 
     private int getBallsShot() {
