@@ -96,7 +96,7 @@ public class Pivot implements Component {
                 setDualServoPosition(newPos);
                 break;
             case AUTO:
-                position = closePivot;
+                position = closeTargetPosition;
                 setDualServoPosition(position);
                 break;
         }

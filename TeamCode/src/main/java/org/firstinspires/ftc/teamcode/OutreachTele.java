@@ -229,8 +229,8 @@ public class OutreachTele extends LinearOpMode {
         }
 
         if (gp1.isFirstA()) {
-            robot.shooter.setShooterShootAuto();
-            robot.pivot.setPivotShootAuto();
+            robot.shooter.setShooterShootClose();
+            robot.pivot.setPivotShootClose();
         }
 
         if (gp1.isFirstDpadUp()) {
