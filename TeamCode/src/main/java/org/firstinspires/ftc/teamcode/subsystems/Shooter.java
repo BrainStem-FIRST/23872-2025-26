@@ -95,7 +95,7 @@ public class Shooter implements Component {
                 break;
             case AUTO:
                 setBothMotorVelocities(Constants.shooterConstants.CLOSE_SHOOT_VEL);
-                targetVel = Constants.shooterConstants.AUTO_VEL;
+                targetVel = Constants.shooterConstants.CLOSE_SHOOT_VEL;
                 break;
         }
 
@@ -112,7 +112,7 @@ public class Shooter implements Component {
     }
 
     public boolean isUpToSpeed() {
-        return (Math.abs(shooterMotorOne.getVelocity() - shooterPID.getTarget()) < 50) && shooterPID.getTarget()!= 0;
+        return (Math.abs(shooterMotorOne.getVelocity() - shooterPID.getTarget()) < 100) && shooterPID.getTarget()!= 0;
     }
 
 

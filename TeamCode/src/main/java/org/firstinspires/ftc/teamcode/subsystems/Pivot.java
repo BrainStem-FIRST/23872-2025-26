@@ -32,7 +32,7 @@ public class Pivot implements Component {
         leftServo.setPwmRange(new PwmControl.PwmRange(leftLower, leftHigher));
         rightServo.setPwmRange(new PwmControl.PwmRange(rightLower, rightHigher));
 
-        pivotState = PivotState.CLOSE;
+        pivotState = PivotState.AUTO;
         this.shooter = shooter;
     }
 
@@ -96,7 +96,7 @@ public class Pivot implements Component {
                 setDualServoPosition(newPos);
                 break;
             case AUTO:
-                position = closeTargetPosition;
+                position = closePivot;
                 setDualServoPosition(position);
                 break;
         }

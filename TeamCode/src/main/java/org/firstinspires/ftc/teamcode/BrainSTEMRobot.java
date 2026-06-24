@@ -77,8 +77,8 @@ public class BrainSTEMRobot {
         double distFromGoal = Math.hypot(robotToGoal.x, robotToGoal.y);
         telemetry.addData("DIST FROM GOAL", distFromGoal);
         telemetry.addData("Goal pose", goalPosition.x + " " + goalPosition.y);
-        shooter.closeTargetSpeed = shooterHoodLookup.getShooterSpeed(distFromGoal);
-        pivot.closeTargetPosition = shooterHoodLookup.getHoodPosition(distFromGoal);
+        // shooter.closeTargetSpeed = shooterHoodLookup.getShooterSpeed(distFromGoal);
+        // pivot.closeTargetPosition = shooterHoodLookup.getHoodPosition(distFromGoal);
 
         pivot.updateCompensatedPosition(ballsShot);
 
