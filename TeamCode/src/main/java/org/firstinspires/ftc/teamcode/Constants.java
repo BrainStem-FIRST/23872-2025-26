@@ -65,7 +65,7 @@ public class Constants {
     public static class CollectorConstants {
         // Power Constants
         public static double INTAKE_VELOCITY = 3300;
-        public static double EXTAKE_VELOCITY = -800;
+        public static double EXTAKE_VELOCITY = -3300;
         public static double AUTO_VELOCITY = 3300; // ).77
         public static final double OFF_POWER = 0.0;
     }

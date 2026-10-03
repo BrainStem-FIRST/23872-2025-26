@@ -173,9 +173,9 @@ public class OutreachTele extends LinearOpMode {
 
         robot.drive.setMotorPowers(
                 y + x + rx,
-                y - x - rx,
-                y - x + rx,
-                y + x - rx
+                -y + x + rx,
+                -y - x + rx,
+                y - x + rx
         );
     }
 

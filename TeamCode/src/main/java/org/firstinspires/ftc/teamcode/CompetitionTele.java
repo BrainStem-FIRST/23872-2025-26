@@ -179,9 +179,9 @@ public class CompetitionTele extends LinearOpMode {
 
         robot.drive.setMotorPowers(
                 y + x + rx,
-                y - x - rx,
-                y - x + rx,
-                y + x - rx
+                -y + x + rx,
+                -y - x + rx,
+                y - x + rx
         );
     }
 
