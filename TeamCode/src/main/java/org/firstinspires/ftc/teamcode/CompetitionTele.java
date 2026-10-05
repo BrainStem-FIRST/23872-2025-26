@@ -179,9 +179,9 @@ public class CompetitionTele extends LinearOpMode {
 
         robot.drive.setMotorPowers(
                 y + x + rx,
-                -y + x + rx,
-                -y - x + rx,
-                y - x + rx
+                y - x - rx,
+                y - x + rx,
+                y + x - rx
         );
     }
 
@@ -309,6 +309,10 @@ public class CompetitionTele extends LinearOpMode {
 
         if (gp2.isFirstLeftBumper()) {
             robot.park.setParkUp();
+        }
+
+        if (Math.abs(gamepad2.right_stick_y) > 0.2) {
+            robot.pivot.adjustPosition(gamepad2.right_stick_y * 0.005);
         }
 
     }

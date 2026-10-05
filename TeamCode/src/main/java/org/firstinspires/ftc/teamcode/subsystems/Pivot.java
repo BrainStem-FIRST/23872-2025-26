@@ -15,7 +15,8 @@ public class Pivot implements Component {
     private static boolean activateLeft = true, activateRight = true;
     private ServoImplEx leftServo, rightServo; Shooter shooter; PivotState pivotState;
     private static double closePivot = 0.62, pointPivot = 0.55, farPivot = 0.22, position, testingPosition = 0.6, newPos; // lower means its up more
-    private static int leftLower = 651, leftHigher = 2409, rightLower = 2240, rightHigher = 474; // 2132
+    private static int leftLower = 651, leftHigher = 2409   , rightLower = 2240, rightHigher = 474; // 2132
+    public static double servPos = 0.5;
     private enum PivotState{
         CLOSE,
         FAR,
@@ -72,6 +73,12 @@ public class Pivot implements Component {
         pivotState = PivotState.FAR;
     }
 
+    public void adjustPosition(double delta) {
+        double start = pivotState == PivotState.ADJUSTING ? newPos : position;
+        newPos = Math.max(0, Math.min(1, start + delta));
+        pivotState = PivotState.ADJUSTING;
+    }
+
     @Override
     public void reset() {
 
@@ -100,6 +107,8 @@ public class Pivot implements Component {
                 setDualServoPosition(position);
                 break;
         }
+
+//        setDualServoPosition(servPos);
     }
 
     @Override

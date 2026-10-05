@@ -45,8 +45,8 @@ public class Shooter implements Component {
         shooterMotorOne.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         shooterMotorTwo.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
-        shooterMotorTwo.setDirection(DcMotorSimple.Direction.FORWARD);
-        shooterMotorOne.setDirection(DcMotorSimple.Direction.REVERSE);
+        shooterMotorTwo.setDirection(DcMotorSimple.Direction.REVERSE);
+        shooterMotorOne.setDirection(DcMotorSimple.Direction.FORWARD);
 
         shooterMotorOne.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
         shooterMotorTwo.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
@@ -168,6 +168,10 @@ public class Shooter implements Component {
         }
         return false;
     }
+    public boolean isOn() {
+        return shooterState != ShooterState.OFF && shooterState != ShooterState.IDLE;
+    }
+
     public void setShooterOff() {
         shooterState = ShooterState.OFF;
         shooterPID.reset();

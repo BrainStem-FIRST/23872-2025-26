@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Pose2d;
@@ -11,6 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.subsystems.Collector;
+import org.firstinspires.ftc.teamcode.subsystems.Pivot;
 import org.firstinspires.ftc.teamcode.utils.Angle;
 import org.firstinspires.ftc.teamcode.utils.Drawing;
 import org.firstinspires.ftc.teamcode.utils.GamepadTracker;
@@ -34,7 +36,11 @@ Right bumper: park down
 Left bumper: park up
 A, B, C, & D: stops opmode
  */
+
+@Config
 public class OutreachTele extends LinearOpMode {
+
+    public static double pos;
 
     private Pose2d newPose;
     private GamepadTracker gp1;
@@ -103,6 +109,11 @@ public class OutreachTele extends LinearOpMode {
         }
 
         while (opModeIsActive() && !isStopRequested()) {
+            telemetry.addLine("Buttons:");
+            telemetry.addLine("A (first press) turns on shooter. (second press) turns off");
+            telemetry.addLine("Y shoots the balls, turns ramp down automatically.");
+            telemetry.addLine("X to turn shooter 120 for manual fallback.");
+            telemetry.addLine("Pressing any button (A/B/X/Y) on D2 turns off opmode");
             telemetry.update();
 
             TelemetryPacket packet = new TelemetryPacket();
@@ -118,6 +129,8 @@ public class OutreachTele extends LinearOpMode {
             updateD1Buttons();
 
             updateDriver2();
+
+            Pivot.servPos = pos;
 
 
 
@@ -173,9 +186,9 @@ public class OutreachTele extends LinearOpMode {
 
         robot.drive.setMotorPowers(
                 y + x + rx,
-                -y + x + rx,
-                -y - x + rx,
-                y - x + rx
+                y - x - rx,
+                y - x + rx,
+                y + x - rx
         );
     }
 
@@ -187,20 +200,15 @@ public class OutreachTele extends LinearOpMode {
             robot.ramp.setRampUp();
             pressedTime.reset();
 
-            if (robot.shooter.isUpToSpeed()) {
-                robot.hit = true;
-            } else {
-                robot.hit = false;
-                gamepad1.rumble(500);
-            }
+            robot.hit = true;
         }
-        if (robot.hit && pressedTime.milliseconds() > 250 && robot.shooter.isUpToSpeed()) {
+        if (robot.hit && pressedTime.milliseconds() > 250) {
             robot.spindexer.startShootingEncoder = robot.spindexer.wrappedEncoder;
             robot.spindexer.setTargetAdj(Constants.spindexerConstants.TICKS_360);
             robot.hit = false;
             wasHit = true;
         }
-        if ((wasHit && pressedTime.milliseconds() > 2500 && (robot.shooter.isShootFar())) || (wasHit && pressedTime.milliseconds() > 1000 && robot.shooter.isShootClose())) {
+        if ((wasHit && pressedTime.milliseconds() > 2500 && robot.shooter.isShootFar()) || (wasHit && pressedTime.milliseconds() > 1000 && !robot.shooter.isShootFar())) {
             robot.ramp.setRampDown();
             wasHit = false;
             isHitting = true;
@@ -229,8 +237,12 @@ public class OutreachTele extends LinearOpMode {
         }
 
         if (gp1.isFirstA()) {
-            robot.shooter.setShooterShootAuto();
-            robot.pivot.setPivotShootAuto();
+            if (robot.shooter.isOn()) {
+                robot.shooter.setShooterOff();
+            } else {
+                robot.shooter.setShooterShootAuto();
+                robot.pivot.setPivotShootAuto();
+            }
         }
 
         if (gp1.isFirstDpadUp()) {
