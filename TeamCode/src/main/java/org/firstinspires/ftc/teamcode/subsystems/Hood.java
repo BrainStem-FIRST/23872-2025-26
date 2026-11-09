@@ -11,22 +11,23 @@ import org.firstinspires.ftc.teamcode.utils.Component;
 
 @Config
 
-public class Pivot implements Component {
+public class Hood implements Component {
     private static boolean activateLeft = true, activateRight = true;
-    private ServoImplEx leftServo, rightServo; Shooter shooter; PivotState pivotState;
+    private ServoImplEx leftServo, rightServo;
+    PivotState pivotState;
     private static double closePivot = 0.62, pointPivot = 0.55, farPivot = 0.22, position, testingPosition = 0.6, newPos; // lower means its up more
     private static int leftLower = 651, leftHigher = 2409   , rightLower = 2240, rightHigher = 474; // 2132
     public static double servPos = 0.5;
     private enum PivotState{
+        HOOD_LUT,
         CLOSE,
-        FAR,
         AUTO,
         POINT,
         ADJUSTING
     }
     public double closeTargetPosition;
 
-    public Pivot(HardwareMap hardwareMap, Telemetry telemetry, Shooter shooter){
+    public Hood(HardwareMap hardwareMap, Telemetry telemetry){
         leftServo = hardwareMap.get(ServoImplEx.class, "leftHood");
         rightServo = hardwareMap.get(ServoImplEx.class, "rightHood");
 
@@ -34,7 +35,6 @@ public class Pivot implements Component {
         rightServo.setPwmRange(new PwmControl.PwmRange(rightLower, rightHigher));
 
         pivotState = PivotState.AUTO;
-        this.shooter = shooter;
     }
 
     public void setDualServoPosition(double position) {
@@ -44,7 +44,7 @@ public class Pivot implements Component {
             rightServo.setPosition(position);
     }
 
-    public static double HOOD_ADJ_SHOT = -0.04; // adjustment after every shot taken in far
+    public static double HOOD_ADJ_SHOT = 0.0; // adjustment after every shot taken in far
 
     public void updateCompensatedPosition(int shotCount) {
         if (shotCount == 0) {return;}
@@ -58,8 +58,8 @@ public class Pivot implements Component {
     public double getRightPos() {
         return rightServo.getPosition();
     }
-    public void setPivotShootClose(){
-        pivotState = PivotState.CLOSE;
+    public void setPivotShootLUT(){
+        pivotState = PivotState.HOOD_LUT;
     }
     public void setPivotShootPoint(){
         pivotState = PivotState.POINT;
@@ -68,9 +68,13 @@ public class Pivot implements Component {
     public void setPivotShootAuto(){
         pivotState = PivotState.AUTO;
     }
+    public void setPivotShootClose(){
+        pivotState = PivotState.CLOSE;
+    }
+
 
     public void setPivotShootFar() {
-        pivotState = PivotState.FAR;
+        pivotState = PivotState.CLOSE;
     }
 
     public void adjustPosition(double delta) {
@@ -87,7 +91,7 @@ public class Pivot implements Component {
     @Override
     public void update() {
         switch (pivotState) {
-            case CLOSE:
+            case HOOD_LUT:
                 position = closeTargetPosition;
                 setDualServoPosition(position);
                 break;
@@ -95,9 +99,9 @@ public class Pivot implements Component {
                 position = pointPivot;
                 setDualServoPosition(position);
                 break;
-            case FAR:
-                position = farPivot;
-                setDualServoPosition(farPivot);
+            case CLOSE:
+                position = 0.55;
+                setDualServoPosition(0.55);
                 break;
             case ADJUSTING:
                 setDualServoPosition(newPos);

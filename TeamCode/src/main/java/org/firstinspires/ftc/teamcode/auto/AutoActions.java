@@ -13,13 +13,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BrainSTEMRobot;
 import org.firstinspires.ftc.teamcode.Constants;
-import org.firstinspires.ftc.teamcode.subsystems.Collector;
 import org.firstinspires.ftc.teamcode.subsystems.sensors.Limelight;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 
 public class AutoActions {
@@ -74,7 +68,7 @@ public class AutoActions {
 
     public static Action shooterTurnOnClose() {
         return telemetryPacket -> {
-            robot.shooter.setShooterShootAuto();
+            robot.shooter.setShooterShootLUT();
             telemetryPacket.addLine("Shooter On");
             return false;
         };
@@ -275,7 +269,7 @@ public class AutoActions {
     public static Action pivotClose() {
         return new SequentialAction (
                 telemetryPacket -> {
-                    robot.pivot.setPivotShootAuto();
+                    robot.hood.setPivotShootAuto();
                     return false;
                 }
         );
@@ -284,7 +278,7 @@ public class AutoActions {
     public static Action pivotFar() {
         return new SequentialAction (
                 telemetryPacket -> {
-                    robot.pivot.setPivotShootFar();
+                    robot.hood.setPivotShootFar();
                     return false;
                 }
         );

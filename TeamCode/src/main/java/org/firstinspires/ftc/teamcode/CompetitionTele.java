@@ -6,11 +6,9 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.subsystems.Collector;
 import org.firstinspires.ftc.teamcode.utils.Angle;
 import org.firstinspires.ftc.teamcode.utils.Drawing;
 import org.firstinspires.ftc.teamcode.utils.GamepadTracker;
@@ -247,8 +245,8 @@ public class CompetitionTele extends LinearOpMode {
             robot.ramp.setRampDown();
         }
         if (gamepad1.a) {
-            robot.shooter.setShooterShootClose();
-            robot.pivot.setPivotShootClose();
+//            robot.shooter.setShooterShootLUT();
+            robot.hood.setPivotShootLUT();
         }
         if (gp1.isFirstDpadLeft()) {
             robot.ramp.setRampDown();
@@ -267,18 +265,18 @@ public class CompetitionTele extends LinearOpMode {
         if (gp2.isFirstA()) {
 
             if (gamepad2.right_trigger > 0.2) {
-                robot.shooter.setShooterShootAuto();
-                robot.pivot.setPivotShootAuto();
+                robot.shooter.setShooterShootLUT();
+                robot.hood.setPivotShootAuto();
             } else {
                 robot.shooter.setShooterShootClose();
-                robot.pivot.setPivotShootClose();
+                robot.hood.setPivotShootLUT();
             }
         }
 
         if (gp2.isFirstY()) {
 
                 robot.shooter.setShooterShootPoint();
-                robot.pivot.setPivotShootPoint();
+                robot.hood.setPivotShootPoint();
         }
 
         if (gp2.isFirstX()) {
@@ -312,7 +310,7 @@ public class CompetitionTele extends LinearOpMode {
         }
 
         if (Math.abs(gamepad2.right_stick_y) > 0.2) {
-            robot.pivot.adjustPosition(gamepad2.right_stick_y * 0.005);
+            robot.hood.adjustPosition(gamepad2.right_stick_y * 0.005);
         }
 
     }

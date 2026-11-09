@@ -26,8 +26,8 @@ public class Shooter implements Component {
         OFF,
         IDLE,
         POINT,
-        SHOOT_FAR,
         SHOOT_CLOSE,
+        SHOOT_LUT,
         AUTO
     }
 
@@ -72,10 +72,10 @@ public class Shooter implements Component {
 
                 targetVel = 0;
                 break;
-            case SHOOT_FAR:
+            case SHOOT_CLOSE:
                 shooterPID.setPIDValues(Constants.shooterConstants.kP_TWO, Constants.shooterConstants.kI, Constants.shooterConstants.kD);
-                setBothMotorVelocities(Constants.shooterConstants.FAR_SHOOT_VEL);
-                targetVel = Constants.shooterConstants.FAR_SHOOT_VEL;
+                setBothMotorVelocities(1500);
+                targetVel = 1500;
                 break;
 
             case POINT:
@@ -83,7 +83,7 @@ public class Shooter implements Component {
                 setBothMotorVelocities(Constants.shooterConstants.POINT_SHOOT_VEL);
                 targetVel = Constants.shooterConstants.POINT_SHOOT_VEL;
                 break;
-            case SHOOT_CLOSE:
+            case SHOOT_LUT:
                 shooterPID.setPIDValues(Constants.shooterConstants.kP_ONE, Constants.shooterConstants.kI, Constants.shooterConstants.kD);
                 targetVel = closeTargetSpeed;
                 setBothMotorVelocities(targetVel);
@@ -139,11 +139,11 @@ public class Shooter implements Component {
         shooterMotorOne.setVelocity(power);
     }
     public void setShooterShootFar() {
-        shooterState = ShooterState.SHOOT_FAR;
+        shooterState = ShooterState.SHOOT_CLOSE;
         shooterPID.reset();
     }
-    public void setShooterShootAuto() {
-        shooterState = ShooterState.AUTO;
+    public void setShooterShootLUT() {
+        shooterState = ShooterState.SHOOT_LUT;
         shooterPID.reset();
     }
     public void setShooterShootClose() {
@@ -156,14 +156,14 @@ public class Shooter implements Component {
     }
 
     public boolean   isShootFar() {
-        if (shooterState == ShooterState.SHOOT_FAR) {
+        if (shooterState == ShooterState.SHOOT_CLOSE) {
             return true;
         }
         return false;
     }
 
     public boolean   isShootClose() {
-        if (shooterState == ShooterState.SHOOT_CLOSE) {
+        if (shooterState == ShooterState.SHOOT_LUT) {
             return true;
         }
         return false;

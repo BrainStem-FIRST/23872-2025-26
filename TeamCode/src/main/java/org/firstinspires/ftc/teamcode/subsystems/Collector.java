@@ -13,15 +13,8 @@ import org.firstinspires.ftc.teamcode.utils.Component;
 
 @Config
 public class Collector implements Component {
-
     private HardwareMap map; Telemetry telemetry; DcMotorEx collectorMotor; CollectorState collectorState;
-    private enum CollectorState {
-        OFF,
-        INTAKE,
-        EXTAKE,
-        AUTO
-    }
-
+    private enum CollectorState {OFF, INTAKE, EXTAKE, AUTO}
     public Collector(HardwareMap hardwareMap, Telemetry telemetry) {
         this.map = hardwareMap;
         this.telemetry = telemetry;
@@ -38,10 +31,8 @@ public class Collector implements Component {
         );
     }
 
-
     @Override
-    public void reset() {
-    }
+    public void reset() {}
 
     @Override
     public void update() {

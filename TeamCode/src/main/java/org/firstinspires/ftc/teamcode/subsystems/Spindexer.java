@@ -21,7 +21,9 @@ import org.firstinspires.ftc.teamcode.utils.PIDController;
 public class Spindexer implements Component {
     public static double maxPowerErrorThreshold = 10000000, maxPower = 0.99;
     private boolean isUnjamming = false, wasMoving = false, justFinishedMoving = false, jammed = false, firstUpdate = true;
-    public ElapsedTime spindexerTimer, antijamTimer, jamTime;
+    public ElapsedTime spindexerTimer,
+            antijamTimer,
+            jamTime;
 
     public double power, error, prevError, targetEncoder;
     public DcMotorEx spindexerMotor;

@@ -2,8 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
 
-import org.firstinspires.ftc.teamcode.subsystems.Pivot;
-
 @Config
 public class Constants {
     public static class ShooterConstants {
@@ -14,10 +12,10 @@ public class Constants {
         // PID Constants
         // TODO: Tune for built in PID
         public  double kP_ONE = 0.0032;
-        public double kP_TWO = 0.0038;
+        public double kP_TWO = 0.004;
         public  double kI = 0.0;
         public  double kD = 0.0000003;
-        public  double kV1 = 0.00042;
+        public  double kV1 = 0.00044;
 
         // Vel Targets (ticks per second)
         public  double AUTO_VEL = 300;
@@ -93,7 +91,7 @@ public class Constants {
 
         // Servo Position
         public double DOWN_POSITION = 0.99; // change
-        public double UP_POSITION = 0.4; // change
+        public double UP_POSITION = 0.45; // change
     }
 
 

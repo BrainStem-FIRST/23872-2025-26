@@ -7,12 +7,10 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.subsystems.Collector;
-import org.firstinspires.ftc.teamcode.subsystems.Pivot;
+import org.firstinspires.ftc.teamcode.subsystems.Hood;
 import org.firstinspires.ftc.teamcode.utils.Angle;
 import org.firstinspires.ftc.teamcode.utils.Drawing;
 import org.firstinspires.ftc.teamcode.utils.GamepadTracker;
@@ -130,20 +128,7 @@ public class OutreachTele extends LinearOpMode {
 
             updateDriver2();
 
-            Pivot.servPos = pos;
-
-
-
-            if (gamepad2.left_trigger > 0.13) {
-                if (red){
-                    newPose = redPose;
-                } else {
-                    newPose = bluePose;
-                }
-                robot.drive.localizer.setPose(newPose);
-
-            }
-
+            Hood.servPos = pos;
 
 
         }
@@ -240,8 +225,8 @@ public class OutreachTele extends LinearOpMode {
             if (robot.shooter.isOn()) {
                 robot.shooter.setShooterOff();
             } else {
-                robot.shooter.setShooterShootAuto();
-                robot.pivot.setPivotShootAuto();
+                robot.shooter.setShooterShootClose();
+                robot.hood.setPivotShootClose();
             }
         }
 

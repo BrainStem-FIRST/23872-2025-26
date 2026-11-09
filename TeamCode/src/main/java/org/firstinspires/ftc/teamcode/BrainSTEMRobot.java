@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Collector;
 import org.firstinspires.ftc.teamcode.subsystems.LED;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.Parking;
-import org.firstinspires.ftc.teamcode.subsystems.Pivot;
+import org.firstinspires.ftc.teamcode.subsystems.Hood;
 //import org.firstinspires.ftc.teamcode.subsystems.Ramp;
 import org.firstinspires.ftc.teamcode.subsystems.Ramp;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterHoodLookup;
@@ -28,7 +28,7 @@ import org.firstinspires.ftc.teamcode.utils.Component;
 public class BrainSTEMRobot {
     public static double autoX = 0, autoY = 0, autoH = 0;
     private final ArrayList<Component> subsystems;
-    public OpMode opMode; Telemetry telemetry; public Spindexer spindexer;  public Collector collector; public MecanumDrive drive; public Limelight limelight; BallSensor ballSensor; LED led; public Pivot pivot; public Ramp ramp; public Shooter shooter; Parking park; BallTracker ballTracker;
+    public OpMode opMode; Telemetry telemetry; public Spindexer spindexer;  public Collector collector; public MecanumDrive drive; public Limelight limelight; BallSensor ballSensor; LED led; public Hood hood; public Ramp ramp; public Shooter shooter; Parking park; BallTracker ballTracker;
 
     public boolean hit = false, isSpindStopped,  isNextEmpty,  isAuto = false;
     public int ballsShot = 0;
@@ -48,7 +48,7 @@ public class BrainSTEMRobot {
         collector = new Collector(hwMap, telemetry);
         shooter = new Shooter(hwMap, telemetry, this);
         ramp = new Ramp(hwMap, telemetry);
-        pivot = new Pivot(hwMap, telemetry, shooter);
+        hood = new Hood(hwMap, telemetry);
         limelight = new Limelight(hwMap, telemetry, this);
         ballTracker = new BallTracker(spindexer);
         drive = new MecanumDrive(hwMap,startPose);
@@ -62,7 +62,7 @@ public class BrainSTEMRobot {
         subsystems.add(collector);
         subsystems.add(shooter);
         subsystems.add(ramp);
-        subsystems.add(pivot);
+        subsystems.add(hood);
 
     }
 
@@ -77,10 +77,10 @@ public class BrainSTEMRobot {
         double distFromGoal = Math.hypot(robotToGoal.x, robotToGoal.y);
         telemetry.addData("DIST FROM GOAL", distFromGoal);
         telemetry.addData("Goal pose", goalPosition.x + " " + goalPosition.y);
-        // shooter.closeTargetSpeed = shooterHoodLookup.getShooterSpeed(distFromGoal);
-        // pivot.closeTargetPosition = shooterHoodLookup.getHoodPosition(distFromGoal);
+         shooter.closeTargetSpeed = shooterHoodLookup.getShooterSpeed(distFromGoal);
+         hood.closeTargetPosition = shooterHoodLookup.getHoodPosition(distFromGoal);
 
-        pivot.updateCompensatedPosition(ballsShot);
+        hood.updateCompensatedPosition(ballsShot);
 
         for (Component c : subsystems) {
             c.update();
@@ -119,8 +119,8 @@ public class BrainSTEMRobot {
         telemetry.addData("distance to goal", distFromGoal);
         telemetry.addData("target shooter vel", shooter.targetVel);
         telemetry.addData("current shooter vel", shooter.currentVel1);
-        telemetry.addData("hood set left", pivot.getLeftPos());
-        telemetry.addData("hood set right", pivot.getRightPos());
+        telemetry.addData("hood set left", hood.getLeftPos());
+        telemetry.addData("hood set right", hood.getRightPos());
 
         telemetry.update();
     }
